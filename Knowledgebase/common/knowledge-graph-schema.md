@@ -113,7 +113,7 @@ A vehicle component or sensor. The central linking node.
 | `oem_location` | string | physical description |
 
 ### `part_number`
-An OEM or aftermarket part number.
+An OEM or aftermarket part number. May be a direct replacement or an interchangeable part from another vehicle.
 
 | Field | Type | Example |
 |-------|------|---------|
@@ -121,7 +121,14 @@ An OEM or aftermarket part number.
 | `type` | `"part_number"` | |
 | `label` | string | `"NGK BKR5ES-11"` |
 | `number` | string | `"BKR5ES-11"` |
-| `source` | `"OEM"` \| `"NGK"` \| `"Champion"` \| `"OpenGK"` \| `"RockAuto"` | |
+| `source` | `"OEM"` \| `"NGK"` \| `"Champion"` \| `"OpenGK"` \| `"RockAuto"` \| `"Toyota"` \| `"manufacturer"` | |
+| `authority_tier` | `1` \| `2` \| `3` \| `4` | 1=factory, 2=OpenGK, 3=forum, 4=web/parts site |
+| `trust_level` | string | See Trust Ladder below |
+| `source_vehicle` | string \| null | `"Toyota Camry 3.0L 1MZ-FE"` — if cross-vehicle interchange |
+| `fit_notes` | string \| null | `"Direct plug-and-play"` or `"requires adapter harness"` |
+| `corroboration_count` | number | How many independent sources confirm |
+| `verified_by` | string[] | Usernames or orgs that confirmed fit |
+| `community_review_issue` | number \| null | GitHub Issue number where this was vetted |
 | `notes` | string | `"Unleaded, 2.7 V6"` |
 | `url` | string \| null | link to product page |
 
@@ -160,8 +167,29 @@ A community forum post from a verified contributor.
 | `thread_id` | string | `"484870"` |
 | `post_number` | number | `3` |
 | `author` | string | `"chase206"` |
+| `priority_contributor` | boolean | `true` for chase206 and other verified contributors |
 | `url` | string | |
 | `summary` | string | brief description of technical content |
+| `authority_tier` | `3` | Forum posts are always Tier 3 |
+| `trust_level` | string | See Trust Ladder below |
+| `community_review_issue` | number \| null | GitHub Issue number |
+| `corroboration_count` | number | `0` until reviewed |
+| `community_verified` | boolean | `false` until reviewed |
+
+### `bolt_record`
+A physical fastener record from the bolt database with photos and measurements.
+
+| Field | Type | Example |
+|-------|------|---------|
+| `id` | string | `"bolt-M6x1.0-20-flange-hex-valve-cover"` |
+| `type` | `"bolt_record"` | |
+| `label` | string | `"Valve Cover Bolt M6×1.0×20"` |
+| `bolt_id` | string | matches key in `fasteners/bolt-index.json` |
+| `record_path` | string | `"fasteners/bolts/M6x1.0-20-flange-hex-valve-cover/"` |
+| `photos` | string[] | `["spec.jpg", "head.jpg", "side.jpg", "location.jpg"]` |
+| `has_dimensions` | boolean | true if measured |
+| `has_location_photo` | boolean | true if install location photo exists |
+| `bin_label` | string | `"ENGINE-01"` — physical storage bin |
 
 ---
 
@@ -182,8 +210,33 @@ A community forum post from a verified contributor.
 | `wired_to` | component → connector | Component connects via this connector |
 | `has_part` | component → part_number | OEM or compatible part number |
 | `replaces` | part_number → part_number | This part replaces another |
+| `interchangeable_with` | part_number → component | Cross-vehicle part fits this component |
 | `mentioned_in` | component → forum_post | Forum post discusses this component |
 | `cross_ref` | section → section | Manual cross-reference (e.g., "see also EE-14") |
+| `fastens` | bolt_record → component | This bolt secures this component |
+| `torque_defined_by` | bolt_record → torque_spec | Factory torque for this fastener |
+| `procedure_in` | bolt_record → section | Installation section |
+| `stored_in_bin` | bolt_record → string | Physical storage bin label |
+
+---
+
+## Trust Ladder
+
+Community and forum-derived information uses a `trust_level` field that escalates as evidence accumulates.
+
+| `trust_level` | Meaning | How to advance |
+|---------------|---------|---------------|
+| `"community_report"` | One person says so — no corroboration | Open GitHub Issue `community-review` |
+| `"multiple_reports"` | ≥3 independent sources confirm | Maintainer updates after Issue discussion |
+| `"verified_fit"` | Someone installed it and it works (photos/thread) | Add to Issue with photo evidence |
+| `"measured"` | Dimensional or electrical measurement provided | Add measurement + tool used to Issue |
+| `"factory_spec"` | Confirmed in factory manual → upgrades to `authority_tier: 1` | Cite manual page_ref in Issue |
+
+Community nodes also carry:
+- `authority_tier`: `2` (OpenGK), `3` (forum), `4` (web/parts data)
+- `community_review_issue`: GitHub Issue number where this was vetted
+- `corroboration_count`: integer count of independent confirmations
+- `community_verified`: boolean — `true` once a maintainer has reviewed
 
 ---
 

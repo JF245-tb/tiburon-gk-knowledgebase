@@ -1,0 +1,133 @@
+{
+  "build_id": "white-tiburon",
+  "description": "2003 Hyundai Tiburon GT V6 — 24 Hours of Lemons primary race car",
+  "year": 2003,
+  "chassis": "GK",
+  "engine": "G6BA",
+  "displacement_cc": 2656,
+  "transmission": "Aisin AY6",
+  "final_drive": "4.050:1",
+  "car_color": "white",
+  "use": "lemons_race",
+
+  "ecu": {
+    "make": "Haltech",
+    "model": "Elite 2500",
+    "firmware": null,
+    "oem_ecu": false,
+    "oem_ecu_model": null,
+
+    "avi_assignments": {
+      "AVI1":  { "signal": "fuel_pressure",    "sensor": "Lowdoller 899404", "pin": "26-pin-13",  "wire": "GY/Y shielded" },
+      "AVI2":  { "signal": "fuel_temp",        "sensor": "Lowdoller 899405", "pin": "34-pin-16",  "wire": "O/B" },
+      "AVI3":  { "signal": "oil_pressure",     "sensor": "Lowdoller 899402", "pin": "34-pin-17",  "wire": "O/R" },
+      "AVI4":  { "signal": "oil_temp",         "sensor": "Lowdoller 899403", "pin": "34-pin-2",   "wire": "O/Y" },
+      "AVI5":  { "signal": "coolant_pressure", "sensor": "Lowdoller 899406", "pin": "26-pin-20",  "wire": "O/G" },
+      "AVI6":  { "signal": "coolant_temp",     "sensor": "Lowdoller 899407", "pin": "26-pin-12",  "wire": "GY/O shielded" },
+      "AVI7":  { "signal": "brake_pressure",   "sensor": "Lowdoller 899408", "pin": "26-pin-3",   "wire": "GY" },
+      "AVI8":  { "signal": "brake_temp",       "sensor": "Lowdoller 899409", "pin": "26-pin-4",   "wire": "V" },
+      "AVI9":  { "signal": "MAP",              "sensor": "factory_oem",      "pin": "34-pin-15",  "wire": "Y" },
+      "AVI10": { "signal": "TPS",              "sensor": "factory_oem",      "pin": "34-pin-14",  "wire": "W" }
+    },
+
+    "sensor_supply_pins": {
+      "5V_100mA":  { "pin": "34-pin-9",  "wire": "O",   "for": "Lowdoller sensors (ratiometric)" },
+      "8V_1A":     { "pin": "34-pin-12", "wire": "O/W", "for": "OEM-type sensors / solenoids" }
+    },
+
+    "digital_inputs": {
+      "SPI1": { "signal": "VSS",          "source": "transaxle C109 Hall IC", "pin": "26-pin-8",  "pulses_per_rev": 4 },
+      "DPO1": { "signal": "tacho_output", "target": "OEM cluster tach",       "pin": "34-pin-18", "wire": "V/B", "ppr": 3, "mode": "active_low_12V" }
+    },
+
+    "ignition": {
+      "type": "COP",
+      "coil_model": "Toyota 90919-A2005",
+      "count": 6,
+      "dwell_ms": 2.1,
+      "mode": "sequential",
+      "pin_map": {
+        "IGN1": "34-pin — see hardware/haltech/main-connector-34-pin-elite2500.md",
+        "IGN2": "same",
+        "IGN3": "same",
+        "IGN4": "same",
+        "IGN5": "same",
+        "IGN6": "same"
+      },
+      "coil_connector": {
+        "A": "GND (engine block)",
+        "B": "trigger (Haltech IGN output)",
+        "C": "feedback (leave open)",
+        "D": "12V (PDM MP2)"
+      }
+    },
+
+    "injection": {
+      "mode": "sequential",
+      "injector_flow_cc_min": null,
+      "injector_deadtime_ms": null
+    },
+
+    "can_buses": {
+      "CAN0": {
+        "baud": 1000000,
+        "pin_H": "26-pin-23",
+        "pin_L": "26-pin-24",
+        "wire_H": "W",
+        "wire_L": "L",
+        "connects_to": "AIM PDM 32 (A22=CANH, A11=CANL)"
+      }
+    }
+  },
+
+  "pdm": {
+    "make": "AIM",
+    "model": "PDM 32",
+    "connector_A_pins": 35,
+    "connector_B_pins": 35,
+    "outputs": {
+      "HP1": { "load": "starter_motor",         "trigger": "STARTER_SAFE",        "current_limit_a": 20, "pins": ["A1","A13"] },
+      "HP2": { "load": "alternator_field",       "trigger": "IGN_ON",              "current_limit_a": 15, "pins": ["A2","A14"] },
+      "HP3": { "load": "fuel_pump",              "trigger": "FP_PRIME_AND_RUN",    "current_limit_a": 15, "pins": ["A3","A15"], "overcurrent_a": 15 },
+      "HP4": { "load": "COP_coils_12V_bank_A",   "trigger": "IGN_ON",              "current_limit_a": 20, "pins": ["A4","A16"] },
+      "HP5": { "load": "injectors_12V",          "trigger": "IGN_ON",              "current_limit_a": 20, "pins": ["A5","A17"] },
+      "HP6": { "load": "cooling_fan_HI",         "trigger": "FAN_HI",              "current_limit_a": 20, "pins": ["A6","A18"] },
+      "HP7": { "load": "cooling_fan_LO",         "trigger": "FAN_LO",              "current_limit_a": 20, "pins": ["A7","A19"] },
+      "MP1": { "load": "Haltech_ECU_power",      "trigger": "IGN_ON",              "current_limit_a": 10, "pins": ["A8","A20"] },
+      "MP2": { "load": "COP_coils_12V_bank_B",   "trigger": "IGN_ON",              "current_limit_a": 10, "pins": ["A9","A21"] },
+      "LP7": { "load": "warning_LED",            "trigger": "CAN_WARN",            "current_limit_a": 3,  "pins": ["B7","B21"] }
+    }
+  },
+
+  "sensors": {
+    "coolant_temp":     { "type": "Lowdoller PTC thermistor", "model": "Lowdoller 899407", "location": "coolant hose tee", "signal_to": "AVI6" },
+    "coolant_pressure": { "type": "Lowdoller ratiometric",    "model": "Lowdoller 899406", "location": "coolant hose tee", "signal_to": "AVI5" },
+    "oil_pressure":     { "type": "Lowdoller ratiometric",    "model": "Lowdoller 899402", "location": "oil sandwich plate", "signal_to": "AVI3" },
+    "oil_temp":         { "type": "Lowdoller PTC thermistor", "model": "Lowdoller 899403", "location": "oil sandwich plate", "signal_to": "AVI4" },
+    "fuel_pressure":    { "type": "Lowdoller ratiometric",    "model": "Lowdoller 899404", "location": "return line tap (Radium FPR)", "signal_to": "AVI1" },
+    "fuel_temp":        { "type": "Lowdoller PTC thermistor", "model": "Lowdoller 899405", "location": "return line tap", "signal_to": "AVI2" },
+    "brake_pressure":   { "type": "Lowdoller ratiometric",    "model": "Lowdoller 899408", "location": "brake hard line tee", "signal_to": "AVI7" },
+    "brake_temp":       { "type": "Lowdoller PTC thermistor", "model": "Lowdoller 899409", "location": "rotor proximity", "signal_to": "AVI8" },
+    "map":              { "type": "factory_oem",               "model": "OEM MAP sensor",   "location": "intake manifold",   "signal_to": "AVI9" },
+    "tps":              { "type": "factory_oem",               "model": "OEM TPS",          "location": "throttle body",     "signal_to": "AVI10" },
+    "lambda":           { "type": null, "model": null, "location": null }
+  },
+
+  "modifications": {
+    "fuel_system": ["Radium FPR", "return-style fuel system"],
+    "intake": [],
+    "exhaust": [],
+    "suspension": [],
+    "safety": ["roll cage (Lemons spec)"],
+    "other": ["AIM 10-inch dash", "AIM keypad 12-button", "COP ignition conversion"]
+  },
+
+  "oem_differences": {
+    "immo_disabled": true,
+    "oem_cluster_retained": false,
+    "ac_deleted": true,
+    "abs_retained": false
+  },
+
+  "note": "Primary Lemons race car. Haltech Elite 2500 replaces OEM Siemens SIMK43. AIM PDM 32 handles all power distribution. All 10 AVI channels assigned to Lowdoller sensors. Sequential COP ignition with Toyota 90919-A2005 coils. Load this file at session start — use AVI assignments and PDM map to answer wiring questions without re-asking."
+}

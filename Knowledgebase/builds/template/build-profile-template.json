@@ -1,0 +1,121 @@
+{
+  "_instructions": "Copy this file to builds/{your-car}/build-profile.json and fill in your car's details. AI models load this at session start for context. Remove _instructions and any unused sections.",
+
+  "build_id": "your-car-name",
+  "description": "2003 Hyundai Tiburon GK — brief description",
+  "year": 2003,
+  "chassis": "GK",
+  "engine": "G6BA",
+  "displacement_cc": 2656,
+  "transmission": "Aisin AY6",
+  "final_drive": "4.050:1",
+  "car_color": "white",
+  "use": "lemons_race",
+
+  "ecu": {
+    "make": "Haltech",
+    "model": "Elite 2500",
+    "firmware": null,
+    "oem_ecu": false,
+    "oem_ecu_model": null,
+
+    "avi_assignments": {
+      "_note": "Leave null if unassigned. Values: signal name, sensor model, and ECU pin",
+      "AVI1":  { "signal": null, "sensor": null, "pin": null },
+      "AVI2":  { "signal": null, "sensor": null, "pin": null },
+      "AVI3":  { "signal": null, "sensor": null, "pin": null },
+      "AVI4":  { "signal": null, "sensor": null, "pin": null },
+      "AVI5":  { "signal": null, "sensor": null, "pin": null },
+      "AVI6":  { "signal": null, "sensor": null, "pin": null },
+      "AVI7":  { "signal": null, "sensor": null, "pin": null },
+      "AVI8":  { "signal": null, "sensor": null, "pin": null },
+      "AVI9":  { "signal": null, "sensor": null, "pin": null },
+      "AVI10": { "signal": null, "sensor": null, "pin": null }
+    },
+
+    "digital_inputs": {
+      "_note": "SPI = Speed/Position Input, DPI = Digital/Pull-up Input",
+      "SPI1": { "signal": null, "sensor": null, "pin": null },
+      "SPI2": { "signal": null, "sensor": null, "pin": null },
+      "SPI3": { "signal": null, "sensor": null, "pin": null },
+      "SPI4": { "signal": null, "sensor": null, "pin": null }
+    },
+
+    "ignition": {
+      "type": "COP",
+      "_type_options": ["COP", "wasted_spark", "distributor"],
+      "coil_model": null,
+      "count": 6,
+      "dwell_ms": null,
+      "mode": "sequential",
+      "_mode_options": ["sequential", "semi_sequential", "batch"]
+    },
+
+    "injection": {
+      "mode": "sequential",
+      "_mode_options": ["sequential", "semi_sequential", "batch"],
+      "injector_flow_cc_min": null,
+      "injector_deadtime_ms": null
+    },
+
+    "can_buses": {
+      "CAN0": { "baud": 1000000, "connects_to": null },
+      "CAN1": { "baud": null, "connects_to": null }
+    }
+  },
+
+  "pdm": {
+    "make": null,
+    "model": null,
+    "outputs": {
+      "_note": "Fill in load (what it powers) and trigger (CAN variable or condition). null = not used.",
+      "HP1": { "load": null, "trigger": null, "current_limit_a": null },
+      "HP2": { "load": null, "trigger": null, "current_limit_a": null },
+      "HP3": { "load": null, "trigger": null, "current_limit_a": null },
+      "HP4": { "load": null, "trigger": null, "current_limit_a": null },
+      "HP5": { "load": null, "trigger": null, "current_limit_a": null },
+      "HP6": { "load": null, "trigger": null, "current_limit_a": null },
+      "HP7": { "load": null, "trigger": null, "current_limit_a": null },
+      "MP1": { "load": null, "trigger": null, "current_limit_a": null },
+      "MP2": { "load": null, "trigger": null, "current_limit_a": null },
+      "MP3": { "load": null, "trigger": null, "current_limit_a": null },
+      "LP1": { "load": null, "trigger": null, "current_limit_a": null },
+      "LP2": { "load": null, "trigger": null, "current_limit_a": null },
+      "LP3": { "load": null, "trigger": null, "current_limit_a": null },
+      "LP4": { "load": null, "trigger": null, "current_limit_a": null },
+      "LP5": { "load": null, "trigger": null, "current_limit_a": null },
+      "LP6": { "load": null, "trigger": null, "current_limit_a": null },
+      "LP7": { "load": null, "trigger": null, "current_limit_a": null }
+    }
+  },
+
+  "sensors": {
+    "coolant_temp": { "type": null, "location": null, "signal_to": null },
+    "oil_pressure":  { "type": null, "location": null, "signal_to": null },
+    "oil_temp":      { "type": null, "location": null, "signal_to": null },
+    "fuel_pressure": { "type": null, "location": null, "signal_to": null },
+    "fuel_temp":     { "type": null, "location": null, "signal_to": null },
+    "map":           { "type": null, "location": null, "signal_to": null },
+    "tps":           { "type": null, "location": null, "signal_to": null },
+    "lambda":        { "type": null, "model": null, "location": null }
+  },
+
+  "modifications": {
+    "fuel_system": [],
+    "intake": [],
+    "exhaust": [],
+    "suspension": [],
+    "safety": [],
+    "other": []
+  },
+
+  "oem_differences": {
+    "_note": "List any OEM systems deleted, bypassed, or modified",
+    "immo_disabled": false,
+    "oem_cluster_retained": false,
+    "ac_deleted": false,
+    "abs_retained": false
+  },
+
+  "note": "Add any free-form notes here that help the AI model understand this build."
+}
