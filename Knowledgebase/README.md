@@ -1,77 +1,54 @@
-# 2003 Hyundai Tiburon (GK) Knowledgebase
-## 24 Hours of Lemons — Dual V6 (Delta 2.7L) Race Cars
+# Tiburon GK Knowledgebase
 
-### The Cars
-
-| | Blue Tiburon | White Tiburon |
-|---|---|---|
-| **Role** | Lower-tech test car | Primary race car (best equipment) |
-| **ECU** | Stock Siemens (tuned via GKFlasher) | Haltech Elite 2500 |
-| **PDM** | None (stock fuse box) | AIM PDM 32 |
-| **Engine** | 2.7L V6 NA ("junkyard engine") | 2.7L V6 (TBD mods) |
-| **Build profile** | `builds/blue-tiburon/build-profile.md` | `builds/white-tiburon/build-profile.md` |
+Structured technical reference for the GK-chassis Hyundai Tiburon (2003). Factory manual content is extracted into searchable Markdown and linked via a knowledge graph. Designed for use with AI models via MCP, or browsed directly on GitHub.
 
 ---
 
-### Directory Structure
+## Directory Structure
 
 ```
 Knowledgebase/
-├── README.md                    ← This file
-├── component-index.json         ← Component → file lookup
-├── system-crossref.json         ← System → component → file mapping
-├── knowledge-graph.json         ← Node/edge graph: components, signals, protocols
+├── ARCHITECTURE.md              ← System design, authority tiers, trust ladder
 │
-├── builds/                      ← Per-car build configs (separable, community-shareable)
-│   ├── template/                ← Intake form for new builds
-│   │   └── build-template.md
-│   ├── white-tiburon/           ← Primary race car
-│   │   ├── build-profile.md     ← Equipment list, known issues, maintenance log
-│   │   ├── weekend-tasks.md     ← Phased build procedure + test gates
-│   │   ├── signal-routing.md    ← End-to-end signal routing (sensor → wire → pin)
-│   │   └── oil-analysis/        ← Blackstone oil reports (PDF)
+├── common/                      ← GK chassis knowledge (shared across all builds)
+│   ├── shop-manual/             ← Factory procedures, specs, torques
+│   │   ├── engine-mechanical.md    (EMA / EM)
+│   │   ├── engine-electrical.md    (EE)
+│   │   ├── fuel-system.md          (FLA / FL)
+│   │   ├── emission-control-system.md (EC)
+│   │   ├── transaxle.md            (TR)
+│   │   ├── suspension-system.md    (SS)
+│   │   ├── brake-system.md         (BR)
+│   │   └── ... (14 chapters total)
+│   ├── electrical-manual/       ← ETM connectors, locations, schematics
+│   │   ├── connector-configurations.md
+│   │   ├── component-locations.md
+│   │   ├── harness-layouts.md
+│   │   └── schematic-diagrams.md
+│   ├── opengk/                  ← OpenGK community wiki (ECU, sensors, tuning)
+│   ├── chassis/
+│   │   └── gk-chassis-specs.md  ← G6BA engine specs, Aisin ratios, dimensions
+│   ├── diagrams/                ← Mermaid component diagrams
+│   │   └── cam-sensor.md        ← CMP sensor signal path + connector + DTCs
+│   ├── tiburon-knowledge-graph.json ← Component/spec/procedure graph
+│   ├── knowledge-graph-schema.md    ← Schema reference
+│   └── vector-store/            ← Semantic search (planned — see ROADMAP.md)
+│
+├── builds/                      ← Per-car configuration
+│   ├── template/
+│   │   ├── build-template.md           ← Human intake form
+│   │   └── build-profile-template.json ← Machine-readable template
+│   ├── white-tiburon/
+│   │   ├── build-profile.md            ← Equipment, wiring, status
+│   │   ├── build-profile.json          ← Machine-readable (load at AI session start)
+│   │   ├── build-knowledge-graph.json  ← Build-specific graph overlay
+│   │   ├── weekend-tasks.md            ← Phased build procedure + test gates
+│   │   ├── signal-routing.md           ← End-to-end signal routing
+│   │   ├── oil-analysis/               ← Blackstone oil reports (PDF)
+│   │   └── diagrams/
+│   │       └── fuel-pump.md            ← Fuel pump power + sensor path diagram
 │   └── blue-tiburon/
 │       └── build-profile.md
-│
-├── common/                      ← Shared GK chassis knowledge (not build-specific)
-│   ├── chassis/
-│   │   └── gk-chassis-specs.md  ← G6BA engine, Aisin trans, dimensions, alignment
-│   ├── engine-builds.md         ← Engine build plans (both cars)
-│   ├── opengk/                  ← OpenGK community wiki (ECU, sensors, tuning)
-│   │   ├── README.md
-│   │   ├── sensor-information.md
-│   │   ├── gkflasher.md
-│   │   ├── ecm-pinouts.md
-│   │   ├── ecm-identification.md
-│   │   ├── fuel-injectors.md
-│   │   ├── map-definitions.md
-│   │   ├── can-bus-messages.md
-│   │   ├── camshaft-specs.md
-│   │   ├── valvetrain.md
-│   │   ├── forced-induction-v6.md
-│   │   ├── immobiliser.md
-│   │   ├── body-control-module.md
-│   │   ├── k-line.md
-│   │   ├── chassis-identifiers.md
-│   │   ├── smartra.md
-│   │   ├── smartra-protocol.md
-│   │   ├── w-line.md
-│   │   └── test-bench-setup.md
-│   ├── shop-manual/             ← Factory service manual (procedures, specs, torques)
-│   │   ├── engine-mechanical.md
-│   │   ├── engine-electrical.md
-│   │   ├── fuel-system.md
-│   │   ├── transaxle.md
-│   │   ├── suspension-system.md
-│   │   ├── brake-system.md
-│   │   ├── body-electrical.md
-│   │   ├── body-control-module.md
-│   │   └── ... (14 chapters)
-│   └── electrical-manual/       ← Electrical troubleshooting manual
-│       ├── connector-configurations.md
-│       ├── component-locations.md
-│       ├── harness-layouts.md
-│       └── schematic-diagrams.md
 │
 ├── hardware/                    ← Aftermarket device documentation
 │   ├── aim-pdm/
@@ -79,95 +56,82 @@ Knowledgebase/
 │   │   ├── pdm-configuration-guide.md
 │   │   └── race-studio-config-guide.md
 │   ├── haltech/
-│   │   ├── elite-2500-wiring-diagram--rev-6.md
 │   │   ├── main-connector-26-pin-elite2500.md
 │   │   ├── main-connector-34-pin-elite2500.md
-│   │   └── rem-harness-diagram.md
+│   │   └── elite-2500-wiring-diagram--rev-6.md
 │   └── sensors/
-│       ├── lowdoller-sensors.md       ← Combo pressure/temp sensor specs & calibration
-│       ├── cop-ignition.md            ← Toyota 90919-A2005 COP conversion
-│       └── oem-cluster-integration.md ← OEM gauge cluster + Haltech/PDM wiring
+│       ├── lowdoller-sensors.md        ← Combo pressure/temp specs + calibration
+│       ├── cop-ignition.md             ← Toyota 90919-A2005 COP wiring
+│       └── oem-cluster-integration.md  ← OEM gauge cluster wiring
 │
-└── fasteners/                   ← Bolt database (built progressively)
-    ├── README.md
-    ├── bolt-index.json          ← Primary query file
-    ├── bin-labels.md            ← Printable bin labels
-    ├── _templates/
-    │   └── record-template.json
-    └── bolts/
-        └── {bolt_id}/
-            ├── record.json
-            └── *.jpg (spec, head, side, location)
+├── fasteners/                   ← Bolt database with photos and measurements
+│   ├── README.md
+│   ├── bolt-index.json
+│   ├── bin-labels.md
+│   └── bolts/{bolt_id}/         ← Per-bolt: record.json + 4 photos
+│
+└── forum/                       ← Community knowledge (planned — see ROADMAP.md)
+    └── demo.md                  ← Example: AI + grounded knowledgebase
 ```
 
-> **Legacy directories** — `cars/`, `opengk/`, `shop-manual/`, `electrical-manual/`, `aim-pdm/`, `haltech/`, `signal-routing.md` (root) — are preserved in place. New canonical locations are under `builds/`, `common/`, and `hardware/`. Legacy directories can be removed once GitHub migration is confirmed.
+---
+
+## How to Use
+
+### Find a spec or procedure
+
+Search the repo (GitHub search or `grep`) for the value or component name. Results link to the source file and page reference (e.g., `EMA-3`, `FLA-73`).
+
+```
+"valve spring free height"  →  common/shop-manual/engine-mechanical.md (EMA-3)
+"P0340"                     →  common/shop-manual/fuel-system.md (FLA-73)
+"cam sensor connector"      →  common/diagrams/cam-sensor.md
+```
+
+### With an AI model (MCP)
+
+Load `builds/{car}/build-profile.json` at session start — the AI will know your AVI assignments, PDM outputs, and wiring without being re-told each session. See `mcp/SETUP-GUIDE.md`.
+
+### Add your own build
+
+Copy `builds/template/build-profile-template.json` → `builds/{your-car}/build-profile.json` and fill in your equipment. The structure works for any GK-chassis Tiburon configuration, stock or modified.
 
 ---
 
-### How to Use This Knowledgebase
-
-**Quick lookup workflow:**
-1. **Check `component-index.json`** — maps every sensor/actuator/connector to relevant files
-2. **For a specific build** — start at `builds/{car}/build-profile.md`
-3. **For GK chassis/engine info** — check `common/chassis/` and `common/opengk/`
-4. **For wiring/connector pinouts** — `common/electrical-manual/` + `hardware/haltech/` + `hardware/aim-pdm/`
-5. **For fasteners** — `fasteners/bolt-index.json`
-6. **Signal routing end-to-end** — `builds/white-tiburon/signal-routing.md`
-
----
-
-### Key External Resources
-
-| Resource | URL | Local Copy |
-|----------|-----|------------|
-| OpenGK Wiki | https://opengk.org/ | `common/opengk/` |
-| GKFlasher | https://github.com/Dante383/GKFlasher | `common/opengk/gkflasher.md` |
-| NewTiburon Forum | https://www.newtiburon.com/ | `forum/` *(planned scrape — see below)* |
-| AIM Sports Webinar | https://www.youtube.com/watch?v=sResCgHlDYI | `hardware/aim-pdm/pdm-configuration-guide.md` |
-
----
-
-### Shop Manual Code → Chapter Mapping
+## Shop Manual Chapter Codes
 
 | Code | Chapter | File |
 |------|---------|------|
-| BCM | Body Control Module | `common/shop-manual/body-control-module.md` |
-| BE | Body Electrical | `common/shop-manual/body-electrical.md` |
-| BR | Brake System | `common/shop-manual/brake-system.md` |
-| CH | Clutch System | `common/shop-manual/clutch-system.md` |
-| DS | Driveshaft And Axle | `common/shop-manual/driveshaft-and-axle.md` |
-| EC | Emission Control | `common/shop-manual/emission-control-system.md` |
+| EMA | Engine Mechanical (V6) | `common/shop-manual/engine-mechanical.md` |
+| EM | Engine Mechanical (I4) | same file, I4 sections |
 | EE | Engine Electrical | `common/shop-manual/engine-electrical.md` |
-| EM | Engine Mechanical | `common/shop-manual/engine-mechanical.md` |
-| FL | Fuel System | `common/shop-manual/fuel-system.md` |
-| GI | General Information | `common/shop-manual/general-information.md` |
-| HA | HVAC | `common/shop-manual/heating-ventilation-air-conditioning.md` |
-| RT | Restraints | `common/shop-manual/restraints.md` |
+| FLA | Fuel System (V6) | `common/shop-manual/fuel-system.md` |
+| FL | Fuel System (I4) | same file |
+| EC | Emission Control | `common/shop-manual/emission-control-system.md` |
+| TR | Transaxle | `common/shop-manual/transaxle.md` |
+| BR | Brake System | `common/shop-manual/brake-system.md` |
 | SS | Suspension | `common/shop-manual/suspension-system.md` |
 | ST | Steering | `common/shop-manual/steering-system.md` |
-| TR | Transaxle | `common/shop-manual/transaxle.md` |
+| EE | Engine Electrical | `common/shop-manual/engine-electrical.md` |
+| BE | Body Electrical | `common/shop-manual/body-electrical.md` |
+| GI | General Information | `common/shop-manual/general-information.md` |
+| CC | Connector Configurations | `common/electrical-manual/connector-configurations.md` |
+| CL | Component Locations | `common/electrical-manual/component-locations.md` |
 
 ---
 
-### Engine Management Quick-Reference (V6 Delta 2.7L)
+## Engine Management Quick-Reference (G6BA 2.7L V6)
 
 | Component | Key Files |
 |-----------|-----------|
-| Cam/crank sensors | `common/shop-manual/emission-control-system.md`, `common/shop-manual/engine-mechanical.md` |
-| Knock sensor | `common/shop-manual/body-electrical.md` |
-| TPS | `common/shop-manual/emission-control-system.md` |
-| Coolant temp | `common/shop-manual/engine-mechanical.md`, `common/shop-manual/body-electrical.md` |
+| Cam / crank sensors | `common/shop-manual/fuel-system.md` (FLA-2, FLA-73), `common/diagrams/cam-sensor.md` |
+| TPS | `common/shop-manual/fuel-system.md` (FLA-3) |
+| Coolant temp sensor | `common/shop-manual/engine-mechanical.md` |
+| Knock sensors | `common/shop-manual/engine-electrical.md` |
 | COP ignition | `hardware/sensors/cop-ignition.md` |
-| Fuel pump | `common/shop-manual/body-electrical.md`, `common/shop-manual/fuel-system.md` |
+| Fuel pump circuit | `builds/white-tiburon/diagrams/fuel-pump.md` |
 | Lowdoller sensors | `hardware/sensors/lowdoller-sensors.md` |
-| Haltech connector pinouts | `hardware/haltech/main-connector-26-pin-elite2500.md`, `hardware/haltech/main-connector-34-pin-elite2500.md` |
-| AIM PDM pinout | `hardware/aim-pdm/pdm-pinout.md` |
-| ECM (stock) | `common/opengk/ecm-pinouts.md`, `common/opengk/ecm-identification.md` |
-
----
-
-### Notes
-
-- **V6 Focus:** Both race cars use the 2.7L V6 Delta. I4-specific content exists in factory manual files but is labeled as such.
-- **Visual Diagrams:** For visual circuit tracing, reference original PDFs in `LARGEFILE Searchable_Manuals/`. Text extracts capture connector codes and pin labels only.
-- **MCP Access:** This knowledgebase is designed to be served via `mcp-server-filesystem` for use with any AI model (Claude, OpenAI-compatible, Gemini, etc.) — see `mcp/README.md` for setup.
+| Haltech 26-pin pinout | `hardware/haltech/main-connector-26-pin-elite2500.md` |
+| Haltech 34-pin pinout | `hardware/haltech/main-connector-34-pin-elite2500.md` |
+| AIM PDM 32 pinout | `hardware/aim-pdm/pdm-pinout.md` |
+| ECM (stock Siemens) | `common/opengk/ecm-pinouts.md` |

@@ -1,7 +1,7 @@
 # Tiburon GK Knowledgebase
-**2003 Hyundai Tiburon GK — 24 Hours of Lemons Race Car Build**
+**2003 Hyundai Tiburon (GK chassis) — Factory Manual + Knowledge Graph + MCP**
 
-A community knowledgebase for the GK-chassis Hyundai Tiburon, maintained by racers for racers. Combines factory service manual content, aftermarket device documentation, community forum knowledge, and AI-queryable structured data.
+Structured technical reference for the GK-chassis Hyundai Tiburon. Combines factory service manual content, aftermarket device documentation, and a queryable knowledge graph. Designed to be served to any AI model via MCP for accurate, cited answers during build and diagnostic sessions.
 
 ---
 
@@ -9,43 +9,37 @@ A community knowledgebase for the GK-chassis Hyundai Tiburon, maintained by race
 
 | Directory | Contents |
 |-----------|----------|
-| `Knowledgebase/` | Core KB: Markdown docs, knowledge graphs, bolt database, diagrams |
-| `Tiburon-Shop-Manual/` | Original factory shop manual PDFs (chapter PDFs, 1–20MB each) |
-| `Electrical Troubleshooting Manual/` | Original ETM PDFs (schematic diagrams, component locations) |
-| `Electrical Excerpts/` | Specific hand-picked ETM pages for quick reference |
+| `Knowledgebase/` | Core KB: Markdown docs, knowledge graphs, diagrams, fastener database |
+| `Tiburon-Shop-Manual/` | Factory shop manual PDFs (chapter PDFs) |
+| `Electrical Troubleshooting Manual/` | ETM PDFs (schematics, component locations, connector configurations) |
+| `Electrical Excerpts/` | Selected ETM pages for quick reference |
 | `AIM PDM/` | AIM PDM 32 original documentation |
-| `Haltech/` | Haltech Elite 2500 documentation |
+| `Haltech/` | Haltech Elite 2500 wiring documentation |
 | `mcp/` | MCP server setup for AI model integration |
 
-> **Note:** `LARGEFILE Searchable_Manuals/` (OCR'd PDFs, 1.4GB) is excluded from this repo. Its text content is already extracted into `Knowledgebase/common/shop-manual/` and `Knowledgebase/common/electrical-manual/`.
+> **Note:** `LARGEFILE Searchable_Manuals/` (OCR'd PDFs, 1.4GB) is excluded from this repo. Its text content is extracted into `Knowledgebase/common/shop-manual/` and `Knowledgebase/common/electrical-manual/`.
 
 ---
 
 ## Quick Start
 
-### For Builders (Human)
+### For Builders
 
-1. Browse `Knowledgebase/builds/{car}/build-profile.md` for a specific car setup
-2. Browse `Knowledgebase/common/shop-manual/` for factory procedures and specs
-3. Use the Mermaid diagrams in `Knowledgebase/common/diagrams/` and `Knowledgebase/builds/{car}/diagrams/` for visual wiring traces
-4. Search GitHub for specific values (e.g., "valve spring free height" → finds EMA-3 in engine-mechanical.md)
+1. Browse `Knowledgebase/common/shop-manual/` for factory procedures and specs
+2. Browse `Knowledgebase/builds/{car}/build-profile.md` for a specific car's equipment and wiring
+3. Use the Mermaid diagrams in `Knowledgebase/common/diagrams/` for visual component traces
+4. Search for specific values (e.g., "valve spring free height" → finds EMA-3 in `engine-mechanical.md`)
 
 ### For AI Models
 
-See `mcp/README.md` for MCP filesystem server setup — works with Claude, OpenAI-compatible models, and any MCP client. No cloud hosting, no API keys, zero ongoing cost.
+See `mcp/SETUP-GUIDE.md` for a step-by-step walkthrough. The short version:
 
 ```bash
 npm install -g @modelcontextprotocol/server-filesystem
 npx @modelcontextprotocol/server-filesystem ./Knowledgebase
 ```
 
-### For Community Contributors
-
-- **Add a forum thread** → `Knowledgebase/forum/thread-index.json` + create `forum/threads/{id}/` folder
-- **Add a bolt** → `Knowledgebase/fasteners/bolt-index.json` + create `fasteners/bolts/{bolt_id}/` folder with 4 photos
-- **Add a build** → Copy `Knowledgebase/builds/template/build-template.md` → `builds/{your-car}/build-profile.md`
-- **Verify forum content** → Open a GitHub Issue with label `community-review` to vet technical claims
-- **Report incorrect spec** → Open a GitHub Issue with label `spec-error`
+Add to your Claude Desktop config and the AI can read any file in the knowledgebase. See `mcp/README.md` for other client configs.
 
 ---
 
@@ -53,57 +47,46 @@ npx @modelcontextprotocol/server-filesystem ./Knowledgebase
 
 ```
 Knowledgebase/
-├── common/          ← Shared GK chassis knowledge
-│   ├── shop-manual/ ← Factory procedures, specs, torques (V6 + I4)
+├── ARCHITECTURE.md      ← System design: authority tiers, trust ladder, build profiles
+├── common/              ← GK chassis knowledge (shared across builds)
+│   ├── shop-manual/     ← Factory procedures, specs, torques (V6 + I4)
 │   ├── electrical-manual/ ← ETM connectors, locations, schematics
-│   ├── opengk/      ← Community wiki (ECU tuning, sensors, immo)
-│   ├── chassis/     ← G6BA engine specs, Aisin trans ratios
-│   ├── diagrams/    ← Mermaid component diagrams (clickable)
-│   ├── tiburon-knowledge-graph.json ← Structured component graph
+│   ├── opengk/          ← OpenGK community wiki (ECU tuning, sensors, immobilizer)
+│   ├── chassis/         ← G6BA engine specs, Aisin trans ratios
+│   ├── diagrams/        ← Mermaid component diagrams (clickable nodes)
+│   ├── tiburon-knowledge-graph.json ← Structured component/spec graph
 │   ├── knowledge-graph-schema.md    ← Schema documentation
-│   └── vector-store/ ← Semantic search implementation (local, free)
+│   └── vector-store/    ← Semantic search (planned)
 ├── builds/
-│   ├── template/    ← Intake form for new builds
-│   ├── white-tiburon/ ← Haltech Elite 2500 + AIM PDM 32 build
-│   │   ├── build-profile.md
-│   │   ├── weekend-tasks.md (phased build procedure)
-│   │   ├── signal-routing.md
-│   │   ├── build-knowledge-graph.json
-│   │   └── diagrams/  ← Build-specific wiring diagrams
-│   └── blue-tiburon/
+│   ├── template/        ← Build profile template for new cars
+│   ├── white-tiburon/   ← Haltech Elite 2500 + AIM PDM 32 build
+│   └── blue-tiburon/    ← Stock Siemens SIMK43 build
 ├── hardware/
-│   ├── aim-pdm/     ← PDM 32 pinout + Race Studio config guide
-│   ├── haltech/     ← Elite 2500 wiring diagrams + connector pinouts
-│   └── sensors/     ← COP coil wiring, Lowdoller sensor specs
-├── fasteners/       ← Bolt database (built progressively)
-└── forum/           ← NewTiburon.com community knowledge
+│   ├── aim-pdm/         ← PDM 32 pinout + Race Studio config guide
+│   ├── haltech/         ← Elite 2500 wiring diagrams + connector pinouts
+│   └── sensors/         ← Aftermarket sensor specs and wiring
+├── fasteners/           ← Bolt database with photos and measurements
+└── forum/               ← Community knowledge (planned)
 ```
 
 ---
 
-## Cars
+## Example Builds
 
-| Car | ECU | PDM | Build file |
-|-----|-----|-----|------------|
-| White Tiburon (primary race car) | Haltech Elite 2500 | AIM PDM 32 | `Knowledgebase/builds/white-tiburon/build-profile.md` |
-| Blue Tiburon (test car) | Stock Siemens SIMK43 (GKFlasher) | None | `Knowledgebase/builds/blue-tiburon/build-profile.md` |
-
----
-
-## Community Review
-
-Forum-derived content starts with `"community_verified": false` in the knowledge graph. To verify:
-1. Open a GitHub Issue with label `community-review`
-2. Tag the specific claim (quote the `chunk_id` from `forum/thread-index.json` or node id from the graph)
-3. Provide a source (another thread, personal experience, manual reference)
-4. A maintainer sets `"community_verified": true` once confirmed
+| Car | ECU | Notes | Build file |
+|-----|-----|-------|------------|
+| White Tiburon | Haltech Elite 2500 + AIM PDM 32 | Full aftermarket engine management | `builds/white-tiburon/build-profile.md` |
+| Blue Tiburon | Stock Siemens SIMK43 (GKFlasher) | OEM ECU with custom tune | `builds/blue-tiburon/build-profile.md` |
 
 ---
 
 ## Acknowledgments
 
-- **OpenGK community** — sensor specs, ECU knowledge, tuning maps
-- **NewTiburon.com** — forum community knowledge (especially chase206 for fabrication and race prep)
 - **Hyundai Motor Company** — factory service manual and electrical troubleshooting manual
-- **AIM Sports** — PDM 32 documentation and webinar content
+- **OpenGK community** — ECU knowledge, sensor specs, tuning maps
+- **AIM Sports** — PDM 32 documentation
 - **Haltech** — Elite 2500 wiring documentation
+
+---
+
+See `ROADMAP.md` for planned additions including community input, forum data, and interchangeable parts.
