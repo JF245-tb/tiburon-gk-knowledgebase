@@ -1,0 +1,49 @@
+{
+  "_meta": {
+    "description": "Primary fastener index for 2003 Hyundai Tiburon GK (G6BA V6)",
+    "bolt_id_format": "M{diameter}x{pitch}-{uhl}-{head_type}-{location-slug}",
+    "version": "1.0",
+    "last_updated": "2026-03-07"
+  },
+  "bolts": {
+    "M6x1.0-20-flange-hex-valve-cover": {
+      "bin_label": "M6x1.0-20 FLANGE / VALVE COVER",
+      "identity": {
+        "diameter_mm": 6,
+        "thread_pitch_mm": 1.0,
+        "uhl_mm": 20,
+        "head_type": "flange-hex",
+        "drive": "hex-external",
+        "material": "steel",
+        "grade": "OEM-unknown",
+        "finish": "oem-phosphate"
+      },
+      "location": {
+        "system": "engine",
+        "subsystem": "valve cover",
+        "description": "Valve cover to cylinder head bolts — 2.7L G6BA V6",
+        "cars": "both",
+        "qty_per_car": 12,
+        "shop_manual_ref": ""
+      },
+      "torque": {
+        "nm": 10,
+        "lbft": 7,
+        "method": "torque-wrench",
+        "note": "Do not overtighten — seals crush"
+      },
+      "oem": {
+        "part_number": "",
+        "schematic_url": "",
+        "parts_site_url": ""
+      },
+      "images": {
+        "spec": "bolts/M6x1.0-20-flange-hex-valve-cover/spec.jpg",
+        "head": "bolts/M6x1.0-20-flange-hex-valve-cover/head.jpg",
+        "side": "bolts/M6x1.0-20-flange-hex-valve-cover/side.jpg",
+        "location": "bolts/M6x1.0-20-flange-hex-valve-cover/location.jpg"
+      },
+      "tags": ["valve-cover", "g6ba", "engine-top"]
+    }
+  }
+}

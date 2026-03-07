@@ -1,0 +1,19 @@
+{
+  "_meta": {
+    "source": "https://www.newtiburon.com/",
+    "last_scraped": "",
+    "priority_contributors": ["chase206"],
+    "notes": "Add threads manually or via scraper.py. Set scraped=true once posts.json is populated."
+  },
+  "threads": {
+    "484870": {
+      "title": "Big Strong Arms — Front Lower Control Arms for the Lemons Tiburons",
+      "url": "https://www.newtiburon.com/threads/big-strong-arms-front-lower-control-arms-for-the-lemons-tiburons.484870/",
+      "section": "Racing / Track",
+      "reply_count": null,
+      "has_priority_contributor": true,
+      "tags": ["control-arms", "fabrication", "lemons", "heim-joint", "suspension", "g6ba"],
+      "scraped": false
+    }
+  }
+}

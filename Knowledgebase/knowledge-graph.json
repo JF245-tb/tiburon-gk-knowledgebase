@@ -1,0 +1,438 @@
+{
+  "version": "1.1",
+  "description": "Relationship graph for 2003 Hyundai Tiburon GK race cars. Nodes = components/modules/signals. Edges = wiring, protocols, data flows. car field: 'blue', 'white', or 'both'.",
+  "notes": "For file-to-component lookup use component-index.json. This graph captures the HOW and WHY of connections.",
+
+  "nodes": {
+
+    "simk43": {
+      "label": "SIMK43 ECU (Siemens)",
+      "type": "module",
+      "car": "blue",
+      "part_numbers": ["5WY5766A", "5WY5766B"],
+      "connector": "C133-1 (32-pin blue) + C133-2 (32-pin grey)",
+      "files": ["opengk/ecm-pinouts.md", "opengk/ecm-identification.md", "opengk/map-definitions.md", "opengk/k-line.md", "opengk/can-bus-messages.md", "cars/blue-tiburon.md"]
+    },
+
+    "haltech_e2500": {
+      "label": "Haltech Elite 2500",
+      "type": "module",
+      "car": "white",
+      "connector": "26-pin (J1) + 34-pin (J2)",
+      "files": ["haltech/main-connector-26-pin-elite2500.md", "haltech/main-connector-34-pin-elite2500.md", "haltech/elite-2500-wiring-diagram--rev-6.md", "cars/white-tiburon.md", "signal-routing.md"]
+    },
+
+    "aim_pdm": {
+      "label": "AIM PDM 32",
+      "type": "module",
+      "car": "white",
+      "connector": "35-pin Conn A (black) + 35-pin Conn B (grey)",
+      "files": ["aim-pdm/pdm-pinout.md", "aim-pdm/pdm-configuration-guide.md", "signal-routing.md"]
+    },
+
+    "bcm": {
+      "label": "BCM (Body Control Module)",
+      "type": "module",
+      "car": "both",
+      "mcu": "Motorola MC68HC908AZ60 @ 8MHz",
+      "connectors": "BCM-AI, BCM-CE, BCM-DE, BCM-EF, BCM-FF, BCM-GF, BCM-HM, BCM-IM, BCM-JM, BCM-KM, BCM-LM, BCM-MR",
+      "note": "On V6: BCM contains SMARTRA2 CU. On white car: BCM retained for cluster signals but immobilizer bypassed",
+      "files": ["opengk/body-control-module.md", "opengk/immobiliser.md", "opengk/smartra.md", "shop-manual/body-control-module.md"]
+    },
+
+    "aim_dash": {
+      "label": "AIM MXS 1.2 Dash",
+      "type": "module",
+      "car": "white",
+      "protocol": "CAN @ 500kbps",
+      "files": ["signal-routing.md", "cars/white-tiburon.md"]
+    },
+
+    "ckp_sensor": {
+      "label": "Crankshaft Position Sensor (CKP)",
+      "type": "sensor",
+      "car": "both",
+      "signal": "Hall effect, reluctor ring",
+      "oem_part": "See opengk/sensor-information.md",
+      "ecm_pin_blue": "SIMK43 C133-2 pin 13",
+      "files": ["opengk/sensor-information.md", "shop-manual/engine-electrical.md", "shop-manual/fuel-system.md", "cars/gk-chassis-specs.md"]
+    },
+
+    "cmp_sensor": {
+      "label": "Camshaft Position Sensor (CMP)",
+      "type": "sensor",
+      "car": "both",
+      "signal": "Hall effect",
+      "oem_part": "See opengk/sensor-information.md",
+      "files": ["opengk/sensor-information.md", "shop-manual/emission-control-system.md", "shop-manual/fuel-system.md"]
+    },
+
+    "maf_sensor": {
+      "label": "Mass Airflow Sensor (MAF)",
+      "type": "sensor",
+      "car": "blue",
+      "signal": "Analog voltage (0–5V)",
+      "note": "White car uses MAP+IAT instead of MAF",
+      "files": ["shop-manual/fuel-system.md", "shop-manual/engine-mechanical.md"]
+    },
+
+    "map_sensor_oem": {
+      "label": "MAP Sensor (OEM / Blue car)",
+      "type": "sensor",
+      "car": "blue",
+      "signal": "Analog voltage (0–5V), 5V supply",
+      "files": ["shop-manual/emission-control-system.md"]
+    },
+
+    "map_sensor_lowdoller": {
+      "label": "MAP Sensor (Lowdoller / White car)",
+      "type": "sensor",
+      "car": "white",
+      "part": "See lowdoller-sensors.md",
+      "signal": "Ratiometric 0.5–4.5V, 0–150 PSI",
+      "supply": "+5V from Haltech 34-pin pin 9",
+      "haltech_pin": "AVI 9 (34-pin pin 15, Y wire)",
+      "files": ["cars/lowdoller-sensors.md", "signal-routing.md"]
+    },
+
+    "tps": {
+      "label": "Throttle Position Sensor (TPS)",
+      "type": "sensor",
+      "car": "both",
+      "signal": "Ratiometric 0–5V potentiometer",
+      "haltech_pin_white": "AVI 10 (34-pin pin 14, W wire)",
+      "files": ["cars/lowdoller-sensors.md", "shop-manual/fuel-system.md", "signal-routing.md"]
+    },
+
+    "iat_sensor": {
+      "label": "Intake Air Temp Sensor (IAT)",
+      "type": "sensor",
+      "car": "both",
+      "signal": "NTC thermistor (resistance decreases with temp)",
+      "files": ["shop-manual/emission-control-system.md", "shop-manual/fuel-system.md"]
+    },
+
+    "ect_sensor": {
+      "label": "Engine Coolant Temp Sensor (ECT)",
+      "type": "sensor",
+      "car": "both",
+      "signal": "NTC thermistor — 17.5Ω@120°C to 143.4Ω@20°C (for OEM cluster gauge)",
+      "note": "OEM cluster reads directly from sensor. White car: ECT also wired to Haltech",
+      "files": ["shop-manual/fuel-system.md", "cars/oem-cluster-integration.md"]
+    },
+
+    "o2_sensors": {
+      "label": "Oxygen Sensors (×4 on V6)",
+      "type": "sensor",
+      "car": "both",
+      "count": 4,
+      "config": "2 upstream (pre-cat), 2 downstream (post-cat)",
+      "signal": "0–1V (narrowband) or wideband on white car",
+      "files": ["shop-manual/emission-control-system.md", "opengk/sensor-information.md"]
+    },
+
+    "knock_sensors": {
+      "label": "Knock Sensors (×2)",
+      "type": "sensor",
+      "car": "both",
+      "count": 2,
+      "signal": "Piezoelectric, flat response",
+      "files": ["shop-manual/engine-electrical.md", "opengk/sensor-information.md"]
+    },
+
+    "vss": {
+      "label": "Vehicle Speed Sensor (VSS)",
+      "type": "sensor",
+      "car": "both",
+      "connector": "C109 (transaxle output)",
+      "signal": "Hall effect, 4 pulses/rev",
+      "note": "Signal fans out to: OEM cluster speedo + BCM-JM pin 4 + Haltech (white car)",
+      "files": ["signal-routing.md", "opengk/body-control-module.md", "shop-manual/transaxle.md"]
+    },
+
+    "fuel_injectors": {
+      "label": "Fuel Injectors (×6, V6)",
+      "type": "actuator",
+      "car": "both",
+      "count": 6,
+      "oem_specs": "See opengk/fuel-injectors.md",
+      "blue_control": "SIMK43 direct drive",
+      "white_control": "Haltech Elite 2500 direct drive",
+      "files": ["opengk/fuel-injectors.md", "shop-manual/fuel-system.md"]
+    },
+
+    "ignition_coils_blue": {
+      "label": "Ignition Coils — Blue Car (×3, wasted spark, OEM)",
+      "type": "actuator",
+      "car": "blue",
+      "count": 3,
+      "config": "Wasted spark — 3 coils, stock SIMK43 IGN outputs. NOT COP.",
+      "files": ["shop-manual/engine-electrical.md", "opengk/k-line.md", "cars/gk-chassis-specs.md"]
+    },
+
+    "ignition_coils_white": {
+      "label": "Ignition Coils — White Car (×6, COP Sequential, Toyota 90919-A2005)",
+      "type": "actuator",
+      "car": "white",
+      "count": 6,
+      "part": "Toyota 90919-A2005 (confirmed). Alternatives: 90080-19015, 90919-02239, 90080-19023, 90919-02234",
+      "config": "Sequential COP — 6 individual triggers from Haltech IGN1–6. Smart coil (internal igniter).",
+      "dwell_ms": 2.1,
+      "connector": "4-pin: A=GND, B=trigger, C=feedback(open), D=12V",
+      "status": "planned — not yet installed",
+      "files": ["cars/cop-ignition.md", "signal-routing.md", "shop-manual/engine-electrical.md"]
+    },
+
+    "fuel_pump": {
+      "label": "Fuel Pump",
+      "type": "actuator",
+      "car": "both",
+      "blue_control": "SIMK43 relay (3s prime + RPM signal)",
+      "white_control": "AIM PDM mid-power output (3s prime trigger + RPM > 50 via CAN from Haltech)",
+      "files": ["aim-pdm/pdm-configuration-guide.md", "shop-manual/fuel-system.md", "signal-routing.md"]
+    },
+
+    "cooling_fans": {
+      "label": "Cooling Fan(s)",
+      "type": "actuator",
+      "car": "both",
+      "blue_control": "SIMK43 relays (high/low speed)",
+      "white_control": "AIM PDM high-power output, PWM speed control based on coolant temp CAN signal",
+      "files": ["aim-pdm/pdm-configuration-guide.md", "shop-manual/fuel-system.md"]
+    },
+
+    "iac": {
+      "label": "Idle Air Control (IAC)",
+      "type": "actuator",
+      "car": "blue",
+      "signal": "PWM stepper motor",
+      "kwp_id": "0x23 (actuator test)",
+      "note": "White car: Haltech controls idle via drive-by-wire or IAC wiring",
+      "files": ["opengk/k-line.md", "shop-manual/fuel-system.md"]
+    },
+
+    "oem_cluster": {
+      "label": "OEM Gauge Cluster",
+      "type": "module",
+      "car": "both",
+      "gauge_types": "Cross-coil (tach, speedo, fuel, coolant)",
+      "tach_signal": "3 pulses/rev from ECM ignition signal",
+      "speedo_signal": "Hall IC 4 pulses/rev from VSS C109",
+      "fuel_signal": "6–97Ω resistive sender (NTC)",
+      "coolant_signal": "17.5–143.4Ω NTC thermistor",
+      "note": "White car: tach source changes (need signal from Haltech DPO or ignition wire splice)",
+      "files": ["cars/oem-cluster-integration.md", "signal-routing.md"]
+    },
+
+    "lowdoller_fuel": {
+      "label": "Lowdoller Fuel Combo Sensor (pressure + temp)",
+      "type": "sensor",
+      "car": "white",
+      "model": "LDM899TP150 / PN 899404",
+      "pressure_range": "0–150 PSI, 0.5–4.5V ratiometric",
+      "temp_type": "PTC thermistor (resistance INCREASES with temp)",
+      "supply": "+5V, Haltech 34-pin pin 9",
+      "pressure_pin": "AVI 1 (26-pin pin 13, GY/Y shielded)",
+      "temp_pin": "AVI 2 (34-pin pin 16, O/B)",
+      "files": ["cars/lowdoller-sensors.md", "signal-routing.md"]
+    },
+
+    "lowdoller_oil": {
+      "label": "Lowdoller Oil Combo Sensor (pressure + temp)",
+      "type": "sensor",
+      "car": "white",
+      "model": "LDM899TP150 / PN 899404",
+      "pressure_range": "0–150 PSI, 0.5–4.5V ratiometric",
+      "temp_type": "PTC thermistor",
+      "supply": "+5V, Haltech 34-pin pin 9",
+      "pressure_pin": "AVI 3 (34-pin pin 17, O/R)",
+      "temp_pin": "AVI 4 (34-pin pin 2, O/Y)",
+      "files": ["cars/lowdoller-sensors.md", "signal-routing.md"]
+    },
+
+    "lowdoller_coolant": {
+      "label": "Lowdoller Coolant Combo Sensor (pressure + temp)",
+      "type": "sensor",
+      "car": "white",
+      "model": "LDM899TP100 (100 PSI)",
+      "pressure_range": "0–100 PSI, 0.5–4.5V ratiometric",
+      "temp_type": "PTC thermistor",
+      "supply": "+5V, Haltech 34-pin pin 9",
+      "pressure_pin": "AVI 5 (26-pin pin 20, O/G)",
+      "temp_pin": "AVI 6 (26-pin pin 12, GY/O shielded)",
+      "files": ["cars/lowdoller-sensors.md", "signal-routing.md"]
+    },
+
+    "lowdoller_brake": {
+      "label": "Lowdoller Brake Combo Sensor (pressure + temp)",
+      "type": "sensor",
+      "car": "white",
+      "model": "LDM899TP / PN 899405",
+      "pressure_range": "0–1500 PSI, 0.5–4.5V ratiometric",
+      "temp_type": "PTC thermistor",
+      "supply": "+5V, Haltech 34-pin pin 9",
+      "pressure_pin": "AVI 7 (26-pin pin 3, GY)",
+      "temp_pin": "AVI 8 (26-pin pin 4, V)",
+      "files": ["cars/lowdoller-sensors.md", "signal-routing.md"]
+    },
+
+    "kline_bus": {
+      "label": "K-Line (KWP2000)",
+      "type": "protocol",
+      "car": "blue",
+      "baud": 10400,
+      "ecu_address": "0x11",
+      "diag_address": "0xF1",
+      "obd2_pin": 7,
+      "routing_v6": "OBD2 pin 7 → BCM-IM pin 19 → ECU C133-1 pin 3",
+      "files": ["opengk/k-line.md", "opengk/gkflasher.md"]
+    },
+
+    "wline_bus": {
+      "label": "W-Line (SMARTRA Protocol)",
+      "type": "protocol",
+      "car": "blue",
+      "physical": "Same as K-Line (single wire, 10400 baud)",
+      "routing_v6": "ECU C133-1 pin 3 → BCM-IM pin 20",
+      "note": "On 2.7L V6, K and W lines share the same ECU pin (C133-1 pin 3)",
+      "files": ["opengk/w-line.md", "opengk/smartra-protocol.md", "opengk/k-line.md"]
+    },
+
+    "can_bus_blue": {
+      "label": "CAN Bus (SIMK43)",
+      "type": "protocol",
+      "car": "blue",
+      "speed": "500 kbps",
+      "broadcasts": ["DME1 0x316", "DME2 0x329", "DME4 0x545", "DME5 0x2A0"],
+      "reads": ["ASC1 0x153 from TCS/ABS", "EGS1 0x43F from TCM (auto only)"],
+      "files": ["opengk/can-bus-messages.md"]
+    },
+
+    "can_bus_white": {
+      "label": "CAN Bus (Haltech/AIM)",
+      "type": "protocol",
+      "car": "white",
+      "speed": "500 kbps",
+      "haltech_pins": "26-pin pin 23 (CAN H) + 26-pin pin 24 (CAN L)",
+      "pdm_pins": "PDM A22 (CAN0 H) + PDM A11 (CAN0 L)",
+      "chain": "Haltech → PDM → AIM Dash → GPS → Smartycam → Podium",
+      "signals_available": "RPM, coolant temp, TPS, fuel pressure, oil pressure (all AVI inputs)",
+      "files": ["signal-routing.md", "aim-pdm/pdm-pinout.md", "haltech/main-connector-26-pin-elite2500.md"]
+    },
+
+    "smartra2": {
+      "label": "SMARTRA2 Immobilizer System",
+      "type": "system",
+      "car": "blue",
+      "components": "BCM (RF CU) + keyfob transponder (PCF7936) + ECU (stores DPN + key IDs)",
+      "rf_freq": "125 kHz ASK",
+      "ic": "PCF7991AT (BCM internal)",
+      "encryption": "Hitag2 algorithm",
+      "dpn_source": "Derived from last 6 VIN chars (smartra-vin-to-pin tool)",
+      "files": ["opengk/smartra.md", "opengk/smartra-protocol.md", "opengk/immobiliser.md", "opengk/k-line.md"]
+    },
+
+    "gkflasher": {
+      "label": "GKFlasher (ECU flashing tool)",
+      "type": "tool",
+      "car": "blue",
+      "repo": "https://github.com/Dante383/GKFlasher",
+      "interface": "FTDI USB-OBD2 (NOT CH340)",
+      "protocol": "KWP2000 over K-Line or CANbus",
+      "operations": ["read calibration/program", "flash calibration/program", "correct checksum", "clear adaptive values", "immobilizer programming", "KWP2000 datalogger"],
+      "files": ["opengk/gkflasher.md", "opengk/k-line.md"]
+    }
+  },
+
+  "edges": [
+
+    {"from": "ckp_sensor",        "to": "simk43",        "relation": "wires_to",     "via": "C133-2 pin 13",                           "car": "blue"},
+    {"from": "ckp_sensor",        "to": "haltech_e2500",  "relation": "wires_to",     "via": "34-pin connector (see pinouts)",           "car": "white"},
+    {"from": "cmp_sensor",        "to": "simk43",        "relation": "wires_to",     "via": "SIMK43 connector (see ecm-pinouts.md)",    "car": "blue"},
+    {"from": "cmp_sensor",        "to": "haltech_e2500",  "relation": "wires_to",     "via": "Haltech connector (see pinouts)",          "car": "white"},
+
+    {"from": "maf_sensor",        "to": "simk43",        "relation": "wires_to",     "via": "Analog voltage input",                     "car": "blue"},
+    {"from": "map_sensor_oem",    "to": "simk43",        "relation": "wires_to",     "via": "Analog voltage input",                     "car": "blue"},
+    {"from": "map_sensor_lowdoller","to": "haltech_e2500","relation": "wires_to",    "via": "AVI 9, 34-pin pin 15 (Y wire)",            "car": "white"},
+
+    {"from": "tps",               "to": "simk43",        "relation": "wires_to",     "via": "Analog input",                             "car": "blue"},
+    {"from": "tps",               "to": "haltech_e2500",  "relation": "wires_to",     "via": "AVI 10, 34-pin pin 14 (W wire)",          "car": "white"},
+
+    {"from": "iat_sensor",        "to": "simk43",        "relation": "wires_to",     "via": "Analog input",                             "car": "blue"},
+    {"from": "iat_sensor",        "to": "haltech_e2500",  "relation": "wires_to",     "via": "Haltech AVI input",                       "car": "white"},
+
+    {"from": "ect_sensor",        "to": "simk43",        "relation": "wires_to",     "via": "Analog input",                             "car": "blue"},
+    {"from": "ect_sensor",        "to": "haltech_e2500",  "relation": "wires_to",     "via": "Haltech AVI input",                       "car": "white"},
+    {"from": "ect_sensor",        "to": "oem_cluster",   "relation": "wires_to",     "via": "Direct to cluster coolant gauge",          "car": "both"},
+
+    {"from": "o2_sensors",        "to": "simk43",        "relation": "wires_to",     "via": "Direct ECU inputs",                        "car": "blue"},
+    {"from": "o2_sensors",        "to": "haltech_e2500",  "relation": "wires_to",     "via": "Wideband controller input",               "car": "white"},
+
+    {"from": "knock_sensors",     "to": "simk43",        "relation": "wires_to",     "via": "Shielded direct inputs",                   "car": "blue"},
+    {"from": "knock_sensors",     "to": "haltech_e2500",  "relation": "wires_to",     "via": "Haltech knock inputs",                    "car": "white"},
+
+    {"from": "vss",               "to": "oem_cluster",   "relation": "wires_to",     "via": "C109 → cluster speedo",                   "car": "both"},
+    {"from": "vss",               "to": "bcm",           "relation": "wires_to",     "via": "C109 → BCM-JM pin 4",                     "car": "both"},
+    {"from": "vss",               "to": "haltech_e2500",  "relation": "wires_to",     "via": "SPI 1, 26-pin pin 8 (splice at C109)",   "car": "white"},
+    {"from": "vss",               "to": "simk43",        "relation": "wires_to",     "via": "Direct ECU input",                         "car": "blue"},
+
+    {"from": "simk43",            "to": "fuel_injectors","relation": "controls",     "via": "Direct drive outputs",                     "car": "blue"},
+    {"from": "haltech_e2500",     "to": "fuel_injectors","relation": "controls",     "via": "Direct drive outputs",                     "car": "white"},
+
+    {"from": "simk43",            "to": "ignition_coils_blue", "relation": "controls", "via": "Wasted spark IGN output (3 coils)",        "car": "blue"},
+    {"from": "haltech_e2500",     "to": "ignition_coils_white","relation": "controls","via": "Sequential COP IGN1–6 (6 individual coils, pin B)", "car": "white"},
+    {"from": "aim_pdm",           "to": "ignition_coils_white","relation": "powers",  "via": "MP2 → 12V bus → coil pin D (all 6)",       "car": "white"},
+
+    {"from": "simk43",            "to": "oem_cluster",   "relation": "wires_to",     "via": "Tach signal (ignition wire, 3 pulses/rev)","car": "blue"},
+    {"from": "haltech_e2500",     "to": "oem_cluster",   "relation": "wires_to",     "via": "DPO 1, 34-pin pin 18 → cluster tach",     "car": "white"},
+
+    {"from": "simk43",            "to": "fuel_pump",     "relation": "controls",     "via": "Relay output",                             "car": "blue"},
+    {"from": "aim_pdm",           "to": "fuel_pump",     "relation": "controls",     "via": "Mid-power output (3s prime + RPM>50)",     "car": "white"},
+
+    {"from": "simk43",            "to": "cooling_fans",  "relation": "controls",     "via": "High/low relay outputs",                   "car": "blue"},
+    {"from": "aim_pdm",           "to": "cooling_fans",  "relation": "controls",     "via": "High-power PWM output (temp-driven)",      "car": "white"},
+
+    {"from": "simk43",            "to": "iac",           "relation": "controls",     "via": "PWM stepper output",                       "car": "blue"},
+
+    {"from": "haltech_e2500",     "to": "can_bus_white", "relation": "sends_can",    "via": "26-pin pins 23/24 (500 kbps)",             "car": "white"},
+    {"from": "can_bus_white",     "to": "aim_pdm",       "relation": "received_by",  "via": "PDM A22/A11 (CAN0)",                       "car": "white"},
+    {"from": "can_bus_white",     "to": "aim_dash",      "relation": "received_by",  "via": "CAN chain from PDM",                       "car": "white"},
+
+    {"from": "aim_pdm",           "to": "haltech_e2500", "relation": "reads_can",    "via": "RPM, coolant temp for fuel pump + fan logic","car": "white"},
+
+    {"from": "simk43",            "to": "can_bus_blue",  "relation": "sends_can",    "via": "DME1/2/4/5 @ 500kbps",                    "car": "blue"},
+    {"from": "can_bus_blue",      "to": "simk43",        "relation": "received_by",  "via": "ASC1 (0x153) from TCS/ABS",                "car": "blue"},
+
+    {"from": "bcm",               "to": "simk43",        "relation": "communicates_via", "via": "W-Line (SMARTRA protocol), BCM-IM pin 20 ↔ ECU C133-1 pin 3", "car": "blue"},
+    {"from": "kline_bus",         "to": "simk43",        "relation": "connects",     "via": "OBD2 pin 7 → BCM-IM pin 19 → ECU C133-1 pin 3", "car": "blue"},
+    {"from": "gkflasher",         "to": "kline_bus",     "relation": "uses",         "via": "FTDI adapter → OBD2 port",                 "car": "blue"},
+
+    {"from": "smartra2",          "to": "bcm",           "relation": "hosted_in",    "via": "PCF7991AT IC inside BCM, antenna BCM-HM pins 1+11", "car": "blue"},
+    {"from": "smartra2",          "to": "simk43",        "relation": "authenticates","via": "Hitag2 challenge-response over W-Line",     "car": "blue"},
+
+    {"from": "lowdoller_fuel",    "to": "haltech_e2500", "relation": "wires_to",     "via": "Pressure: AVI 1 (26-pin 13); Temp: AVI 2 (34-pin 16)", "car": "white"},
+    {"from": "lowdoller_oil",     "to": "haltech_e2500", "relation": "wires_to",     "via": "Pressure: AVI 3 (34-pin 17); Temp: AVI 4 (34-pin 2)",  "car": "white"},
+    {"from": "lowdoller_coolant", "to": "haltech_e2500", "relation": "wires_to",     "via": "Pressure: AVI 5 (26-pin 20); Temp: AVI 6 (26-pin 12)", "car": "white"},
+    {"from": "lowdoller_brake",   "to": "haltech_e2500", "relation": "wires_to",     "via": "Pressure: AVI 7 (26-pin 3); Temp: AVI 8 (26-pin 4)",   "car": "white"},
+
+    {"from": "lowdoller_fuel",    "to": "can_bus_white", "relation": "data_via",     "via": "Haltech reads AVI → broadcasts on CAN → PDM + Dash see fuel pressure/temp", "car": "white"},
+    {"from": "lowdoller_oil",     "to": "can_bus_white", "relation": "data_via",     "via": "Haltech reads AVI → broadcasts on CAN",    "car": "white"},
+    {"from": "lowdoller_coolant", "to": "can_bus_white", "relation": "data_via",     "via": "Haltech reads AVI → broadcasts on CAN",    "car": "white"},
+    {"from": "lowdoller_brake",   "to": "can_bus_white", "relation": "data_via",     "via": "Haltech reads AVI → broadcasts on CAN",    "car": "white"}
+  ],
+
+  "quick_lookup": {
+    "blue_car_ecu_tool": "gkflasher → opengk/gkflasher.md",
+    "blue_car_immobilizer": "smartra2 → opengk/smartra.md + opengk/k-line.md (routines 0x1A, 0x26)",
+    "blue_car_kline_routing": "OBD2 pin 7 → BCM-IM pin 19 → ECU C133-1 pin 3",
+    "white_car_sensor_supply": "All Lowdoller sensors: +5V from Haltech 34-pin pin 9; signal ground 34-pin pin 10",
+    "white_car_can_pins": "Haltech 26-pin 23 (H) + 24 (L) → PDM A22/A11",
+    "white_car_map_supply": "+8V from Haltech 34-pin pin 12 (O/W wire) — NOT pin 3",
+    "white_car_ignition": "6× Toyota 90919-A2005 COP, sequential IGN1–6, dwell 2.1ms, smart coil (internal igniter) — see cars/cop-ignition.md",
+    "fan_control": "White: PDM PWM auto based on CAN coolant temp; Blue: SIMK43 relays (KWP 0x1A/0x1B)",
+    "fuel_pump_logic": "3s startup prime + RPM>50 trigger (both cars, different controller)",
+    "transmission": "6-speed Aisin AY6 (M6CF1), final drive 4.050:1 — both cars",
+    "dpn_recovery": "Use github.com/Dante383/smartra-vin-to-pin with last 6 VIN chars",
+    "lowdoller_ptc_warning": "Lowdoller temp sensors are PTC (resistance INCREASES with temp). Do NOT wire to OEM cluster."
+  }
+}

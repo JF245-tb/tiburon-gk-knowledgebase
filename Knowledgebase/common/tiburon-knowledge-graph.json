@@ -1,0 +1,1033 @@
+{
+  "_meta": {
+    "description": "Tiburon GK common knowledge graph — manual hierarchy, standard values, OEM components",
+    "schema": "common/knowledge-graph-schema.md",
+    "version": "1.0",
+    "last_updated": "2026-03-07",
+    "vehicles": ["2003 Hyundai Tiburon GK"],
+    "engines": ["2.7L V6 Delta (G6BA)", "2.0L I4 Beta"],
+    "primary_engine": "V6",
+    "notes": "Seed data from OCR-extracted shop manual and electrical manual. Expand progressively. See schema for full node/edge type definitions."
+  },
+
+  "nodes": [
+
+    {
+      "id": "manual-ema",
+      "type": "manual",
+      "label": "Engine Mechanical System (2.7 V6)",
+      "chapter_code": "EMA",
+      "engine": "V6",
+      "source_pdf": "LARGEFILE Searchable_Manuals/Tiburon-Shop-Manual/02. Engine Mechanical-OCR.pdf",
+      "md_file": "common/shop-manual/engine-mechanical.md",
+      "pages": 80
+    },
+    {
+      "id": "manual-em",
+      "type": "manual",
+      "label": "Engine Mechanical System (2.0 I4)",
+      "chapter_code": "EM",
+      "engine": "I4",
+      "source_pdf": "LARGEFILE Searchable_Manuals/Tiburon-Shop-Manual/02. Engine Mechanical-OCR.pdf",
+      "md_file": "common/shop-manual/engine-mechanical.md",
+      "pages": 80,
+      "notes": "I4 content coexists in same MD file as EMA. Filter by chapter prefix."
+    },
+    {
+      "id": "manual-ee",
+      "type": "manual",
+      "label": "Engine Electrical System",
+      "chapter_code": "EE",
+      "engine": "both",
+      "source_pdf": "LARGEFILE Searchable_Manuals/Tiburon-Shop-Manual/03. Engine Electrical-OCR.pdf",
+      "md_file": "common/shop-manual/engine-electrical.md",
+      "pages": 46
+    },
+    {
+      "id": "manual-fla",
+      "type": "manual",
+      "label": "Fuel System (2.7 V6)",
+      "chapter_code": "FLA",
+      "engine": "V6",
+      "source_pdf": "LARGEFILE Searchable_Manuals/Tiburon-Shop-Manual/05. Fuel System-OCR.pdf",
+      "md_file": "common/shop-manual/fuel-system.md",
+      "pages": 120
+    },
+    {
+      "id": "manual-ec",
+      "type": "manual",
+      "label": "Emission Control System",
+      "chapter_code": "EC",
+      "engine": "both",
+      "source_pdf": "LARGEFILE Searchable_Manuals/Tiburon-Shop-Manual/04. Emission Control-OCR.pdf",
+      "md_file": "common/shop-manual/emission-control-system.md",
+      "pages": 0
+    },
+    {
+      "id": "manual-gi",
+      "type": "manual",
+      "label": "General Information",
+      "chapter_code": "GI",
+      "engine": "both",
+      "md_file": "common/shop-manual/general-information.md",
+      "pages": 17
+    },
+    {
+      "id": "manual-etm-cc",
+      "type": "manual",
+      "label": "Electrical Manual — Connector Configurations",
+      "chapter_code": "CC",
+      "engine": "both",
+      "source_pdf": "LARGEFILE Searchable_Manuals/Tiburon-Electrical-Manual/02. Connector Configurations-OCR.pdf",
+      "md_file": "common/electrical-manual/connector-configurations.md",
+      "pages": 24
+    },
+    {
+      "id": "manual-etm-cl",
+      "type": "manual",
+      "label": "Electrical Manual — Component Locations",
+      "chapter_code": "CL",
+      "engine": "both",
+      "source_pdf": "LARGEFILE Searchable_Manuals/Tiburon-Electrical-Manual/03. Component Locations-OCR.pdf",
+      "md_file": "common/electrical-manual/component-locations.md",
+      "pages": 34
+    },
+    {
+      "id": "manual-etm-sd",
+      "type": "manual",
+      "label": "Electrical Manual — Schematic Diagrams",
+      "chapter_code": "SD",
+      "engine": "both",
+      "md_file": "common/electrical-manual/schematic-diagrams.md"
+    },
+
+    {
+      "id": "EMA-index",
+      "type": "section",
+      "label": "Chapter Index",
+      "page_ref": "EMA-1",
+      "section_type": "index",
+      "toc": {
+        "GENERAL": "EMA-2",
+        "ENGINE BLOCK": "EMA-H",
+        "MAIN MOVING SYSTEM": "EMA-28",
+        "COOLING SYSTEM": "EMA-42",
+        "LUBRICATION SYSTEM": "EMA-55",
+        "INTAKE AND EXHAUST SYSTEM": "EMA-59",
+        "CYLINDER HEAD ASSEMBLY": "EMA-69",
+        "TIMING SYSTEM": "EMA-75"
+      }
+    },
+    {
+      "id": "EMA-2",
+      "type": "section",
+      "label": "General Specifications",
+      "page_ref": "EMA-2",
+      "section_code": "EMCO100",
+      "section_type": "spec"
+    },
+    {
+      "id": "EMA-3",
+      "type": "section",
+      "label": "Specifications Table — Valve Train, Pistons, Crankshaft",
+      "page_ref": "EMA-3",
+      "section_type": "spec",
+      "notes": "Master standard values table. Cross-reference to specific section procedures."
+    },
+    {
+      "id": "EMA-4",
+      "type": "section",
+      "label": "Specifications Table — Oil Pump, Cooling",
+      "page_ref": "EMA-4",
+      "section_type": "spec"
+    },
+    {
+      "id": "EMA-5",
+      "type": "section",
+      "label": "Tightening Torques",
+      "page_ref": "EMA-5",
+      "section_code": "EDJAO200",
+      "section_type": "torque"
+    },
+    {
+      "id": "EMA-20",
+      "type": "section",
+      "label": "Engine Block",
+      "page_ref": "EMA-20",
+      "section_type": "procedure"
+    },
+    {
+      "id": "EMA-EDHA2300",
+      "type": "subsection",
+      "label": "Inspection",
+      "page_ref": "EMA-20",
+      "section_code": "EDHA2300",
+      "parent_id": "EMA-20",
+      "section_type": "procedure"
+    },
+    {
+      "id": "EMA-cylinder-block-topic",
+      "type": "topic",
+      "label": "Cylinder Block",
+      "page_ref": "EMA-20",
+      "parent_id": "EMA-EDHA2300"
+    },
+    {
+      "id": "EMA-69",
+      "type": "section",
+      "label": "Cylinder Head Assembly",
+      "page_ref": "EMA-69",
+      "section_type": "procedure"
+    },
+    {
+      "id": "EMA-72",
+      "type": "section",
+      "label": "Valve Spring — Diagram",
+      "page_ref": "EMA-72",
+      "section_type": "diagram",
+      "parent_id": "EMA-69"
+    },
+    {
+      "id": "EMA-73",
+      "type": "section",
+      "label": "Valve Spring — Installation",
+      "page_ref": "EMA-73",
+      "section_type": "procedure",
+      "parent_id": "EMA-69"
+    },
+
+    {
+      "id": "EE-index",
+      "type": "section",
+      "label": "Chapter Index",
+      "page_ref": "EE-1",
+      "section_type": "index",
+      "toc": {
+        "GENERAL": "EE-2",
+        "IGNITION SYSTEM (DOHC/I4)": "EE-11",
+        "IGNITION SYSTEM (V6)": "EE-14",
+        "CHARGING SYSTEM": "EE-17",
+        "STARTING SYSTEM": "EE-34",
+        "CRUISE CONTROL SYSTEM": "EE-43"
+      }
+    },
+    {
+      "id": "EE-2",
+      "type": "section",
+      "label": "General Specifications — Ignition, Starter, Alternator, Battery",
+      "page_ref": "EE-2",
+      "section_code": "EBOO5O10",
+      "section_type": "spec"
+    },
+    {
+      "id": "EE-14",
+      "type": "section",
+      "label": "Ignition System (V6)",
+      "page_ref": "EE-14",
+      "section_type": "procedure",
+      "engine": "V6"
+    },
+
+    {
+      "id": "FLA-index",
+      "type": "section",
+      "label": "Chapter Index",
+      "page_ref": "FLA-1",
+      "section_type": "index",
+      "toc": {
+        "GENERAL": "FLA-2",
+        "MFI CONTROL SYSTEM": "FLA-20",
+        "TROUBLESHOOTING FOR DTCS (SIEMENS EMS)": "FLA-73"
+      }
+    },
+    {
+      "id": "FLA-2",
+      "type": "section",
+      "label": "General Specifications — Sensors, Actuators, Fuel Pressure",
+      "page_ref": "FLA-2",
+      "section_code": "EFOC3010",
+      "section_type": "spec",
+      "engine": "V6"
+    },
+    {
+      "id": "FLA-3",
+      "type": "section",
+      "label": "Service Standards + Sealants",
+      "page_ref": "FLA-3",
+      "section_type": "spec"
+    },
+    {
+      "id": "FLA-4",
+      "type": "section",
+      "label": "Tightening Torques",
+      "page_ref": "FLA-4",
+      "section_code": "EFJBO",
+      "section_type": "torque"
+    },
+
+    {
+      "id": "sv-cylinder-bore",
+      "type": "standard_value",
+      "label": "Cylinder Bore",
+      "value": "86.7 mm (3.4134 in.)",
+      "limit": null,
+      "unit": "mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-3",
+      "notes": "Standard bore for G6BA. Out-of-round limit: 0.02mm. Flatness of gasket surface: max 0.03mm (limit 0.05mm)."
+    },
+    {
+      "id": "sv-valve-spring-free-height",
+      "type": "standard_value",
+      "label": "Valve Spring Free Height",
+      "value": "42.5 mm (1.6732 in.)",
+      "limit": "41.5 mm (1.6339 in.)",
+      "unit": "mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-3"
+    },
+    {
+      "id": "sv-valve-spring-load",
+      "type": "standard_value",
+      "label": "Valve Spring Load",
+      "value": "21.9 kg/35 mm (48.4 lb/1.3780 in.)",
+      "limit": "21.9 kg/34 mm (48.4 lb/1.3386 in.)",
+      "unit": "kg@mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-3"
+    },
+    {
+      "id": "sv-valve-spring-squareness",
+      "type": "standard_value",
+      "label": "Valve Spring Out of Squareness",
+      "value": "Max 1.5°",
+      "limit": "Max 3°",
+      "unit": "degrees",
+      "engine": "V6",
+      "table_page_ref": "EMA-3"
+    },
+    {
+      "id": "sv-cam-height-intake",
+      "type": "standard_value",
+      "label": "Cam Height — Intake",
+      "value": "43.95–44.15 mm (1.7303–1.7382 in.)",
+      "limit": "43.45 mm (1.7106 in.)",
+      "unit": "mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-2"
+    },
+    {
+      "id": "sv-cam-height-exhaust",
+      "type": "standard_value",
+      "label": "Cam Height — Exhaust",
+      "value": "43.95–44.15 mm (1.7303–1.7382 in.)",
+      "limit": "43.45 mm (1.7106 in.)",
+      "unit": "mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-2"
+    },
+    {
+      "id": "sv-cam-journal-diameter",
+      "type": "standard_value",
+      "label": "Camshaft Journal Diameter",
+      "value": "25.964–25.980 mm (1.0222–1.0228 in.)",
+      "limit": "25.914 mm (1.0202 in.)",
+      "unit": "mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-2"
+    },
+    {
+      "id": "sv-cam-bearing-clearance",
+      "type": "standard_value",
+      "label": "Camshaft Bearing Oil Clearance",
+      "value": "0.02–0.061 mm (0.0007–0.0024 in.)",
+      "limit": "0.1 mm (0.0039 in.)",
+      "unit": "mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-2"
+    },
+    {
+      "id": "sv-bore",
+      "type": "standard_value",
+      "label": "Bore",
+      "value": "86.7 mm (3.4133 in.)",
+      "unit": "mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-2"
+    },
+    {
+      "id": "sv-stroke",
+      "type": "standard_value",
+      "label": "Stroke",
+      "value": "75 mm (2.9528 in.)",
+      "unit": "mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-2"
+    },
+    {
+      "id": "sv-compression-ratio",
+      "type": "standard_value",
+      "label": "Compression Ratio",
+      "value": "10:1",
+      "engine": "V6",
+      "table_page_ref": "EMA-2"
+    },
+    {
+      "id": "sv-firing-order",
+      "type": "standard_value",
+      "label": "Firing Order",
+      "value": "1-2-3-4-5-6",
+      "engine": "V6",
+      "table_page_ref": "EMA-2"
+    },
+    {
+      "id": "sv-coolant-capacity",
+      "type": "standard_value",
+      "label": "Cooling System Capacity (V6)",
+      "value": "7.0 L (7.4 US qt, 6.1 Imp qt)",
+      "unit": "liters",
+      "engine": "V6",
+      "table_page_ref": "EMA-4"
+    },
+    {
+      "id": "sv-thermostat-open",
+      "type": "standard_value",
+      "label": "Thermostat Opening Temperature",
+      "value": "82 ± 2.0°C (179.6 ± 3.6°F)",
+      "unit": "°C",
+      "engine": "both",
+      "table_page_ref": "EMA-4"
+    },
+    {
+      "id": "sv-thermostat-wide-open",
+      "type": "standard_value",
+      "label": "Thermostat Wide Open Temperature",
+      "value": "95°C (203°F)",
+      "unit": "°C",
+      "engine": "both",
+      "table_page_ref": "EMA-4"
+    },
+    {
+      "id": "sv-crankshaft-journal-od",
+      "type": "standard_value",
+      "label": "Crankshaft Journal O.D.",
+      "value": "61.982–62.000 mm (2.4402–2.4409 in.)",
+      "limit": null,
+      "unit": "mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-3"
+    },
+    {
+      "id": "sv-crankshaft-pin-od",
+      "type": "standard_value",
+      "label": "Crankshaft Pin O.D.",
+      "value": "47.982–48.000 mm (1.8891–1.8898 in.)",
+      "unit": "mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-3"
+    },
+    {
+      "id": "sv-piston-diameter",
+      "type": "standard_value",
+      "label": "Piston Diameter (Standard)",
+      "value": "86.68–86.71 mm (3.413–3.414 in.)",
+      "unit": "mm",
+      "engine": "V6",
+      "table_page_ref": "EMA-3"
+    },
+
+    {
+      "id": "sv-coil-primary-resistance-v6",
+      "type": "standard_value",
+      "label": "Ignition Coil Primary Resistance (V6)",
+      "value": "0.74 ± 10% Ω",
+      "unit": "Ω",
+      "engine": "V6",
+      "table_page_ref": "EE-2"
+    },
+    {
+      "id": "sv-coil-secondary-resistance-v6",
+      "type": "standard_value",
+      "label": "Ignition Coil Secondary Resistance (V6)",
+      "value": "13.3 ± 15% kΩ",
+      "unit": "kΩ",
+      "engine": "V6",
+      "table_page_ref": "EE-2"
+    },
+    {
+      "id": "sv-alternator-output",
+      "type": "standard_value",
+      "label": "Alternator Rated Output",
+      "value": "13.5V / 95A (80A)",
+      "engine": "both",
+      "table_page_ref": "EE-2"
+    },
+    {
+      "id": "sv-alternator-regulator-voltage",
+      "type": "standard_value",
+      "label": "Alternator Regulator Setting Voltage",
+      "value": "14.4 ± 0.3 V",
+      "unit": "V",
+      "engine": "both",
+      "table_page_ref": "EE-2"
+    },
+
+    {
+      "id": "sv-tps-resistance-v6",
+      "type": "standard_value",
+      "label": "TPS Resistance at Curb Idle (V6)",
+      "value": "1.6–2.4 kΩ",
+      "unit": "kΩ",
+      "engine": "V6",
+      "table_page_ref": "FLA-2"
+    },
+    {
+      "id": "sv-tps-voltage-v6",
+      "type": "standard_value",
+      "label": "TPS Output Voltage at Curb Idle (V6)",
+      "value": "250–800 mV",
+      "unit": "mV",
+      "engine": "V6",
+      "table_page_ref": "FLA-2"
+    },
+    {
+      "id": "sv-iat-resistance",
+      "type": "standard_value",
+      "label": "IAT Sensor Resistance at 20°C",
+      "value": "2.33–2.97 kΩ",
+      "unit": "kΩ",
+      "engine": "V6",
+      "table_page_ref": "FLA-2"
+    },
+    {
+      "id": "sv-ect-resistance-20c",
+      "type": "standard_value",
+      "label": "ECT Sensor Resistance at 20°C",
+      "value": "2.5 kΩ",
+      "unit": "kΩ",
+      "engine": "V6",
+      "table_page_ref": "FLA-2"
+    },
+    {
+      "id": "sv-ect-resistance-80c",
+      "type": "standard_value",
+      "label": "ECT Sensor Resistance at 80°C",
+      "value": "0.3 kΩ",
+      "unit": "kΩ",
+      "engine": "V6",
+      "table_page_ref": "FLA-2"
+    },
+    {
+      "id": "sv-injector-resistance",
+      "type": "standard_value",
+      "label": "Injector Resistance",
+      "value": "13–16 Ω at 20°C",
+      "unit": "Ω",
+      "engine": "V6",
+      "table_page_ref": "FLA-2"
+    },
+    {
+      "id": "sv-fuel-pressure-vac-disconnected",
+      "type": "standard_value",
+      "label": "Fuel Pressure (Vacuum Hose Disconnected)",
+      "value": "330–350 kPa (47–50 psi)",
+      "unit": "kPa",
+      "engine": "V6",
+      "table_page_ref": "FLA-3"
+    },
+    {
+      "id": "sv-fuel-pressure-vac-connected",
+      "type": "standard_value",
+      "label": "Fuel Pressure (Vacuum Hose Connected)",
+      "value": "~270 kPa (~38 psi)",
+      "unit": "kPa",
+      "engine": "V6",
+      "table_page_ref": "FLA-3"
+    },
+    {
+      "id": "sv-ignition-timing-v6",
+      "type": "standard_value",
+      "label": "Basic Ignition Timing (V6)",
+      "value": "BTDC 12° ± 5° at curb idle",
+      "engine": "V6",
+      "table_page_ref": "FLA-3"
+    },
+    {
+      "id": "sv-idle-speed-v6",
+      "type": "standard_value",
+      "label": "Curb Idle Speed (V6)",
+      "value": "750 ± 100 RPM (A/C OFF) / 800 ± 100 RPM (A/C ON)",
+      "unit": "RPM",
+      "engine": "V6",
+      "table_page_ref": "FLA-3"
+    },
+
+    {
+      "id": "ts-cam-sprocket",
+      "type": "torque_spec",
+      "label": "Camshaft Sprocket Bolt",
+      "nm_range": "90–110",
+      "kgcm": "900–1100",
+      "lbft": "65–80",
+      "method": "standard",
+      "table_page_ref": "EMA-5",
+      "engine": "V6"
+    },
+    {
+      "id": "ts-valve-cover",
+      "type": "torque_spec",
+      "label": "Cylinder Head Cover Bolt",
+      "nm_range": "5–6",
+      "kgcm": "50–60",
+      "lbft": "3.6–4.3",
+      "method": "standard",
+      "table_page_ref": "EMA-5",
+      "engine": "V6"
+    },
+    {
+      "id": "ts-main-bearing-m10",
+      "type": "torque_spec",
+      "label": "Main Bearing Cap Bolt (M10)",
+      "nm_range": "27–33",
+      "kgcm": "270–330",
+      "lbft": "19.5–24",
+      "method": "torque-angle",
+      "angle_deg": 90,
+      "table_page_ref": "EMA-5",
+      "engine": "V6"
+    },
+    {
+      "id": "ts-main-bearing-m8",
+      "type": "torque_spec",
+      "label": "Main Bearing Cap Bolt (M8)",
+      "nm_range": "13–19",
+      "kgcm": "130–190",
+      "lbft": "10–14",
+      "method": "torque-angle",
+      "angle_deg": 90,
+      "table_page_ref": "EMA-5",
+      "engine": "V6"
+    },
+    {
+      "id": "ts-connecting-rod",
+      "type": "torque_spec",
+      "label": "Connecting Rod Bolt",
+      "nm_range": "16–20",
+      "kgcm": "160–200",
+      "lbft": "12–15",
+      "method": "torque-angle",
+      "angle_deg": 90,
+      "table_page_ref": "EMA-5",
+      "engine": "V6"
+    },
+
+    {
+      "id": "ts-ect-sensor",
+      "type": "torque_spec",
+      "label": "Engine Coolant Temperature Sensor",
+      "nm_range": "20–40",
+      "kgcm": "200–400",
+      "lbft": "14–29",
+      "method": "standard",
+      "table_page_ref": "FLA-4",
+      "engine": "V6"
+    },
+    {
+      "id": "ts-o2-sensor",
+      "type": "torque_spec",
+      "label": "Heated Oxygen Sensor",
+      "nm_range": "40–50",
+      "kgcm": "400–500",
+      "lbft": "29–36",
+      "method": "standard",
+      "table_page_ref": "FLA-4",
+      "engine": "V6"
+    },
+
+    {
+      "id": "comp-cmp-sensor",
+      "type": "component",
+      "label": "Camshaft Position Sensor",
+      "aliases": ["CMP sensor", "CMP", "cam position sensor", "cam sensor"],
+      "system": "engine",
+      "subsystem": "engine-management",
+      "engine": "V6",
+      "sensor_type": "Hall effect",
+      "oem_location": "Camshaft journal area — top of engine",
+      "opengk_url": "https://opengk.org/",
+      "community_review": "pending"
+    },
+    {
+      "id": "comp-ckp-sensor",
+      "type": "component",
+      "label": "Crankshaft Position Sensor",
+      "aliases": ["CKP sensor", "CKP", "crank position sensor", "crank sensor"],
+      "system": "engine",
+      "subsystem": "engine-management",
+      "engine": "V6",
+      "sensor_type": "Hall effect"
+    },
+    {
+      "id": "comp-ect-sensor",
+      "type": "component",
+      "label": "Engine Coolant Temperature Sensor",
+      "aliases": ["ECT sensor", "ECT", "coolant temp sensor"],
+      "system": "engine",
+      "subsystem": "engine-management",
+      "engine": "V6",
+      "sensor_type": "Thermistor (NTC)",
+      "thread_spec": "LOCTITE 962T sealant required"
+    },
+    {
+      "id": "comp-iat-sensor",
+      "type": "component",
+      "label": "Intake Air Temperature Sensor",
+      "aliases": ["IAT sensor", "IAT"],
+      "system": "engine",
+      "subsystem": "engine-management",
+      "engine": "V6",
+      "sensor_type": "Thermistor"
+    },
+    {
+      "id": "comp-tps",
+      "type": "component",
+      "label": "Throttle Position Sensor",
+      "aliases": ["TPS", "throttle position sensor"],
+      "system": "engine",
+      "subsystem": "engine-management",
+      "engine": "V6",
+      "sensor_type": "Variable resistor"
+    },
+    {
+      "id": "comp-maf-sensor",
+      "type": "component",
+      "label": "Air Flow Sensor (MAF)",
+      "aliases": ["MAF sensor", "MAF", "airflow sensor", "hot film sensor"],
+      "system": "engine",
+      "subsystem": "engine-management",
+      "engine": "V6",
+      "sensor_type": "Hot film"
+    },
+    {
+      "id": "comp-knock-sensor",
+      "type": "component",
+      "label": "Knock Sensor",
+      "aliases": ["knock sensor", "detonation sensor"],
+      "system": "engine",
+      "subsystem": "engine-management",
+      "engine": "V6",
+      "notes": "Two sensors — front bank and rear bank (G6BA)"
+    },
+    {
+      "id": "comp-vss",
+      "type": "component",
+      "label": "Vehicle Speed Sensor",
+      "aliases": ["VSS", "vehicle speed sensor", "speed sensor"],
+      "system": "drivetrain",
+      "subsystem": "transaxle",
+      "sensor_type": "Hall effect, 4 pulses/rev",
+      "oem_location": "Transaxle C109 connector",
+      "notes": "Fans out to: cluster, BCM-JM pin 4, ECU"
+    },
+    {
+      "id": "comp-ignition-coil",
+      "type": "component",
+      "label": "Ignition Coil (V6)",
+      "aliases": ["ignition coil", "coil", "COP coil"],
+      "system": "engine",
+      "subsystem": "ignition",
+      "engine": "V6",
+      "notes": "OEM: wasted spark (3 coils). White car converted to COP — Toyota 90919-A2005 ×6. See hardware/sensors/cop-ignition.md."
+    },
+    {
+      "id": "comp-injector",
+      "type": "component",
+      "label": "Fuel Injector (V6)",
+      "aliases": ["injector", "fuel injector"],
+      "system": "engine",
+      "subsystem": "fuel",
+      "engine": "V6",
+      "quantity": 6,
+      "injector_type": "Electromagnetic"
+    },
+    {
+      "id": "comp-o2-sensor",
+      "type": "component",
+      "label": "Heated Oxygen Sensor",
+      "aliases": ["O2 sensor", "HO2S", "oxygen sensor", "lambda sensor"],
+      "system": "engine",
+      "subsystem": "emissions",
+      "engine": "V6",
+      "sensor_type": "Titanium (2.7 V6)"
+    },
+    {
+      "id": "comp-alternator",
+      "type": "component",
+      "label": "Alternator (Generator)",
+      "aliases": ["alternator", "generator", "alt"],
+      "system": "electrical",
+      "subsystem": "charging",
+      "notes": "Battery voltage sensing type. 95A rated. Exciter wire routed through PDM MP6 on white car."
+    },
+    {
+      "id": "comp-starter",
+      "type": "component",
+      "label": "Starter Motor",
+      "aliases": ["starter", "starter motor"],
+      "system": "electrical",
+      "subsystem": "starting",
+      "notes": "Reduction drive with planetary gear. 1.2 kW, 12V."
+    },
+    {
+      "id": "comp-fuel-pressure-regulator",
+      "type": "component",
+      "label": "Fuel Pressure Regulator",
+      "aliases": ["FPR", "fuel pressure regulator"],
+      "system": "engine",
+      "subsystem": "fuel",
+      "engine": "V6",
+      "notes": "OEM setpoint: 300 ± 1.5 kPa (3.35 ± 0.06 kg/cm²). White car: Radium FPR/damper to be installed."
+    },
+    {
+      "id": "comp-valve-spring",
+      "type": "component",
+      "label": "Valve Spring",
+      "aliases": ["valve spring"],
+      "system": "engine",
+      "subsystem": "valvetrain",
+      "engine": "V6",
+      "quantity_per_engine": 12
+    },
+    {
+      "id": "comp-camshaft",
+      "type": "component",
+      "label": "Camshaft",
+      "aliases": ["camshaft", "cam"],
+      "system": "engine",
+      "subsystem": "valvetrain",
+      "engine": "V6",
+      "drive_type": "Cogged belt (timing belt)",
+      "quantity_per_engine": 2
+    },
+    {
+      "id": "comp-cylinder-block",
+      "type": "component",
+      "label": "Cylinder Block (G6BA)",
+      "aliases": ["cylinder block", "engine block", "block"],
+      "system": "engine",
+      "subsystem": "engine-block",
+      "engine": "V6"
+    },
+
+    {
+      "id": "pn-spark-plug-ngk-v6-unleaded",
+      "type": "part_number",
+      "label": "NGK BKR5ES-11",
+      "number": "BKR5ES-11",
+      "source": "NGK",
+      "notes": "2.7 V6, unleaded fuel. Gap: 1.0–1.1 mm",
+      "table_page_ref": "EE-2"
+    },
+    {
+      "id": "pn-spark-plug-champion-v6-unleaded",
+      "type": "part_number",
+      "label": "Champion RC10YPYP4",
+      "number": "RC10YPYP4",
+      "source": "Champion",
+      "notes": "2.7 V6, unleaded fuel",
+      "table_page_ref": "EE-2"
+    },
+    {
+      "id": "pn-cop-toyota-90919-A2005",
+      "type": "part_number",
+      "label": "Toyota 90919-A2005",
+      "number": "90919-A2005",
+      "source": "Toyota OEM",
+      "notes": "COP conversion for G6BA. Smart coil (internal igniter). Qty: 6. See hardware/sensors/cop-ignition.md.",
+      "url": null
+    },
+
+    {
+      "id": "diag-EMA-72",
+      "type": "diagram",
+      "label": "Valve Spring — Installation Diagram",
+      "page_ref": "EMA-72",
+      "engine": "V6"
+    }
+
+  ],
+
+  "edges": [
+
+    { "source": "EMA-index",   "target": "manual-ema", "rel": "chapter_of" },
+    { "source": "EMA-2",       "target": "manual-ema", "rel": "chapter_of" },
+    { "source": "EMA-3",       "target": "manual-ema", "rel": "chapter_of" },
+    { "source": "EMA-4",       "target": "manual-ema", "rel": "chapter_of" },
+    { "source": "EMA-5",       "target": "manual-ema", "rel": "chapter_of" },
+    { "source": "EMA-20",      "target": "manual-ema", "rel": "chapter_of" },
+    { "source": "EMA-69",      "target": "manual-ema", "rel": "chapter_of" },
+    { "source": "EMA-72",      "target": "manual-ema", "rel": "chapter_of" },
+    { "source": "EMA-73",      "target": "manual-ema", "rel": "chapter_of" },
+    { "source": "EE-index",    "target": "manual-ee",  "rel": "chapter_of" },
+    { "source": "EE-2",        "target": "manual-ee",  "rel": "chapter_of" },
+    { "source": "EE-14",       "target": "manual-ee",  "rel": "chapter_of" },
+    { "source": "FLA-index",   "target": "manual-fla", "rel": "chapter_of" },
+    { "source": "FLA-2",       "target": "manual-fla", "rel": "chapter_of" },
+    { "source": "FLA-3",       "target": "manual-fla", "rel": "chapter_of" },
+    { "source": "FLA-4",       "target": "manual-fla", "rel": "chapter_of" },
+
+    { "source": "EMA-EDHA2300",        "target": "EMA-20",          "rel": "subsection_of" },
+    { "source": "EMA-cylinder-block-topic", "target": "EMA-EDHA2300", "rel": "topic_of" },
+    { "source": "EMA-72",              "target": "EMA-69",           "rel": "subsection_of" },
+    { "source": "EMA-73",              "target": "EMA-69",           "rel": "subsection_of" },
+
+    { "source": "EMA-2", "target": "sv-bore",                  "rel": "table_specifies" },
+    { "source": "EMA-2", "target": "sv-stroke",                "rel": "table_specifies" },
+    { "source": "EMA-2", "target": "sv-compression-ratio",    "rel": "table_specifies" },
+    { "source": "EMA-2", "target": "sv-firing-order",         "rel": "table_specifies" },
+    { "source": "EMA-2", "target": "sv-cam-height-intake",    "rel": "table_specifies" },
+    { "source": "EMA-2", "target": "sv-cam-height-exhaust",   "rel": "table_specifies" },
+    { "source": "EMA-2", "target": "sv-cam-journal-diameter", "rel": "table_specifies" },
+    { "source": "EMA-2", "target": "sv-cam-bearing-clearance","rel": "table_specifies" },
+    { "source": "EMA-3", "target": "sv-valve-spring-free-height", "rel": "table_specifies" },
+    { "source": "EMA-3", "target": "sv-valve-spring-load",    "rel": "table_specifies" },
+    { "source": "EMA-3", "target": "sv-valve-spring-squareness", "rel": "table_specifies" },
+    { "source": "EMA-3", "target": "sv-cylinder-bore",        "rel": "table_specifies" },
+    { "source": "EMA-3", "target": "sv-piston-diameter",      "rel": "table_specifies" },
+    { "source": "EMA-3", "target": "sv-crankshaft-journal-od","rel": "table_specifies" },
+    { "source": "EMA-3", "target": "sv-crankshaft-pin-od",    "rel": "table_specifies" },
+    { "source": "EMA-4", "target": "sv-coolant-capacity",     "rel": "table_specifies" },
+    { "source": "EMA-4", "target": "sv-thermostat-open",      "rel": "table_specifies" },
+    { "source": "EMA-4", "target": "sv-thermostat-wide-open", "rel": "table_specifies" },
+    { "source": "EE-2",  "target": "sv-coil-primary-resistance-v6",  "rel": "table_specifies" },
+    { "source": "EE-2",  "target": "sv-coil-secondary-resistance-v6","rel": "table_specifies" },
+    { "source": "EE-2",  "target": "sv-alternator-output",    "rel": "table_specifies" },
+    { "source": "EE-2",  "target": "sv-alternator-regulator-voltage", "rel": "table_specifies" },
+    { "source": "FLA-2", "target": "sv-tps-resistance-v6",    "rel": "table_specifies" },
+    { "source": "FLA-2", "target": "sv-tps-voltage-v6",       "rel": "table_specifies" },
+    { "source": "FLA-2", "target": "sv-iat-resistance",       "rel": "table_specifies" },
+    { "source": "FLA-2", "target": "sv-ect-resistance-20c",   "rel": "table_specifies" },
+    { "source": "FLA-2", "target": "sv-ect-resistance-80c",   "rel": "table_specifies" },
+    { "source": "FLA-2", "target": "sv-injector-resistance",  "rel": "table_specifies" },
+    { "source": "FLA-3", "target": "sv-fuel-pressure-vac-disconnected", "rel": "table_specifies" },
+    { "source": "FLA-3", "target": "sv-fuel-pressure-vac-connected",    "rel": "table_specifies" },
+    { "source": "FLA-3", "target": "sv-ignition-timing-v6",   "rel": "table_specifies" },
+    { "source": "FLA-3", "target": "sv-idle-speed-v6",        "rel": "table_specifies" },
+
+    { "source": "sv-cylinder-bore",        "target": "EMA-cylinder-block-topic", "rel": "procedure_contains" },
+    { "source": "sv-valve-spring-free-height", "target": "EMA-73",              "rel": "procedure_contains" },
+    { "source": "sv-valve-spring-load",    "target": "EMA-73",                   "rel": "procedure_contains" },
+    { "source": "sv-valve-spring-squareness", "target": "EMA-73",               "rel": "procedure_contains" },
+
+    { "source": "diag-EMA-72", "target": "comp-valve-spring", "rel": "diagram_illustrates" },
+    { "source": "diag-EMA-72", "target": "EMA-73",            "rel": "cross_ref", "note": "Diagram on EMA-72, installation instructions on EMA-73" },
+
+    { "source": "ts-cam-sprocket",      "target": "comp-camshaft",         "rel": "torque_for" },
+    { "source": "ts-valve-cover",       "target": "manual-ema",            "rel": "torque_for", "note": "Cylinder head cover" },
+    { "source": "ts-main-bearing-m10",  "target": "comp-cylinder-block",   "rel": "torque_for" },
+    { "source": "ts-main-bearing-m8",   "target": "comp-cylinder-block",   "rel": "torque_for" },
+    { "source": "ts-connecting-rod",    "target": "comp-cylinder-block",   "rel": "torque_for" },
+    { "source": "ts-ect-sensor",        "target": "comp-ect-sensor",       "rel": "torque_for" },
+    { "source": "ts-o2-sensor",         "target": "comp-o2-sensor",        "rel": "torque_for" },
+
+    { "source": "comp-cmp-sensor",    "target": "FLA-2",  "rel": "procedure_for", "context": "Type: Hall effect, specs" },
+    { "source": "comp-cmp-sensor",    "target": "FLA-20", "rel": "procedure_for", "context": "MFI control system — sensor role" },
+    { "source": "comp-ckp-sensor",    "target": "FLA-2",  "rel": "procedure_for" },
+    { "source": "comp-ect-sensor",    "target": "FLA-2",  "rel": "procedure_for", "context": "Resistance specs" },
+    { "source": "comp-ect-sensor",    "target": "FLA-3",  "rel": "procedure_for", "context": "Sealant: LOCTITE 962T" },
+    { "source": "comp-ect-sensor",    "target": "FLA-4",  "rel": "procedure_for", "context": "Torque: 20–40 Nm" },
+    { "source": "comp-iat-sensor",    "target": "FLA-2",  "rel": "procedure_for" },
+    { "source": "comp-tps",           "target": "FLA-2",  "rel": "procedure_for" },
+    { "source": "comp-maf-sensor",    "target": "FLA-2",  "rel": "procedure_for" },
+    { "source": "comp-injector",      "target": "FLA-2",  "rel": "procedure_for" },
+    { "source": "comp-o2-sensor",     "target": "FLA-4",  "rel": "procedure_for", "context": "Torque: 40–50 Nm" },
+    { "source": "comp-ignition-coil", "target": "EE-14",  "rel": "procedure_for" },
+    { "source": "comp-ignition-coil", "target": "EE-2",   "rel": "procedure_for", "context": "Resistance specs" },
+    { "source": "comp-alternator",    "target": "EE-2",   "rel": "procedure_for", "context": "Output and regulator specs" },
+    { "source": "comp-valve-spring",  "target": "EMA-72", "rel": "procedure_for", "context": "Diagram" },
+    { "source": "comp-valve-spring",  "target": "EMA-73", "rel": "procedure_for", "context": "Installation" },
+    { "source": "comp-valve-spring",  "target": "EMA-3",  "rel": "procedure_for", "context": "Specs table" },
+    { "source": "comp-camshaft",      "target": "EMA-2",  "rel": "procedure_for", "context": "Cam height, journal specs" },
+    { "source": "comp-cylinder-block","target": "EMA-3",  "rel": "procedure_for", "context": "Bore, flatness specs" },
+    { "source": "comp-cylinder-block","target": "EMA-20", "rel": "procedure_for", "context": "Engine block section" },
+
+    { "source": "sv-cam-height-intake",       "target": "comp-camshaft",       "rel": "applies_to" },
+    { "source": "sv-cam-height-exhaust",      "target": "comp-camshaft",       "rel": "applies_to" },
+    { "source": "sv-cam-journal-diameter",    "target": "comp-camshaft",       "rel": "applies_to" },
+    { "source": "sv-cam-bearing-clearance",   "target": "comp-camshaft",       "rel": "applies_to" },
+    { "source": "sv-valve-spring-free-height","target": "comp-valve-spring",   "rel": "applies_to" },
+    { "source": "sv-valve-spring-load",       "target": "comp-valve-spring",   "rel": "applies_to" },
+    { "source": "sv-valve-spring-squareness", "target": "comp-valve-spring",   "rel": "applies_to" },
+    { "source": "sv-cylinder-bore",           "target": "comp-cylinder-block", "rel": "applies_to" },
+    { "source": "sv-piston-diameter",         "target": "comp-cylinder-block", "rel": "applies_to" },
+    { "source": "sv-ect-resistance-20c",      "target": "comp-ect-sensor",     "rel": "applies_to" },
+    { "source": "sv-ect-resistance-80c",      "target": "comp-ect-sensor",     "rel": "applies_to" },
+    { "source": "sv-tps-resistance-v6",       "target": "comp-tps",            "rel": "applies_to" },
+    { "source": "sv-tps-voltage-v6",          "target": "comp-tps",            "rel": "applies_to" },
+    { "source": "sv-iat-resistance",          "target": "comp-iat-sensor",     "rel": "applies_to" },
+    { "source": "sv-injector-resistance",     "target": "comp-injector",       "rel": "applies_to" },
+    { "source": "sv-coil-primary-resistance-v6",  "target": "comp-ignition-coil", "rel": "applies_to" },
+    { "source": "sv-coil-secondary-resistance-v6","target": "comp-ignition-coil", "rel": "applies_to" },
+    { "source": "sv-alternator-output",       "target": "comp-alternator",     "rel": "applies_to" },
+    { "source": "sv-fuel-pressure-vac-disconnected","target": "comp-fuel-pressure-regulator","rel": "applies_to"},
+    { "source": "sv-fuel-pressure-vac-connected",   "target": "comp-fuel-pressure-regulator","rel": "applies_to"},
+
+    { "source": "comp-ignition-coil", "target": "pn-cop-toyota-90919-A2005",   "rel": "has_part", "note": "COP conversion — white car only. OEM = wasted spark." },
+    { "source": "comp-ignition-coil", "target": "pn-spark-plug-ngk-v6-unleaded", "rel": "has_part" },
+    { "source": "comp-ignition-coil", "target": "pn-spark-plug-champion-v6-unleaded", "rel": "has_part" }
+
+  ],
+
+  "quick_lookup": {
+    "chapter_codes": {
+      "GI":  "General Information",
+      "EMA": "Engine Mechanical (V6 Delta 2.7L) — shop manual",
+      "EM":  "Engine Mechanical (I4 Beta 2.0L) — shop manual",
+      "EE":  "Engine Electrical — shop manual (both engines)",
+      "EC":  "Emission Control — shop manual",
+      "FLA": "Fuel System (V6) — shop manual",
+      "FL":  "Fuel System (I4) — shop manual",
+      "CH":  "Clutch System",
+      "TR":  "Transaxle",
+      "DS":  "Driveshaft and Axle",
+      "SS":  "Suspension System",
+      "ST":  "Steering System",
+      "BR":  "Brake System",
+      "BE":  "Body Electrical",
+      "BCM": "Body Control Module",
+      "BD":  "Body Interior and Exterior",
+      "HA":  "HVAC",
+      "RT":  "Restraints",
+      "CC":  "Connector Configurations (ETM)",
+      "CL":  "Component Locations (ETM)",
+      "SD":  "Schematic Diagrams (ETM)",
+      "HL":  "Harness Layouts (ETM)"
+    },
+    "key_specs_v6": {
+      "bore_mm": 86.7,
+      "stroke_mm": 75,
+      "displacement_cc": 2656,
+      "compression_ratio": "10:1",
+      "firing_order": "1-2-3-4-5-6",
+      "idle_speed_rpm": "750 ± 100 (A/C OFF)",
+      "ignition_timing_btdc": "12° ± 5°",
+      "thermostat_open_c": 82,
+      "thermostat_wide_open_c": 95,
+      "coolant_capacity_liters": 7.0,
+      "fuel_pressure_static_kpa": "330–350"
+    },
+    "common_component_ids": {
+      "cam_sensor": "comp-cmp-sensor",
+      "crank_sensor": "comp-ckp-sensor",
+      "coolant_temp_sensor": "comp-ect-sensor",
+      "throttle_position": "comp-tps",
+      "knock_sensor": "comp-knock-sensor",
+      "maf_sensor": "comp-maf-sensor",
+      "injectors": "comp-injector",
+      "ignition_coil": "comp-ignition-coil",
+      "alternator": "comp-alternator",
+      "valve_spring": "comp-valve-spring",
+      "camshaft": "comp-camshaft"
+    }
+  }
+}

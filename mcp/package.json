@@ -1,0 +1,15 @@
+{
+  "name": "tiburon-gk-knowledgebase-mcp",
+  "version": "1.0.0",
+  "description": "MCP filesystem server for the Tiburon GK race car knowledgebase",
+  "scripts": {
+    "start": "npx @modelcontextprotocol/server-filesystem ../Knowledgebase",
+    "start:absolute": "npx @modelcontextprotocol/server-filesystem %TIBURON_KB_PATH%"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server-filesystem": "latest"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

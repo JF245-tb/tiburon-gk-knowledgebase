@@ -1,0 +1,653 @@
+{
+  "_meta": {
+    "description": "White Tiburon build-specific knowledge graph — ECU pins, PDM outputs, sensor wiring, signal paths",
+    "schema": "common/knowledge-graph-schema.md",
+    "common_graph": "common/tiburon-knowledge-graph.json",
+    "version": "1.0",
+    "last_updated": "2026-03-07",
+    "car": "White 2003 Hyundai Tiburon GK",
+    "ecu": "Haltech Elite 2500",
+    "pdm": "AIM PDM 32",
+    "notes": "Nodes in this graph extend the common graph. Component nodes reference comp-* IDs from tiburon-knowledge-graph.json. Build-specific edges override common behavior (e.g., COP coils replace OEM wasted spark)."
+  },
+
+  "nodes": [
+
+    {
+      "id": "build-white",
+      "type": "build",
+      "label": "White Tiburon — Primary Race Car",
+      "profile_file": "builds/white-tiburon/build-profile.md",
+      "signal_routing": "builds/white-tiburon/signal-routing.md",
+      "weekend_tasks": "builds/white-tiburon/weekend-tasks.md"
+    },
+
+    {
+      "id": "ecu-haltech-2500",
+      "type": "device",
+      "label": "Haltech Elite 2500",
+      "device_type": "ECU",
+      "connectors": ["26-pin", "34-pin"],
+      "docs": [
+        "hardware/haltech/main-connector-26-pin-elite2500.md",
+        "hardware/haltech/main-connector-34-pin-elite2500.md",
+        "hardware/haltech/elite-2500-wiring-diagram--rev-6.md"
+      ]
+    },
+
+    {
+      "id": "pdm-aim32",
+      "type": "device",
+      "label": "AIM PDM 32",
+      "device_type": "PDM",
+      "connectors": ["Conn-A (35-pin)", "Conn-B (35-pin)"],
+      "docs": [
+        "hardware/aim-pdm/pdm-pinout.md",
+        "hardware/aim-pdm/pdm-configuration-guide.md",
+        "hardware/aim-pdm/race-studio-config-guide.md"
+      ]
+    },
+
+    {
+      "id": "keypad-aim12",
+      "type": "device",
+      "label": "AIM CAN Keypad 12",
+      "device_type": "input",
+      "can_bus": "PDM CAN2",
+      "can_speed_kbps": 125
+    },
+
+    {
+      "id": "dash-aim10",
+      "type": "device",
+      "label": "AIM 10\" Dash Display",
+      "device_type": "display",
+      "can_bus": "PDM CAN1"
+    },
+
+    {
+      "id": "ecu-26pin-23",
+      "type": "ecu_pin",
+      "label": "Haltech 26-pin Pin 23 — CAN H",
+      "connector": "26-pin",
+      "pin_number": 23,
+      "function": "CAN H",
+      "wire_color": "W",
+      "destination": "PDM A22 (CAN0 H)",
+      "can_speed_kbps": 500
+    },
+    {
+      "id": "ecu-26pin-24",
+      "type": "ecu_pin",
+      "label": "Haltech 26-pin Pin 24 — CAN L",
+      "connector": "26-pin",
+      "pin_number": 24,
+      "function": "CAN L",
+      "wire_color": "L",
+      "destination": "PDM A11 (CAN0 L)",
+      "can_speed_kbps": 500
+    },
+    {
+      "id": "ecu-34pin-13",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 13 — ECU IGN Enable",
+      "connector": "34-pin",
+      "pin_number": 13,
+      "wire_color": "P",
+      "function": "IGN Enable",
+      "notes": "Spliced from ignition switch toggle (also goes to PDM B23). ECU shuts down engine when de-energized."
+    },
+    {
+      "id": "ecu-34pin-9",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 9 — +5V Supply",
+      "connector": "34-pin",
+      "pin_number": 9,
+      "wire_color": "O",
+      "function": "+5V DC, 100mA",
+      "destination": "Lowdoller sensor signal supply (ratiometric)"
+    },
+    {
+      "id": "ecu-34pin-12",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 12 — +8V Supply",
+      "connector": "34-pin",
+      "pin_number": 12,
+      "wire_color": "O/W",
+      "function": "+8V DC, 1A",
+      "destination": "MAP sensor supply, OEM-type sensors/solenoids"
+    },
+    {
+      "id": "ecu-26pin-13",
+      "type": "ecu_pin",
+      "label": "Haltech 26-pin Pin 13 — AVI 1",
+      "connector": "26-pin",
+      "pin_number": 13,
+      "wire_color": "GY/Y shielded",
+      "function": "AVI 1",
+      "assigned_to": "Fuel pressure (Lowdoller PN 899404)"
+    },
+    {
+      "id": "ecu-34pin-16",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 16 — AVI 2",
+      "connector": "34-pin",
+      "pin_number": 16,
+      "wire_color": "O/B",
+      "function": "AVI 2",
+      "assigned_to": "Fuel temp (Lowdoller PN 899404)"
+    },
+    {
+      "id": "ecu-34pin-17",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 17 — AVI 3",
+      "connector": "34-pin",
+      "pin_number": 17,
+      "wire_color": "O/R",
+      "function": "AVI 3",
+      "assigned_to": "Oil pressure (Lowdoller PN 899404)"
+    },
+    {
+      "id": "ecu-34pin-2",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 2 — AVI 4",
+      "connector": "34-pin",
+      "pin_number": 2,
+      "wire_color": "O/Y",
+      "function": "AVI 4",
+      "assigned_to": "Oil temp (Lowdoller PN 899404)"
+    },
+    {
+      "id": "ecu-26pin-20",
+      "type": "ecu_pin",
+      "label": "Haltech 26-pin Pin 20 — AVI 5",
+      "connector": "26-pin",
+      "pin_number": 20,
+      "wire_color": "O/G",
+      "function": "AVI 5",
+      "assigned_to": "Coolant pressure (Lowdoller LDM899TP100)"
+    },
+    {
+      "id": "ecu-26pin-12",
+      "type": "ecu_pin",
+      "label": "Haltech 26-pin Pin 12 — AVI 6",
+      "connector": "26-pin",
+      "pin_number": 12,
+      "wire_color": "GY/O shielded",
+      "function": "AVI 6",
+      "assigned_to": "Coolant temp (Lowdoller LDM899TP100)"
+    },
+    {
+      "id": "ecu-26pin-3",
+      "type": "ecu_pin",
+      "label": "Haltech 26-pin Pin 3 — AVI 7",
+      "connector": "26-pin",
+      "pin_number": 3,
+      "wire_color": "GY",
+      "function": "AVI 7",
+      "assigned_to": "Brake pressure (Lowdoller PN 899405)"
+    },
+    {
+      "id": "ecu-26pin-4",
+      "type": "ecu_pin",
+      "label": "Haltech 26-pin Pin 4 — AVI 8",
+      "connector": "26-pin",
+      "pin_number": 4,
+      "wire_color": "V",
+      "function": "AVI 8",
+      "assigned_to": "Brake temp (Lowdoller PN 899405)"
+    },
+    {
+      "id": "ecu-34pin-15",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 15 — AVI 9",
+      "connector": "34-pin",
+      "pin_number": 15,
+      "wire_color": "Y",
+      "function": "AVI 9",
+      "assigned_to": "MAP sensor"
+    },
+    {
+      "id": "ecu-34pin-14",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 14 — AVI 10",
+      "connector": "34-pin",
+      "pin_number": 14,
+      "wire_color": "W",
+      "function": "AVI 10",
+      "assigned_to": "TPS"
+    },
+    {
+      "id": "ecu-34pin-18",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 18 — DPO 1",
+      "connector": "34-pin",
+      "pin_number": 18,
+      "wire_color": "V/B",
+      "function": "DPO 1",
+      "assigned_to": "Tacho Output → OEM cluster tach (3 ppr, 12V, active low)"
+    },
+    {
+      "id": "ecu-26pin-8",
+      "type": "ecu_pin",
+      "label": "Haltech 26-pin Pin 8 — SPI 1",
+      "connector": "26-pin",
+      "pin_number": 8,
+      "function": "SPI 1",
+      "assigned_to": "VSS — transaxle Hall IC, 4 ppr"
+    },
+    {
+      "id": "ecu-34pin-3",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 3 — IGN 1",
+      "connector": "34-pin",
+      "pin_number": 3,
+      "function": "IGN 1",
+      "assigned_to": "COP Coil 1 trigger (Toyota 90919-A2005)"
+    },
+    {
+      "id": "ecu-34pin-4",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 4 — IGN 2",
+      "connector": "34-pin",
+      "pin_number": 4,
+      "function": "IGN 2",
+      "assigned_to": "COP Coil 2 trigger"
+    },
+    {
+      "id": "ecu-34pin-5",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 5 — IGN 3",
+      "connector": "34-pin",
+      "pin_number": 5,
+      "function": "IGN 3",
+      "assigned_to": "COP Coil 3 trigger"
+    },
+    {
+      "id": "ecu-34pin-6",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 6 — IGN 4",
+      "connector": "34-pin",
+      "pin_number": 6,
+      "function": "IGN 4",
+      "assigned_to": "COP Coil 4 trigger"
+    },
+    {
+      "id": "ecu-34pin-7",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 7 — IGN 5",
+      "connector": "34-pin",
+      "pin_number": 7,
+      "function": "IGN 5",
+      "assigned_to": "COP Coil 5 trigger"
+    },
+    {
+      "id": "ecu-34pin-8",
+      "type": "ecu_pin",
+      "label": "Haltech 34-pin Pin 8 — IGN 6",
+      "connector": "34-pin",
+      "pin_number": 8,
+      "function": "IGN 6",
+      "assigned_to": "COP Coil 6 trigger"
+    },
+
+    {
+      "id": "pdm-connB-pin23",
+      "type": "pdm_input",
+      "label": "PDM Conn B Pin 23 — Ignition Input",
+      "connector": "B",
+      "pin": 23,
+      "function": "Ignition input (SafeIgnition)",
+      "switch_type": "latching toggle",
+      "notes": "Also spliced to Haltech 34-pin pin 13 (ECU IGN enable). SafeIgnition status variable derived from this."
+    },
+    {
+      "id": "pdm-connB-pin21",
+      "type": "pdm_input",
+      "label": "PDM Ch09 (Conn B Pin 21) — Backup Start Button",
+      "connector": "B",
+      "pin": 21,
+      "function": "Physical backup start button",
+      "switch_type": "momentary"
+    },
+    {
+      "id": "pdm-connB-pin28",
+      "type": "pdm_input",
+      "label": "PDM Ch11 (Conn B Pin 28) — Brake Light Switch",
+      "connector": "B",
+      "pin": 28,
+      "function": "Brake light switch (always active, no keypad logic)",
+      "switch_type": "momentary (brake pedal)"
+    },
+
+    {
+      "id": "pdm-HP1",
+      "type": "pdm_output",
+      "label": "HP1 — Starter Motor",
+      "output_tier": "HP",
+      "pdm_pins": ["A1", "A13"],
+      "load": "Starter motor relay / direct",
+      "mode": "OVC Protected",
+      "current_limit_a": 20,
+      "trigger": "STARTER_SAFE = (Key01 OR Ch09) AND SafeIgnition AND NOT ENGINE_RUNNING"
+    },
+    {
+      "id": "pdm-HP2",
+      "type": "pdm_output",
+      "label": "HP2 — Cooling Fan",
+      "output_tier": "HP",
+      "pdm_pins": ["A12", "A23"],
+      "load": "Brushless cooling fan motor",
+      "mode": "PWM 100Hz",
+      "current_limit_a": 35,
+      "trigger": "ECT 4-band curve (80–95°C) + Key05 full override (100%)"
+    },
+    {
+      "id": "pdm-HP3",
+      "type": "pdm_output",
+      "label": "HP3 — Fuel Pump",
+      "output_tier": "HP",
+      "pdm_pins": ["A24", "A25"],
+      "load": "Fuel pump (in-tank)",
+      "mode": "OVC Protected",
+      "current_limit_a": 15,
+      "trigger": "3s IGN prime OR RPM > 50 OR Key06 override"
+    },
+    {
+      "id": "pdm-MP1",
+      "type": "pdm_output",
+      "label": "MP1 — Injector Power",
+      "output_tier": "MP",
+      "pdm_pins": ["A2"],
+      "load": "Fuel injector power rail (×6)",
+      "mode": "OVC Protected",
+      "current_limit_a": 15,
+      "trigger": "SafeIgnition"
+    },
+    {
+      "id": "pdm-MP2",
+      "type": "pdm_output",
+      "label": "MP2 — COP Coil Power",
+      "output_tier": "MP",
+      "pdm_pins": ["A3"],
+      "load": "COP coil +12V supply (×6 — Toyota 90919-A2005 pin D)",
+      "mode": "OVC Protected",
+      "current_limit_a": 15,
+      "trigger": "SafeIgnition"
+    },
+    {
+      "id": "pdm-MP3",
+      "type": "pdm_output",
+      "label": "MP3 — Horn",
+      "output_tier": "MP",
+      "pdm_pins": ["A4"],
+      "mode": "OVC Protected",
+      "current_limit_a": 15,
+      "trigger": "Key02 momentary"
+    },
+    {
+      "id": "pdm-MP4",
+      "type": "pdm_output",
+      "label": "MP4 — Brake Lights",
+      "output_tier": "MP",
+      "pdm_pins": ["A5"],
+      "mode": "Fused",
+      "current_limit_a": 10,
+      "trigger": "Ch11 brake switch (direct — no keypad)"
+    },
+    {
+      "id": "pdm-MP5",
+      "type": "pdm_output",
+      "label": "MP5 — Tail / Running Lights",
+      "output_tier": "MP",
+      "pdm_pins": ["A6"],
+      "mode": "Fused",
+      "current_limit_a": 10,
+      "trigger": "Key03 toggle"
+    },
+    {
+      "id": "pdm-MP6",
+      "type": "pdm_output",
+      "label": "MP6 — Alternator Exciter",
+      "output_tier": "MP",
+      "pdm_pins": ["A7"],
+      "load": "Alternator exciter wire (replaces OEM connection)",
+      "mode": "OVC Protected",
+      "current_limit_a": 5,
+      "trigger": "SafeIgnition",
+      "notes": "Engine charging only active with ignition on. Cuts charge if ignition toggled off."
+    },
+    {
+      "id": "pdm-MP7",
+      "type": "pdm_output",
+      "label": "MP7 — Coolsuit Pump",
+      "output_tier": "MP",
+      "pdm_pins": ["A8"],
+      "mode": "OVC Protected",
+      "current_limit_a": 10,
+      "trigger": "Key04 toggle"
+    },
+    {
+      "id": "pdm-LP1",
+      "type": "pdm_output",
+      "label": "LP1 — ECU Power (Haltech Elite 2500)",
+      "output_tier": "LP",
+      "pdm_pins": ["A14"],
+      "mode": "OVC Protected",
+      "current_limit_a": 10,
+      "trigger": "SafeIgnition"
+    },
+    {
+      "id": "pdm-LP2",
+      "type": "pdm_output",
+      "label": "LP2 — AIM Dash Power",
+      "output_tier": "LP",
+      "pdm_pins": ["A15"],
+      "mode": "OVC Protected",
+      "current_limit_a": 10,
+      "trigger": "SafeIgnition"
+    },
+    {
+      "id": "pdm-LP3",
+      "type": "pdm_output",
+      "label": "LP3 — SmartyCam Power",
+      "output_tier": "LP",
+      "pdm_pins": ["A16"],
+      "mode": "OVC Protected",
+      "current_limit_a": 10,
+      "trigger": "SafeIgnition"
+    },
+    {
+      "id": "pdm-LP4",
+      "type": "pdm_output",
+      "label": "LP4 — GPS Module Power",
+      "output_tier": "LP",
+      "pdm_pins": ["A17"],
+      "mode": "OVC Protected",
+      "current_limit_a": 10,
+      "trigger": "SafeIgnition"
+    },
+    {
+      "id": "pdm-LP5",
+      "type": "pdm_output",
+      "label": "LP5 — Wideband O2 Power",
+      "output_tier": "LP",
+      "pdm_pins": ["A18"],
+      "mode": "OVC Protected",
+      "current_limit_a": 10,
+      "trigger": "SafeIgnition"
+    },
+    {
+      "id": "pdm-LP6",
+      "type": "pdm_output",
+      "label": "LP6 — OEM Cluster Power",
+      "output_tier": "LP",
+      "pdm_pins": ["A19"],
+      "mode": "OVC Protected",
+      "current_limit_a": 10,
+      "trigger": "SafeIgnition"
+    },
+    {
+      "id": "pdm-LP7",
+      "type": "pdm_output",
+      "label": "LP7 — Warning LED",
+      "output_tier": "LP",
+      "pdm_pins": ["A20"],
+      "mode": "OVC Protected",
+      "current_limit_a": 5,
+      "trigger": "MULTI_WARNING = (oil P low) OR (ECT high) OR (oil T high) OR (fuel P low)"
+    },
+
+    {
+      "id": "sensor-lowdoller-fuel",
+      "type": "sensor_instance",
+      "label": "Lowdoller Fuel Pressure/Temp Sensor",
+      "part_number": "899404",
+      "sensor_type": "combo pressure+temp (PTC)",
+      "pressure_range_psi": 150,
+      "temp_range_f": 500,
+      "thread": "1/8\" NPT",
+      "install_location": "Fuel return line via line tap + hose barbs",
+      "common_component_ref": "comp-fuel-pressure-regulator"
+    },
+    {
+      "id": "sensor-lowdoller-oil",
+      "type": "sensor_instance",
+      "label": "Lowdoller Oil Pressure/Temp Sensor",
+      "part_number": "899404",
+      "sensor_type": "combo pressure+temp (PTC)",
+      "pressure_range_psi": 150,
+      "temp_range_f": 500,
+      "thread": "1/8\" NPT",
+      "install_location": "Direct mount to engine"
+    },
+    {
+      "id": "sensor-lowdoller-coolant",
+      "type": "sensor_instance",
+      "label": "Lowdoller Coolant Pressure/Temp Sensor",
+      "part_number": "LDM899TP100",
+      "sensor_type": "combo pressure+temp (PTC)",
+      "pressure_range_psi": 100,
+      "temp_range_f": 500,
+      "thread": "M12×1.5 with sealing ring",
+      "install_location": "Intake manifold coolant port"
+    },
+    {
+      "id": "sensor-lowdoller-brake",
+      "type": "sensor_instance",
+      "label": "Lowdoller Brake Pressure/Temp Sensor",
+      "part_number": "899405",
+      "sensor_type": "combo pressure+temp (PTC)",
+      "pressure_range_psi": 1500,
+      "temp_range_f": 500,
+      "thread": "1/8\" NPT",
+      "install_location": "Brake line — fittings to Jak",
+      "status": "planned"
+    },
+    {
+      "id": "sensor-cop-coil-1",
+      "type": "sensor_instance",
+      "label": "COP Coil 1 (Toyota 90919-A2005)",
+      "part_number": "90919-A2005",
+      "cylinder": 1,
+      "pin_A": "GND (engine block)",
+      "pin_B": "Trigger → Haltech 34-pin pin 3 (IGN1)",
+      "pin_C": "Feedback (leave open)",
+      "pin_D": "12V → PDM MP2 (A3)",
+      "docs": "hardware/sensors/cop-ignition.md"
+    }
+
+  ],
+
+  "edges": [
+
+    { "source": "pdm-connB-pin23",  "target": "pdm-aim32",       "rel": "input_to" },
+    { "source": "pdm-connB-pin21",  "target": "pdm-aim32",       "rel": "input_to" },
+    { "source": "pdm-connB-pin28",  "target": "pdm-aim32",       "rel": "input_to" },
+    { "source": "pdm-aim32",        "target": "pdm-HP1",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-HP2",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-HP3",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-MP1",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-MP2",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-MP3",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-MP4",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-MP5",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-MP6",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-MP7",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-LP1",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-LP2",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-LP3",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-LP4",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-LP5",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-LP6",         "rel": "drives" },
+    { "source": "pdm-aim32",        "target": "pdm-LP7",         "rel": "drives" },
+
+    { "source": "pdm-LP1",         "target": "ecu-haltech-2500", "rel": "powered_by" },
+    { "source": "pdm-LP2",         "target": "dash-aim10",       "rel": "powered_by" },
+    { "source": "pdm-MP1",         "target": "comp-injector",    "rel": "powered_by" },
+    { "source": "pdm-MP2",         "target": "sensor-cop-coil-1","rel": "powered_by", "note": "MP2 powers all 6 COP coils (pin D)" },
+    { "source": "pdm-MP6",         "target": "comp-alternator",  "rel": "powered_by", "context": "Alternator exciter only" },
+    { "source": "pdm-HP3",         "target": "comp-fuel-pressure-regulator", "rel": "powered_by", "context": "Powers in-tank fuel pump" },
+
+    { "source": "ecu-26pin-23",    "target": "pdm-aim32",        "rel": "signals_to", "context": "CAN0 H @ 500 kbps" },
+    { "source": "ecu-26pin-24",    "target": "pdm-aim32",        "rel": "signals_to", "context": "CAN0 L @ 500 kbps" },
+    { "source": "ecu-34pin-13",    "target": "pdm-connB-pin23",  "rel": "spliced_from", "note": "Same IGN switch feeds both ECU pin 13 and PDM B23" },
+
+    { "source": "sensor-lowdoller-fuel",    "target": "ecu-26pin-13", "rel": "signals_to", "context": "Pressure (0.5–4.5V ratiometric)" },
+    { "source": "sensor-lowdoller-fuel",    "target": "ecu-34pin-16", "rel": "signals_to", "context": "Temp (PTC resistive)" },
+    { "source": "sensor-lowdoller-oil",     "target": "ecu-34pin-17", "rel": "signals_to", "context": "Pressure" },
+    { "source": "sensor-lowdoller-oil",     "target": "ecu-34pin-2",  "rel": "signals_to", "context": "Temp" },
+    { "source": "sensor-lowdoller-coolant", "target": "ecu-26pin-20", "rel": "signals_to", "context": "Pressure" },
+    { "source": "sensor-lowdoller-coolant", "target": "ecu-26pin-12", "rel": "signals_to", "context": "Temp" },
+    { "source": "sensor-lowdoller-brake",   "target": "ecu-26pin-3",  "rel": "signals_to", "context": "Pressure" },
+    { "source": "sensor-lowdoller-brake",   "target": "ecu-26pin-4",  "rel": "signals_to", "context": "Temp" },
+
+    { "source": "sensor-cop-coil-1", "target": "ecu-34pin-3", "rel": "triggered_by", "context": "Pin B of COP coil ← IGN1" },
+
+    { "source": "sensor-lowdoller-fuel",    "target": "sensor-instance", "rel": "instance_of", "common_node": "comp-fuel-pressure-regulator" },
+
+    { "source": "pdm-aim32",  "target": "ecu-haltech-2500", "rel": "can_receives", "bus": "CAN0", "speed_kbps": 500, "signals": ["RPM", "ECT", "Oil P", "Oil T", "Fuel P"] },
+    { "source": "pdm-aim32",  "target": "dash-aim10",       "rel": "can_receives", "bus": "CAN1", "speed_kbps": 1000 },
+    { "source": "pdm-aim32",  "target": "keypad-aim12",     "rel": "can_receives", "bus": "CAN2", "speed_kbps": 125 }
+
+  ],
+
+  "quick_lookup": {
+    "pdm_outputs": {
+      "HP1": { "id": "pdm-HP1", "pins": ["A1", "A13"], "load": "Starter" },
+      "HP2": { "id": "pdm-HP2", "pins": ["A12", "A23"], "load": "Fan" },
+      "HP3": { "id": "pdm-HP3", "pins": ["A24", "A25"], "load": "Fuel pump" },
+      "MP1": { "id": "pdm-MP1", "pins": ["A2"],  "load": "Injector power" },
+      "MP2": { "id": "pdm-MP2", "pins": ["A3"],  "load": "COP coil power" },
+      "MP3": { "id": "pdm-MP3", "pins": ["A4"],  "load": "Horn" },
+      "MP4": { "id": "pdm-MP4", "pins": ["A5"],  "load": "Brake lights" },
+      "MP5": { "id": "pdm-MP5", "pins": ["A6"],  "load": "Tail lights" },
+      "MP6": { "id": "pdm-MP6", "pins": ["A7"],  "load": "Alt exciter" },
+      "MP7": { "id": "pdm-MP7", "pins": ["A8"],  "load": "Coolsuit" },
+      "LP1": { "id": "pdm-LP1", "pins": ["A14"], "load": "ECU power" },
+      "LP2": { "id": "pdm-LP2", "pins": ["A15"], "load": "Dash power" },
+      "LP3": { "id": "pdm-LP3", "pins": ["A16"], "load": "SmartyCam" },
+      "LP4": { "id": "pdm-LP4", "pins": ["A17"], "load": "GPS" },
+      "LP5": { "id": "pdm-LP5", "pins": ["A18"], "load": "Wideband" },
+      "LP6": { "id": "pdm-LP6", "pins": ["A19"], "load": "OEM cluster" },
+      "LP7": { "id": "pdm-LP7", "pins": ["A20"], "load": "Warning LED" }
+    },
+    "avi_assignments": {
+      "AVI1": "Fuel pressure — 26-pin pin 13 (GY/Y shielded)",
+      "AVI2": "Fuel temp — 34-pin pin 16 (O/B)",
+      "AVI3": "Oil pressure — 34-pin pin 17 (O/R)",
+      "AVI4": "Oil temp — 34-pin pin 2 (O/Y)",
+      "AVI5": "Coolant pressure — 26-pin pin 20 (O/G)",
+      "AVI6": "Coolant temp — 26-pin pin 12 (GY/O shielded)",
+      "AVI7": "Brake pressure — 26-pin pin 3 (GY)",
+      "AVI8": "Brake temp — 26-pin pin 4 (V)",
+      "AVI9": "MAP — 34-pin pin 15 (Y)",
+      "AVI10": "TPS — 34-pin pin 14 (W)"
+    },
+    "can_buses": {
+      "CAN0": { "device": "Haltech Elite 2500", "speed_kbps": 500, "pdm_pins": { "H": "A22", "L": "A11" } },
+      "CAN1": { "device": "AIM device chain (dash, GPS, SmartyCam)", "speed_kbps": 1000, "pdm_pins": { "H": "A30", "L": "A31" } },
+      "CAN2": { "device": "AIM CAN Keypad 12", "speed_kbps": 125, "pdm_pins": { "H": "A28", "L": "A29" } }
+    }
+  }
+}

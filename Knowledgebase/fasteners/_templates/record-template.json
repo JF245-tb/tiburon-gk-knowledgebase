@@ -1,0 +1,39 @@
+{
+  "bin_label": "M_x_-_ TYPE / LOCATION",
+  "identity": {
+    "diameter_mm": 0,
+    "thread_pitch_mm": 0.0,
+    "uhl_mm": 0,
+    "head_type": "",
+    "drive": "",
+    "material": "steel",
+    "grade": "OEM-unknown",
+    "finish": ""
+  },
+  "location": {
+    "system": "",
+    "subsystem": "",
+    "description": "",
+    "cars": "both",
+    "qty_per_car": 0,
+    "shop_manual_ref": ""
+  },
+  "torque": {
+    "nm": null,
+    "lbft": null,
+    "method": "torque-wrench",
+    "note": ""
+  },
+  "oem": {
+    "part_number": "",
+    "schematic_url": "",
+    "parts_site_url": ""
+  },
+  "images": {
+    "spec": "bolts/{bolt_id}/spec.jpg",
+    "head": "bolts/{bolt_id}/head.jpg",
+    "side": "bolts/{bolt_id}/side.jpg",
+    "location": "bolts/{bolt_id}/location.jpg"
+  },
+  "tags": []
+}

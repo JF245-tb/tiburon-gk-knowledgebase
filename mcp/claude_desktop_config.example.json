@@ -1,0 +1,12 @@
+{
+  "_comment": "Copy relevant sections into %APPDATA%\\Claude\\claude_desktop_config.json (Windows) or ~/Library/Application Support/Claude/claude_desktop_config.json (Mac). Update the path to match where you cloned the repo.",
+  "mcpServers": {
+    "tiburon-kb": {
+      "command": "npx",
+      "args": [
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\YourName\\Desktop\\Tiburon Project\\Knowledgebase"
+      ]
+    }
+  }
+}

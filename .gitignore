@@ -1,0 +1,30 @@
+# Large factory manual OCR files — too large for git (1.4GB total)
+# Content extracted to Knowledgebase/common/shop-manual/ and /electrical-manual/
+LARGEFILE Searchable_Manuals/
+
+# Claude Code session files
+.claude/
+
+# Windows system files
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+
+# Python / vector store runtime
+__pycache__/
+*.pyc
+*.pyo
+Knowledgebase/common/vector-store/chroma/
+Knowledgebase/common/vector-store/chunks.jsonl
+
+# Node / MCP
+node_modules/
+npm-debug.log
+
+# Editor
+.vscode/
+*.swp
+*.swo
