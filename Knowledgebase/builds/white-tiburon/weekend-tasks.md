@@ -168,7 +168,7 @@ Cut the OEM alternator exciter wire from the stock ignition circuit and route th
 - [ ] Test physical fitment on valve covers
 - [ ] Confirm cylinder-to-coil assignment for G6BA firing order
 - [ ] Wire coils: Pin B (trigger) → Haltech IGN1–6 (34-pin pins 3–8); Pin D (power) → PDM MP2 (A3); Pin A → engine block GND; Pin C → leave open
-- Reference: `cars/cop-ignition.md`
+- Reference: `hardware/sensors/cop-ignition.md`
 
 ### P2.6 Front Brakes + Bearings
 - [ ] Swap front brake pads
@@ -176,7 +176,7 @@ Cut the OEM alternator exciter wire from the stock ignition circuit and route th
 
 ### P2.7 Decked Engine Upper Oil Pan
 - [ ] Clean mating surface; install upper oil pan on the milled-heads Build 1 engine
-- See `cars/engine-builds.md`
+- See `builds/white-tiburon/build-profile.md`
 
 ---
 
@@ -279,7 +279,7 @@ All other controls (horn, lights, fan, wiper, coolsuit, fuel override) → **AIM
 | Ignition #6 | Haltech IGN 6 | Y/L wire | (available if COP) |
 
 **Haltech fuse block:** Fuse 3 = 15A ignition
-**Note:** COP confirmed — Toyota 90919-A2005 ×6, sequential COP, all 6 ignition outputs active. See `cars/cop-ignition.md`.
+**Note:** COP confirmed — Toyota 90919-A2005 ×6, sequential COP, all 6 ignition outputs active. See `hardware/sensors/cop-ignition.md`.
 
 ### 5g. ECU Sensitive Bundle (Shielded Wiring)
 | Signal | Haltech Pin | Wire | Notes |
@@ -298,7 +298,7 @@ All other controls (horn, lights, fan, wiper, coolsuit, fuel override) → **AIM
 
 ### 5h. ECU Analog Bundle — Lowdoller Combo Sensors
 
-Full specs & calibration: `Knowledgebase/cars/lowdoller-sensors.md`
+Full specs & calibration: `hardware/sensors/lowdoller-sensors.md`
 
 All Lowdoller sensors: 5-wire (Red=+5V, Black=pressure GND, Yellow=pressure signal, White=temp GND, Green=temp signal)
 
@@ -332,7 +332,7 @@ All Lowdoller sensors: 5-wire (Red=+5V, Black=pressure GND, Yellow=pressure sign
 
 ## 6. AIM PDM 32 — Finalized Output/Input Assignments
 
-> Full Race Studio 3 configuration (status variables, trigger logic, protection settings, LED colors) → `aim-pdm/race-studio-config-guide.md`
+> Full Race Studio 3 configuration (status variables, trigger logic, protection settings, LED colors) → `hardware/aim-pdm/race-studio-config-guide.md`
 
 ### Physical Inputs to Wire
 - [ ] **Conn B pin 23** — Ignition latching toggle switch (master IGN / `SafeIgnition`) — also splice to Haltech 34-pin pin 13 (P)
