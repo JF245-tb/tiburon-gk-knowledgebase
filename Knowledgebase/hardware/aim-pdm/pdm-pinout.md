@@ -1,6 +1,7 @@
 # AIM PDM 32 — Complete Technical Reference
 
 **Source:** `AIM PDM/PDM Pinout.pdf` (AIM PDM 32 User Guide, page 4)
+**Full User Guide:** `AIM PDM/PDM32_user_guide.pdf` — complete wiring, CAN keypad setup, protection configuration, Race Studio 3 reference
 **Device:** AIM PDM 32 Power Distribution Module
 **Application:** White Tiburon (primary race car)
 

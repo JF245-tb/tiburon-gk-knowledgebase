@@ -8,6 +8,7 @@
 | System | Status |
 |--------|--------|
 | Haltech bench setup | Cam ✅ Crank ✅ — Knock: **next** |
+| Toyota COP coil (90919-A2005) | **Bench tested with Haltech ✅ — firing confirmed** |
 | PDM Race Studio config | Base map loaded; keypad, outputs, triggers configured |
 | PDM car connection | Spade connectors → fuse box pin 87 (alongside stock ECU — non-destructive) |
 | CAN Keypad 12 | Connected to PDM CAN2 at 125 kbps |
