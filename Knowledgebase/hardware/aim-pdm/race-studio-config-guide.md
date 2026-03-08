@@ -5,6 +5,8 @@
 Complete Race Studio 3 configuration for the AIM PDM32 + AIM CAN Keypad 12 in the white 2003 Tiburon GK race car. Based on analysis of the AIM "I Have a PDM Now What" webinar config (`Webinar complete.zconfig`), adapted for the Tiburon's Haltech Elite 2500 + COP ignition + CAN keypad control scheme.
 
 > **`.zconfig` files** use proprietary internal UIDs and cross-referenced channel indices managed by Race Studio 3. The starting-point file `Tiburon_White_v1_base.zconfig` has output names and settings pre-configured but trigger logic must be finalized in Race Studio 3.
+>
+> **Note:** `Tiburon_White_v1_base.zconfig` and `Webinar complete.zconfig` are Race Studio 3 project files — they live on the laptop running Race Studio, not in this repo. Export a backup copy to `AIM PDM/` after each major config change.
 
 ---
 
