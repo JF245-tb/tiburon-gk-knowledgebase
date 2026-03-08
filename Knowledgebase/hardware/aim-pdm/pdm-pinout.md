@@ -221,6 +221,16 @@ Based on the pinout, the PDM 32 outputs fall into these categories:
 | Ignition    | B23 | B |
 | LIN bus     | B15 | B |
 
+### Built-In Internal Channels (Software Only — No Pin)
+| Channel | Description |
+|---------|-------------|
+| `SafeIgnition` | ON when PDM activated via IGN input (B23). OFF when activated via CH_IN11/12. Use as master permissive for all engine outputs. |
+| `POTotCurrent` | Sum of all current drawn by power outputs — useful for monitoring total load |
+| IMU 9-axis | Internal 3-axis accelerometer + magnetometer + gyro |
+| Internal temperature | PDM internal temperature sensor |
+
+> **Source:** PDM32 User Guide §11.5 — these channels appear automatically in Race Studio 3 and do not require wiring.
+
 ---
 
 ## Communication Buses
