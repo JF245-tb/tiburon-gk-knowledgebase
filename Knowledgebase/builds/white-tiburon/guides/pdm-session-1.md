@@ -167,27 +167,29 @@ Fan temperature bands (use ECT channel from CAN1 Haltech):
 
 **`FAN_TEMP_25`**
 ```
-Condition: ECT > 80
-Hysteresis: 5°C (turns off at 75°C)
+Condition: ECT > 77
+Hysteresis: 5°C (turns off at 72°C)
 ```
+*170°F thermostat installed — begins opening at 77°C. Fan starts as thermostat opens.*
 
 **`FAN_TEMP_50`**
 ```
-Condition: ECT > 85
+Condition: ECT > 82
 Hysteresis: 5°C
 ```
 
 **`FAN_TEMP_75`**
 ```
-Condition: ECT > 90
+Condition: ECT > 87
 Hysteresis: 5°C
 ```
 
 **`FAN_TEMP_100`**
 ```
-Condition: ECT > 95
+Condition: ECT > 92
 Hysteresis: 5°C
 ```
+*Thermostat estimated fully open ~92°C with 170°F unit — fan at 100% when thermostat maxed out.*
 
 **`FAN_FAILSAFE`**
 ```
@@ -206,8 +208,9 @@ Condition: Oil_Pressure < 15 AND ENGINE_RUNNING AND RPM > 500
 
 **`HIGH_COOLANT_T`**
 ```
-Condition: ECT > 105
+Condition: ECT > 95
 ```
+*170°F thermostat — normal operating range is 77–87°C. At 95°C the thermostat is fully open and fan is maxed; something is wrong.*
 
 **`HIGH_OIL_T`**
 ```
@@ -216,8 +219,9 @@ Condition: Oil_Temp > 130
 
 **`LOW_FUEL_P`**
 ```
-Condition: Fuel_Pressure < 30 AND ENGINE_RUNNING AND RPM > 500
+Condition: Fuel_Pressure < 40 AND ENGINE_RUNNING AND RPM > 500
 ```
+*Factory idle fuel pressure is 46–49 PSI. 40 PSI catches a failing pump/regulator while still above injector deadband.*
 
 **`MULTI_WARNING`**
 ```
@@ -272,13 +276,13 @@ Go to **Triggered Power Outputs**. Map each physical output:
 - Soft Start: 1.0 s
 - **Add 5 trigger actions (priority order):**
 
-| Priority | Trigger | Duty |
-|---|---|---|
-| 1 (lowest) | `FAN_TEMP_25` | 25% |
-| 2 | `FAN_TEMP_50` | 50% |
-| 3 | `FAN_TEMP_75` | 75% |
-| 4 | `FAN_TEMP_100` | 100% |
-| 5 (highest) | `FanKYD OR FAN_FAILSAFE` | 100% |
+| Priority | Trigger | Duty | Threshold |
+|---|---|---|---|
+| 1 (lowest) | `FAN_TEMP_25` | 25% | ECT > 77°C (170°F thermostat opens) |
+| 2 | `FAN_TEMP_50` | 50% | ECT > 82°C |
+| 3 | `FAN_TEMP_75` | 75% | ECT > 87°C |
+| 4 | `FAN_TEMP_100` | 100% | ECT > 92°C (est. fully open) |
+| 5 (highest) | `FanKYD OR FAN_FAILSAFE` | 100% | Manual override or CAN timeout |
 
 Higher priority actions override lower ones when multiple triggers are active.
 

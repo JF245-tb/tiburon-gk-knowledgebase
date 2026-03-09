@@ -85,16 +85,16 @@ These webinar status variables are directly reusable:
 |---|---|---|
 | `ENGINE_RUNNING` | CAN RPM > 50 | Starter interlock, fuel pump, oil P alarm |
 | `FUEL_PRIME` | 3s one-shot timer on SafeIgnition rising edge | Fuel pump prime |
-| `FAN_TEMP_25` | CAN Coolant_T > 80°C AND <= 85°C (hysteresis -5°C) | Fan 25% band |
-| `FAN_TEMP_50` | CAN Coolant_T > 85°C AND <= 90°C | Fan 50% band |
-| `FAN_TEMP_75` | CAN Coolant_T > 90°C AND <= 95°C | Fan 75% band |
-| `FAN_TEMP_100` | CAN Coolant_T > 95°C | Fan 98% band |
+| `FAN_TEMP_25` | CAN Coolant_T > 77°C (hysteresis -5°C, off at 72°C) | Fan 25% band — 170°F thermostat starts opening at 77°C |
+| `FAN_TEMP_50` | CAN Coolant_T > 82°C (hysteresis -5°C) | Fan 50% band |
+| `FAN_TEMP_75` | CAN Coolant_T > 87°C (hysteresis -5°C) | Fan 75% band |
+| `FAN_TEMP_100` | CAN Coolant_T > 92°C | Fan 98% band — thermostat est. fully open at ~92°C |
 | `FAN_FAILSAFE` | CAN coolant_T signal timeout > 5s | Fan 98% failsafe |
 | `STARTER_SAFE` | (StarterKYD OR Ch09) AND SafeIgnition AND NOT ENGINE_RUNNING | Safe to crank |
 | `LOW_OIL_P` | CAN Oil_P < 15 PSI AND ENGINE_RUNNING AND RPM > 500 | Warning light |
-| `HIGH_COOLANT_T` | CAN Coolant_T > 105°C | Warning light |
+| `HIGH_COOLANT_T` | CAN Coolant_T > 95°C | Warning light — thermostat fully open at 92°C; >95°C = problem |
 | `HIGH_OIL_T` | CAN Oil_T > 130°C | Warning light |
-| `LOW_FUEL_P` | CAN Fuel_P < 30 PSI AND ENGINE_RUNNING AND RPM > 500 | Warning light |
+| `LOW_FUEL_P` | CAN Fuel_P < 40 PSI AND ENGINE_RUNNING AND RPM > 500 | Warning light — factory idle spec 46–49 PSI |
 | `MULTI_WARNING` | LOW_OIL_P OR HIGH_COOLANT_T OR HIGH_OIL_T OR LOW_FUEL_P | Red LED trigger |
 | `CoolsuitKYD` | Latched toggle from keypad Key 04 | Coolsuit pump |
 | `FuelOverride` | Latched toggle from keypad Key 06 | Manual fuel pump on |
@@ -160,10 +160,10 @@ Safety:
 ```
 Fan speed is driven by CAN coolant temp from Haltech, with manual override.
 
-Action 1: ON @ 25% duty  | Priority 1 | Trigger: FAN_TEMP_25 (80-85°C)
-Action 2: ON @ 50% duty  | Priority 2 | Trigger: FAN_TEMP_50 (85-90°C)
-Action 3: ON @ 75% duty  | Priority 3 | Trigger: FAN_TEMP_75 (90-95°C)
-Action 4: ON @ 98% duty  | Priority 4 | Trigger: FAN_TEMP_100 (>95°C) OR FAN_FAILSAFE
+Action 1: ON @ 25% duty  | Priority 1 | Trigger: FAN_TEMP_25 (>77°C — 170°F thermostat opens here)
+Action 2: ON @ 50% duty  | Priority 2 | Trigger: FAN_TEMP_50 (>82°C)
+Action 3: ON @ 75% duty  | Priority 3 | Trigger: FAN_TEMP_75 (>87°C)
+Action 4: ON @ 98% duty  | Priority 4 | Trigger: FAN_TEMP_100 (>92°C est. fully open) OR FAN_FAILSAFE
 
 Manual override: FanKYD (Key 05) → 98% duty, Priority 5 (highest)
 
@@ -464,12 +464,12 @@ These are starting values — adjust based on engine behavior:
 
 | Alarm | Threshold | Guard | Notes |
 |---|---|---|---|
-| Low oil pressure | < 15 PSI | RPM > 500 | Normal hot idle may be 20-30 PSI |
-| High coolant temp | > 105°C | Always active | Thermostat opens ~82°C |
+| Low oil pressure | < 15 PSI | RPM > 500 | Factory min 7.3 PSI; normal hot idle ~20-30 PSI |
+| High coolant temp | > 95°C | Always active | 170°F thermostat — normal 77–87°C; est. fully open at ~92°C |
 | High oil temp | > 130°C | Always active | Normal operating ~90-110°C |
-| Low fuel pressure | < 30 PSI | RPM > 500 | Stock rail ~45-55 PSI |
-| Fan ON | > 80°C | Always active | First band (25%) |
-| Fan 100% | > 95°C | Always active | Emergency cooling |
+| Low fuel pressure | < 40 PSI | RPM > 500 | Factory idle spec 46–49 PSI |
+| Fan ON | > 77°C | Always active | First band (25%) — 170°F thermostat opens here |
+| Fan 100% | > 92°C | Always active | Thermostat est. fully open |
 | Fan failsafe | CAN timeout 5s | Always active | Full speed if CAN lost |
 | Starter timeout | > 10s continuous | Always active | Motor protection |
 
