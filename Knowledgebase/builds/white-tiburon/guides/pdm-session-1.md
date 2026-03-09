@@ -51,27 +51,55 @@
 
 ---
 
-## Step 2: CAN1 — Haltech ECU Stream
+## Step 2: ECU Stream — Haltech CAN_V2_40
 
 This is the most important step and must be done first — all sensor channels (RPM, ECT, Oil P, etc.) depend on it.
 
-1. In device tree → **CAN1 Stream**
-2. Click the ECU dropdown — the webinar may have a different ECU loaded
-3. Search for **"Haltech"** in the ECU list
-   - If found: select **Haltech Elite 2500**
-   - If not found: click **"Import from file"** and load the Haltech `.dbc` or `.xc1` file (download from Haltech support portal → Resources → CAN Bus Protocols)
-4. Set baud rate: **1 Mbps** (Haltech Elite 2500 default)
-5. Verify these channels appear in the channel list:
-   - `RPM` (Engine Speed)
-   - `ECT` (Engine Coolant Temperature)
-   - `Oil_Pressure`
-   - `Oil_Temp`
-   - `Fuel_Pressure`
-   - `TPS` (Throttle Position)
-   - `Vehicle_Speed`
-6. Click **Apply**
+### 2a. Select Protocol
 
-> **Note:** CAN0 on the PDM connects to Haltech (A22=CANH, A11=CANL). If Race Studio labels them CAN0/CAN1/CAN2, confirm which physical connector pin pair corresponds to which CAN index in your firmware version.
+1. Click the **ECU Stream** tab (top row, second tab)
+2. Click **Change ECU** dropdown (top right of ECU Stream panel)
+3. Select **HALTECH - CAN_V2_40 (ver. 02.00.03) 1 Mbit/sec**
+4. Baud rate is set by the protocol — **1 Mbit/sec** (confirms in the dropdown label)
+
+> **CAN wiring:** PDM A22 = CAN H, A11 = CAN L → Haltech 26-pin pin 23 (W) / pin 24 (L)
+
+> **Enable the CAN Bus 120 Ohm Resistor** ✅ **Leave checked.** The bus is PDM ↔ Haltech only (two endpoints). PDM is one endpoint; Haltech has its own internal termination resistor (enabled by default in NSP). Both must be terminated.
+
+> **Silent on CAN Bus** ☐ **Leave unchecked.** Silent = receive-only. The PDM must transmit on this bus to send the pit limiter CAN message to the Haltech (Step 8). Unchecking is correct.
+
+### 2b. Fix Channel Count — MAX 120
+
+> **WARNING:** The Haltech CAN_V2_40 protocol has ~267 channels. Race Studio enforces a 120-channel maximum. If you accept defaults, it will silently drop anything after the first 120.
+
+1. In the ECU Stream channel list, check the header row: it shows **Enabled Channels (Max. 120) X / 267**
+2. **Uncheck the header checkbox** to disable ALL channels
+3. Manually enable only the channels in the tables below (≤ 30 total)
+4. Re-check the counter — must show **≤ 120 / 267**
+
+### 2c. Channels to Enable — Master List
+
+Enable exactly these channels. Total: **15 known + 3 AVI to locate = 18**, well under the 120 limit.
+
+| CC ID | Channel Name | Unit | Type | Purpose |
+|---|---|---|---|---|
+| CC01 | ECU RPM | rpm | Required | ENGINE_RUNNING, STARTER_SAFE, alarm guards |
+| CC04 | ECU ThrottlePos | % | Required | PITLIMITER_ACTIVE (TPS > 60 bypass) |
+| CC69 | ECU CoolantTemp | °F | Required | Fan bands, HIGH_COOLANT_T alarm |
+| CC167 | ECU Gear Sel Pos | # | Required | Display |
+| CC237 | ECU FLTS BATTVOL | mV | Required | Battery health |
+| CC249 | ECU PLIGHT STATE | # | Required | Engine protection / fault flag |
+| CC___ | Vehicle Speed | mph | Required | PITLIMITER_SAFE speed gate — search "speed" or "VSS"; comes from transaxle Hall sensor on Haltech 26-pin pin 8 |
+| CC___ | AVI1 Fuel Pressure | psi | Required | LOW_FUEL_P alarm (Lowdoller sensor on Haltech AVI1) |
+| CC___ | AVI3 Oil Pressure | psi | Required | LOW_OIL_P alarm (Lowdoller sensor on Haltech AVI3) |
+| CC___ | AVI4 Oil Temp | °F | Required | HIGH_OIL_T alarm (Lowdoller sensor on Haltech AVI4) |
+| CC168 | ECU WIDEBAND B2 | lambda | Logging | AFR — tune quality, lean events |
+| CC241 | ECU FT RACC PRES | psi | Logging | Manifold pressure reference (was old MAP channel) |
+| CC261 | ECU AIR TEMP | °F | Logging | IAT — knock correlation |
+| CC147 | ECU TorDrRPMEI | deg | Logging | Ignition advance — shows retard events |
+| CC144 | ECU RaceTimer | ms | Logging | Session timing |
+
+> **Finding AVI channels:** Scroll the full channel list and search for "Analog" or "AVI". The Haltech broadcasts each AVI input as its own channel. Fill in the three CC___ IDs above once found.
 
 ---
 

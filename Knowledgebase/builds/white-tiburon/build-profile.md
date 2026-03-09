@@ -36,6 +36,7 @@
   - **REM harness** available (no REM unit) — repurposing harness for this build
   - REM harness diagram: `/Knowledgebase/haltech/rem-harness-diagram.md`
 - **Coil-on-plug (COP) confirmed** — Toyota 90919-A2005 ×6, sequential, IGN1–6 all active. See `cars/cop-ignition.md`.
+- **No wheel speed sensors** — TC and ABS are not possible. Launch control not configured.
 
 ### Sensors (Planned/In Progress)
 Full specs, wiring, and calibration tables: `Knowledgebase/cars/lowdoller-sensors.md`

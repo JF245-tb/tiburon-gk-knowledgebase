@@ -45,6 +45,7 @@
 - AC system deleted
 - Charcoal canister (EVAP) deleted
 - Ignition switch deleted (start button replaces it)
+- **No wheel speed sensors** — TC and ABS are not possible on either car.
 
 ---
 
