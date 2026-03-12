@@ -131,6 +131,7 @@ These webinar status variables are directly reusable:
 | **LP5** | Wideband | OVC Protected | 10A | No | DC | SafeIgnition |
 | **LP6** | Cluster | OVC Protected | 10A | No | DC | SafeIgnition |
 | **LP7** | WarningLED | OVC Protected | 5A | No | DC | MULTI_WARNING |
+| **LP8** | Keypad | OVC Protected | 5A | No | DC | `SafeIgnition` — AIM CAN Keypad 12 Vbatt via Binder-to-Deutsch cable (A21) |
 
 ### Detailed Output Logic
 
@@ -303,31 +304,40 @@ PodiumConnect CAN integration:
 
 ## CAN Bus Configuration
 
-### CAN0 (PDM Conn A pins 22/11) — Haltech ECU
+### CAN0 (PDM Conn A pins A22 H / A11 L) — AIM Expansion Bus
+
+| Setting | Value |
+|---|---|
+| Devices | CAN Data Hub → GPS-08, SmartyCAM, Podium module |
+| Speed | 1 Mbps (AIM internal protocol) |
+| Physical cable | Pre-wired "CAN expansion" harness (5-pin Binder, 22 AWG). **Do not reuse pins A10, A11, A22, A32, A33.** |
+| Power to devices | A33 (+Vb out CAN via expansion cable) |
+| Note | Dash connects via LVDS (4-pin Rosenberger), not CAN0 |
+
+### CAN1 (PDM Conn A pins A30 H / A31 L) — Haltech Elite 2500
 
 | Setting | Value |
 |---|---|
 | Protocol | Haltech Elite 2500 |
 | Speed | 500 kbps |
-| Termination | External 120Ω |
+| Termination | 120Ω at PDM end (A30/A31) if Haltech does not self-terminate |
+| Silent on CAN Bus | Try OFF first; enable if Haltech errors on extra ACK signals from PDM |
 | Data used | RPM, Coolant Temp, Oil Pressure, Oil Temp, Fuel Pressure, TPS |
+| Haltech wiring | Haltech 26-pin pin 23 (W wire) → A30; pin 24 (L wire) → A31 |
+| Note | A30/A31 shared with RS232 TX/RX — RS232 unavailable when CAN1 active |
 
-### CAN1 — AIM Device Chain
+> **"Silent on CAN Bus"** (RS3 ECU config option): By default PDM sends an ACK to every ECU message. Some ECUs misbehave when another device sends ACK on their bus. If Haltech logs CAN errors after PDM is connected, enable this flag. *(Source: PDM32 User Guide §12)*
 
-| Setting | Value |
-|---|---|
-| Devices | AIM Dash → GPS → SmartyCam → Podium |
-| Speed | 1 Mbps (AIM standard) or 500 kbps |
-| Note | Dash may use LVDS instead of CAN1 |
-
-### CAN2 — AIM CAN Keypad 12
+### CAN2 (PDM Conn A pins A28 H / A29 L) — AIM CAN Keypad 12
 
 | Setting | Value |
 |---|---|
 | Device | AIM CAN Keypad 12 |
 | Speed | 125 kbps (AIM keypad standard) |
 | Buttons | 12 buttons with RGB LED feedback |
-| Connection | Dedicated CAN2 bus on PDM |
+| Keypad power | LP8 (A21) → Keypad Deutsch pin 4 (Red), trigger = SafeIgnition |
+| Keypad GND | B18 (grey connector) → Keypad Deutsch pin 3 (Black) |
+| Cable | Custom Binder-to-Deutsch adapter — see pdm-pinout.md CAN Keypad Cable section |
 
 ---
 
@@ -373,12 +383,14 @@ Ch10, Ch12, and others are **available** for future physical inputs.
 
 Open `Tiburon_White_v1_base.zconfig` in Race Studio 3. Output names and basic settings are pre-configured.
 
-### 2. Configure CAN1 Stream (Haltech)
+### 2. Configure ECU Stream (Haltech)
 
-1. Go to Configuration → CAN1 Stream
+1. Go to **ECU Stream** tab *(RS3 tab name — this connects to the CAN ECU bus, PDM pins A30/A31)*
 2. Select **Haltech Elite** as ECU protocol (or import Haltech CAN DBC)
-3. Verify these channels appear: RPM, Coolant Temp (ECT), Oil Pressure, Oil Temp, Fuel Pressure, TPS
-4. If Haltech is not in the preset list: manually add CAN messages per `opengk/can-bus-messages.md`
+3. Enable **120Ω termination** if Haltech does not self-terminate on its end
+4. Leave **"Silent on CAN Bus"** OFF initially; enable only if Haltech logs CAN errors after PDM connects
+5. Verify these channels appear: RPM, Coolant Temp (ECT), Oil Pressure, Oil Temp, Fuel Pressure, TPS
+6. If Haltech is not in the preset list: manually add CAN messages per `opengk/can-bus-messages.md`
 
 ### 3. Configure CAN2 Keypad
 
@@ -429,11 +441,21 @@ In CAN Output 2 (Keypad), set RGB values for each key state per the LED Color ta
 
 Enable LP7, set trigger to `MULTI_WARNING`, optionally set PWM for blinking.
 
-### 9. Transmit and Test
+### 9. Configure SmartyCam Stream
+
+1. Go to **SmartyCam Stream** tab *(rightmost tab in PDM RS3 config)*
+2. Enable SmartyCam, select **CAN AiM** bus (expansion bus, A22/A11)
+3. Assign channels to SmartyCam overlay slots — click each slot, select channel from panel
+   - If a channel is missing from the list, check **"Enable all channels for functions"** to see all
+   - Key channels: RPM, Speed (GPS-08), Gear, Coolant Temp, Oil Pressure, TPS, Lat G, Long G
+4. Choose **AiM Default** protocol (or create Advanced protocol for custom channel set)
+5. See `hardware/aim-smartycam/aim-smartycam.md` for full channel map and SmartyCam-side RS3 config
+
+### 10. Transmit and Test
 
 1. Save configuration
 2. Transmit to PDM via USB
-3. Force-test each output in Race Studio 3
+3. Force-test each output in Race Studio 3 (Device window → Live Measures → force channel values)
 4. Verify keypad button presses activate correct outputs
 5. Verify brake lights work with physical switch only (no keypad required)
 6. Verify backup start button on Ch09 cranks the starter
@@ -455,6 +477,7 @@ Enable LP7, set trigger to `MULTI_WARNING`, optionally set PWM for blinking.
 | MP7 Coolsuit | OVC Protected | 10A | Yes | 1 | 5s | No |
 | LP1-6 Accessories | OVC Protected | 10A | No | 1 | 5s | No |
 | LP7 WarningLED | OVC Protected | 5A | No | 1 | 5s | No |
+| LP8 Keypad | OVC Protected | 5A | No | 1 | 5s | No |
 
 ---
 

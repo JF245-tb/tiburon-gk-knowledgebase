@@ -116,7 +116,7 @@ Panel male connector, external view.
 | 11 | Half bridge power output 2  | 29 | Channel input 4 |
 | 12 | Half bridge power output 2  | 30 | Channel input 5 |
 | 13 | P GND                       | 31 | Channel input 6 |
-| 14 | L GND                       | 32 | Channel input 7 |
+| 14 | P GND                       | 32 | Channel input 7 |
 | 15 | LIN                         | 33 | Channel input 8 |
 | 16 | +5V Analog Vreference       | 34 | Half bridge power output 4 |
 | 17 | +Vb output                  | 35 | Half bridge power output 4 |
@@ -129,7 +129,7 @@ Panel male connector, external view.
   - Half bridge output 3: pins 24 + 25
   - Half bridge output 4: pins 34 + 35
 - Pin 13: P GND = Power Ground
-- Pin 14: L GND = Logic Ground
+- Pin 14: P GND = Power Ground
 - Pin 15: LIN bus connection
 - Pin 16: +5V Analog reference (for sensors)
 - Pin 17: +Vb output (switched battery voltage)
@@ -249,6 +249,68 @@ Based on the pinout, the PDM 32 outputs fall into these categories:
 
 **Three CAN buses total:** CAN0, CAN1 (also configurable as RS232), CAN2
 
+### CAN Expansion Cable (AIM Device Bus — CAN0)
+
+The PDM ships with a dedicated harness labeled **"CAN expansion"** that plugs into the **black connector (Connector A)** and breaks CAN0 plus its power rails out to a **5-pin Binder connector** for connecting AIM devices (GPS-08, SmartyCAM, CAN Data Hub, etc.).
+
+Binder pin layout (front/mating face view):
+
+```
+  5  1
+ 4    2
+   3
+```
+
+| Binder Pin | Signal | PDM Pin (Conn A) | Wire Gauge | Notes |
+|-----------|--------|-----------------|------------|-------|
+| 1 | +Vb ext CAN | A32 | 22 AWG | Power IN from external device to PDM (typically unused) |
+| 2 | CAN0 Low | A11 | 22 AWG | AIM device bus data − |
+| 3 | +Vb out CAN | A33 | 22 AWG | Power OUT from PDM to AIM devices (powers hub/GPS/cam) |
+| 4 | GND | A10 | 22 AWG | Logic ground |
+| 5 | CAN0 High | A22 | 22 AWG | AIM device bus data + — **see fault note below** |
+
+> **Wire gauge: 22 AWG throughout** — all five conductors in the expansion cable are 22 ga. The +Vb out CAN line (A33) powers connected AIM devices; keep total device current draw modest given this gauge. Do not splice high-current loads onto this line.
+
+> ~~⚠️ Known fault — Binder pin 5 (CAN0 High / A22): no continuity found~~ — **resolved: loose connection in test setup. All 5 pins confirmed good.**
+
+### CAN Keypad Cable (CAN2 — custom Binder-to-Deutsch)
+
+The AIM CAN Keypad 12 uses a **4-pin Deutsch connector**. A custom cable is made using a 5-pin Binder (female, wires run to PDM Connector A) on one end and a 4-pin Deutsch (male) on the other. Amazon pre-made Binder cable assemblies are used; pin 3 (Yellow) is spare.
+
+**Keypad Deutsch standard pinout (wire side):**
+
+| Deutsch Pin | Colour | Function |
+|------------|--------|----------|
+| 1 | Blue | CAN L |
+| 2 | White | CAN H |
+| 3 | Black | GND |
+| 4 | Red | Vbatt (12–24V) |
+
+**Binder pin layout (front/mating face view):**
+
+```
+  5  1
+ 4    2
+   3
+```
+
+**Full color map — Binder (PDM side) → Amazon cable wire → Deutsch (keypad side):**
+
+| Binder Pin | Amazon Color | PDM Pin | Connector | Deutsch Pin | Keypad Color | Signal |
+|-----------|-------------|---------|-----------|------------|-------------|--------|
+| 1 | Red | A21 (LP8 — Keypad power) | Black | 4 | Red | Vbatt |
+| 2 | White | A28 (CAN2 High) | Black | 2 | White | CAN H |
+| 3 | Yellow | — | — | — | — | Spare — not connected |
+| 4 | Green | A29 (CAN2 Low) | Black | 1 | Blue | CAN L |
+| 5 | Black | **B18 (GND)** | **Grey** | 3 | Black | GND |
+
+> **Note:** Green (Binder/Amazon) connects to Blue (Deutsch/keypad) for CAN L — the only color mismatch. Label the loom accordingly.
+> **Note:** A10 (GND) is committed to the wrapped CAN0 expansion cable and must not be reused. Keypad GND runs to B18 on the grey connector instead — same ground plane.
+
+> **⚠️ Do not wire keypad to CAN0 (A11/A22).** CAN0 runs AIM expansion devices at 1 Mbps. Keypad runs at 125 kbps on CAN2 only. Mixed bus = both buses fail.
+
+> **LP8 (A21) — "Keypad" power output:** OVC Protected, 5A max, trigger = `SafeIgnition`. Keypad draws <1A.
+
 ### LIN Bus (Connector B)
 | Signal | Pin |
 |--------|-----|
@@ -279,9 +341,9 @@ Based on the pinout, the PDM 32 outputs fall into these categories:
 
 | Signal | Pin | Connector |
 |--------|-----|-----------|
-| GND (logic)     | A10 | A |
-| P GND (power)   | B13 | B |
-| L GND (logic)   | B14 | B |
+| GND             | A10 | A |
+| P GND           | B13 | B |
+| P GND           | B14 | B |
 | GND             | B18 | B |
 
 ---

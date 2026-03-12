@@ -6,6 +6,63 @@
 
 ---
 
+## Hardware Specifications
+
+### PDM 32
+
+| Spec | Value |
+|------|-------|
+| Dimensions | 234.5 × 94.6 × 49.5 mm |
+| Weight | 761 g |
+| Body | Anodized aluminum |
+| Waterproof | IP65 |
+| Power supply | 9–15V DC |
+| Total max current | 120A |
+| Internal memory | 4 GB (data logging) |
+| CAN buses | 3 (CAN AiM, CAN ECU, CAN2) |
+| LIN bus | 1 |
+| Analog camera inputs | 2 |
+| Inputs | 14 fully configurable (8 analog 0–5V/0–12V or digital, 2 speed, 4 digital), max 500 Hz each |
+| LEDs | 32 RGB + 1 PDM ON + 1 PDM STS (Status) |
+| Remote display | LVDS (4-pin Rosenberger) — 5", 6", or 10" dash |
+
+**Compatible AIM expansions:** GPS09c, Channel Expansion, TC Hub, Lambda Controller (LCU-One CAN), SmartyCam 3 Series, Formula Steering Wheel, Memory Module, K Keypads
+
+**Part number (bare PDM, no GPS, no display):** `XC1PDM3201`
+**CAN expansion cable (female Binder, 150 cm):** `V02579030`
+**USB cable (3M712, 250 cm):** `V02563030`
+
+### AIM PDM Dash 10"
+
+| Spec | Value |
+|------|-------|
+| Display | 10" TFT |
+| Resolution | 1280 × 480 pixels |
+| Brightness | 800 cd/m² |
+| Contrast | 1100:1 |
+| Dimensions | 278.0 × 135.0 × 26.2 mm |
+| Weight | 1000 g |
+| Waterproof | IP65 |
+| Shift light LEDs | 10 |
+| Status info LEDs | 6 |
+| Power consumption | 250 mA |
+| Ambient light sensor | Yes |
+| Connector | LVDS Link, 4-pin Rosenberger male |
+
+**LVDS connector pinout (external view):**
+
+| Pin | Signal |
+|-----|--------|
+| 1 | GND |
+| 2 | Serial Data + |
+| 3 | +V Power |
+| 4 | Serial Data − |
+
+**Part number (10" with icons):** `XC1D10000`
+**LVDS cable 200 cm:** `FCCA682000`
+
+---
+
 ## Core Configuration Concepts
 
 The PDM uses a layered logic system. Think of it as a state machine:
@@ -182,7 +239,7 @@ Triggers:
 
 ## White Tiburon — Finalized PDM Configuration
 
-> Full Race Studio 3 setup (status variables, trigger logic, protection settings, LED assignments, step-by-step): `aim-pdm/race-studio-config-guide.md`
+> Full Race Studio 3 setup (status variables, trigger logic, protection settings, LED assignments, step-by-step): `builds/white-tiburon/guides/pdm-config.md`
 
 ### Physical Inputs (2 only)
 
@@ -209,7 +266,9 @@ Connected to PDM **CAN2** at **125 kbps**. RGB LED feedback per button.
 | 06 | Fuel Pump Override | Latching toggle | Dim red / Bright red |
 | 07 | Pit Limiter | Latching toggle | Dim white / Bright white |
 | 08 | Wiper | Latching toggle | Dim white / Bright white |
-| 09–12 | Spare | — | Off |
+| 09 | Comms Yes/No | Latching toggle | Off / Bright green (Yes) |
+| 10 | Pit-In Request | Multi-position (0→1→2→3 laps) | Off / White dim / White / Bright white |
+| 11–12 | Spare | — | Off |
 
 ### Power Output Map (Finalized)
 
@@ -234,14 +293,19 @@ Connected to PDM **CAN2** at **125 kbps**. RGB LED feedback per button.
 | LP5 | Wideband | A18 | OVC Protected | 10A | `SafeIgnition` |
 | LP6 | Cluster | A19 | OVC Protected | 10A | `SafeIgnition` |
 | LP7 | Warning LED | A20 | OVC Protected | 5A | `MULTI_WARNING` (oil P low / ECT high / oil T high / fuel P low) |
+| LP8 | Keypad Pwr | A21 | OVC Protected | 5A | `SafeIgnition` — AIM CAN Keypad 12 Vbatt via Binder-to-Deutsch cable |
 
 ### CAN Bus Configuration
 
-| Bus | PDM Pins | Device | Speed | Notes |
-|-----|----------|--------|-------|-------|
-| CAN0 | A22 (H) / A11 (L) | Haltech Elite 2500 | 500 kbps | RPM, ECT, Oil P, Oil T, Fuel P → fuel pump, fan PWM, alarms |
-| CAN1 | A30 (H) / A31 (L) | AIM device chain | 1 Mbps | Dash, GPS, SmartyCam, Podium |
-| CAN2 | A28 (H) / A29 (L) | AIM CAN Keypad 12 | 125 kbps | Button inputs + RGB LED feedback |
+AIM's official pin labels (from PDM32 tech sheet Ver. 1.17):
+
+| Bus Label | PDM Pins | Device | Speed | RS3 Tab | Notes |
+|-----------|----------|--------|-------|---------|-------|
+| **CAN AiM** | A22 (H) / A11 (L) | AIM expansion bus | 1 Mbps | SmartyCam Stream / Channels | GPS-08, SmartyCam, Podium via 4-way Data Hub. Pre-wired expansion cable. Pins A10/A11/A22/A32/A33 reserved. |
+| **CAN ECU** | A30 (H) / A31 (L) | Haltech Elite 2500 | 500 kbps | ECU Stream | RPM, ECT, Oil P, Oil T, Fuel P → fuel pump, fan PWM, alarms. Shared with RS232 TX/RX — RS232 unavailable when CAN ECU active. |
+| **CAN2** | A28 (H) / A29 (L) | AIM CAN Keypad 12 | 125 kbps | CAN2 Keypad | Button inputs + RGB LED feedback. Also used by CAN2 Stream if a secondary ECU is ever added. |
+
+> **Note on RS3 tab naming:** The RS3 "ECU Stream" tab controls the **CAN ECU** bus (A30/A31). The "CAN AiM" expansion bus (A22/A11) is configured through the SmartyCam Stream tab and is where the GPS-08 auto-broadcasts. There is no dedicated "CAN AiM" tab — the expansion bus is always-on at 1 Mbps.
 
 ---
 
@@ -261,6 +325,6 @@ Connected to PDM **CAN2** at **125 kbps**. RGB LED feedback per button.
 | File | Contents |
 |------|----------|
 | `aim-pdm/pdm-pinout.md` | Full connector pinout (both 35-pin connectors) |
-| `aim-pdm/race-studio-config-guide.md` | Full Race Studio 3 config: status vars, triggers, LED colors, step-by-step setup |
+| `builds/white-tiburon/guides/pdm-config.md` | Full Race Studio 3 config: status vars, triggers, LED colors, step-by-step setup |
 | `cars/white-tiburon-weekend-tasks.md` | Wiring bundle assignments and build task list |
 | `haltech/main-connector-26-pin-elite2500.md` | Haltech CAN bus pins (23=H, 24=L) |

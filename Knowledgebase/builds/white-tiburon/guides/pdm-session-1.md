@@ -79,50 +79,180 @@ This is the most important step and must be done first — all sensor channels (
 
 ### 2c. Channels to Enable — Master List
 
-Enable exactly these channels. Total: **15 known + 3 AVI to locate = 18**, well under the 120 limit.
+Enable exactly these channels. Total: **~72**, well under the 120 limit.
 
-| CC ID | Channel Name | Unit | Type | Purpose |
-|---|---|---|---|---|
-| CC01 | ECU RPM | rpm | Required | ENGINE_RUNNING, STARTER_SAFE, alarm guards |
-| CC04 | ECU ThrottlePos | % | Required | PITLIMITER_ACTIVE (TPS > 60 bypass) |
-| CC69 | ECU CoolantTemp | °F | Required | Fan bands, HIGH_COOLANT_T alarm |
-| CC167 | ECU Gear Sel Pos | # | Required | Display |
-| CC237 | ECU FLTS BATTVOL | mV | Required | Battery health |
-| CC249 | ECU PLIGHT STATE | # | Required | Engine protection / fault flag |
-| CC___ | Vehicle Speed | mph | Required | PITLIMITER_SAFE speed gate — search "speed" or "VSS"; comes from transaxle Hall sensor on Haltech 26-pin pin 8 |
-| CC___ | AVI1 Fuel Pressure | psi | Required | LOW_FUEL_P alarm (Lowdoller sensor on Haltech AVI1) |
-| CC___ | AVI3 Oil Pressure | psi | Required | LOW_OIL_P alarm (Lowdoller sensor on Haltech AVI3) |
-| CC___ | AVI4 Oil Temp | °F | Required | HIGH_OIL_T alarm (Lowdoller sensor on Haltech AVI4) |
-| CC168 | ECU WIDEBAND B2 | lambda | Logging | AFR — tune quality, lean events |
-| CC241 | ECU FT RACC PRES | psi | Logging | Manifold pressure reference (was old MAP channel) |
-| CC261 | ECU AIR TEMP | °F | Logging | IAT — knock correlation |
-| CC147 | ECU TorDrRPMEI | deg | Logging | Ignition advance — shows retard events |
-| CC144 | ECU RaceTimer | ms | Logging | Session timing |
+**Required — PDM alarm/logic channels:**
 
-> **Finding AVI channels:** Scroll the full channel list and search for "Analog" or "AVI". The Haltech broadcasts each AVI input as its own channel. Fill in the three CC___ IDs above once found.
+| CC ID | Channel Name | Unit | Purpose |
+|---|---|---|---|
+| CC01 | ECU RPM | rpm | ENGINE_RUNNING, STARTER_SAFE, alarm guards |
+| CC04 | ECU ThrottlePos | % | PITLIMITER_ACTIVE (TPS > 60 bypass) |
+| CC05 | ECU OilPress | bar | LOW_OIL_P alarm |
+| CC06 | ECU FuelPress | bar | LOW_FUEL_P alarm |
+| CC30 | ECU BrakePress | bar | Brake pressure (AVI7 Lowdoller sensor) |
+| CC45 | ECU VehSpeed | km/h | PITLIMITER_SAFE — **threshold = 97 km/h (= 60 mph)** |
+| CC52 | ECU BatteryVolt | V | Battery health |
+| CC69 | ECU CoolantTemp | °F | Fan bands, HIGH_COOLANT_T alarm |
+| CC71 | ECU OilTemp | °C | HIGH_OIL_T alarm |
+| CC94 | ECU Oil Press Li | # | ECU oil pressure warning flag |
+| CC117 | PitLane SpLimErr | # | Pit lane speed limiter error feedback |
+| CC119 | PitLane SpdLimSS | # | Pit lane set speed reference |
+| CC249 | ECU PLIGHT STATE | # | Engine protection / fault flag |
+
+**Logging — keep all of these:**
+
+| CC ID | Channel Name | Unit | Notes |
+|---|---|---|---|
+| CC02 | ECU ManifPress | bar | Manifold pressure (MAP) |
+| CC03 | ECU CoolantPres | bar | Coolant pressure (AVI5 Lowdoller) |
+| CC08 | ECU EngineDeman | % | Engine load / demand |
+| CC09 | ECU IgnAngLead | deg | Ignition advance — shows retard events |
+| CC10 | ECU InjDT2 | % | Injector duty cycle bank 2 |
+| CC11 | ECU InjDT1 | % | Injector duty cycle bank 1 |
+| CC15 | ECU Avg Inj 1 | ms | Injection pulse width |
+| CC16 | ECU Avg Inj 2 | ms | Injection pulse width |
+| CC17 | ECU Avg Inj 3 | ms | Injection pulse width |
+| CC23 | ECU TrigSyncLev | # | Trigger sync level — tune health |
+| CC24 | ECU TrigErrCount | # | Trigger error count — tune health |
+| CC26 | ECU KnockLev2 | # | Knock bank 2 — critical for tune |
+| CC27 | ECU KnockLev1 | # | Knock bank 1 — critical for tune |
+| CC28 | ECU LateralG | g | Lateral acceleration |
+| CC36 | ECU ExhCamAng1 | deg | Exhaust cam angle bank 1 (VVT) |
+| CC37 | ECU ExhCamAng2 | deg | Exhaust cam angle bank 2 (VVT) |
+| CC38 | ECU LongG | g | Longitudinal acceleration |
+| CC46 | ECU IntakeCamA1 | deg | Intake cam angle bank 1 (VVT) |
+| CC47 | ECU IntakeCamA2 | deg | Intake cam angle bank 2 (VVT) |
+| CC50 | ECU BaromPress | bar | Barometric pressure |
+| CC65 | ECU Amb Air T | °C | Ambient air temp |
+| CC66 | ECU Rel Humidity | % | Relative humidity |
+| CC67 | ECU Abs Humidity | # | Absolute humidity |
+| CC68 | ECU Spec Humi | # | Specific humidity |
+| CC70 | ECU AirTemp | °C | Air temp (°C) |
+| CC72 | ECU FuelTemp | °C | Fuel temperature |
+| CC73 | ECU DiffOilTemp | °C | Diff/trans oil temp |
+| CC74 | ECU GearOilTemp | °C | Gearbox oil temp |
+| CC76 | ECU FuelLevel | l | Fuel level |
+| CC77 | ECU FuelTrimSTB1 | % | Short-term fuel trim bank 1 |
+| CC78 | ECU FuelTrimSTB2 | % | Short-term fuel trim bank 2 |
+| CC79 | ECU FuelTrimLTB1 | % | Long-term fuel trim bank 1 |
+| CC80 | ECU FuelTrimLTB2 | % | Long-term fuel trim bank 2 |
+| CC91 | ECU CheckEngLtSw | # | Check engine light status |
+| CC107 | ECU TPSAct | # | TPS active status |
+| CC134 | ECU TargLambda | lambda | Target lambda |
+| CC138 | ECU CrankCPress | bar | Crankcase pressure |
+| CC141 | ECU InjectionDT4 | % | Injector duty cycle 4 |
+| CC142 | ECU IgnitionAng1 | deg | Ignition angle cyl 1 |
+| CC143 | ECU IgnitionAng2 | deg | Ignition angle cyl 2 |
+| CC144 | ECU RaceTimer | ms | Session timing |
+| CC149 | ECU TorqCIgnCorr | deg | Torque/ignition correction |
+| CC166 | ECU Temperature | °C | ECU internal temperature |
+| CC167 | ECU Gear Sel Pos | gear | Gear display |
+| CC168 | ECU WIDEBAND B2 | lambda | AFR bank 2 |
+| CC169 | ECU WIDEBAND OVE | lambda | AFR average |
+| CC170 | ECU WIDEBAND B1 | lambda | AFR bank 1 |
+| CC172 | ECU Inj Pres D | bar | Injector pressure delta |
+| CC173 | ECU Acc Ped Pos | % | Accelerator pedal position |
+| CC210 | ECU VERTICAL G | g | Vertical acceleration |
+| CC211 | ECU PITCH RATE | deg/s | Pitch rate |
+| CC212 | ECU ROLL RATE | deg/s | Roll rate |
+| CC213 | ECU YAW RATE | deg/s | Yaw rate |
+| CC227 | ECU ENG LIM MAX | deg/s | Rev limiter threshold |
+| CC254 | ECU FUEL TRIPMT | l | Fuel used — endurance reference |
+| CC255 | Trip Meter | m | Distance |
+| CC261 | ECU AIR TEMP | °F | IAT |
+
+> ⚠️ **Disable CC260 (ECU H2O INJ DUTY)** — no water injection on this car, uncheck it.
 
 ---
 
-## Step 3: CAN2 Keypad — Remap Button Assignments
+## Step 3: CAN2 Keypad — Button Configuration
 
-1. Device tree → **CAN2 Keypad** → AIM CAN Keypad 12
-2. The webinar has buttons K01–K08 defined. Make the following remaps:
+Click the **CAN2 Keypad** tab. Verify bus speed = **125 kbps**. Delete all existing buttons from the webinar config and create fresh assignments as below.
 
-| Old Key | Old Function | New Key | New Function | Type |
-|---|---|---|---|---|
-| K04 | StarterKYD | **K01** | Starter | Latching toggle |
-| K03 | SirenKYD | **K02** | Horn | Momentary |
-| K02 | LightsKYD | **K03** | Lights | Latching toggle |
-| K05 | IgnitionKYD | **DELETE** | — | (remove — use physical IGN) |
-| K01 | FanKYD | **K05** | Fan Override | Latching toggle |
-| K06 | (spare) | **K04** | CoolsuitKYD | Latching toggle |
-| — | (new) | **K06** | FuelOverride | Latching toggle |
-| — | (new) | **K07** | PitLimiter_KYD | Latching toggle |
-| — | (new) | **K08** | WiperKYD | Latching toggle |
-| — | (new) | **K09** | COMMS_YN | Latching toggle |
-| — | (new) | **K10** | PITIN_LAPS | Multi-position (4 pos) |
+> **Variable names must match exactly** — these are referenced in math channels (Step 5) and LED logic (Step 7).
 
-For each key, set the generated status variable name to match the table above.
+### K33 — Starter
+- **Name:** `StarterKYD`
+- **Type: Momentary** — crank only while held; releasing stops the starter
+- Rest: label `RDY`, value `0`
+- Active: label `CRNK`, value `1`
+- Use timing: NO
+- Variable name: `StarterKYD`
+
+### K34 — Horn
+- **Name:** `HornKYD`
+- **Type: Momentary**
+- Rest: label `OFF`, value `0`
+- Active: label `HORN`, value `1`
+- Use timing: NO
+- Variable name: `HornKYD`
+
+### K35 — Lights
+- **Name:** `LightsKYD`
+- **Type: Multistatus** — 3 positions, cycles on each press
+- Position 0: label `OFF`, value `0`
+- Position 1: label `LOW`, value `1`
+- Position 2: label `HIGH`, value `2`
+- Variable name: `LightsKYD`
+
+### K36 — Coolsuit
+- **Name:** `CoolsuitKYD`
+- **Type: Toggle**
+- Rest: label `OFF`, value `0`
+- Active: label `ON`, value `1`
+- Variable name: `CoolsuitKYD`
+
+### K37 — Fan Override
+- **Name:** `FanKYD`
+- **Type: Toggle**
+- Rest: label `OFF`, value `0`
+- Active: label `ON`, value `1`
+- Variable name: `FanKYD`
+
+### K38 — Fuel Override
+- **Name:** `FuelOverrideKYD`
+- **Type: Toggle**
+- Rest: label `OFF`, value `0`
+- Active: label `ON`, value `1`
+- Variable name: `FuelOverride`
+
+### K39 — Pit Limiter
+- **Name:** `PitLimKYD`
+- **Type: Toggle + timing** (can't hold a button while driving; timing adds safety clear)
+- Rest: label `OFF`, value `0`
+- Active: label `PIT`, value `1`
+- Use timing: YES
+  - Short press: toggles state (normal arm/disarm)
+  - Long press: label `CLEAR`, value `0` — forces OFF regardless of current state
+  - Time threshold: **2000 ms**
+- Variable name: `PitLimiter_KYD`
+
+### K40 — Comms
+- **Name:** `CommsKYD`
+- **Type: Toggle**
+- Rest: label `NO`, value `0`
+- Active: label `YES`, value `1`
+- Variable name: `COMMS_YN`
+
+### K41 — Pit-In Laps
+- **Name:** `PitInKYD`
+- **Type: Multistatus** — 4 positions, cycles on each press
+- Position 0: label `---`, value `0` (not pitting)
+- Position 1: label `L+1`, value `1` (1 lap out)
+- Position 2: label `L+2`, value `2`
+- Position 3: label `L+3`, value `3`
+- Variable name: `PITIN_LAPS`
+
+### K42 — Wiper
+- **Name:** `WiperKYD`
+- **Type: Multistatus** — 3 positions, cycles on each press
+- Position 0: label `OFF`, value `0`
+- Position 1: label `SLOW`, value `1`
+- Position 2: label `FAST`, value `2`
+- Variable name: `WiperKYD`
+
+### K43–K44 — Spare
+- Leave unconfigured
 
 ---
 
@@ -134,7 +264,7 @@ For each key, set the generated status variable name to match the table above.
    - Type: Digital
    - Mode: Momentary (push button)
    - Active: Ground (closed = active)
-3. **Ch11** (Connector B, pin B28):
+3. **Ch11** (Black connector, pin 26):
    - Name: `BRAKE_SWITCH`
    - Type: Digital
    - Mode: Bistable (closed when brake pressed)
@@ -276,9 +406,9 @@ Condition: PITLIMITER_SAFE AND NOT (TPS > 60)
 
 PodiumConnect:
 
-**`COMMS_YN`** — comes from K09 keypad output (latching toggle), no additional math needed
+**`COMMS_YN`** — comes from K40 keypad output (toggle), no additional math needed
 
-**`PITIN_LAPS`** — comes from K10 keypad output (multi-position 0/1/2/3), no additional math needed
+**`PITIN_LAPS`** — comes from K41 keypad output (multistatus 0/1/2/3), no additional math needed
 
 ---
 
@@ -385,26 +515,69 @@ All: OVC Protected, 10A, **Trigger:** `SafeIgnition` → DC
 
 ## Step 7: Keypad LED Colors
 
-Go to **CAN Output 2 (Keypad)** → configure `ColorsConditionK01` through `ColorsConditionK10`:
+Go to **CAN2 Keypad** tab → select each button → configure LED colors.
 
-| Key | Off Color | Active Color | Source Variable |
-|---|---|---|---|
-| K01 Start | Dim green | Bright green | `StarterKYD` |
-| K02 Horn | Dim yellow | Bright yellow | `HornKYD` |
-| K03 Lights | Dim blue | Bright blue | `LightsKYD` |
-| K04 Coolsuit | Dim cyan | Bright cyan | `CoolsuitKYD` |
-| K05 Fan | Dim white | Bright red | `FanKYD` (red = manual override) |
-| K06 Fuel Override | Dim white | Bright red | `FuelOverride` |
-| K07 Pit Limiter | Dim white | Bright white (active) / Red (engaged-but-unsafe) | `PITLIMITER_ACTIVE` / `PitLimiter_KYD AND NOT PITLIMITER_SAFE` |
-| K08 Wiper | Dim white | Bright white | `WiperKYD` |
-| K09 Comms Yes | Off | Bright green | `COMMS_YN` |
-| K10 Pit-In Laps | Off | White dim/med/bright (1/2/3 laps) | `PITIN_LAPS` position |
-| K11–12 | Off | — | Spare |
+**Available colors:** White · Red · Green · Blue · Amber · Magenta · Cyan
 
-For K07 (pit limiter), if Race Studio allows conditional LED color:
-- `PITLIMITER_ACTIVE = 1` → White (all systems go)
-- `PitLimiter_KYD = 1 AND PITLIMITER_ACTIVE = 0` → Red (armed but speed-blocked)
-- `PitLimiter_KYD = 0` → Dim white (off)
+### Backlight Approach
+
+The AIM CAN Keypad 12 has one RGB LED per button. There is no separate backlight — the LED **is** the button illumination.
+
+**Design rule:**
+- **Rest (default):** White — all 12 buttons are uniformly lit white when idle. Provides even illumination in the cockpit regardless of function state.
+- **Active:** Color changes to the assigned function color when the button state changes. This makes active states immediately visible against the white background.
+
+There is no global brightness setting per-button in the current Race Studio version — brightness is determined by the color selected. White at rest gives a consistent baseline; colored states will be visually distinct.
+
+> **Note:** If Race Studio shows a "Backlight" or "Brightness" field separate from the LED condition, set it to a fixed value (e.g., 100%) so the keypad is always visible. The per-button LED color conditions below control the function indication.
+
+### Simple buttons (toggle / momentary)
+
+| Button | Function | Rest | Active | Notes |
+|---|---|---|---|---|
+| K33 | Starter | White | Green | Cranking = go |
+| K34 | Horn | White | Amber | Attention |
+| K36 | Coolsuit | White | Cyan | Cooling = cyan |
+| K37 | Fan Override | White | Red | Override = warning |
+| K38 | Fuel Override | White | Red | Override = warning |
+| K40 | Comms | White | Green | Active = confirmed |
+
+### K39 — Pit Limiter (two-condition LED)
+
+Race Studio allows multiple color conditions per button. Configure in this order (highest priority first):
+
+1. `PITLIMITER_ACTIVE = 1` → **Red** (limiter actively clamping speed — you're hitting the limit)
+2. `PitLimiter_KYD = 1` → **Green** (armed — speed gate not yet met, still entering pit lane)
+3. Rest → **White** (off)
+
+> Green = armed and on your way in. Red = the limiter is firing and holding your speed. If you see green but the car isn't slowing, you haven't hit 97 km/h yet.
+
+### K35 — Lights (multistatus, 3 positions)
+
+| Position | Label | Color |
+|---|---|---|
+| 0 | OFF | White |
+| 1 | LOW | Blue |
+| 2 | HIGH | Cyan |
+
+### K41 — Pit-In Laps (multistatus, 4 positions)
+
+Traffic light countdown — green = plenty of time, red = pit next lap.
+
+| Position | Label | Color |
+|---|---|---|
+| 0 | --- | White |
+| 1 | L+1 | Red |
+| 2 | L+2 | Amber |
+| 3 | L+3 | Green |
+
+### K42 — Wiper (multistatus, 3 positions)
+
+| Position | Label | Color |
+|---|---|---|
+| 0 | OFF | White |
+| 1 | SLOW | Blue |
+| 2 | FAST | Cyan |
 
 ---
 
@@ -457,21 +630,34 @@ With PDM powered (via IGN toggle or direct 12V):
 
 ## Reference: Output Physical Pin Map
 
-| Output Name | PDM Connector Pins |
-|---|---|
-| HP1 Starter | A1 + A13 |
-| HP2 Fan | A12 + A23 |
-| HP3 FuelPump | A24 + A25 |
-| MP1 InjectorPwr | A2 |
-| MP2 CoilPwr | A3 |
-| MP3 Horn | A4 |
-| MP4 BrakeLights | A5 |
-| MP5 TailLights | A6 |
-| MP6 AltExciter | A7 |
-| MP7 Coolsuit | A8 |
-| LP1–LP7 | A14–A20 |
-| IGN Input | B23 |
-| Ch09 (Start backup) | B21 |
-| Ch11 (Brake switch) | B28 |
-| CAN0 H/L | A22 / A11 |
-| CAN2 (Keypad) | B pins — see pdm-pinout.md |
+**Black connector = power outputs, CAN, Ch11–Ch12**
+**Grey connector = additional outputs, Ch01–Ch10, IGN, analog ref**
+
+| Output / Signal | Connector | Pin(s) |
+|---|---|---|
+| HP1 Starter | Black | 1 + 13 |
+| HP2 Fan | Black | 12 + 23 |
+| HP3 FuelPump | Black | 24 + 25 |
+| MP1 InjectorPwr | Black | 2 |
+| MP2 CoilPwr | Black | 3 |
+| MP3 Horn | Black | 4 |
+| MP4 BrakeLights | Black | 5 |
+| MP5 TailLights | Black | 6 |
+| MP6 AltExciter | Black | 7 |
+| MP7 Coolsuit | Black | 8 |
+| LP1–LP7 | Black | 14–20 |
+| Ch11 (Brake switch) | Black | 26 |
+| Ch12 (spare) | Black | 27 |
+| CAN0 H / CAN0 L (Haltech) | Black | 22 / 11 |
+| CAN2 H / CAN2 L (Keypad) | Black | 28 / 29 |
+| CAN1 H / CAN1 L (AIM Expansion → DataHub) | Black | 30 / 31 |
+| +Vb out CAN (power to expansion devices) | Black | 33 |
+| +Vb ext CAN (external CAN power input) | Black | 32 |
+| IGN Input | Grey | 23 |
+| Ch09 (Start backup) | Grey | 21 |
+| Ch10 (spare) | Grey | 22 |
+| Ch01–Ch08 (spare) | Grey | 26–33 |
+| +5V Analog Vref (sensor reference) | Grey | 16 |
+| +Vb output (sensor supply) | Grey | 17 |
+| Speed 1 input | Grey | 20 |
+| Speed 2 input | Grey | 19 |
