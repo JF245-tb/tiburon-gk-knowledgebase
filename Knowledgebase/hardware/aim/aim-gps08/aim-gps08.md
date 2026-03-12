@@ -1,4 +1,4 @@
-# AIM GPS-08 — Pinout and Configuration
+﻿# AIM GPS-08 — Pinout and Configuration
 
 **Source:** AIM Sports product documentation; PDM32 tech sheet Ver. 1.17; SmartyCam 3 manual Rev 1.14
 **Application:** White Tiburon — GPS module connected to PDM CAN AiM expansion bus via 4-way Data Hub
@@ -116,7 +116,7 @@ The GPS-08 is **not configured** in the PDM's RS3 session. It is not listed in C
 
 | File | Contents |
 |------|----------|
-| `hardware/aim-datahub/aim-datahub.md` | Data Hub pinout — GPS-08 connects via hub to PDM CAN AiM |
-| `hardware/aim-smartycam/aim-smartycam.md` | SmartyCam receives GPS G-force and speed channels via CAN AiM |
-| `hardware/aim-pdm/pdm-pinout.md` | PDM CAN AiM pins (A22/A11/A33) — expansion bus |
+| `hardware/aim/aim-datahub/aim-datahub.md` | Data Hub pinout — GPS-08 connects via hub to PDM CAN AiM |
+| `hardware/aim/aim-smartycam/aim-smartycam.md` | SmartyCam receives GPS G-force and speed channels via CAN AiM |
+| `hardware/aim/aim-pdm/pdm-pinout.md` | PDM CAN AiM pins (A22/A11/A33) — expansion bus |
 | `builds/white-tiburon/guides/pdm-config.md` | LP4 (GPS power) output assignment |

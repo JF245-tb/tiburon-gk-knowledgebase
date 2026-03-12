@@ -1,4 +1,4 @@
-# White Tiburon — Session Start
+﻿# White Tiburon — Session Start
 
 **2003 Hyundai Tiburon GK | G6BA 2.7L V6 | Haltech Elite 2500 + AIM PDM 32 | 24 Hours of Lemons**
 
@@ -60,7 +60,7 @@
 |---|---|
 | Sensor supply +5V | 34-pin **pin 9** (O wire) — ratiometric sensors (Lowdoller, MAP, TPS) |
 | Sensor supply +8V | 34-pin **pin 12** (O/W wire) — NOT pin 3 |
-| CAN0 to PDM | 26-pin **pin 23** (W) = CAN H → PDM A22; **pin 24** (L) = CAN L → PDM A11 |
+| CAN ECU to PDM | 26-pin **pin 23** (W) = CAN H → PDM **A30**; **pin 24** (L) = CAN L → PDM **A31** *(CAN1/CAN ECU bus, 500 kbps — NOT A22/A11 which is CAN AiM/expansion bus)* |
 | VSS (speed) | 26-pin **pin 8** (SPI 1) ← transaxle Hall IC, 4 pulses/rev |
 | Tacho output | 34-pin **pin 18** (DPO 1, V/B) — 3 ppr, 12V active low |
 
@@ -145,10 +145,10 @@
 |---|---|
 | Haltech Elite 2500 — 26-pin connector | `hardware/haltech/main-connector-26-pin-elite2500.md` |
 | Haltech Elite 2500 — 34-pin connector | `hardware/haltech/main-connector-34-pin-elite2500.md` |
-| AIM PDM 32 — full pinout | `hardware/aim-pdm/pdm-pinout.md` |
-| AIM PDM 32 — logic & configuration theory | `hardware/aim-pdm/pdm-configuration-guide.md` |
+| AIM PDM 32 — full pinout | `hardware/aim/aim-pdm/pdm-pinout.md` |
+| AIM PDM 32 — logic & configuration theory | `hardware/aim/aim-pdm/pdm-configuration-guide.md` |
 | Lowdoller combo sensors | `hardware/sensors/lowdoller-sensors.md` |
 | Toyota COP coil 90919-A2005 | `hardware/sensors/cop-ignition.md` |
-| AIM CAN Data Hub (4-way) | `hardware/aim-datahub/aim-datahub.md` |
-| AIM GPS-08 GPS module | `hardware/aim-gps08/aim-gps08.md` |
-| AIM SmartyCam 3 camera | `hardware/aim-smartycam/aim-smartycam.md` |
+| AIM CAN Data Hub (4-way) | `hardware/aim/aim-datahub/aim-datahub.md` |
+| AIM GPS-08 GPS module | `hardware/aim/aim-gps08/aim-gps08.md` |
+| AIM SmartyCam 3 camera | `hardware/aim/aim-smartycam/aim-smartycam.md` |

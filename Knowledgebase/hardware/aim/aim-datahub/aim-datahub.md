@@ -1,4 +1,4 @@
-# AIM CAN Data Hub — 2-Way and 4-Way
+﻿# AIM CAN Data Hub — 2-Way and 4-Way
 
 **Source:** `Pinout_DataHub_101_eng.pdf` (AIM Sports, Release 1.01)
 **Application:** White Tiburon — connects GPS-08, SmartyCAM, and Podium module to PDM CAN0 expansion bus
@@ -119,8 +119,8 @@ When the PDM's female expansion cable mates with the hub's male connector:
 
 | File | Contents |
 |------|----------|
-| `hardware/aim-pdm/pdm-pinout.md` | PDM CAN expansion cable pinout — CAN0 signals |
-| `hardware/aim-smartycam/aim-smartycam.md` | SmartyCAM pinout, RS3 config, master device setup |
+| `hardware/aim/aim-pdm/pdm-pinout.md` | PDM CAN expansion cable pinout — CAN0 signals |
+| `hardware/aim/aim-smartycam/aim-smartycam.md` | SmartyCAM pinout, RS3 config, master device setup |
 | `builds/white-tiburon/guides/pdm-config.md` | CAN bus assignments — CAN0 AIM expansion bus |
-| `hardware/aim-gps08/aim-gps08.md` | GPS-08 pinout, CAN behavior, part numbers |
+| `hardware/aim/aim-gps08/aim-gps08.md` | GPS-08 pinout, CAN behavior, part numbers |
 | `Pinout_DataHub_101_eng.pdf` | Source AIM document — original pinout diagrams |

@@ -1,4 +1,4 @@
-# AIM PDM32 Race Studio 3 Configuration Guide — White Tiburon
+﻿# AIM PDM32 Race Studio 3 Configuration Guide — White Tiburon
 
 ## Overview
 
@@ -449,7 +449,7 @@ Enable LP7, set trigger to `MULTI_WARNING`, optionally set PWM for blinking.
    - If a channel is missing from the list, check **"Enable all channels for functions"** to see all
    - Key channels: RPM, Speed (GPS-08), Gear, Coolant Temp, Oil Pressure, TPS, Lat G, Long G
 4. Choose **AiM Default** protocol (or create Advanced protocol for custom channel set)
-5. See `hardware/aim-smartycam/aim-smartycam.md` for full channel map and SmartyCam-side RS3 config
+5. See `hardware/aim/aim-smartycam/aim-smartycam.md` for full channel map and SmartyCam-side RS3 config
 
 ### 10. Transmit and Test
 

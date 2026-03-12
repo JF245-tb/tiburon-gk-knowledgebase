@@ -1,4 +1,4 @@
-# AIM SmartyCam 3 Series — Pinout, Configuration, and PDM Integration
+﻿# AIM SmartyCam 3 Series — Pinout, Configuration, and PDM Integration
 
 **Source:** AIM SmartyCam 3 User Manual Rev 1.14 (`SmartyCam3_114_eng.pdf`)
 **Application:** White Tiburon — HD video overlay camera connected to PDM CAN0 expansion bus via CAN Data Hub
@@ -274,8 +274,8 @@ When working in PDM's RS3 config:
 
 | File | Contents |
 |------|----------|
-| `hardware/aim-datahub/aim-datahub.md` | Data Hub pinout and CAN topology — SmartyCam connects via hub |
-| `hardware/aim-pdm/pdm-pinout.md` | PDM CAN0 pins (A11/A22/A33) for expansion bus |
+| `hardware/aim/aim-datahub/aim-datahub.md` | Data Hub pinout and CAN topology — SmartyCam connects via hub |
+| `hardware/aim/aim-pdm/pdm-pinout.md` | PDM CAN0 pins (A11/A22/A33) for expansion bus |
 | `builds/white-tiburon/guides/pdm-config.md` | Full PDM RS3 config including SmartyCam Stream setup |
-| `hardware/aim-gps08/aim-gps08.md` | GPS-08 pinout, CAN behavior, mounting notes |
+| `hardware/aim/aim-gps08/aim-gps08.md` | GPS-08 pinout, CAN behavior, mounting notes |
 | `SmartyCam3_114_eng.pdf` | Source AIM document — pinout diagrams (image-only, not text-searchable) |

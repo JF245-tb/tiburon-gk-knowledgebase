@@ -1,0 +1,303 @@
+{
+  "_meta": {
+    "description": "Layer 2 — Hardware capability graph. Describes what each device IS: interfaces, connectors, signal types. Generic — not specific to any car build. Referenced by build graphs via hw_ref fields.",
+    "layer": 2,
+    "schema": "common/knowledge-graph-schema.md",
+    "version": "1.0",
+    "last_updated": "2026-03-11",
+    "related": {
+      "layer_1": "common/tiburon-knowledge-graph.json — platform OEM/factory knowledge",
+      "layer_3": "builds/{car}/build-knowledge-graph.json — car-specific wiring instances"
+    },
+    "notes": "Add new hardware devices here when they are acquired. Build graph nodes reference these via hw_ref. Do not put car-specific wiring here."
+  },
+
+  "nodes": [
+
+    {
+      "id": "hw-haltech-elite2500",
+      "type": "device",
+      "label": "Haltech Elite 2500 ECU",
+      "manufacturer": "Haltech",
+      "device_type": "ECU",
+      "docs": [
+        "hardware/haltech/main-connector-26-pin-elite2500.md",
+        "hardware/haltech/main-connector-34-pin-elite2500.md",
+        "hardware/haltech/elite-2500-wiring-diagram--rev-6.md"
+      ],
+      "connectors": ["26-pin Haltech main", "34-pin Haltech main"],
+      "can_channels": [
+        { "label": "CAN0", "speed_kbps": 500, "pins_26pin": { "H": "pin 23 (W)", "L": "pin 24 (L)" } },
+        { "label": "CAN1", "speed_kbps": 500 }
+      ],
+      "avi_inputs": 10,
+      "ign_outputs": 6,
+      "inj_outputs": 6,
+      "sensor_supply_5v": "34-pin pin 9 (O) — 100mA, ratiometric",
+      "sensor_supply_8v": "34-pin pin 12 (O/W) — 1A"
+    },
+
+    {
+      "id": "hw-aim-pdm32",
+      "type": "device",
+      "label": "AIM PDM 32",
+      "manufacturer": "AIM Sports",
+      "device_type": "PDM",
+      "docs": [
+        "hardware/aim/aim-pdm/pdm-pinout.md",
+        "hardware/aim/aim-pdm/pdm-configuration-guide.md"
+      ],
+      "part_number": "XC1PDM3201",
+      "connectors": ["Conn A (35-pin Deutsch)", "Conn B (35-pin Deutsch)"],
+      "can_buses": [
+        {
+          "aim_label": "CAN AiM",
+          "internal_label": "CAN0",
+          "pdm_pins": { "H": "A22", "L": "A11", "pwr": "A33", "gnd": "A10", "pwr_ext": "A32" },
+          "speed_kbps": 1000,
+          "interface": "5-pin Binder 712 expansion cable (female, pre-wired, part V02579030)",
+          "rs3_tab": "SmartyCam Stream / Channels tab",
+          "notes": "Always-on at 1 Mbps. GPS-08 and SmartyCam connect here via Data Hub."
+        },
+        {
+          "aim_label": "CAN ECU",
+          "internal_label": "CAN1",
+          "pdm_pins": { "H": "A30", "L": "A31" },
+          "speed_kbps": 500,
+          "rs3_tab": "ECU Stream",
+          "notes": "Shared with RS232 TX/RX — RS232 unavailable when CAN ECU active. ECU (Haltech) connects here."
+        },
+        {
+          "aim_label": "CAN2",
+          "internal_label": "CAN2",
+          "pdm_pins": { "H": "A28", "L": "A29" },
+          "speed_kbps": 125,
+          "rs3_tab": "CAN2 Keypad",
+          "notes": "CAN Keypad 12 connects here at 125 kbps only. Do NOT wire keypad to CAN AiM (different speed = bus failure)."
+        }
+      ],
+      "outputs": {
+        "HP": { "count": 4, "dual_pin": true, "max_a_each": 40 },
+        "half_bridge": { "count": 4, "dual_pin": true },
+        "MP": { "count": 12, "single_pin": true },
+        "LP": { "count": 12, "single_pin": true }
+      },
+      "total_max_current_a": 120,
+      "internal_memory_gb": 4,
+      "ip_rating": "IP65",
+      "power_v": "9-15V",
+      "lvds_display": "4-pin Rosenberger connector (LVDS)"
+    },
+
+    {
+      "id": "hw-aim-datahub-4way",
+      "type": "device",
+      "label": "AIM CAN Data Hub (4-way)",
+      "manufacturer": "AIM Sports",
+      "device_type": "passive_splitter",
+      "docs": ["hardware/aim/aim-datahub/aim-datahub.md"],
+      "variants": ["2-way (1 master, 2 device ports)", "4-way (1 master, 4 device ports)"],
+      "connector": "5-pin Binder 712",
+      "master_ports": 1,
+      "device_ports": 4,
+      "bus": "CAN AiM",
+      "pinout": {
+        "1": "CAN+",
+        "2": "GND",
+        "3": "+Vb (12V — fed from PDM A33, distributed to all device ports)",
+        "4": "CAN-",
+        "5": "+VBext (external power pass-through)"
+      },
+      "firmware": false,
+      "usb": false,
+      "rs3_visible": false,
+      "notes": "Passive — electrically transparent. No configuration. Not visible in Race Studio 3. Power flows from PDM A33 through hub to all connected devices."
+    },
+
+    {
+      "id": "hw-aim-gps08",
+      "type": "device",
+      "label": "AIM GPS-08 (and GPS09c)",
+      "manufacturer": "AIM Sports",
+      "device_type": "GPS_module",
+      "docs": ["hardware/aim/aim-gps08/aim-gps08.md"],
+      "part_numbers": {
+        "X40GPS090050": "GPS-08, 50cm cable",
+        "X40GPS090130": "GPS-08, 130cm cable",
+        "X40GPS090200": "GPS-08, 200cm cable",
+        "X40GPS090400": "GPS-08, 400cm cable"
+      },
+      "connector": "5-pin Binder 712 male",
+      "pinout": {
+        "1": "CAN+",
+        "2": "GND",
+        "3": "+Vb (12V in — from Data Hub pin 3)",
+        "4": "CAN-",
+        "5": "n.c. (NOT connected — differs from Data Hub pin 5 which is +VBext)"
+      },
+      "bus": "CAN AiM",
+      "speed_kbps": 1000,
+      "broadcasts": [
+        "latitude", "longitude", "speed_kmh", "speed_mph", "heading",
+        "altitude", "satellites_locked", "lateral_g", "longitudinal_g", "gps_status"
+      ],
+      "rs3_config_required": false,
+      "antenna": "integrated patch (top face, must face skyward)",
+      "satellite_min_for_g_force": 5,
+      "satellite_recommended": 8,
+      "lock_time_s": 30,
+      "gps09c_note": "GPS09c is AIM's current model — same 5-pin Binder interface and CAN protocol, external antenna (SMA)"
+    },
+
+    {
+      "id": "hw-aim-smartycam3",
+      "type": "device",
+      "label": "AIM SmartyCam 3 Series",
+      "manufacturer": "AIM Sports",
+      "device_type": "video_logger",
+      "docs": ["hardware/aim/aim-smartycam/aim-smartycam.md"],
+      "variants": {
+        "Sport": { "exp_connector": "1x 5-pin Binder 712 female (single — power + CAN)", "usb": "none", "storage": "microSD" },
+        "GP": { "exp_connector": "5-pin Binder 712 female (labeled EXP) + 7-pin Binder female (main power)", "usb": "USB-C" },
+        "GP Pro": { "exp_connector": "2x 5-pin Deutsch male (blue key)", "usb": "USB-C" },
+        "Corsa": { "exp_connector": "5-pin Binder EXP + 5-pin Binder GPS + 7-pin Binder main", "usb": "USB-C" },
+        "Dual": { "exp_connector": "22-pin Deutsch female harness", "usb": "USB-C + Ethernet" }
+      },
+      "bus": "CAN AiM",
+      "speed_kbps": 1000,
+      "power_v": "9-15V",
+      "resolution": "1920x1080",
+      "fps": { "Sport": 30, "Dual_GP_Corsa": 60 },
+      "internal_battery_min": 20,
+      "ip_rating": "IP65",
+      "rs3_sessions": 2,
+      "config_methods": ["SD card (all models)", "USB-C (all except Sport)"],
+      "rs3_session_A": "PDM SmartyCam Stream tab — which channels PDM broadcasts to camera",
+      "rs3_session_B": "SmartyCam USB-C/SD — CAN Protocol selection, overlay layout, start/stop conditions",
+      "auto_start_rec": "Starts/stops with PDM master recording when AUTO START REC enabled (MENU → SETTINGS → AUTO START REC)"
+    },
+
+    {
+      "id": "hw-aim-keypad12",
+      "type": "device",
+      "label": "AIM CAN Keypad 12",
+      "manufacturer": "AIM Sports",
+      "device_type": "input_panel",
+      "bus": "CAN2",
+      "speed_kbps": 125,
+      "buttons": 12,
+      "led": "RGB per button",
+      "notes": "Connects to PDM CAN2 (A28/A29) at 125 kbps only. GND to PDM B18 (NOT B23 which is IGN input)."
+    },
+
+    {
+      "id": "hw-aim-dash10",
+      "type": "device",
+      "label": "AIM PDM Dash 10\"",
+      "manufacturer": "AIM Sports",
+      "device_type": "display",
+      "part_number": "XC1D10000",
+      "connector": "4-pin Rosenberger (LVDS)",
+      "interface": "LVDS",
+      "pinout_lvds": { "1": "GND", "2": "Serial Data+", "3": "+V Power", "4": "Serial Data-" },
+      "resolution": "1280x480",
+      "brightness_cdm2": 800,
+      "contrast": "1100:1",
+      "power_ma": 250,
+      "ip_rating": "IP65",
+      "shift_leds": 10,
+      "status_leds": 6,
+      "notes": "Connects via LVDS — NOT CAN. Powered and driven directly from PDM via Rosenberger cable."
+    },
+
+    {
+      "id": "hw-lowdoller-combo",
+      "type": "device",
+      "label": "Lowdoller Combo Pressure+Temp Sensor",
+      "manufacturer": "Lowdoller Motorsports",
+      "device_type": "sensor",
+      "docs": ["hardware/sensors/lowdoller-sensors.md"],
+      "part_numbers": {
+        "899402": "Oil/water/fuel — 150 PSI, 500°F, 1/8 NPT",
+        "899403": "Oil/water/fuel — 150 PSI, 500°F, M10×1.0",
+        "899404": "Oil/water/fuel — 150 PSI, 500°F, 1/8 NPT (alternative)",
+        "LDM899TP100": "Coolant — 100 PSI, 500°F, M12×1.5",
+        "899405": "Brake — 1500 PSI, 500°F, 1/8 NPT"
+      },
+      "pressure_signal": "0.5–4.5V ratiometric (0 to full scale)",
+      "temp_sensor_type": "PTC thermistor — resistance INCREASES with temperature",
+      "supply_v": 5.0,
+      "supply_note": "CRITICAL: PTC thermistor NOT NTC — opposite behavior from OEM sensors. Must configure correctly in Haltech.",
+      "pressure_supply": "Haltech 34-pin pin 9 (+5V, 100mA)",
+      "temp_reading": "Resistive — configure as PTC in Haltech channel setup"
+    },
+
+    {
+      "id": "hw-toyota-cop-90919a2005",
+      "type": "device",
+      "label": "Toyota COP Coil 90919-A2005",
+      "manufacturer": "Toyota",
+      "device_type": "ignition_coil",
+      "docs": ["hardware/sensors/cop-ignition.md"],
+      "connector": "4-pin",
+      "pins": {
+        "A": "GND — chassis/block ground",
+        "B": "Trigger — ECU IGN output (5V logic, Haltech 34-pin pins 3–8)",
+        "C": "Feedback — leave OPEN (not used with Haltech)",
+        "D": "+12V supply — PDM output (MP2, A3)"
+      },
+      "dwell_ms": 2.1,
+      "quantity_per_engine": 6,
+      "notes": "Sequential COP, one per cylinder. Pin C (feedback) must be left open. 12V from PDM MP2 powers all 6 coils."
+    }
+
+  ],
+
+  "edges": [
+    { "source": "hw-aim-pdm32",       "target": "hw-haltech-elite2500",  "rel": "can_interface",   "bus": "CAN ECU (CAN1)",  "speed_kbps": 500,  "pdm_pins": "A30/A31", "haltech_pins": "26-pin 23/24" },
+    { "source": "hw-aim-pdm32",       "target": "hw-aim-datahub-4way",   "rel": "expansion_bus",   "bus": "CAN AiM (CAN0)", "speed_kbps": 1000, "pdm_pins": "A22/A11/A33/A10/A32", "cable": "5-pin Binder 712 female expansion cable" },
+    { "source": "hw-aim-pdm32",       "target": "hw-aim-keypad12",       "rel": "can_interface",   "bus": "CAN2",           "speed_kbps": 125,  "pdm_pins": "A28/A29" },
+    { "source": "hw-aim-pdm32",       "target": "hw-aim-dash10",         "rel": "lvds_drives",     "interface": "LVDS",     "connector": "4-pin Rosenberger" },
+    { "source": "hw-aim-datahub-4way","target": "hw-aim-gps08",          "rel": "device_port",     "port": 1, "connector": "5-pin Binder 712 female" },
+    { "source": "hw-aim-datahub-4way","target": "hw-aim-smartycam3",     "rel": "device_port",     "port": 2, "connector": "5-pin Binder 712 female (EXP port)" },
+    { "source": "hw-aim-gps08",       "target": "hw-aim-pdm32",          "rel": "broadcasts_on",   "bus": "CAN AiM", "via": "hw-aim-datahub-4way", "channels": ["speed", "lat/lon", "heading", "altitude", "G-forces", "GPS status"] },
+    { "source": "hw-aim-smartycam3",  "target": "hw-aim-pdm32",          "rel": "receives_from",   "bus": "CAN AiM", "data": "overlay telemetry (RPM, speed, temps, G-forces)" },
+    { "source": "hw-haltech-elite2500","target": "hw-aim-pdm32",         "rel": "broadcasts_on",   "bus": "CAN ECU", "channels": ["RPM", "ECT", "Oil P", "Oil T", "Fuel P", "TPS", "gear"] }
+  ],
+
+  "quick_lookup": {
+    "can_buses": {
+      "CAN_AIM": {
+        "aim_label": "CAN AiM",
+        "internal_label": "CAN0",
+        "pdm_pins": { "H": "A22", "L": "A11" },
+        "speed_kbps": 1000,
+        "devices": ["AIM GPS-08 (via Data Hub)", "AIM SmartyCam 3 (via Data Hub)", "AIM Podium (via Data Hub, future)"],
+        "rs3_tab": "SmartyCam Stream / Channels tab"
+      },
+      "CAN_ECU": {
+        "aim_label": "CAN ECU",
+        "internal_label": "CAN1",
+        "pdm_pins": { "H": "A30", "L": "A31" },
+        "speed_kbps": 500,
+        "devices": ["Haltech Elite 2500"],
+        "rs3_tab": "ECU Stream"
+      },
+      "CAN2": {
+        "aim_label": "CAN2",
+        "internal_label": "CAN2",
+        "pdm_pins": { "H": "A28", "L": "A29" },
+        "speed_kbps": 125,
+        "devices": ["AIM CAN Keypad 12"],
+        "rs3_tab": "CAN2 Keypad"
+      }
+    },
+    "connector_pinout_5pin_binder": {
+      "1": "CAN+",
+      "2": "GND",
+      "3": "+Vb (12V)",
+      "4": "CAN-",
+      "5": "+VBext (hub) OR n.c. (GPS-08)"
+    }
+  }
+}

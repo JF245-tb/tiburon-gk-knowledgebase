@@ -1,4 +1,4 @@
-# Build Template — [CAR NAME]
+﻿# Build Template — [CAR NAME]
 ## [Year] Hyundai Tiburon GK | [Series / Class]
 
 > **How to use:** Copy this folder to `builds/{your-build-name}/`, rename this file to `build-profile.md`, and fill in every section. Delete fields that don't apply. Blank fields are fine — fill progressively as you learn. Reference files in `common/` and `hardware/` rather than duplicating content.
@@ -276,7 +276,7 @@
 |------|----------|
 | `builds/{car}/signal-routing.md` | End-to-end signal routing |
 | `builds/{car}/weekend-tasks.md` | Phased build procedure |
-| `hardware/aim-pdm/pdm-configuration-guide.md` | PDM logic setup |
+| `hardware/aim/aim-pdm/pdm-configuration-guide.md` | PDM logic setup |
 | `builds/{car}/guides/pdm-config.md` | Race Studio 3 config guide (car-specific) |
 | `hardware/haltech/main-connector-26-pin-elite2500.md` | Haltech 26-pin pinout |
 | `hardware/haltech/main-connector-34-pin-elite2500.md` | Haltech 34-pin pinout |

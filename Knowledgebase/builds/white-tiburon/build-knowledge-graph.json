@@ -1,14 +1,21 @@
 {
   "_meta": {
-    "description": "White Tiburon build-specific knowledge graph — ECU pins, PDM outputs, sensor wiring, signal paths",
+    "description": "White Tiburon build-specific knowledge graph — Layer 3. ECU pins, PDM outputs, AIM CAN devices, sensor wiring, signal paths for this specific car.",
+    "layer": 3,
     "schema": "common/knowledge-graph-schema.md",
+    "hardware_graph": "hardware/hardware-graph.json",
     "common_graph": "common/tiburon-knowledge-graph.json",
-    "version": "1.0",
-    "last_updated": "2026-03-07",
+    "version": "2.0",
+    "last_updated": "2026-03-11",
     "car": "White 2003 Hyundai Tiburon GK",
     "ecu": "Haltech Elite 2500",
     "pdm": "AIM PDM 32",
-    "notes": "Nodes in this graph extend the common graph. Component nodes reference comp-* IDs from tiburon-knowledge-graph.json. Build-specific edges override common behavior (e.g., COP coils replace OEM wasted spark)."
+    "notes": [
+      "Nodes in this graph extend hardware-graph.json (device capabilities) and common graph (OEM components).",
+      "Build-specific edges override common behavior (e.g., COP coils replace OEM wasted spark).",
+      "CAN bus naming uses official AIM labels: CAN AiM (A22/A11, 1 Mbps), CAN ECU (A30/A31, 500 kbps), CAN2 (A28/A29, 125 kbps).",
+      "IMPORTANT: Haltech CAN connects to PDM A30/A31 (CAN ECU), NOT A22/A11 (CAN AiM = AIM expansion bus)."
+    ]
   },
 
   "nodes": [
@@ -31,6 +38,7 @@
       "type": "device",
       "label": "Haltech Elite 2500",
       "device_type": "ECU",
+      "hw_ref": "hw-haltech-elite2500",
       "connectors": ["26-pin", "34-pin"],
       "docs": [
         "hardware/haltech/main-connector-26-pin-elite2500.md",
@@ -44,10 +52,11 @@
       "type": "device",
       "label": "AIM PDM 32",
       "device_type": "PDM",
+      "hw_ref": "hw-aim-pdm32",
       "connectors": ["Conn-A (35-pin)", "Conn-B (35-pin)"],
       "docs": [
-        "hardware/aim-pdm/pdm-pinout.md",
-        "hardware/aim-pdm/pdm-configuration-guide.md",
+        "hardware/aim/aim-pdm/pdm-pinout.md",
+        "hardware/aim/aim-pdm/pdm-configuration-guide.md",
         "builds/white-tiburon/guides/pdm-config.md",
         "builds/white-tiburon/guides/pdm-session-1.md",
         "builds/white-tiburon/guides/bench-test.md"
@@ -55,12 +64,59 @@
     },
 
     {
+      "id": "aim-datahub-4way",
+      "type": "device",
+      "label": "AIM CAN Data Hub (4-way)",
+      "device_type": "passive_splitter",
+      "hw_ref": "hw-aim-datahub-4way",
+      "bus": "CAN AiM",
+      "power_from": "PDM A33 (+Vb CAN)",
+      "connected_to_pdm": "CAN AiM expansion cable (female 5-pin Binder)",
+      "port_assignments": {
+        "1": "GPS-08",
+        "2": "SmartyCam",
+        "3": "Podium module (future)",
+        "4": "spare"
+      },
+      "docs": ["hardware/aim/aim-datahub/aim-datahub.md"]
+    },
+
+    {
+      "id": "aim-gps08",
+      "type": "device",
+      "label": "AIM GPS-08 Module",
+      "device_type": "GPS_module",
+      "hw_ref": "hw-aim-gps08",
+      "bus": "CAN AiM",
+      "hub_port": 1,
+      "power_from": "pdm-LP4 (A17)",
+      "mount": "roof — antenna facing skyward",
+      "docs": ["hardware/aim/aim-gps08/aim-gps08.md"]
+    },
+
+    {
+      "id": "aim-smartycam",
+      "type": "device",
+      "label": "AIM SmartyCam 3",
+      "device_type": "video_logger",
+      "hw_ref": "hw-aim-smartycam3",
+      "bus": "CAN AiM",
+      "hub_port": 2,
+      "power_from": "pdm-LP3 (A16)",
+      "rs3_config": "builds/white-tiburon/guides/pdm-config.md — SmartyCam Stream step",
+      "docs": ["hardware/aim/aim-smartycam/aim-smartycam.md"]
+    },
+
+    {
       "id": "keypad-aim12",
       "type": "device",
       "label": "AIM CAN Keypad 12",
       "device_type": "input",
-      "can_bus": "PDM CAN2",
-      "can_speed_kbps": 125
+      "hw_ref": "hw-aim-keypad12",
+      "bus": "CAN2",
+      "speed_kbps": 125,
+      "power_from": "pdm-LP8 (A21)",
+      "pdm_pins": { "CAN_H": "A28", "CAN_L": "A29" }
     },
 
     {
@@ -68,7 +124,9 @@
       "type": "device",
       "label": "AIM 10\" Dash Display",
       "device_type": "display",
-      "can_bus": "PDM CAN1"
+      "hw_ref": "hw-aim-dash10",
+      "interface": "LVDS (4-pin Rosenberger — NOT CAN)",
+      "power_from": "pdm-LP2 (A15)"
     },
 
     {
@@ -79,8 +137,10 @@
       "pin_number": 23,
       "function": "CAN H",
       "wire_color": "W",
-      "destination": "PDM A22 (CAN0 H)",
-      "can_speed_kbps": 500
+      "destination": "PDM A30 (CAN ECU H)",
+      "bus": "CAN ECU",
+      "speed_kbps": 500,
+      "note": "Goes to PDM A30 (CAN ECU / CAN1). NOT A22 which is CAN AiM expansion bus."
     },
     {
       "id": "ecu-26pin-24",
@@ -90,8 +150,9 @@
       "pin_number": 24,
       "function": "CAN L",
       "wire_color": "L",
-      "destination": "PDM A11 (CAN0 L)",
-      "can_speed_kbps": 500
+      "destination": "PDM A31 (CAN ECU L)",
+      "bus": "CAN ECU",
+      "speed_kbps": 500
     },
     {
       "id": "ecu-34pin-13",
@@ -346,7 +407,8 @@
       "load": "Brushless cooling fan motor",
       "mode": "PWM 100Hz",
       "current_limit_a": 35,
-      "trigger": "ECT 4-band curve (80–95°C) + Key05 full override (100%)"
+      "trigger": "ECT PWM curve: 25% @ 77°C, 50% @ 82°C, 75% @ 87°C, 100% @ 92°C + Key05 full override (100%)",
+      "note": "Thermostat is 170°F (77°C) — fan bands shifted vs OEM 82°C base"
     },
     {
       "id": "pdm-HP3",
@@ -421,7 +483,7 @@
       "mode": "OVC Protected",
       "current_limit_a": 5,
       "trigger": "SafeIgnition",
-      "notes": "Engine charging only active with ignition on. Cuts charge if ignition toggled off."
+      "notes": "Engine charging only active with ignition on."
     },
     {
       "id": "pdm-MP7",
@@ -503,15 +565,25 @@
       "current_limit_a": 5,
       "trigger": "MULTI_WARNING = (oil P low) OR (ECT high) OR (oil T high) OR (fuel P low)"
     },
+    {
+      "id": "pdm-LP8",
+      "type": "pdm_output",
+      "label": "LP8 — CAN Keypad 12 Power",
+      "output_tier": "LP",
+      "pdm_pins": ["A21"],
+      "mode": "OVC Protected",
+      "current_limit_a": 5,
+      "trigger": "SafeIgnition"
+    },
 
     {
       "id": "sensor-lowdoller-fuel",
       "type": "sensor_instance",
       "label": "Lowdoller Fuel Pressure/Temp Sensor",
+      "hw_ref": "hw-lowdoller-combo",
       "part_number": "899404",
       "sensor_type": "combo pressure+temp (PTC)",
       "pressure_range_psi": 150,
-      "temp_range_f": 500,
       "thread": "1/8\" NPT",
       "install_location": "Fuel return line via line tap + hose barbs",
       "common_component_ref": "comp-fuel-pressure-regulator"
@@ -520,10 +592,10 @@
       "id": "sensor-lowdoller-oil",
       "type": "sensor_instance",
       "label": "Lowdoller Oil Pressure/Temp Sensor",
+      "hw_ref": "hw-lowdoller-combo",
       "part_number": "899404",
       "sensor_type": "combo pressure+temp (PTC)",
       "pressure_range_psi": 150,
-      "temp_range_f": 500,
       "thread": "1/8\" NPT",
       "install_location": "Direct mount to engine"
     },
@@ -531,10 +603,10 @@
       "id": "sensor-lowdoller-coolant",
       "type": "sensor_instance",
       "label": "Lowdoller Coolant Pressure/Temp Sensor",
+      "hw_ref": "hw-lowdoller-combo",
       "part_number": "LDM899TP100",
       "sensor_type": "combo pressure+temp (PTC)",
       "pressure_range_psi": 100,
-      "temp_range_f": 500,
       "thread": "M12×1.5 with sealing ring",
       "install_location": "Intake manifold coolant port"
     },
@@ -542,10 +614,10 @@
       "id": "sensor-lowdoller-brake",
       "type": "sensor_instance",
       "label": "Lowdoller Brake Pressure/Temp Sensor",
+      "hw_ref": "hw-lowdoller-combo",
       "part_number": "899405",
       "sensor_type": "combo pressure+temp (PTC)",
       "pressure_range_psi": 1500,
-      "temp_range_f": 500,
       "thread": "1/8\" NPT",
       "install_location": "Brake line — fittings to Jak",
       "status": "planned"
@@ -554,6 +626,7 @@
       "id": "sensor-cop-coil-1",
       "type": "sensor_instance",
       "label": "COP Coil 1 (Toyota 90919-A2005)",
+      "hw_ref": "hw-toyota-cop-90919a2005",
       "part_number": "90919-A2005",
       "cylinder": 1,
       "pin_A": "GND (engine block)",
@@ -570,34 +643,39 @@
     { "source": "pdm-connB-pin23",  "target": "pdm-aim32",       "rel": "input_to" },
     { "source": "pdm-connB-pin21",  "target": "pdm-aim32",       "rel": "input_to" },
     { "source": "pdm-connB-pin28",  "target": "pdm-aim32",       "rel": "input_to" },
-    { "source": "pdm-aim32",        "target": "pdm-HP1",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-HP2",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-HP3",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-MP1",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-MP2",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-MP3",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-MP4",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-MP5",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-MP6",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-MP7",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-LP1",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-LP2",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-LP3",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-LP4",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-LP5",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-LP6",         "rel": "drives" },
-    { "source": "pdm-aim32",        "target": "pdm-LP7",         "rel": "drives" },
 
-    { "source": "pdm-LP1",         "target": "ecu-haltech-2500", "rel": "powered_by" },
-    { "source": "pdm-LP2",         "target": "dash-aim10",       "rel": "powered_by" },
-    { "source": "pdm-MP1",         "target": "comp-injector",    "rel": "powered_by" },
-    { "source": "pdm-MP2",         "target": "sensor-cop-coil-1","rel": "powered_by", "note": "MP2 powers all 6 COP coils (pin D)" },
-    { "source": "pdm-MP6",         "target": "comp-alternator",  "rel": "powered_by", "context": "Alternator exciter only" },
-    { "source": "pdm-HP3",         "target": "comp-fuel-pressure-regulator", "rel": "powered_by", "context": "Powers in-tank fuel pump" },
+    { "source": "pdm-aim32", "target": "pdm-HP1",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-HP2",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-HP3",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-MP1",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-MP2",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-MP3",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-MP4",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-MP5",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-MP6",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-MP7",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-LP1",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-LP2",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-LP3",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-LP4",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-LP5",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-LP6",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-LP7",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-LP8",  "rel": "drives" },
 
-    { "source": "ecu-26pin-23",    "target": "pdm-aim32",        "rel": "signals_to", "context": "CAN0 H @ 500 kbps" },
-    { "source": "ecu-26pin-24",    "target": "pdm-aim32",        "rel": "signals_to", "context": "CAN0 L @ 500 kbps" },
-    { "source": "ecu-34pin-13",    "target": "pdm-connB-pin23",  "rel": "spliced_from", "note": "Same IGN switch feeds both ECU pin 13 and PDM B23" },
+    { "source": "pdm-LP1",  "target": "ecu-haltech-2500",   "rel": "powered_by" },
+    { "source": "pdm-LP2",  "target": "dash-aim10",          "rel": "powered_by" },
+    { "source": "pdm-LP3",  "target": "aim-smartycam",       "rel": "powered_by" },
+    { "source": "pdm-LP4",  "target": "aim-gps08",           "rel": "powered_by" },
+    { "source": "pdm-LP8",  "target": "keypad-aim12",        "rel": "powered_by" },
+    { "source": "pdm-MP1",  "target": "comp-injector",       "rel": "powered_by" },
+    { "source": "pdm-MP2",  "target": "sensor-cop-coil-1",  "rel": "powered_by", "note": "MP2 powers all 6 COP coils (pin D)" },
+    { "source": "pdm-MP6",  "target": "comp-alternator",     "rel": "powered_by", "context": "Alternator exciter only" },
+    { "source": "pdm-HP3",  "target": "comp-fuel-pressure-regulator", "rel": "powered_by", "context": "Powers in-tank fuel pump" },
+
+    { "source": "ecu-26pin-23",  "target": "pdm-aim32", "rel": "signals_to", "context": "CAN ECU H @ 500 kbps → PDM A30" },
+    { "source": "ecu-26pin-24",  "target": "pdm-aim32", "rel": "signals_to", "context": "CAN ECU L @ 500 kbps → PDM A31" },
+    { "source": "ecu-34pin-13",  "target": "pdm-connB-pin23", "rel": "spliced_from", "note": "Same IGN switch feeds both ECU pin 13 and PDM B23" },
 
     { "source": "sensor-lowdoller-fuel",    "target": "ecu-26pin-13", "rel": "signals_to", "context": "Pressure (0.5–4.5V ratiometric)" },
     { "source": "sensor-lowdoller-fuel",    "target": "ecu-34pin-16", "rel": "signals_to", "context": "Temp (PTC resistive)" },
@@ -610,18 +688,21 @@
 
     { "source": "sensor-cop-coil-1", "target": "ecu-34pin-3", "rel": "triggered_by", "context": "Pin B of COP coil ← IGN1" },
 
-    { "source": "sensor-lowdoller-fuel",    "target": "sensor-instance", "rel": "instance_of", "common_node": "comp-fuel-pressure-regulator" },
-
-    { "source": "pdm-aim32",  "target": "ecu-haltech-2500", "rel": "can_receives", "bus": "CAN0", "speed_kbps": 500, "signals": ["RPM", "ECT", "Oil P", "Oil T", "Fuel P"] },
-    { "source": "pdm-aim32",  "target": "dash-aim10",       "rel": "can_receives", "bus": "CAN1", "speed_kbps": 1000 },
-    { "source": "pdm-aim32",  "target": "keypad-aim12",     "rel": "can_receives", "bus": "CAN2", "speed_kbps": 125 }
+    { "source": "pdm-aim32",      "target": "ecu-haltech-2500",  "rel": "can_receives",  "bus": "CAN ECU",  "speed_kbps": 500,  "pdm_pins": "A30/A31", "signals": ["RPM", "ECT", "Oil P", "Oil T", "Fuel P", "TPS", "gear"] },
+    { "source": "pdm-aim32",      "target": "aim-datahub-4way",  "rel": "expansion_bus", "bus": "CAN AiM",  "speed_kbps": 1000, "pdm_pins": "A22/A11" },
+    { "source": "pdm-aim32",      "target": "keypad-aim12",      "rel": "can_receives",  "bus": "CAN2",     "speed_kbps": 125,  "pdm_pins": "A28/A29" },
+    { "source": "pdm-aim32",      "target": "dash-aim10",        "rel": "lvds_drives",   "interface": "LVDS 4-pin Rosenberger" },
+    { "source": "aim-datahub-4way", "target": "aim-gps08",      "rel": "device_port",   "port": 1 },
+    { "source": "aim-datahub-4way", "target": "aim-smartycam",  "rel": "device_port",   "port": 2 },
+    { "source": "aim-gps08",      "target": "pdm-aim32",         "rel": "broadcasts_on", "bus": "CAN AiM",  "via": "aim-datahub-4way", "channels": ["speed", "lat/lon", "heading", "G-forces"] },
+    { "source": "aim-smartycam",  "target": "pdm-aim32",         "rel": "receives_from", "bus": "CAN AiM",  "data": "overlay telemetry" }
 
   ],
 
   "quick_lookup": {
     "pdm_outputs": {
-      "HP1": { "id": "pdm-HP1", "pins": ["A1", "A13"], "load": "Starter" },
-      "HP2": { "id": "pdm-HP2", "pins": ["A12", "A23"], "load": "Fan" },
+      "HP1": { "id": "pdm-HP1", "pins": ["A1", "A13"],  "load": "Starter" },
+      "HP2": { "id": "pdm-HP2", "pins": ["A12", "A23"], "load": "Fan (PWM)" },
       "HP3": { "id": "pdm-HP3", "pins": ["A24", "A25"], "load": "Fuel pump" },
       "MP1": { "id": "pdm-MP1", "pins": ["A2"],  "load": "Injector power" },
       "MP2": { "id": "pdm-MP2", "pins": ["A3"],  "load": "COP coil power" },
@@ -631,29 +712,53 @@
       "MP6": { "id": "pdm-MP6", "pins": ["A7"],  "load": "Alt exciter" },
       "MP7": { "id": "pdm-MP7", "pins": ["A8"],  "load": "Coolsuit" },
       "LP1": { "id": "pdm-LP1", "pins": ["A14"], "load": "ECU power" },
-      "LP2": { "id": "pdm-LP2", "pins": ["A15"], "load": "Dash power" },
-      "LP3": { "id": "pdm-LP3", "pins": ["A16"], "load": "SmartyCam" },
-      "LP4": { "id": "pdm-LP4", "pins": ["A17"], "load": "GPS" },
-      "LP5": { "id": "pdm-LP5", "pins": ["A18"], "load": "Wideband" },
+      "LP2": { "id": "pdm-LP2", "pins": ["A15"], "load": "Dash power (LVDS)" },
+      "LP3": { "id": "pdm-LP3", "pins": ["A16"], "load": "SmartyCam power" },
+      "LP4": { "id": "pdm-LP4", "pins": ["A17"], "load": "GPS-08 power (via Data Hub)" },
+      "LP5": { "id": "pdm-LP5", "pins": ["A18"], "load": "Wideband O2" },
       "LP6": { "id": "pdm-LP6", "pins": ["A19"], "load": "OEM cluster" },
-      "LP7": { "id": "pdm-LP7", "pins": ["A20"], "load": "Warning LED" }
+      "LP7": { "id": "pdm-LP7", "pins": ["A20"], "load": "Warning LED" },
+      "LP8": { "id": "pdm-LP8", "pins": ["A21"], "load": "CAN Keypad 12 power" }
     },
     "avi_assignments": {
-      "AVI1": "Fuel pressure — 26-pin pin 13 (GY/Y shielded)",
-      "AVI2": "Fuel temp — 34-pin pin 16 (O/B)",
-      "AVI3": "Oil pressure — 34-pin pin 17 (O/R)",
-      "AVI4": "Oil temp — 34-pin pin 2 (O/Y)",
-      "AVI5": "Coolant pressure — 26-pin pin 20 (O/G)",
-      "AVI6": "Coolant temp — 26-pin pin 12 (GY/O shielded)",
-      "AVI7": "Brake pressure — 26-pin pin 3 (GY)",
-      "AVI8": "Brake temp — 26-pin pin 4 (V)",
-      "AVI9": "MAP — 34-pin pin 15 (Y)",
-      "AVI10": "TPS — 34-pin pin 14 (W)"
+      "AVI1":  "Fuel pressure    — 26-pin pin 13 (GY/Y shielded)",
+      "AVI2":  "Fuel temp        — 34-pin pin 16 (O/B)",
+      "AVI3":  "Oil pressure     — 34-pin pin 17 (O/R)",
+      "AVI4":  "Oil temp         — 34-pin pin 2  (O/Y)",
+      "AVI5":  "Coolant pressure — 26-pin pin 20 (O/G)",
+      "AVI6":  "Coolant temp     — 26-pin pin 12 (GY/O shielded)",
+      "AVI7":  "Brake pressure   — 26-pin pin 3  (GY)",
+      "AVI8":  "Brake temp       — 26-pin pin 4  (V)",
+      "AVI9":  "MAP              — 34-pin pin 15 (Y)",
+      "AVI10": "TPS              — 34-pin pin 14 (W)"
     },
     "can_buses": {
-      "CAN0": { "device": "Haltech Elite 2500", "speed_kbps": 500, "pdm_pins": { "H": "A22", "L": "A11" } },
-      "CAN1": { "device": "AIM device chain (dash, GPS, SmartyCam)", "speed_kbps": 1000, "pdm_pins": { "H": "A30", "L": "A31" } },
-      "CAN2": { "device": "AIM CAN Keypad 12", "speed_kbps": 125, "pdm_pins": { "H": "A28", "L": "A29" } }
+      "CAN_AIM": {
+        "aim_label": "CAN AiM",
+        "internal_label": "CAN0",
+        "speed_kbps": 1000,
+        "pdm_pins": { "H": "A22", "L": "A11" },
+        "devices": ["AIM Data Hub → GPS-08", "AIM Data Hub → SmartyCam"],
+        "rs3_tab": "SmartyCam Stream / Channels tab",
+        "notes": "AIM expansion bus. Always-on. GPS-08 auto-broadcasts. Do NOT connect keypad here."
+      },
+      "CAN_ECU": {
+        "aim_label": "CAN ECU",
+        "internal_label": "CAN1",
+        "speed_kbps": 500,
+        "pdm_pins": { "H": "A30", "L": "A31" },
+        "haltech_pins": { "H": "26-pin pin 23 (W)", "L": "26-pin pin 24 (L)" },
+        "devices": ["Haltech Elite 2500"],
+        "rs3_tab": "ECU Stream"
+      },
+      "CAN2": {
+        "aim_label": "CAN2",
+        "internal_label": "CAN2",
+        "speed_kbps": 125,
+        "pdm_pins": { "H": "A28", "L": "A29" },
+        "devices": ["AIM CAN Keypad 12"],
+        "rs3_tab": "CAN2 Keypad"
+      }
     }
   }
 }

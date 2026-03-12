@@ -1,4 +1,4 @@
-# Tiburon GK Knowledgebase
+﻿# Tiburon GK Knowledgebase
 
 Structured technical reference for the GK-chassis Hyundai Tiburon (2003). Factory manual content is extracted into searchable Markdown and linked via a knowledge graph. Designed for use with AI models via MCP, or browsed directly on GitHub.
 
@@ -133,5 +133,5 @@ Copy `builds/template/build-profile-template.json` → `builds/{your-car}/build-
 | Lowdoller sensors | `hardware/sensors/lowdoller-sensors.md` |
 | Haltech 26-pin pinout | `hardware/haltech/main-connector-26-pin-elite2500.md` |
 | Haltech 34-pin pinout | `hardware/haltech/main-connector-34-pin-elite2500.md` |
-| AIM PDM 32 pinout | `hardware/aim-pdm/pdm-pinout.md` |
+| AIM PDM 32 pinout | `hardware/aim/aim-pdm/pdm-pinout.md` |
 | ECM (stock Siemens) | `common/opengk/ecm-pinouts.md` |

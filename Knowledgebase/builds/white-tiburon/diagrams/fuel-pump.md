@@ -1,4 +1,4 @@
-# Fuel Pump — White Tiburon Signal & Power Diagram
+﻿# Fuel Pump — White Tiburon Signal & Power Diagram
 **Car:** White Tiburon | **ECU:** Haltech Elite 2500 | **PDM:** AIM PDM 32
 
 Click any node to open the relevant knowledgebase file.
@@ -29,7 +29,7 @@ flowchart TD
     FPR -->|"excess return"| TANK["Fuel Tank"]
 
     click IGN "Knowledgebase/builds/white-tiburon/build-profile.md" "Ignition switch wiring"
-    click HP3 "Knowledgebase/hardware/aim-pdm/pdm-configuration-guide.md" "PDM output map"
+    click HP3 "Knowledgebase/hardware/aim/aim-pdm/pdm-configuration-guide.md" "PDM output map"
     click FPR "Knowledgebase/builds/white-tiburon/build-profile.md" "Radium FPR details"
     click RAIL "Knowledgebase/common/shop-manual/fuel-system.md" "FLA-2: injector specs"
 ```
@@ -64,8 +64,8 @@ flowchart TD
     click SENSOR "Knowledgebase/hardware/sensors/lowdoller-sensors.md" "Sensor specs and wiring"
     click PWR5V "Knowledgebase/hardware/haltech/main-connector-34-pin-elite2500.md" "34-pin pinout"
     click ECU "Knowledgebase/hardware/haltech/main-connector-26-pin-elite2500.md" "26-pin pinout (AVI 1)"
-    click PDM "Knowledgebase/hardware/aim-pdm/pdm-pinout.md" "PDM pinout"
-    click LED "Knowledgebase/hardware/aim-pdm/pdm-configuration-guide.md" "MULTI_WARNING logic"
+    click PDM "Knowledgebase/hardware/aim/aim-pdm/pdm-pinout.md" "PDM pinout"
+    click LED "Knowledgebase/hardware/aim/aim-pdm/pdm-configuration-guide.md" "MULTI_WARNING logic"
 ```
 
 ---
@@ -90,7 +90,7 @@ flowchart TD
 
 | File | Contents |
 |------|----------|
-| [`hardware/aim-pdm/pdm-configuration-guide.md`](../../hardware/aim-pdm/pdm-configuration-guide.md) | HP3 trigger logic, fuel pump prime sequence |
+| [`hardware/aim/aim-pdm/pdm-configuration-guide.md`](../../hardware/aim/aim-pdm/pdm-configuration-guide.md) | HP3 trigger logic, fuel pump prime sequence |
 | [`hardware/sensors/lowdoller-sensors.md`](../../hardware/sensors/lowdoller-sensors.md) | PN 899404 full specs, calibration tables |
 | [`hardware/haltech/main-connector-26-pin-elite2500.md`](../../hardware/haltech/main-connector-26-pin-elite2500.md) | AVI 1 pin 13 details |
 | [`hardware/haltech/main-connector-34-pin-elite2500.md`](../../hardware/haltech/main-connector-34-pin-elite2500.md) | AVI 2 pin 16, +5V pin 9 |

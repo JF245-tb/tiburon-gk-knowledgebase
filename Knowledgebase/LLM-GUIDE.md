@@ -1,4 +1,4 @@
-# LLM Navigation Guide — Tiburon GK Knowledgebase
+﻿# LLM Navigation Guide — Tiburon GK Knowledgebase
 
 This document tells an AI model how to navigate this knowledgebase effectively. Read it at the start of any session where you're unsure where to look.
 
@@ -36,11 +36,13 @@ Knowledgebase/
 │   └── knowledge-graph-schema.md     ← node and edge type definitions
 │
 ├── hardware/              ← DEVICE REFERENCE: generic docs, not car-specific
+│   ├── hardware-graph.json  ← Layer 2: device capability graph (reusable across builds)
 │   ├── haltech/           ← Elite 2500 pinout sheets, wiring diagram
-│   ├── aim-pdm/           ← PDM 32 pinout, configuration theory
-│   ├── aim-datahub/       ← AIM CAN Data Hub (2-way & 4-way) — passive bus splitter
-│   ├── aim-gps08/         ← GPS-08 / GPS09c — CAN AiM GPS module
-│   ├── aim-smartycam/     ← SmartyCam 3 series — HD video overlay camera
+│   ├── aim/               ← All AIM Sports devices (grouping folder)
+│   │   ├── aim-pdm/       ← PDM 32 pinout, configuration theory
+│   │   ├── aim-datahub/   ← CAN Data Hub (2-way & 4-way) — passive bus splitter
+│   │   ├── aim-gps08/     ← GPS-08 / GPS09c — CAN AiM GPS module
+│   │   └── aim-smartycam/ ← SmartyCam 3 series — HD video overlay camera
 │   └── sensors/           ← COP coil, Lowdoller sensor, OEM sensors
 │
 ├── fasteners/             ← BOLT DATABASE: JSON index, bin labels, photos
@@ -117,7 +119,7 @@ Used in `signal-routing.md` and other active-build files:
 |---|---|
 | What pin is AVI 3 on? | `builds/white-tiburon/build-profile.json` → ecu.avi_assignments.AVI3 |
 | How does the fuel pump trigger? | `builds/white-tiburon/guides/pdm-config.md` → HP3 section |
-| What's the PDM connector A pin for the fan? | `hardware/aim-pdm/pdm-pinout.md` |
+| What's the PDM connector A pin for the fan? | `hardware/aim/aim-pdm/pdm-pinout.md` |
 | How do I configure fan PWM in Race Studio? | `builds/white-tiburon/guides/pdm-session-1.md` → Step 6, HP2 |
 | What wire color is CAN H on the Haltech? | `hardware/haltech/main-connector-26-pin-elite2500.md` → pin 23 |
 | What is the OEM coolant temp sensor resistance? | `common/opengk/sensor-information.md` |
@@ -125,9 +127,9 @@ Used in `signal-routing.md` and other active-build files:
 | How does SMARTRA immo bypass work? | `common/opengk/smartra.md` + `common/opengk/gkflasher.md` |
 | Where is BCM-IM pin 19? | `common/opengk/body-control-module.md` |
 | What's the Aisin AY6 final drive ratio? | `common/chassis/gk-chassis-specs.md` |
-| How does the GPS-08 connect to the PDM? | `hardware/aim-gps08/aim-gps08.md` + `hardware/aim-datahub/aim-datahub.md` |
-| What CAN bus are the GPS / SmartyCam on? | CAN AiM (PDM A22/A11, 1 Mbps) via 4-way Data Hub — `hardware/aim-datahub/aim-datahub.md` |
-| How do I set up SmartyCam in Race Studio? | `hardware/aim-smartycam/aim-smartycam.md` — two sessions: PDM SmartyCam Stream tab + SmartyCam USB-C/SD config |
+| How does the GPS-08 connect to the PDM? | `hardware/aim/aim-gps08/aim-gps08.md` + `hardware/aim/aim-datahub/aim-datahub.md` |
+| What CAN bus are the GPS / SmartyCam on? | CAN AiM (PDM A22/A11, 1 Mbps) via 4-way Data Hub — `hardware/aim/aim-datahub/aim-datahub.md` |
+| How do I set up SmartyCam in Race Studio? | `hardware/aim/aim-smartycam/aim-smartycam.md` — two sessions: PDM SmartyCam Stream tab + SmartyCam USB-C/SD config |
 | Does GPS-08 need RS3 configuration? | No — auto-broadcasts when powered; channels appear in Channels tab automatically |
 
 ---
