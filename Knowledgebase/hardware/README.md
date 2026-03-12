@@ -27,7 +27,25 @@
 | File | Contents |
 |---|---|
 | `pdm-pinout.md` | Full 35-pin ×2 connector pinout (Connector A and B), built-in channels |
-| `pdm-configuration-guide.md` | Logic architecture: keypads → status variables → triggers → outputs; PWM fan example |
+| `pdm-configuration-guide.md` | Logic architecture: keypads → status variables → triggers → outputs; PWM fan example; PDM32 + 10" dash specs |
+
+### `aim-datahub/` — AIM CAN Data Hub
+
+| File | Contents |
+|---|---|
+| `aim-datahub.md` | 2-way and 4-way hub pinout (5-pin Binder 712); passive bus splitter; PDM ↔ GPS-08 / SmartyCam / Podium topology; PDM expansion cable ↔ hub pin mapping |
+
+### `aim-gps08/` — AIM GPS-08 / GPS09c
+
+| File | Contents |
+|---|---|
+| `aim-gps08.md` | 5-pin Binder 712 pinout (pin 5 = n.c., confirmed from AIM PDF); auto-broadcast channels (speed, GPS, G-forces); no RS3 config required; part numbers for all cable lengths |
+
+### `aim-smartycam/` — AIM SmartyCam 3 Series
+
+| File | Contents |
+|---|---|
+| `aim-smartycam.md` | All 5 model variants and connectors (Sport/Dual/GP/GP Pro/Corsa); RS3 two-session workflow (PDM SmartyCam Stream tab + SmartyCam USB-C/SD config); channel assignment table; LED behavior; troubleshooting |
 
 ### `sensors/` — Sensors & Actuators
 
@@ -42,5 +60,5 @@
 
 | Car | Config files |
 |---|---|
-| White Tiburon | `builds/white-tiburon/pdm/` — Race Studio config guide + session 1 walkthrough |
+| White Tiburon | `builds/white-tiburon/guides/` — Race Studio config guide + session 1 walkthrough |
 | White Tiburon | `builds/white-tiburon/cluster-integration.md` — OEM cluster wiring into Haltech |

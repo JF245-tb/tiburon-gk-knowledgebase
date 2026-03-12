@@ -101,6 +101,7 @@
 | MP7 (A8) | Coolsuit | CoolsuitKYD |
 | LP1–LP6 (A14–A19) | ECUPwr/Dash/SmartyCam/GPS/Wideband/Cluster | SafeIgnition |
 | LP7 (A20) | WarningLED | MULTI_WARNING |
+| LP8 (A21) | KeypadPwr | SafeIgnition |
 
 ### Physical Switches
 | Input | PDM Connection | Function |
@@ -112,7 +113,7 @@
 ### CAN Keypad 12 (CAN2, 125 kbps) Button Map
 | Key | Function | Type |
 |---|---|---|
-| K01 | Start | Latching toggle |
+| K01 | Start | Momentary |
 | K02 | Horn | Momentary |
 | K03 | Lights | Latching toggle |
 | K04 | Coolsuit | Latching toggle |
@@ -148,3 +149,6 @@
 | AIM PDM 32 — logic & configuration theory | `hardware/aim-pdm/pdm-configuration-guide.md` |
 | Lowdoller combo sensors | `hardware/sensors/lowdoller-sensors.md` |
 | Toyota COP coil 90919-A2005 | `hardware/sensors/cop-ignition.md` |
+| AIM CAN Data Hub (4-way) | `hardware/aim-datahub/aim-datahub.md` |
+| AIM GPS-08 GPS module | `hardware/aim-gps08/aim-gps08.md` |
+| AIM SmartyCam 3 camera | `hardware/aim-smartycam/aim-smartycam.md` |

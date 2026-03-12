@@ -113,7 +113,7 @@ SmartyCam configuration requires **two distinct RS3 sessions**:
 | Field | Setting | Notes |
 |-------|---------|-------|
 | Enabled | **Yes** | Must be ON for PDM to transmit to SmartyCam |
-| CAN Bus | **CAN0** | AIM expansion bus — SmartyCam is on CAN0 via Data Hub |
+| CAN Bus | **CAN AiM** | AIM expansion bus — SmartyCam is on CAN AiM bus via Data Hub |
 | Protocol | **AiM Default** or **Advanced** | Default covers most channels; Advanced allows custom channel set |
 | Stream name | Give a recognizable name | Saved with PDM config |
 

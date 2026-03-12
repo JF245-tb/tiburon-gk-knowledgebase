@@ -18,7 +18,7 @@ Knowledgebase/
 │   │   ├── build-profile.json  ← machine-readable config (AVI pins, PDM map, etc.)
 │   │   ├── signal-routing.md   ← end-to-end wire traces, verified vs planned
 │   │   ├── weekend-tasks.md    ← phased build procedure with test gates
-│   │   ├── pdm/           ← PDM Race Studio config guides (white-car-specific)
+│   │   ├── guides/        ← PDM Race Studio config guides (white-car-specific)
 │   │   └── ...
 │   ├── blue-tiburon/      ← OEM ECU + GKFlasher test/race car
 │   │   ├── README.md      ← SESSION START for blue car work
@@ -38,6 +38,9 @@ Knowledgebase/
 ├── hardware/              ← DEVICE REFERENCE: generic docs, not car-specific
 │   ├── haltech/           ← Elite 2500 pinout sheets, wiring diagram
 │   ├── aim-pdm/           ← PDM 32 pinout, configuration theory
+│   ├── aim-datahub/       ← AIM CAN Data Hub (2-way & 4-way) — passive bus splitter
+│   ├── aim-gps08/         ← GPS-08 / GPS09c — CAN AiM GPS module
+│   ├── aim-smartycam/     ← SmartyCam 3 series — HD video overlay camera
 │   └── sensors/           ← COP coil, Lowdoller sensor, OEM sensors
 │
 ├── fasteners/             ← BOLT DATABASE: JSON index, bin labels, photos
@@ -122,6 +125,10 @@ Used in `signal-routing.md` and other active-build files:
 | How does SMARTRA immo bypass work? | `common/opengk/smartra.md` + `common/opengk/gkflasher.md` |
 | Where is BCM-IM pin 19? | `common/opengk/body-control-module.md` |
 | What's the Aisin AY6 final drive ratio? | `common/chassis/gk-chassis-specs.md` |
+| How does the GPS-08 connect to the PDM? | `hardware/aim-gps08/aim-gps08.md` + `hardware/aim-datahub/aim-datahub.md` |
+| What CAN bus are the GPS / SmartyCam on? | CAN AiM (PDM A22/A11, 1 Mbps) via 4-way Data Hub — `hardware/aim-datahub/aim-datahub.md` |
+| How do I set up SmartyCam in Race Studio? | `hardware/aim-smartycam/aim-smartycam.md` — two sessions: PDM SmartyCam Stream tab + SmartyCam USB-C/SD config |
+| Does GPS-08 need RS3 configuration? | No — auto-broadcasts when powered; channels appear in Channels tab automatically |
 
 ---
 
