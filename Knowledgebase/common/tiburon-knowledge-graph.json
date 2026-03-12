@@ -853,6 +853,225 @@
       "label": "Valve Spring — Installation Diagram",
       "page_ref": "EMA-72",
       "engine": "V6"
+    },
+
+    {
+      "id": "conn-C111",
+      "type": "connector",
+      "label": "ECT Sensor Connector C111",
+      "connector_code": "C111",
+      "harness": "control",
+      "pin_count": 2,
+      "etm_page_ref": "CC-17"
+    },
+    {
+      "id": "conn-C112",
+      "type": "connector",
+      "label": "TPS Connector C112",
+      "connector_code": "C112",
+      "harness": "control",
+      "pin_count": 3,
+      "etm_page_ref": "CC-17"
+    },
+    {
+      "id": "conn-C113",
+      "type": "connector",
+      "label": "CKP Sensor Connector C113",
+      "connector_code": "C113",
+      "harness": "control",
+      "pin_count": 3,
+      "connector_pn": "CR03F038",
+      "etm_page_ref": "CC-17"
+    },
+    {
+      "id": "conn-C114",
+      "type": "connector",
+      "label": "CMP Sensor Connector C114",
+      "connector_code": "C114",
+      "harness": "control",
+      "pin_count": 3,
+      "connector_pn": "CR03F029",
+      "etm_page_ref": "CC-17"
+    },
+    {
+      "id": "conn-C109",
+      "type": "connector",
+      "label": "VSS Connector C109",
+      "connector_code": "C109",
+      "harness": "control",
+      "pin_count": 3,
+      "etm_page_ref": "CC-17"
+    },
+    {
+      "id": "conn-C125",
+      "type": "connector",
+      "label": "MAF Sensor Connector C125",
+      "connector_code": "C125",
+      "harness": "control",
+      "pin_count": 3,
+      "connector_pn": "CR03F008",
+      "etm_page_ref": "CC-17"
+    },
+    {
+      "id": "conn-C127",
+      "type": "connector",
+      "label": "IAT Sensor Connector C127",
+      "connector_code": "C127",
+      "harness": "control",
+      "pin_count": 2,
+      "etm_page_ref": "CC-17"
+    },
+    {
+      "id": "conn-C123-1",
+      "type": "connector",
+      "label": "Knock Sensor #1 Connector C123-1",
+      "connector_code": "C123-1",
+      "harness": "control",
+      "pin_count": 1,
+      "etm_page_ref": "CC-17"
+    },
+    {
+      "id": "conn-C123-2",
+      "type": "connector",
+      "label": "Knock Sensor #2 Connector C123-2",
+      "connector_code": "C123-2",
+      "harness": "control",
+      "pin_count": 1,
+      "etm_page_ref": "CC-17"
+    },
+
+    {
+      "id": "section-SD-78",
+      "type": "section",
+      "label": "MFI Control System (2.7L) — ECM Area",
+      "page_ref": "SD-78",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-SD-79",
+      "type": "section",
+      "label": "MFI Control System (2.7L) — O2 Sensors Bank 1",
+      "page_ref": "SD-79",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-SD-80",
+      "type": "section",
+      "label": "MFI Control System (2.7L) — O2 Sensors Bank 2",
+      "page_ref": "SD-80",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-SD-81",
+      "type": "section",
+      "label": "MFI Control System (2.7L) — Fuel/Actuators",
+      "page_ref": "SD-81",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-SD-82",
+      "type": "section",
+      "label": "MFI Control System (2.7L) — Air/Misc Sensors",
+      "page_ref": "SD-82",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-CL-22",
+      "type": "section",
+      "label": "Component Locations — Engine Sensors",
+      "page_ref": "CL-22",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-CL-23",
+      "type": "section",
+      "label": "Component Locations — Engine Actuators/Coils",
+      "page_ref": "CL-23",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-CL-24",
+      "type": "section",
+      "label": "Component Locations — ISC/IAT Area",
+      "page_ref": "CL-24",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-CL-25",
+      "type": "section",
+      "label": "Component Locations — ECM Area",
+      "page_ref": "CL-25",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-HL-15",
+      "type": "section",
+      "label": "Harness Layout — Control Harness (4) 2.7L",
+      "page_ref": "HL-15",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-FLA-35",
+      "type": "section",
+      "label": "ECT Sensor — Circuit Diagram & Procedure",
+      "page_ref": "FLA-35",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-FLA-40",
+      "type": "section",
+      "label": "MAF Sensor — Circuit Diagram & Procedure",
+      "page_ref": "FLA-40",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-FLA-43",
+      "type": "section",
+      "label": "IAT Sensor — Circuit Diagram & Procedure",
+      "page_ref": "FLA-43",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-FLA-46",
+      "type": "section",
+      "label": "TPS — Circuit Diagram & Procedure",
+      "page_ref": "FLA-46",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-FLA-52",
+      "type": "section",
+      "label": "Heated Oxygen Sensor — Circuit Diagram & Procedure",
+      "page_ref": "FLA-52",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-FLA-55",
+      "type": "section",
+      "label": "CMP Sensor — Circuit Diagram & Procedure",
+      "page_ref": "FLA-55",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-FLA-57",
+      "type": "section",
+      "label": "CKP Sensor — Circuit Diagram & Procedure",
+      "page_ref": "FLA-57",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-FLA-59",
+      "type": "section",
+      "label": "Fuel Injector — Circuit Diagram & Procedure",
+      "page_ref": "FLA-59",
+      "section_type": "diagram"
+    },
+    {
+      "id": "section-FLA-65",
+      "type": "section",
+      "label": "Knock Sensor — Circuit Diagram & Procedure",
+      "page_ref": "FLA-65",
+      "section_type": "diagram"
     }
 
   ],
@@ -974,7 +1193,90 @@
 
     { "source": "comp-ignition-coil", "target": "pn-cop-toyota-90919-A2005",   "rel": "has_part", "note": "COP conversion — white car only. OEM = wasted spark." },
     { "source": "comp-ignition-coil", "target": "pn-spark-plug-ngk-v6-unleaded", "rel": "has_part" },
-    { "source": "comp-ignition-coil", "target": "pn-spark-plug-champion-v6-unleaded", "rel": "has_part" }
+    { "source": "comp-ignition-coil", "target": "pn-spark-plug-champion-v6-unleaded", "rel": "has_part" },
+
+    { "source": "section-SD-78",  "target": "manual-etm-sd", "rel": "chapter_of" },
+    { "source": "section-SD-79",  "target": "manual-etm-sd", "rel": "chapter_of" },
+    { "source": "section-SD-80",  "target": "manual-etm-sd", "rel": "chapter_of" },
+    { "source": "section-SD-81",  "target": "manual-etm-sd", "rel": "chapter_of" },
+    { "source": "section-SD-82",  "target": "manual-etm-sd", "rel": "chapter_of" },
+    { "source": "section-CL-22",  "target": "manual-etm-cl", "rel": "chapter_of" },
+    { "source": "section-CL-23",  "target": "manual-etm-cl", "rel": "chapter_of" },
+    { "source": "section-CL-24",  "target": "manual-etm-cl", "rel": "chapter_of" },
+    { "source": "section-CL-25",  "target": "manual-etm-cl", "rel": "chapter_of" },
+    { "source": "section-HL-15",  "target": "manual-etm-sd", "rel": "chapter_of", "note": "HL is a separate ETM section but linked here for navigation" },
+    { "source": "section-FLA-35", "target": "manual-fla", "rel": "chapter_of" },
+    { "source": "section-FLA-40", "target": "manual-fla", "rel": "chapter_of" },
+    { "source": "section-FLA-43", "target": "manual-fla", "rel": "chapter_of" },
+    { "source": "section-FLA-46", "target": "manual-fla", "rel": "chapter_of" },
+    { "source": "section-FLA-52", "target": "manual-fla", "rel": "chapter_of" },
+    { "source": "section-FLA-55", "target": "manual-fla", "rel": "chapter_of" },
+    { "source": "section-FLA-57", "target": "manual-fla", "rel": "chapter_of" },
+    { "source": "section-FLA-59", "target": "manual-fla", "rel": "chapter_of" },
+    { "source": "section-FLA-65", "target": "manual-fla", "rel": "chapter_of" },
+
+    { "source": "comp-ect-sensor",    "target": "conn-C111",   "rel": "connector_code", "context": "ETM connector C111, 2-pin, CC-17, Control Harness (4)" },
+    { "source": "comp-tps",           "target": "conn-C112",   "rel": "connector_code", "context": "ETM connector C112, 3-pin, CC-17, Control Harness (4)" },
+    { "source": "comp-ckp-sensor",    "target": "conn-C113",   "rel": "connector_code", "context": "ETM connector C113, 3-pin, CR03F038, CC-17, Control Harness (4)" },
+    { "source": "comp-cmp-sensor",    "target": "conn-C114",   "rel": "connector_code", "context": "ETM connector C114, 3-pin, CR03F029, CC-17, Control Harness (4)" },
+    { "source": "comp-vss",           "target": "conn-C109",   "rel": "connector_code", "context": "ETM connector C109, 3-pin, CC-17, Control Harness (4)" },
+    { "source": "comp-maf-sensor",    "target": "conn-C125",   "rel": "connector_code", "context": "ETM connector C125, 5-pin, CC-17, Control Harness (4)" },
+    { "source": "comp-iat-sensor",    "target": "conn-C127",   "rel": "connector_code", "context": "ETM connector C127, 2-pin, CC-17, Control Harness (4)" },
+    { "source": "comp-knock-sensor",  "target": "conn-C123-1", "rel": "connector_code", "context": "ETM connector C123-1, 1-pin, CC-17, Control Harness (4) — front bank" },
+    { "source": "comp-knock-sensor",  "target": "conn-C123-2", "rel": "connector_code", "context": "ETM connector C123-2, 1-pin, CC-17, Control Harness (4) — rear bank" },
+
+    { "source": "comp-ckp-sensor",    "target": "section-SD-78", "rel": "schematic_page", "context": "SD-78: MFI Control System (2.7L) — ECM pinout, CKP circuit" },
+    { "source": "comp-cmp-sensor",    "target": "section-SD-78", "rel": "schematic_page", "context": "SD-78: MFI Control System (2.7L) — CMP circuit, power via C142" },
+    { "source": "comp-tps",           "target": "section-SD-78", "rel": "schematic_page", "context": "SD-78: TPS circuit — signal to C133-3 pin 15" },
+    { "source": "comp-ect-sensor",    "target": "section-SD-81", "rel": "schematic_page", "context": "SD-81: ECT circuit — signal to C133-4" },
+    { "source": "comp-injector",      "target": "section-SD-81", "rel": "schematic_page", "context": "SD-81: Injector circuits — C124-1 through C124-6" },
+    { "source": "comp-maf-sensor",    "target": "section-SD-82", "rel": "schematic_page", "context": "SD-82: MAF circuit — signal to C133-3 pin 5" },
+    { "source": "comp-iat-sensor",    "target": "section-SD-82", "rel": "schematic_page", "context": "SD-82: IAT circuit — signal to C133-4" },
+    { "source": "comp-knock-sensor",  "target": "section-SD-82", "rel": "schematic_page", "context": "SD-82: Knock sensor circuits — both banks" },
+    { "source": "comp-vss",           "target": "section-SD-82", "rel": "schematic_page", "context": "SD-82: VSS circuit — C109 to cluster/BCM/ECM" },
+    { "source": "comp-o2-sensor",     "target": "section-SD-79", "rel": "schematic_page", "context": "SD-79: O2 sensors Bank 1 — C116, C145, C147" },
+    { "source": "comp-o2-sensor",     "target": "section-SD-80", "rel": "schematic_page", "context": "SD-80: O2 sensors Bank 2 — C122, C146, C148" },
+
+    { "source": "comp-ect-sensor",    "target": "section-CL-22", "rel": "location_page", "context": "CL-22: Engine harness component locations" },
+    { "source": "comp-tps",           "target": "section-CL-22", "rel": "location_page", "context": "CL-22: Engine harness component locations" },
+    { "source": "comp-ckp-sensor",    "target": "section-CL-22", "rel": "location_page", "context": "CL-22: Engine harness component locations" },
+    { "source": "comp-cmp-sensor",    "target": "section-CL-22", "rel": "location_page", "context": "CL-22: Engine harness component locations" },
+    { "source": "comp-o2-sensor",     "target": "section-CL-22", "rel": "location_page", "context": "CL-22: Front O2 sensor locations" },
+    { "source": "comp-ignition-coil", "target": "section-CL-23", "rel": "location_page", "context": "CL-23: Ignition coil locations" },
+    { "source": "comp-knock-sensor",  "target": "section-CL-23", "rel": "location_page", "context": "CL-23: Knock sensor locations" },
+    { "source": "comp-maf-sensor",    "target": "section-CL-23", "rel": "location_page", "context": "CL-23: MAF sensor location" },
+    { "source": "comp-injector",      "target": "section-CL-23", "rel": "location_page", "context": "CL-23: Injector locations — all 6 cylinders" },
+    { "source": "comp-iat-sensor",    "target": "section-CL-24", "rel": "location_page", "context": "CL-24: IAT sensor location" },
+
+    { "source": "comp-ckp-sensor",    "target": "section-HL-15", "rel": "harness_assignment", "context": "HL-15: Control Harness (4) 2.7L — C113" },
+    { "source": "comp-cmp-sensor",    "target": "section-HL-15", "rel": "harness_assignment", "context": "HL-15: Control Harness (4) 2.7L — C114" },
+    { "source": "comp-ect-sensor",    "target": "section-HL-15", "rel": "harness_assignment", "context": "HL-15: Control Harness (4) 2.7L — C111" },
+    { "source": "comp-tps",           "target": "section-HL-15", "rel": "harness_assignment", "context": "HL-15: Control Harness (4) 2.7L — C112" },
+    { "source": "comp-maf-sensor",    "target": "section-HL-15", "rel": "harness_assignment", "context": "HL-15: Control Harness (4) 2.7L — C125" },
+    { "source": "comp-iat-sensor",    "target": "section-HL-15", "rel": "harness_assignment", "context": "HL-15: Control Harness (4) 2.7L — C127" },
+    { "source": "comp-knock-sensor",  "target": "section-HL-15", "rel": "harness_assignment", "context": "HL-15: Control Harness (4) 2.7L — C123-1/C123-2" },
+    { "source": "comp-vss",           "target": "section-HL-15", "rel": "harness_assignment", "context": "HL-15: Control Harness (4) 2.7L — C109" },
+    { "source": "comp-o2-sensor",     "target": "section-HL-15", "rel": "harness_assignment", "context": "HL-15: Control Harness (4) 2.7L — C116/C122/C145-C148" },
+    { "source": "comp-injector",      "target": "section-HL-15", "rel": "harness_assignment", "context": "HL-15: Control Harness (4) + Injector Harness — C124-1..6" },
+    { "source": "comp-ignition-coil", "target": "section-HL-15", "rel": "harness_assignment", "context": "HL-15: Control Harness (4) 2.7L — C118" },
+
+    { "source": "section-FLA-35", "target": "comp-ect-sensor",   "rel": "circuit_diagram", "context": "FLA-35: ECT sensor circuit diagram, inspection, troubleshooting" },
+    { "source": "section-FLA-40", "target": "comp-maf-sensor",   "rel": "circuit_diagram", "context": "FLA-40: MAF sensor circuit diagram, inspection, troubleshooting" },
+    { "source": "section-FLA-43", "target": "comp-iat-sensor",   "rel": "circuit_diagram", "context": "FLA-43: IAT sensor circuit diagram, inspection, troubleshooting" },
+    { "source": "section-FLA-46", "target": "comp-tps",          "rel": "circuit_diagram", "context": "FLA-46: TPS circuit diagram, 3-pin pinout, inspection" },
+    { "source": "section-FLA-52", "target": "comp-o2-sensor",    "rel": "circuit_diagram", "context": "FLA-52: HO2S circuit diagram, heater circuits, bank ID" },
+    { "source": "section-FLA-55", "target": "comp-cmp-sensor",   "rel": "circuit_diagram", "context": "FLA-55: CMP sensor circuit — Pin 1=Power, Pin 2=Signal, Pin 3=GND" },
+    { "source": "section-FLA-57", "target": "comp-ckp-sensor",   "rel": "circuit_diagram", "context": "FLA-57: CKP sensor circuit — Pin 1=Power, Pin 2=Signal, Pin 3=GND" },
+    { "source": "section-FLA-59", "target": "comp-injector",     "rel": "circuit_diagram", "context": "FLA-59: Fuel injector circuit diagram, resistance check" },
+    { "source": "section-FLA-65", "target": "comp-knock-sensor", "rel": "circuit_diagram", "context": "FLA-65: Knock sensor circuit diagram, signal characteristics" },
+
+    { "source": "section-FLA-57", "target": "comp-ckp-sensor",   "rel": "dtc_for", "context": "FLA-73+: P0335 CKP Circuit Malfunction, P0336 CKP Range/Performance" },
+    { "source": "section-FLA-55", "target": "comp-cmp-sensor",   "rel": "dtc_for", "context": "FLA-73: P0340 CMP Circuit Malfunction, P0341 CMP Range/Performance" },
+    { "source": "section-FLA-35", "target": "comp-ect-sensor",   "rel": "dtc_for", "context": "FLA-73+: P0115/P0117/P0118 ECT Circuit" },
+    { "source": "section-FLA-46", "target": "comp-tps",          "rel": "dtc_for", "context": "FLA-73+: P0120/P0122/P0123 TPS Circuit" },
+    { "source": "section-FLA-40", "target": "comp-maf-sensor",   "rel": "dtc_for", "context": "FLA-73+: P0100-P0103 MAF Circuit" },
+    { "source": "section-FLA-43", "target": "comp-iat-sensor",   "rel": "dtc_for", "context": "FLA-73+: P0110/P0112/P0113 IAT Circuit" },
+    { "source": "section-FLA-65", "target": "comp-knock-sensor", "rel": "dtc_for", "context": "FLA-73+: P0325 KS1, P0330 KS2" }
 
   ],
 

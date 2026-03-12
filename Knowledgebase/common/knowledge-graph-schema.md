@@ -131,6 +131,8 @@ An OEM or aftermarket part number. May be a direct replacement or an interchange
 | `community_review_issue` | number \| null | GitHub Issue number where this was vetted |
 | `notes` | string | `"Unleaded, 2.7 V6"` |
 | `url` | string \| null | link to product page |
+| `credibility_score` | number \| null | Composite score 0-10 from `credibility/scoring-algorithm.md`. Only populated for T3/T4 sourced parts. |
+| `credibility_breakdown` | object \| null | `{ "source": "newtiburon", "contributor": "chase206", "post_type": "technical_reply", "computed": "2026-03-12" }` |
 
 ### `connector`
 An electrical connector identified by harness code.
@@ -175,6 +177,8 @@ A community forum post from a verified contributor.
 | `community_review_issue` | number \| null | GitHub Issue number |
 | `corroboration_count` | number | `0` until reviewed |
 | `community_verified` | boolean | `false` until reviewed |
+| `credibility_score` | number \| null | Composite score 0-10 from `credibility/scoring-algorithm.md`. Provides granularity within the tier. |
+| `credibility_breakdown` | object \| null | `{ "source": "newtiburon", "contributor": "chase206", "post_type": "technical_reply", "computed": "2026-03-12" }` |
 
 ### `bolt_record`
 A physical fastener record from the bolt database with photos and measurements.
@@ -217,6 +221,12 @@ A physical fastener record from the bolt database with photos and measurements.
 | `torque_defined_by` | bolt_record → torque_spec | Factory torque for this fastener |
 | `procedure_in` | bolt_record → section | Installation section |
 | `stored_in_bin` | bolt_record → string | Physical storage bin label |
+| `connector_code` | component → connector | Component uses this ETM connector code (e.g., CKP → C113). Context includes pin count, CC page, harness assignment. |
+| `schematic_page` | component → section | Component appears on this SD schematic page (e.g., CKP → SD-78) |
+| `location_page` | component → section | Component's physical location shown on this CL page (e.g., CKP → CL-22) |
+| `harness_assignment` | component → section | Component belongs to this harness per HL section (e.g., CKP → HL-15, Control Harness 4) |
+| `dtc_for` | section → component | DTC troubleshooting section for this component (e.g., FLA-73 P0335 → CKP) |
+| `circuit_diagram` | section → component | FLA circuit diagram/pinout section for this component (e.g., FLA-57 → CKP) |
 
 ---
 
