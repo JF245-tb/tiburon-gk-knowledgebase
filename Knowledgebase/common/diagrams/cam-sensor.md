@@ -39,9 +39,9 @@ flowchart TD
 flowchart LR
     CMP_CONN["CMP Sensor Connector<br/><i>3-pin, engine harness</i>"]
 
-    CMP_CONN -->|"Pin 1 — 12V supply"| FUSE["Fuse / Relay<br/><i>ECM-controlled supply</i>"]
-    CMP_CONN -->|"Pin 2 — GND"| CHASSIS["Engine / Chassis Ground"]
-    CMP_CONN -->|"Pin 3 — Signal"| ECU_PIN["ECU Signal Pin<br/><i>OEM: C133-1 connector<br/>Haltech: see 26-pin pinout</i>"]
+    CMP_CONN -->|"Pin 1 — 12V supply (0.5O)"| FUSE["SNSR FUSE 10A<br/><i>via C142 joint connector</i>"]
+    CMP_CONN -->|"Pin 2 — GND (0.5G/B)"| ECM_GND["ECM Sensor Ground<br/><i>OEM: C133-4</i>"]
+    CMP_CONN -->|"Pin 3 — Signal (0.5B)"| ECU_PIN["ECU Signal Pin<br/><i>OEM: C133-4 pin 2<br/>Haltech: see 26-pin pinout</i>"]
 
     DTC_P0340["DTC P0340<br/>CMP Circuit Malfunction<br/><i>Open or short to battery<br/>Short between CMP wires</i>"]
 
@@ -93,7 +93,8 @@ flowchart TD
 | Sensor type | Hall effect | FLA-2 |
 | OEM DTC | P0340 — CMP circuit malfunction | FLA-73 |
 | Fault conditions | Open/short to battery between CMP and ECM; short between wires | FLA-73 |
-| ECM connector | C133-1 | `common/opengk/ecm-pinouts.md` |
+| ECM connector | C133-4 pin 2 (signal), C133-4 (ground) | `common/opengk/ecm-pinouts.md` |
+| Power supply | SNSR FUSE 10A via C142 joint connector (0.5O wire) | SD-78 schematic |
 | Replacement sensor | See `common/opengk/sensor-information.md` | OpenGK |
 
 ---
