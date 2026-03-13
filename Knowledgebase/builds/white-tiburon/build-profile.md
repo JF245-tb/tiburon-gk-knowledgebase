@@ -62,12 +62,31 @@ Full specs, wiring, and calibration tables: `Knowledgebase/cars/lowdoller-sensor
 - Pinout: `/Knowledgebase/aim-pdm/pdm-pinout.md`
 
 ### Power & Grounding
-- *(Details TBD — document battery location, cable gauges, grounding strategy as install progresses)*
+
+**Kill switch:** 4-pole OMP kill switch, left of steering wheel.
+- **Large poles:** 2 AWG battery cable → kill switch → 150A breaker → starter B+ / alternator B+ AND 4 AWG → 120A breaker → PDM Surlok (+)
+- **Small poles:** Jumpered from battery side large terminal. Output side → IGN toggle switch → PDM Conn B pin 23 (IGN input) + Haltech 34-pin pin 13 (ECU IGN enable)
+- Kill switch OFF = all 4 poles open = everything dies instantly (PDM, ECU, alternator field, starter)
+
+**PDM Surlok:** 4 AWG from kill switch large terminal B → 120A breaker → PDM Surlok (+). PDM ground lugs (B13, B14, B18) to chassis.
+
+**Alternator exciter:** OEM D+ field wire cut and routed through PDM LP8 (A21). SafeIgnition trigger — kill switch drops field immediately.
+
+### Mounting
+- PDM, Haltech Elite 2500, Podium Micro (SN: 1QTV5KM), Innovate LM2 all mounted on a plate in the **passenger footwell**
+- Short wire runs to dash (LVDS), switch panel, CAN buses
+- Engine bay harness exits through firewall grommet
 
 ### Ignition & Switches
+- **Physical switch panel** with 6 latching toggles + 1 momentary starter + warning LED
 - **Ignition switch:** Dedicated latching toggle — goes to PDM Conn B pin 23 (Ignition input) AND Haltech 34-pin pin 13 (ECU IGN enable). Turns engine off without cutting PDM/battery power.
-- **Start switch:** Momentary push button — PDM Ch09 (B21). Physical backup for CAN keypad Key 01.
-- **No other physical switches** — horn, lights, fan, wiper, coolsuit all on AIM CAN Keypad 12.
+- **Start switch:** Momentary push button — PDM Ch09 (B21). Gated by ignition and RPM interlock.
+- **Fan override:** Latching toggle — PDM Ch01 (B26). Forces fan to 98% duty.
+- **Wiper Low:** Latching toggle — PDM Ch02 (B27). Wiper motor low speed.
+- **Wiper High:** Latching toggle — PDM Ch03 (B28). Wiper motor high speed (overrides low).
+- **Coolsuit:** Latching toggle — PDM Ch04 (B29). Coolsuit pump on/off.
+- **Defogger:** Latching toggle — PDM Ch05 (B30). Rear window defogger.
+- **CAN keypad excluded** from this build — all controls are physical switches.
 - OEM ignition cylinder **removed** from loop.
 
 ---
