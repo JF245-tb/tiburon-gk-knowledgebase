@@ -41,13 +41,16 @@
                     │ Engine Sensors   │    │ (Phase 1)       │   │ Lowdoller       │
                     │                  │    │ HP3, MP1/MP2    │   │ Sensors (all 3) │
                     │ [D2] 8-pin      │    │                 │   │                 │
-                    │ Coil Harness    │    │ Fan (HP2 direct)│   │ LP8 Alt Exciter │
-                    │                  │    │ Wiper MP3/MP6   │   │                 │
+                    │ Coil Harness    │    │ Horn MP3 (Ph2+) │   │ LP8 Alt Exciter │
+                    │                  │    │ Lights MP6(Ph2+)│   │                 │
                     │ Starter (direct) │    │                 │   │ HP2 Fan         │
-                    └──────────────────┘    │ [D3] 8-pin     │   │ (direct)        │
+                    └──────────────────┘    │ [D3] 8-pin     │   │ (relay/direct)  │
                                            │ Injector Harness│   └─────────────────┘
                                            └─────────────────┘
 ```
+
+> **Phase structure:** See `guides/pdm-build-guide.md` for the 3-phase build plan. Phase 1 = stock ECU + fuse box spades. Phase 2 = Haltech + Deutsch connectors. Phase 3 = CAN keypad + OE removal.
+> **Wiper outputs:** MP9 (B4) low, MP10 (B5) high, LP9 (B3) park sweep — relay-less design using WIPER_PARKING math channel. Install when wipers are needed.
 
 ---
 
@@ -229,11 +232,13 @@ These connect to chassis-mounted loads — no engine swap disconnect needed.
 
 | Load | PDM Output | Pin | Wire Gauge | Termination | Routing |
 |------|-----------|-----|-----------|-------------|---------|
-| **Wiper Low** | MP3 | A4 | 16 AWG | Spade (Phase 1), direct splice (Phase 2) | Firewall → CENTER → wiper motor |
-| **Wiper High** | MP6 | A7 | 16 AWG | Spade (Phase 1), direct splice (Phase 2) | Firewall → CENTER → wiper motor |
+| **Horn** | MP3 | A4 | 16 AWG | Phase 1: not connected (BCM controls). Phase 2+: direct to horn or relay socket | Firewall → CENTER → horn |
+| **Headlights** | MP6 | A7 | 14 AWG | Phase 1: not connected (BCM controls). Phase 2+: direct to headlights or relay socket | Firewall → CENTER → headlight connector |
 | **Alt Exciter** | LP8 | A21 | 18 AWG | Splice to cut OEM D+ wire | Firewall → RIGHT → alternator area |
-| **MP1 (Phase 1)** | MP1 | A2 | 14 AWG | Spade into OE relay pin 87 | Firewall → CENTER → fuse box |
-| **MP2 (Phase 1)** | MP2 | A3 | 14 AWG | Spade into OE relay pin 87 | Firewall → CENTER → fuse box |
+| **MP1** | MP1 | A2 | 14 AWG | Phase 1: spade into OE relay pin 87. Phase 2: D3 pin 7 (injector power) | Firewall → CENTER → fuse box / Deutsch |
+| **MP2** | MP2 | A3 | 14 AWG | Phase 1: spade into OE relay pin 87. Phase 2: D2 pin 7 (coil power) | Firewall → CENTER → fuse box / Deutsch |
+
+> **MP3 and MP6 repurposed** from wipers to horn and headlights. Wipers use MP9 (B4) low, MP10 (B5) high, LP9 (B3) park sweep on Connector B — relay-less park design, config pre-loaded.
 
 **Phase 2 transition for MP1/MP2:** Pull spades from OE relay socket. Reroute:
 - MP1 → D3 pin 7 (injector power, chassis side of Deutsch)
@@ -243,14 +248,18 @@ These connect to chassis-mounted loads — no engine swap disconnect needed.
 
 ## Fuse Box Spade Connections (Phase 1 — Temporary)
 
+> Phase 1A (Saturday): Main relay + fuel pump + starter only. Fan added in Phase 1B (Sunday after CAN verified).
+> Horn and headlights stay on stock BCM relays through Phase 1.
+
 | PDM Output | Fuse Box Target | Phase 2 (Direct) |
 |-----------|----------------|-------------------|
-| HP3 Fuel Pump | Fuel pump relay pin 87 (relay pulled) | Direct to fuel pump + wire |
-| MP1 InjectorPwr | OE main relay pin 87 (relay pulled) | → D3 pin 7 (injector Deutsch) |
+| MP1 InjPwr | OE main relay pin 87 (relay pulled) | → D3 pin 7 (injector Deutsch) |
 | MP2 CoilPwr | OE main relay pin 87 (relay pulled) | → D2 pin 7 (coil Deutsch) |
-| MP3 WiperLow | Wiper relay socket | Direct splice to wiper motor low |
-| MP6 WiperHigh | Wiper relay socket | Direct splice to wiper motor high |
-| HP1 Starter | Starter relay pin 87 or direct to solenoid | Direct to solenoid S-terminal |
+| HP3 FuelPump | Fuel pump relay pin 87 (relay pulled) | Direct to fuel pump + wire |
+| HP1 Starter | Direct to solenoid S-terminal (preferred) | Same |
+| HP2 Fan | Fan relay pin 87 (Phase 1B, after CAN verified) | Direct to fan motor |
+| MP3 Horn | Not connected Phase 1 (BCM controls) | Direct to horn or relay socket |
+| MP6 Headlights | Not connected Phase 1 (BCM controls) | Direct to headlight connector or relay socket |
 
 ---
 
@@ -330,8 +339,9 @@ All harnesses pass through a single center firewall grommet, then split into 3 t
 - D4 sensor bus branch to coolant sensor (manifold tee)
 - D4 sensor bus branch to fuel sensor (return line tap)
 - HP3 fuel pump (14 AWG, to fuse box)
-- MP1/MP2 (14 AWG, to OE relay, Phase 1)
-- MP3/MP6 wiper (16 AWG, to fuse box / wiper motor)
+- MP1/MP2 (14 AWG, to OE relay Phase 1 / Deutsch Phase 2)
+- MP3 horn (16 AWG, Phase 2+ only)
+- MP6 headlights (14 AWG, Phase 2+ only)
 - +5V sensor supply trunk
 - Signal GND trunk
 
@@ -354,7 +364,11 @@ All harnesses pass through a single center firewall grommet, then split into 3 t
 5. **D3 injector harness** — build chassis-side cable (6× INJ wires from Haltech + MP1 power wire). Build engine-side branches to 6× injector pigtail connectors. Terminate with 8-pin Deutsch.
 6. **LM2 analog cable** — short cockpit run: Lime Green → AVI 8, Yellow → signal GND.
 
-**Phase 1 note:** D2 and D3 are built but NOT plugged in. MP1/MP2 go to OE relay spades. Stock ECU drives coils/injectors. When switching to Haltech, disconnect stock coil/injector connectors, plug in D2 + D3, reroute MP1 → D3 pin 7 and MP2 → D2 pin 7.
+**Phase 1 note:** D2 and D3 are built but NOT plugged in. MP1/MP2 go to OE relay spades. Stock ECU drives coils/injectors through OE harness. Horn (MP3) and headlights (MP6) are not connected — BCM controls them.
+
+**Phase 2 switchover:** Disconnect stock coil/injector connectors, plug in D2 + D3, reroute MP1 → D3 pin 7 and MP2 → D2 pin 7. Add horn button (Ch06) and headlight toggle (Ch07). Wire MP3 → horn, MP6 → headlights. No Race Studio config change. See `guides/pdm-build-guide.md` → "Phase 2 — Transition Procedure".
+
+**Wiper wiring (when needed):** MP9 (B4) → motor Green wire (low), MP10 (B5) → motor Yellow wire (high), LP9 (B3) → motor Brown wire (park sweep). Motor Black → chassis ground. No external relay — PDM WIPER_PARKING math channel handles park positioning. See `guides/pdm-build-guide.md` → "Wiper — Relay-Less Park Design".
 
 ---
 
@@ -362,11 +376,15 @@ All harnesses pass through a single center firewall grommet, then split into 3 t
 
 | File | Contents |
 |------|----------|
-| `guides/pdm-config.md` | PDM output map, trigger logic, protection settings |
+| `guides/pdm-build-guide.md` | **Primary:** 3-phase PDM build guide, output maps, Race Studio config, test gates |
+| `weekend-tasks.md` | Weekend build schedule — sensor install, harness fab, test procedures |
 | `signal-routing.md` | Complete pin-to-pin signal trace |
-| `guides/bench-test.md` | Test procedures for each output |
+| `guides/pdm-config.md` | Detailed PDM output logic (legacy reference) |
+| `guides/bench-test.md` | Additional bench test procedures and notes log |
+| `guides/keypad-config-future.md` | Phase 3 CAN keypad button/LED/variable config |
 | `hardware/haltech/main-connector-26-pin-elite2500.md` | Haltech 26-pin pinout |
 | `hardware/haltech/main-connector-34-pin-elite2500.md` | Haltech 34-pin pinout |
 | `hardware/aim/aim-pdm/pdm-pinout.md` | PDM connector pinout |
+| `hardware/aim/aim-podium/aim-podium-micro.md` | PodiumConnect Micro pinout, CAN mapping |
 | `hardware/sensors/lowdoller-sensors.md` | Lowdoller sensor specs, wire colors, calibration |
 | `hardware/sensors/cop-ignition.md` | Toyota COP coil pinout (A/B/C/D) |

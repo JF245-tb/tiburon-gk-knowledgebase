@@ -3,10 +3,24 @@
 
 **Target:** PDM fully installed and running with stock ECU for next track day. Haltech wired with Lowdoller sensors and MAP vacuum for data logging + CAN communication test. Injector/coil harnesses left ready to plug in the following weekend.
 
-> **Separate reference files:**
-> - Race Studio 3 config: `guides/pdm-config.md`
-> - Bench test procedures: `guides/bench-test.md`
+> **Primary reference files:**
+> - PDM build guide (3-phase): `guides/pdm-build-guide.md` — Race Studio config, output maps, all phase procedures
+> - Harness design: `guides/harness-design.md` — Deutsch connectors, wire routing, bundle sizing
 > - Signal routing: `signal-routing.md`
+>
+> **Supporting files:**
+> - `guides/pdm-config.md` — detailed PDM output logic (legacy, being consolidated)
+> - `guides/bench-test.md` — additional bench test notes and issues log
+> - `guides/keypad-config-future.md` — Phase 3 CAN keypad config (preserved)
+> - `guides/pdm-session-1.md` — Race Studio 3 step-by-step walkthrough
+>
+> **CAN device docs:**
+> - `hardware/aim/aim-smartycam/aim-smartycam.md` — SmartyCam pinout, RS3 config
+> - `hardware/aim/aim-podium/aim-podium-micro.md` — PodiumConnect Micro, RaceCapture config
+> - `hardware/aim/aim-datahub/aim-datahub.md` — Data Hub star topology
+> - `hardware/aim/aim-gps08/aim-gps08.md` — GPS-08 auto-broadcast behavior
+>
+> **Wiper logic:** Relay-less park design finalized — MP9/MP10/LP9 on Connector B with WIPER_PARKING math channel. Config pre-loaded in RS3. Install when wipers are needed.
 
 ---
 
@@ -26,32 +40,81 @@
 
 ---
 
-## FRIDAY AT HOME — Race Studio Config (Workday)
+## FRIDAY AT HOME — Race Studio Config + Fuel Pump Bench (Workday)
 
-PDM at home with laptop. All software work — no car needed.
+PDM at home with laptop + fuel pump. All software work and bench testing — no car needed.
 
 ### F.1 Finalize PDM Configuration
 
-- [ ] Open Race Studio 3, load `Tiburon_White_v1_base.zconfig`
-- [ ] Configure all power outputs per `guides/pdm-config.md`:
+> **Full config reference:** `guides/pdm-build-guide.md` → "Race Studio Configuration" section
+
+- [ ] Open Race Studio 3 → `Webinar complete.zconfig` → Save As `Tiburon_White_v1.zconfig`
+- [ ] Configure all power outputs per build guide output map (one config for Phase 1 + Phase 2)
   - HP1–HP3 (starter, fan, fuel pump)
-  - MP1–MP8 (injector/coil pwr, wiper low/high, brake/tail lights, coolsuit, defogger)
+  - MP1/MP2 (injector/coil pwr — Phase 1: main relay spade, Phase 2: Deutsch connectors)
+  - MP3 Horn, MP4 BrakeLights, MP5 TailLights, MP6 Headlights (MP3/MP6 active in Phase 2+)
+  - MP7 Coolsuit, MP8 Defogger
   - LP1–LP8 (ECU, dash, SmartyCam, GPS, wideband, cluster, warning LED, alt exciter)
 - [ ] Configure status variables: ENGINE_RUNNING, FUEL_PRIME, FAN_TEMP bands (77/82/87/92°C), FAN_FAILSAFE, STARTER_SAFE, MULTI_WARNING
-- [ ] Configure wiper priority logic: MP3 = Ch02 AND NOT Ch03; MP6 = Ch03
-- [ ] Configure channel inputs: Ch01–Ch05 (toggles), Ch09 (starter), Ch11 (brake)
-- [ ] Verify CAN2 disabled (no keypad — config preserved in `guides/keypad-config-future.md`)
-- [ ] Configure ECU Stream tab: Haltech CAN_V2_40 protocol on CAN1 (A30/A31), 500 kbps
+- [ ] Configure channel inputs: Ch01 (fan), Ch04 (coolsuit), Ch05 (defogger), Ch06 (horn), Ch07 (headlights), Ch09 (starter), Ch11 (brake)
+- [ ] Verify CAN2 disabled (no keypad — preserved in `guides/keypad-config-future.md`)
+- [ ] Configure ECU Stream: Haltech CAN_V2_40 on CAN1 (A30/A31), 500 kbps
   - Enable channels: RPM, ECT, Oil P, Oil T, Fuel P, TPS, Vehicle Speed, Battery V
 - [ ] Configure SmartyCam Stream: RPM, Speed (GPS-08), Gear, Coolant Temp, Oil P, TPS, Lat G, Long G
 - [ ] Transmit config to PDM via USB
 
+> **Wiper logic:** Being added separately. Ch02/Ch03 left spare for now.
+
 > **✓ TEST:** Force-test each output in Race Studio Live Measures (no loads — just verify logic triggers)
 
-### F.2 Prep Work (While Config Compiles/Transmits)
+### F.2 Fuel Pump Bench Test
 
-- [ ] Label all PDM harness wires with destination (use wiring summary tables below)
-- [ ] Inventory parts: breakers (150A, 120A), spade connectors, ring terminals, wire (2/4/14/18 AWG)
+> **Full procedure:** `guides/pdm-build-guide.md` → "Fuel Pump Bench Test" section
+
+- [ ] Wire fuel pump to HP3 (A24+A25), 14 AWG minimum, battery GND to pump (−)
+- [ ] IGN on → verify 3-second prime cycle → off
+- [ ] Force HP3 on → measure current (expected 5–10A continuous)
+- [ ] Measure voltage at pump (< 0.5V drop from supply)
+- [ ] IGN off/on → verify prime timer resets
+
+### F.3 CAN Device Configuration (SmartyCam + Podium)
+
+> **SmartyCam config reference:** `hardware/aim/aim-smartycam/aim-smartycam.md`
+> **Podium config reference:** `hardware/aim/aim-podium/aim-podium-micro.md`
+
+**SmartyCam 3 Corsa — RS3 Session B (USB-C to camera):**
+- [ ] Connect USB-C to SmartyCam (camera must be powered via 7-pin or internal battery)
+- [ ] RS3 → CAN Protocol tab → select **AiM Default** (matches PDM SmartyCam Stream)
+- [ ] RS3 → Overlay tab → position: RPM (top center), Speed (bottom), Water Temp, Oil P, TPS, G-force
+- [ ] Save → Transmit config to camera
+- [ ] On camera: MENU → SETTINGS → AUTO START REC → **Enable**
+- [ ] Insert SD card (≥2 GB)
+
+**PodiumConnect Micro — RaceCapture App (USB or phone):**
+- [ ] Connect Podium via USB to PC (or Bluetooth to phone)
+- [ ] Open RaceCapture app → set CAN baud rate to **1000000** (1 Mbps)
+- [ ] Select **AIM** preset for CAN channel mapping (Speed, Lat, Long, RPM, ECT, Oil P, TPS)
+- [ ] WiFi → AP mode: Enable (pit wall dashboard on phone)
+- [ ] WiFi → STA mode: Enter phone hotspot SSID + password (2.4 GHz only) for cloud streaming
+- [ ] Insert SD card (≥2 GB)
+- [ ] Optional: create Podium account at podium.live, generate streaming key
+
+> **Podium is NOT an AIM device.** It won't appear in Race Studio. All config is via the RaceCapture app.
+
+**Bench smoke test (all devices on Data Hub):**
+- [ ] Connect PDM → expansion cable → Data Hub → GPS-08 (port 1) + SmartyCam EXP (port 2) + Podium (port 3 via Binder-to-M8 adapter)
+- [ ] Wire LP3 (A16) → SmartyCam 7-pin power (Red +12V, Black GND) — or use fused bench tap
+- [ ] IGN on → verify SmartyCam LED (green/blue = CAN active), GPS-08 LED, Podium CAN LED (⇄)
+- [ ] RS3 Live Data → CAN AiM bus shows traffic
+- [ ] SmartyCam: press record → 10s → stop → check `.mp4` on SD (overlay labels visible, values = 0 expected)
+- [ ] Podium: phone → connect to Podium AP WiFi → RaceCapture dashboard shows channel tiles
+
+> GPS won't lock indoors — all position/speed/G values will be zero. Normal. Verify at shop with sky view.
+
+### F.4 Prep Work
+
+- [ ] Label all PDM harness wires with destination (use build guide output map + harness-design.md)
+- [ ] Inventory parts: breakers (150A, 120A), spade connectors, ring terminals, wire (2/4/10/14/18 AWG)
 - [ ] Inventory sensors: Lowdoller fuel/oil/coolant, MAP, wideband O2 bung
 - [ ] Pack laptop + USB cable for shop
 
@@ -78,9 +141,11 @@ PDM at home with laptop. All software work — no car needed.
 
 ---
 
-## SATURDAY — PDM Install + Power System (Shop, All Day)
+## SATURDAY — PDM Install + Power System = Phase 1A (Shop, All Day)
 
-**Goal by end of Saturday:** PDM installed, powered, all switches working, car starts and runs on stock ECU with PDM controlling starter, fuel pump, and alternator exciter.
+> **Detailed procedure:** `guides/pdm-build-guide.md` → "Phase 1A — Core Install"
+
+**Goal by end of Saturday:** PDM installed, powered, all switches working, car starts and runs on stock ECU with PDM controlling engine power, starter, fuel pump, and alternator exciter. Horn/headlights/fan stay on stock BCM relays.
 
 ### S.1 Install Electronics Mounting Plate (First Thing)
 
@@ -96,37 +161,32 @@ All electronics on a single plate in passenger footwell: PDM, Haltech Elite 2500
 
 Kill switch already mounted. 2 AWG cable already run from battery (+) to large terminal A.
 
-```
-Battery (+) ─── 2 AWG ─── Kill Switch [Large Terminal A]
-                                │
-                          [Jumper] to [Small Terminal A]
-                                │
-                     Kill Switch [Large Terminal B] ───┬─── 2 AWG ─── 150A Breaker ─── Starter B+ / Alternator B+
-                                │                      │
-                                │                      └─── 4 AWG ─── 120A Breaker ─── PDM Surlok (+)
-                                │
-                     Kill Switch [Small Terminal B] ─── IGN toggle switch ─── PDM Conn B pin 23 (IGN input)
-                                                                         └─── Haltech 34-pin pin 13 (ECU IGN)
-```
-
 - [ ] Verify jumper from large terminal A to small terminal A
 - [ ] Wire large terminal B → 150A breaker → starter B+ / alternator B+ (2 AWG)
 - [ ] Wire large terminal B → 120A breaker → PDM Surlok (+) (4 AWG)
 - [ ] Wire small terminal B → IGN toggle switch (new)
+- [ ] IGN toggle → PDM B23 AND Haltech 34-pin pin 13 (P wire)
 - [ ] Connect PDM Surlok power cable
 - [ ] Connect PDM grounds (B13, B14, B18 to chassis)
 
-### S.3 Switch Panel + IGN Wiring
+> Kill switch diagram: `guides/pdm-build-guide.md` → "S.2 Kill Switch Wiring"
 
-- [ ] Wire IGN toggle → PDM Conn B pin 23 AND splice to Haltech 34-pin pin 13 (P wire)
-- [ ] Wire start button → Ch09 (B21), momentary, active = GND
-- [ ] Wire fan override toggle → Ch01 (B26), active = 12V
-- [ ] Wire wiper low toggle → Ch02 (B27), active = 12V
-- [ ] Wire wiper high toggle → Ch03 (B28), active = 12V
-- [ ] Wire coolsuit toggle → Ch04 (B29), active = 12V
-- [ ] Wire defogger toggle → Ch05 (B30), active = 12V
-- [ ] Wire brake light switch → Ch11 (A26), closed on press
-- [ ] Wire warning LED → LP7 (A20)
+### S.3 Switch Panel Wiring (Phase 1 Layout)
+
+```
+[IGN]  [FAN]  [COOL]  [DEFOG]  [____]  [____]
+[START]                                  (LED)
+```
+
+- [ ] Start button → Ch09 (B21), momentary, active = GND
+- [ ] Fan override toggle → Ch01 (B26), active = 12V
+- [ ] Coolsuit toggle → Ch04 (B29), active = 12V
+- [ ] Defogger toggle → Ch05 (B30), active = 12V
+- [ ] Brake light switch → Ch11 (A26), closed on press
+- [ ] Warning LED → LP7 (A20)
+
+> **2 spare panel positions** reserved for horn (Ch06/B31) and headlights (Ch07/B32) in Phase 2.
+> **Wiper switches** not installed — wiper logic being developed separately.
 
 ### S.4 First Power-Up in Car
 
@@ -146,7 +206,7 @@ Battery (+) ─── 2 AWG ─── Kill Switch [Large Terminal A]
 - [ ] Connect LVDS cable from PDM to dash
 - [ ] Verify dash powers up and shows live data
 
-### S.6 PDM → Fuse Box Connections (Engine Bay)
+### S.6 Fuse Box Connections — Core (3 Relay Spades)
 
 **OE Main Relay (MP1/MP2):**
 - [ ] Locate OE main relay in underhood fuse box
@@ -154,61 +214,85 @@ Battery (+) ─── 2 AWG ─── Kill Switch [Large Terminal A]
 - [ ] Insert PDM MP1 (A2) wire into relay socket pin 87 (power out)
 - [ ] Insert PDM MP2 (A3) wire into same pin 87 socket (parallel)
 - [ ] IGN on → verify stock ECU powers up via PDM; IGN off → stock ECU loses power
+- [ ] **Test:** Stock dash lights, check engine light, fuel gauge all work
 
-> **Phase 2 switchover:** Disconnect MP1/MP2 from relay socket. Reroute MP1 → injector rail + Haltech 34-pin pin 26 (R/L). Reroute MP2 → COP coil Pin D common bus. No Race Studio config change.
+> **Phase 2:** Pull MP1/MP2 spades, reroute MP1 → D3 pin 7 (injectors), MP2 → D2 pin 7 (coils). No Race Studio config change.
 
 **Fuel Pump Relay (HP3):**
 - [ ] Pull OEM fuel pump relay
 - [ ] Insert PDM HP3 (A24+A25) wire into pin 87 socket
 - [ ] IGN on → verify 3-second fuel prime (listen for pump), then off
-- [ ] Verify in Race Studio: `FUEL_PRIME` timer fires, `FuelSV` active → inactive
+- [ ] Verify in Race Studio: `FUEL_PRIME` timer fires
 
-**Starter (HP1):**
-- [ ] Wire HP1 (A1+A13) to starter — fuse box pin 87 (try first) or direct to solenoid S terminal
-- [ ] Press START button (Ch09) → engine cranks; release → stops
+**Starter (HP1 → direct to solenoid):**
+- [ ] Run HP1 (A1+A13) wire directly to starter solenoid S-terminal (10 AWG, ring terminal)
+- [ ] Leave OEM starter relay in place as backup
+- [ ] Press START (Ch09) → engine cranks; release → stops
 - [ ] While engine running: press START → should NOT engage (RPM interlock)
+
+> **Horn, headlights, fan relays left in place.** Stock BCM controls them normally through Phase 1.
 
 ### S.7 Alternator Exciter (LP8)
 
 - [ ] Locate OEM alternator D+ exciter wire (thin ~18 AWG at alternator Yazaki connector)
-- [ ] Cut exciter wire at convenient point near fuse box (leave length on both ends)
+- [ ] Confirm with multimeter: 12V with IGN on, 0V with IGN off
+- [ ] Cut exciter wire at convenient point (leave length on both ends)
 - [ ] Fuse box side → wire to PDM LP8 (A21, Connector A)
 - [ ] Alternator D+ side → remains connected to alternator (load side)
 
-### S.8 CAN0 Expansion Bus — AIM Devices
+### S.8 CAN0 Expansion Bus — AIM Devices + Podium
 
+> Data Hub is a passive star splitter — each device plugs into its own port.
+> GPS-08 and Podium get power through hub +Vb rail (A33, always on). SmartyCam needs **separate LP3 power** via 7-pin connector.
+> All software config should be done Friday (F.3). Saturday is physical install + verification.
+
+**Install:**
 - [ ] Verify CAN0 expansion cable: A22 (H) / A11 (L) / A33 (+Vb out) / A10 (GND)
-- [ ] Connect AIM CAN Data Hub (4-way) to expansion cable Binder
-- [ ] Daisy-chain: PDM → Data Hub → GPS-08 → SmartyCam → Podium Micro
-- [ ] Power all devices via A33 (+Vb out CAN)
-- [ ] Mount GPS-08 (roof or cowl — clear sky view)
+- [ ] Connect Data Hub male port to expansion cable
+- [ ] Hub port 1 → GPS-08 (5-pin Binder)
+- [ ] Hub port 2 → SmartyCam EXP port (5-pin Binder — CAN data only)
+- [ ] Hub port 3 → Podium Micro (Binder-to-M8 adapter)
+- [ ] Wire LP3 (A16) → SmartyCam 7-pin main power (Red = +12V, Black = GND)
+- [ ] Mount GPS-08 (roof or cowl — clear sky view, antenna face up)
 - [ ] Mount SmartyCam (windshield or roll bar bracket)
-- [ ] Verify GPS position lock in Race Studio Live Data
-- [ ] Verify SmartyCam recording on power-up
-- [ ] Verify Podium Micro recognized in Race Studio
+- [ ] Podium already on electronics plate (S.1)
 
-### S.9 Full System Test — Start Car on Stock ECU
+**Verify:**
+- [ ] IGN on → SmartyCam powers up (CAN LED: green/blue solid)
+- [ ] GPS-08 LED active (powered via hub A33)
+- [ ] Podium power LED on, CAN ⇄ LED active
+- [ ] RS3 Live Data → CAN AiM bus shows traffic
+- [ ] GPS channels appear in RS3 Channels tab after satellite lock (~30s with sky view)
+- [ ] SmartyCam: start recording → overlay shows channel labels (values may be 0 until Haltech CAN connected Sunday)
+- [ ] Podium: phone → connect to Podium AP WiFi → RaceCapture dashboard shows channel tiles
+
+> **Podium is NOT visible in Race Studio** — it's Autosport Labs, not AIM. Verify via RaceCapture app only.
+
+### S.9 Full System Test — Phase 1A Gate
 
 - [ ] IGN on → fuel prime (3s) → pump off
 - [ ] Press START → engine cranks and starts
 - [ ] Verify engine running: `ENGINE_RUNNING` = 1 in Race Studio
 - [ ] Verify starter interlock: press START while running → no crank
 - [ ] Verify alternator charging: 13.8–14.4V at battery posts
-- [ ] Verify fan toggle (Ch01) → HP2 at 98%
-- [ ] Verify wiper low (Ch02) → MP3 on; wiper high (Ch03) → MP6 on, MP3 off
+- [ ] Verify fan works via stock BCM relay (should activate on its own at temp)
+- [ ] Verify horn works via steering wheel button (stock BCM)
+- [ ] Verify headlights work via stalk switch (stock BCM)
 - [ ] Verify coolsuit (Ch04) → MP7 on
 - [ ] Verify defogger (Ch05) → MP8 on
 - [ ] Verify brake lights (Ch11) → MP4 on (test with IGN off too)
 - [ ] Verify tail lights → MP5 on with IGN (automatic)
 - [ ] **Kill switch test:** engine running → flip kill switch → engine dies, all power drops, alternator stops charging
 
-> **✓ GATE:** Car starts, runs, and stops reliably on stock ECU with PDM. Kill switch kills everything.
+> **✓ GATE:** Car starts, runs, and stops reliably on stock ECU with PDM. Kill switch kills everything. Horn/headlights/fan work through stock BCM.
 
 ---
 
-## SUNDAY — Sensors + Haltech Wiring + Harnesses (Shop, All Day)
+## SUNDAY — Sensors + CAN + Fan Migration = Phase 1B (Shop, All Day)
 
-**Goal by end of Sunday:** All Lowdoller sensors installed and reading, Haltech CAN data flowing to PDM, coil/injector harnesses built and ready to plug in.
+> **Fan migration procedure:** `guides/pdm-build-guide.md` → "Phase 1B — CAN + Sensors + Fan Migration"
+
+**Goal by end of Sunday:** All Lowdoller sensors installed and reading, Haltech CAN data flowing to PDM, fan moved to PDM control (verified via CAN temp), coil/injector harnesses built and ready to plug in.
 
 ### SU.1 Oil Sensor Install (Oil Already Drained Friday)
 
@@ -252,7 +336,25 @@ Battery (+) ─── 2 AWG ─── Kill Switch [Large Terminal A]
 - [ ] Confirm warning LED (LP7) triggers when sensor thresholds crossed (force values in NSP)
 - [ ] Verify MAP reading in NSP at idle vacuum
 
+> **✓ GATE:** CAN data flowing confirmed before moving fan to PDM control.
+
 > **✓ TEST:** Start car → RPM > 50 → `ENGINE_RUNNING` activates → fuel pump stays on → all CAN sensor data flowing
+
+### SU.6B Move Fan to PDM Control
+
+> CAN temp data confirmed flowing → safe to migrate fan from stock BCM relay to PDM PWM control.
+
+**Try Option A first (reversible):**
+- [ ] Pull OEM fan relay
+- [ ] Insert HP2 (A12+A23) wire into fan relay pin 87 socket (12 AWG)
+- [ ] Warm up engine → verify fan bands activate at correct temps (25%@77°C, 50%@82°C, 75%@87°C, 98%@92°C)
+
+**If relay socket has too much resistance → Option B (direct):**
+- [ ] Run HP2 directly to fan motor connector
+- [ ] Leave OEM fan relay as backup
+
+- [ ] Verify fan override toggle (Ch01) → 98% duty
+- [ ] Verify fan failsafe: disconnect Haltech CAN temporarily → fan goes to 98% after 5s → reconnect
 
 ### SU.7 Wideband AFR (Innovate LM2)
 
@@ -307,10 +409,10 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 | Starter | HP1 | A1 + A13 | Via solenoid; inductive; series diode |
 | Fan | HP2 | A12 + A23 | PWM 100Hz; freewheeling diode |
 | Fuel Pump | HP3 | A24 + A25 | Via fuse box pin 87; freewheeling diode |
-| Injector Power / OE Relay | MP1 | A2 | **Phase 1:** OE relay box pin 87 (pull relay). **Phase 2:** → injector rail + Haltech 34-pin pin 26 |
-| Coil Power / OE Relay | MP2 | A3 | **Phase 1:** OE relay box pin 87 (same socket). **Phase 2:** → Pin D all 6 COPs |
-| Wiper Low | MP3 | A4 | OEM wiper motor low speed wire |
-| Wiper High | MP6 | A7 | OEM wiper motor high speed wire |
+| Injector Power / OE Relay | MP1 | A2 | **Phase 1:** OE relay box pin 87 (pull relay). **Phase 2:** → D3 pin 7 (injector rail + Haltech 34-pin pin 26) |
+| Coil Power / OE Relay | MP2 | A3 | **Phase 1:** OE relay box pin 87 (same socket). **Phase 2:** → D2 pin 7 (Pin D all 6 COPs) |
+| Horn | MP3 | A4 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → horn direct or relay socket; Ch06 button |
+| Headlights | MP6 | A7 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → headlight direct or relay socket; Ch07 toggle |
 | Alternator exciter | LP8 | A21 | D+ field wire cut and routed through LP8; SafeIgnition trigger; < 1A draw |
 
 ### Cockpit
@@ -330,7 +432,7 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 | ECU Power | LP1 | A14 |
 | Dash | LP2 | A15 |
 | SmartyCam | LP3 | A16 |
-| GPS | LP4 | A17 |
+| Spare (was GPS) | LP4 | A17 |
 | Wideband | LP5 | A18 |
 | Cluster | LP6 | A19 |
 | Warning LED | LP7 | A20 |
@@ -351,11 +453,14 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 | Ignition | IGN input | B23 | Latching toggle, 12V |
 | Start | Ch09 | B21 | Momentary, active = GND |
 | Fan override | Ch01 | B26 | Latching toggle, 12V |
-| Wiper Low | Ch02 | B27 | Latching toggle, 12V |
-| Wiper High | Ch03 | B28 | Latching toggle, 12V |
+| Horn | Ch06 | B31 | Momentary, active = GND (Phase 2+) |
+| Headlights | Ch07 | B32 | Latching toggle, 12V (Phase 2+) |
 | Coolsuit | Ch04 | B29 | Latching toggle, 12V |
 | Defogger | Ch05 | B30 | Latching toggle, 12V |
 | Brake switch | Ch11 | A26 | Closed on press |
+
+> **Wipers:** Ch02 (B27) / Ch03 (B28) reserved — wiper logic being developed separately.
+> **Spare:** Ch08 (B33), Ch10 (B22), Ch12 (A27)
 
 ---
 
@@ -419,23 +524,30 @@ Power: PDM MP1 (A2) → injector rail + Haltech 34-pin pin 26 (R/L)
 
 ---
 
-## NEXT WEEKEND — Haltech Takes Over Engine
+## NEXT WEEKEND — Phase 2: Haltech Takes Over Engine
 
-After track day with stock ECU + PDM, switch to Haltech running the engine:
+> **Full Phase 2 procedure:** `guides/pdm-build-guide.md` → "Phase 2 — PDM + Haltech ECU"
 
-- [ ] Disconnect stock ECU injector wiring → plug in Haltech injector harness
-- [ ] Disconnect stock ECU coil wiring → plug in Haltech coil harness
-- [ ] Reroute MP1 from OE relay pin 87 → injector rail + Haltech 34-pin pin 26
-- [ ] Reroute MP2 from OE relay pin 87 → COP Pin D common bus
-- [ ] Move crank/cam/TPS to Haltech (bench-confirmed)
-- [ ] Power Haltech ECU from PDM LP1 (A14) — disconnect stock ECU power
+After track day with stock ECU + PDM, switch to Haltech running the engine. **No Race Studio config change needed.** Physical wiring only.
+
+- [ ] Unplug stock ECU connectors (C133-1 through C133-4) — leave mounted, label for reversal
+- [ ] Unplug BCM connector — leave mounted
+- [ ] Pull MP1/MP2 spades from OE main relay pin 87 socket
+- [ ] Reroute MP1 (A2) → D3 pin 7 (injector rail + Haltech 34-pin pin 26)
+- [ ] Reroute MP2 (A3) → D2 pin 7 (COP coil Pin D common bus)
+- [ ] Plug in D2 (coil Deutsch) — engine side already on coils
+- [ ] Plug in D3 (injector Deutsch) — engine side already on injectors
+- [ ] Add horn button → Ch06 (B31), wire MP3 (A4) → horn
+- [ ] Add headlight toggle → Ch07 (B32), wire MP6 (A7) → headlights
 - [ ] First fire on Haltech — base tune, confirm idle
 - [ ] Verify all PDM tests still pass with Haltech running
-- [ ] Connect wideband to Haltech AVI for closed-loop AFR
+- [ ] **Reversal test:** plug stock ECU + BCM back in, MP1/MP2 back to relay → car runs on stock
 
 ---
 
 ## LATER / ONGOING
+
+> **Phase 3 (CAN keypad + OE removal):** `guides/pdm-build-guide.md` → "Phase 3"
 
 - [ ] Rubber-mount ECU and PDM plate (vibration isolation)
 - [ ] Clean and label all harnesses
@@ -444,3 +556,6 @@ After track day with stock ECU + PDM, switch to Haltech running the engine:
 - [ ] Mount Lowdoller 1500 PSI brake sensor bracket (leave wires terminated, AVI 7+8 reserved)
 - [ ] Crankcase pressure sensor (valve cover or PCV port → available PDM/Haltech input)
 - [ ] IR tire temp sensor bracket + PDM channel input wiring
+- [ ] Wiper integration — relay-less park design: MP9 (B4) low, MP10 (B5) high, LP9 (B3) park sweep. Ch02/Ch03 switches. Math channels pre-configured in RS3.
+- [ ] CAN Keypad 12 installation (Phase 3 — see `guides/keypad-config-future.md`)
+- [ ] Remove OE ECU, BCM, and relay box (Phase 3 — after proven reliability)
