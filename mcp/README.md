@@ -151,7 +151,7 @@ Key entry points:
 |------|----------|
 | `builds/{car}/build-profile.md` | Per-car equipment, wiring, known issues |
 | `builds/{car}/signal-routing.md` | End-to-end signal routing |
-| `hardware/aim-pdm/pdm-configuration-guide.md` | PDM output map and keypad config |
+| `hardware/aim-pdm/pdm-configuration-guide.md` | PDM output map and input configuration |
 | `hardware/haltech/main-connector-26-pin-elite2500.md` | Haltech 26-pin pinout |
 | `hardware/sensors/lowdoller-sensors.md` | Sensor specs and calibration |
 | `common/opengk/ecm-pinouts.md` | Stock ECM connector pinouts |

@@ -73,7 +73,7 @@
           "pdm_pins": { "H": "A28", "L": "A29" },
           "speed_kbps": 125,
           "rs3_tab": "CAN2 Keypad",
-          "notes": "CAN Keypad 12 connects here at 125 kbps only. Do NOT wire keypad to CAN AiM (different speed = bus failure)."
+          "notes": "Available for CAN Keypad 12 or other 125 kbps device. Do NOT wire CAN2 devices to CAN AiM (different speed = bus failure)."
         }
       ],
       "outputs": {
@@ -288,7 +288,7 @@
         "internal_label": "CAN2",
         "pdm_pins": { "H": "A28", "L": "A29" },
         "speed_kbps": 125,
-        "devices": ["AIM CAN Keypad 12"],
+        "devices": ["(available — AIM CAN Keypad 12 or other 125 kbps device)"],
         "rs3_tab": "CAN2 Keypad"
       }
     },

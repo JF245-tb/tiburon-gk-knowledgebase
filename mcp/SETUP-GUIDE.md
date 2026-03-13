@@ -93,7 +93,7 @@ Once the session is loaded, try these to confirm it's working:
 **"Which PDM output powers the fuel pump, and what's the trigger logic?"**
 
 Expected answer (from `build-profile.json` + `hardware/aim-pdm/pdm-configuration-guide.md`):
-> HP3 (pins A24+A25), 15A overcurrent protection. Trigger: `FP_PRIME_AND_RUN` — 3-second prime on IGN on, then tracks RPM > 50 via CAN from Haltech. Key 06 (Fuel Override) on keypad bypasses the RPM condition and runs the pump regardless.
+> HP3 (pins A24+A25), 15A overcurrent protection. Trigger: FUEL_PRIME OR ENGINE_RUNNING — 3-second prime on IGN on, then tracks RPM > 50 via CAN from Haltech. No manual override switch; cycle IGN off/on to re-trigger the 3s fuel prime.
 
 ---
 
@@ -107,7 +107,7 @@ Expected answer (from `build-profile.json`):
 **"Walk me through Phase 1.4 — fan PWM logic — and tell me if anything's unclear."**
 
 Expected answer (from `builds/white-tiburon/weekend-tasks.md`):
-> The guide lists simulating ECT via CAN in Race Studio to test the 4 duty cycle bands (25% / 50% / 75% / 98%), manual override with Key 05, and the loss-of-CAN failsafe (HP2 goes to 98% after 5s with no CAN signal). [Then Claude can flag anything ambiguous or missing in the procedure.]
+> The guide lists simulating ECT via CAN in Race Studio to test the 4 duty cycle bands (25% / 50% / 75% / 98%), manual override with Ch01 (Fan toggle switch), and the loss-of-CAN failsafe (HP2 goes to 98% after 5s with no CAN signal). [Then Claude can flag anything ambiguous or missing in the procedure.]
 
 ---
 
