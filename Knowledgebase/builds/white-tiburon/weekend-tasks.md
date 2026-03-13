@@ -40,7 +40,7 @@ PDM at home with laptop. All software work — no car needed.
 - [ ] Configure status variables: ENGINE_RUNNING, FUEL_PRIME, FAN_TEMP bands (77/82/87/92°C), FAN_FAILSAFE, STARTER_SAFE, MULTI_WARNING
 - [ ] Configure wiper priority logic: MP3 = Ch02 AND NOT Ch03; MP6 = Ch03
 - [ ] Configure channel inputs: Ch01–Ch05 (toggles), Ch09 (starter), Ch11 (brake)
-- [ ] Disable CAN2 keypad, remove all `*KYD` status variables
+- [ ] Verify CAN2 disabled (no keypad — config preserved in `guides/keypad-config-future.md`)
 - [ ] Configure ECU Stream tab: Haltech CAN_V2_40 protocol on CAN1 (A30/A31), 500 kbps
   - Enable channels: RPM, ECT, Oil P, Oil T, Fuel P, TPS, Vehicle Speed, Battery V
 - [ ] Configure SmartyCam Stream: RPM, Speed (GPS-08), Gear, Coolant Temp, Oil P, TPS, Lat G, Long G
@@ -342,7 +342,7 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 |-----|----------|--------|-------|
 | CAN0 (AIM expansion) | A22 (H) / A11 (L) | Data Hub → GPS, SmartyCam, Podium | 1 Mbps |
 | CAN1 (ECU) | A30 (H) / A31 (L) | Haltech Elite 2500 | 500 kbps |
-| CAN2 | A28 (H) / A29 (L) | **Unused** — available for future keypad | 125 kbps |
+| CAN2 | A28 (H) / A29 (L) | **Unused** — available for future CAN device | 125 kbps |
 
 ### Switch Panel Inputs
 

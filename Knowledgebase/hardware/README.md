@@ -31,7 +31,7 @@ All AIM Sports hardware lives here. The `hardware-graph.json` at the root of `ha
 | File | Contents |
 |---|---|
 | `pdm-pinout.md` | Full 35-pin ×2 connector pinout (Conn A and B); CAN bus pin assignments (CAN0=A22/A11, CAN1=A30/A31, CAN2=A28/A29) |
-| `pdm-configuration-guide.md` | Logic architecture: keypads → status variables → triggers → outputs; PWM fan example; PDM32 + 10" dash specs |
+| `pdm-configuration-guide.md` | Logic architecture: inputs → status variables → triggers → outputs; PWM fan example; PDM32 + 10" dash specs |
 
 #### `aim/aim-datahub/` — AIM CAN Data Hub
 

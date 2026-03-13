@@ -86,7 +86,7 @@ Full specs, wiring, and calibration tables: `Knowledgebase/cars/lowdoller-sensor
 - **Wiper High:** Latching toggle — PDM Ch03 (B28). Wiper motor high speed (overrides low).
 - **Coolsuit:** Latching toggle — PDM Ch04 (B29). Coolsuit pump on/off.
 - **Defogger:** Latching toggle — PDM Ch05 (B30). Rear window defogger.
-- **CAN keypad excluded** from this build — all controls are physical switches.
+- **CAN keypad not installed** — all controls are physical switches. Keypad config preserved in `guides/keypad-config-future.md`.
 - OEM ignition cylinder **removed** from loop.
 
 ---

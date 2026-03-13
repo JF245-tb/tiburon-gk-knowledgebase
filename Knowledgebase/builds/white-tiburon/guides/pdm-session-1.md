@@ -2,7 +2,9 @@
 
 **Goal:** Configure PDM32 for white Tiburon starting from `Webinar complete.zconfig`
 **Time estimate:** 60–90 minutes
-**Source file analysis:** Webinar config has SafeIgnition, StarterKYD, SirenKYD, LightsKYD, FanKYD, FuelSV, FanSpeed, Starter, Siren, Fuel1A/B, plus all keypad color channels — ~80% reusable.
+**Source file analysis:** Webinar config has SafeIgnition, FuelSV, FanSpeed, Starter, Siren, Fuel1A/B — output logic and protection settings are ~80% reusable. Keypad variables (`*KYD`, LED colors) are deleted — all controls via physical switch panel.
+
+> **CAN keypad excluded from this build.** Keypad variable names and LED assignments are preserved in `guides/keypad-config-future.md` for future re-addition.
 
 **Before you start:** Export a backup of the webinar config to `AIM PDM/` before making any changes.
 
@@ -13,17 +15,17 @@
 | Webinar Variable | What It Does | Tiburon Action |
 |---|---|---|
 | `SafeIgnition` | ON when PDM IGN input (B23) active | **Keep as-is** — this is our master permissive |
-| `StarterKYD` | Latched toggle from keypad press | **Keep, remap to Key 01** |
-| `SirenKYD` | Momentary from keypad press | **Keep, rename HornKYD, remap to Key 02** |
-| `LightsKYD` | Latched toggle from keypad press | **Keep, remap to Key 03** |
-| `FanKYD` | Latched toggle from keypad press | **Keep, remap to Key 05** |
-| `IgnitionKYD` | Was Key 05 — keypad-controlled ignition | **Delete — we use physical IGN switch (B23)** |
+| `StarterKYD` | Latched toggle from keypad press | **Delete — replaced by Ch09 physical start button** |
+| `SirenKYD` | Momentary from keypad press | **Delete — horn via fuse box spade (Phase 1)** |
+| `LightsKYD` | Latched toggle from keypad press | **Delete — tail lights always on with SafeIgnition** |
+| `FanKYD` | Latched toggle from keypad press | **Delete — replaced by Ch01 physical fan toggle** |
+| `IgnitionKYD` | Was Key 05 — keypad-controlled ignition | **Delete — physical IGN switch (B23)** |
 | `FuelSV` | Composite fuel pump run condition | **Keep, update logic** |
 | `FANOFFSV` | Fan manual off state | **Keep** |
 | `FlashSV` | Momentary flash state | **Keep** |
-| `momentary_SW` | Physical momentary switch template | **Repurpose → START_BACKUP on Ch09** |
-| `ColorsConditionK01–K12` | Keypad LED color logic | **Keep, update per new key assignments** |
-| `BitRed/Green/BlueX15–X1C` | RGB color bits for keypad LEDs | **Keep** |
+| `momentary_SW` | Physical momentary switch template | **Repurpose → START on Ch09** |
+| `ColorsConditionK01–K12` | Keypad LED color logic | **Delete — no keypad. See `guides/keypad-config-future.md`** |
+| `BitRed/Green/BlueX15–X1C` | RGB color bits for keypad LEDs | **Delete — no keypad** |
 
 | Webinar Output | HW Channel | Webinar Setting | Tiburon Action |
 |---|---|---|---|
@@ -165,111 +167,55 @@ Enable exactly these channels. Total: **~72**, well under the 120 limit.
 
 ---
 
-## Step 3: CAN2 Keypad — Button Configuration
+## Step 3: Disable CAN2 Keypad
 
-Click the **CAN2 Keypad** tab. Verify bus speed = **125 kbps**. Delete all existing buttons from the webinar config and create fresh assignments as below.
+The webinar config includes a CAN2 keypad with buttons K01–K12. This build uses physical switches instead.
 
-> **Variable names must match exactly** — these are referenced in math channels (Step 5) and LED logic (Step 7).
+1. Click the **CAN2 Keypad** tab
+2. **Delete all button definitions** (K01–K12)
+3. **Delete all keypad status variables:** `StarterKYD`, `SirenKYD`, `LightsKYD`, `FanKYD`, `CoolsuitKYD`, `FuelOverride`, `PitLimiter_KYD`, `COMMS_YN`, `PITIN_LAPS`, `WiperKYD`
+4. **Delete all keypad LED color assignments** (`ColorsConditionK01–K12`, `BitRed/Green/BlueX15–X1C`)
+5. CAN2 bus remains available for future expansion
 
-### K33 — Starter
-- **Name:** `StarterKYD`
-- **Type: Momentary** — crank only while held; releasing stops the starter
-- Rest: label `RDY`, value `0`
-- Active: label `CRNK`, value `1`
-- Use timing: NO
-- Variable name: `StarterKYD`
-
-### K34 — Horn
-- **Name:** `HornKYD`
-- **Type: Momentary**
-- Rest: label `OFF`, value `0`
-- Active: label `HORN`, value `1`
-- Use timing: NO
-- Variable name: `HornKYD`
-
-### K35 — Lights
-- **Name:** `LightsKYD`
-- **Type: Multistatus** — 3 positions, cycles on each press
-- Position 0: label `OFF`, value `0`
-- Position 1: label `LOW`, value `1`
-- Position 2: label `HIGH`, value `2`
-- Variable name: `LightsKYD`
-
-### K36 — Coolsuit
-- **Name:** `CoolsuitKYD`
-- **Type: Toggle**
-- Rest: label `OFF`, value `0`
-- Active: label `ON`, value `1`
-- Variable name: `CoolsuitKYD`
-
-### K37 — Fan Override
-- **Name:** `FanKYD`
-- **Type: Toggle**
-- Rest: label `OFF`, value `0`
-- Active: label `ON`, value `1`
-- Variable name: `FanKYD`
-
-### K38 — Fuel Override
-- **Name:** `FuelOverrideKYD`
-- **Type: Toggle**
-- Rest: label `OFF`, value `0`
-- Active: label `ON`, value `1`
-- Variable name: `FuelOverride`
-
-### K39 — Pit Limiter
-- **Name:** `PitLimKYD`
-- **Type: Toggle + timing** (can't hold a button while driving; timing adds safety clear)
-- Rest: label `OFF`, value `0`
-- Active: label `PIT`, value `1`
-- Use timing: YES
-  - Short press: toggles state (normal arm/disarm)
-  - Long press: label `CLEAR`, value `0` — forces OFF regardless of current state
-  - Time threshold: **2000 ms**
-- Variable name: `PitLimiter_KYD`
-
-### K40 — Comms
-- **Name:** `CommsKYD`
-- **Type: Toggle**
-- Rest: label `NO`, value `0`
-- Active: label `YES`, value `1`
-- Variable name: `COMMS_YN`
-
-### K41 — Pit-In Laps
-- **Name:** `PitInKYD`
-- **Type: Multistatus** — 4 positions, cycles on each press
-- Position 0: label `---`, value `0` (not pitting)
-- Position 1: label `L+1`, value `1` (1 lap out)
-- Position 2: label `L+2`, value `2`
-- Position 3: label `L+3`, value `3`
-- Variable name: `PITIN_LAPS`
-
-### K42 — Wiper
-- **Name:** `WiperKYD`
-- **Type: Multistatus** — 3 positions, cycles on each press
-- Position 0: label `OFF`, value `0`
-- Position 1: label `SLOW`, value `1`
-- Position 2: label `FAST`, value `2`
-- Variable name: `WiperKYD`
-
-### K43–K44 — Spare
-- Leave unconfigured
+> **Keypad config preserved:** All button assignments, LED colors, and variable names are documented in `guides/keypad-config-future.md`. When a keypad is added later, re-import those settings and update trigger logic to OR keypad + physical switch inputs.
 
 ---
 
 ## Step 4: Channel Inputs — Physical Switches
 
+All driver controls use physical switches wired directly to PDM channel inputs. No CAN keypad.
+
 1. Device tree → **Channels** (or Inputs section)
-2. **Ch09** (Connector B):
-   - Name: `START_BACKUP`
-   - Type: Digital
-   - Mode: Momentary (push button)
+2. **Ch01** (Connector B, pin 26):
+   - Name: `FAN_OVERRIDE`
+   - Type: Digital, latching toggle
+   - Active: 12V when ON
+3. **Ch02** (Connector B, pin 27):
+   - Name: `WIPER_LOW`
+   - Type: Digital, latching toggle
+   - Active: 12V when ON
+4. **Ch03** (Connector B, pin 28):
+   - Name: `WIPER_HIGH`
+   - Type: Digital, latching toggle
+   - Active: 12V when ON
+5. **Ch04** (Connector B, pin 29):
+   - Name: `COOLSUIT`
+   - Type: Digital, latching toggle
+   - Active: 12V when ON
+6. **Ch05** (Connector B, pin 30):
+   - Name: `DEFOGGER`
+   - Type: Digital, latching toggle
+   - Active: 12V when ON
+7. **Ch09** (Connector B, pin 21):
+   - Name: `START`
+   - Type: Digital, momentary (push button)
    - Active: Ground (closed = active)
-3. **Ch11** (Black connector, pin 26):
+8. **Ch11** (Connector A, pin 26):
    - Name: `BRAKE_SWITCH`
    - Type: Digital
    - Mode: Bistable (closed when brake pressed)
    - Active: Ground
-4. All other channel inputs: leave at defaults (available for future)
+9. Ch06–Ch08, Ch10, Ch12: leave at defaults (available for future)
 
 ---
 
@@ -281,11 +227,11 @@ Go to **Math Channels** (or Calculated Channels). Add/modify in this order:
 
 **`FuelSV` — update trigger logic:**
 ```
-FuelSV = FUEL_PRIME OR ENGINE_RUNNING OR FuelOverride
+FuelSV = FUEL_PRIME OR ENGINE_RUNNING
 ```
-(Previously it used SafeIgnition + RPM; update to use the new variables below)
+(FuelOverride removed — no manual override switch. Cycle IGN off/on to re-trigger 3s fuel prime.)
 
-**`momentary_SW` — rename to `START_BACKUP`:**
+**`momentary_SW` — rename to `START`:**
 - Change input source from whatever it was → Channel Input Ch09
 
 ### 5b. Add New Variables
@@ -315,9 +261,9 @@ Duration: 3000 ms
 
 **`STARTER_SAFE`**
 ```
-Condition: (StarterKYD OR START_BACKUP) AND SafeIgnition AND NOT ENGINE_RUNNING
+Condition: Ch09 AND SafeIgnition AND NOT ENGINE_RUNNING
 ```
-*Prevents cranking into a running engine; requires IGN on*
+*Prevents cranking into a running engine; requires IGN on. Ch09 = physical start button.*
 
 ---
 
@@ -390,25 +336,11 @@ Condition: LOW_OIL_P OR HIGH_COOLANT_T OR HIGH_OIL_T OR LOW_FUEL_P
 
 Pit limiter:
 
-**`PITLIMITER_SAFE`**
-```
-Condition: PitLimiter_KYD AND Vehicle_Speed < 60
-```
-*Speed gate: keypad can latch on even at speed, but won't activate until <60 mph*
-
-**`PITLIMITER_ACTIVE`**
-```
-Condition: PITLIMITER_SAFE AND NOT (TPS > 60)
-```
-*TPS override: flooring it temporarily bypasses limiter*
-
----
+> **Pit limiter not available without keypad.** No physical switch assigned. See `guides/keypad-config-future.md` for PitLimiter_KYD, PITLIMITER_SAFE, and PITLIMITER_ACTIVE variable definitions when a keypad is added.
 
 PodiumConnect:
 
-**`COMMS_YN`** — comes from K40 keypad output (toggle), no additional math needed
-
-**`PITIN_LAPS`** — comes from K41 keypad output (multistatus 0/1/2/3), no additional math needed
+> **COMMS_YN and PITIN_LAPS not available without keypad.** These require multi-position or toggle inputs not present on the physical switch panel. See `guides/keypad-config-future.md`.
 
 ---
 
@@ -467,32 +399,37 @@ Higher priority actions override lower ones when multiple triggers are active.
 - Inductive: NO
 - **Trigger:** `SafeIgnition` → DC
 
-### MP3 — Horn
-- `Siren` → rename `Horn`
-- Mode: OVC Protected, 15A, not inductive
-- **Trigger:** `HornKYD` (momentary, hold to honk) → DC
-- Already configured correctly in webinar ✅
+### MP3 — Wiper Low
+- `Siren` → rename `WiperLow`
+- Mode: OVC Protected, 10A, inductive (wiper motor)
+- **Trigger:** Ch02 AND NOT Ch03 → DC
+- Horn: no dedicated switch. **Phase 1:** spade connector to fuse box. **Phase 2:** direct splice to horn harness.
 
 ### MP4 — Brake Lights
 - Repurpose `Low Beams` → rename `BrakeLights`
 - Mode: Fused, 10A
 - **Trigger:** `BRAKE_SWITCH` (Ch11) → DC
-- **Must work independently of keypad — wire brake switch to Ch11 only**
+- **Must work independently of ignition — brake switch always active**
 
 ### MP5 — Tail Lights
 - Repurpose `MidPO3` → rename `TailLights`
 - Mode: Fused, 10A
-- **Trigger:** `LightsKYD` (Key 03 toggle) → DC
+- **Trigger:** `SafeIgnition` → DC (always on when car is on)
 
-### MP6 — Alternator Exciter
-- Repurpose `MidPO4` → rename `AltExciter`
-- Mode: OVC Protected, 5A
-- **Trigger:** `SafeIgnition` → DC
+### MP6 — Wiper High
+- Repurpose `MidPO4` → rename `WiperHigh`
+- Mode: OVC Protected, 10A, Inductive: YES (wiper motor)
+- **Trigger:** Ch03 → DC (overrides low speed — MP3 has AND NOT Ch03 guard)
 
 ### MP7 — Coolsuit
 - Repurpose `MidPO5` → rename `Coolsuit`
 - Mode: OVC Protected, 10A, Inductive: YES (pump motor)
-- **Trigger:** `CoolsuitKYD` (Key 04 toggle) → DC
+- **Trigger:** Ch04 AND SafeIgnition → DC
+
+### MP8 — Defogger
+- Repurpose `MidPO6` (or spare) → rename `Defogger`
+- Mode: OVC Protected, 10A, Inductive: NO (resistive heating element)
+- **Trigger:** Ch05 AND SafeIgnition → DC
 
 ### LP1–LP6 — Accessories (all trigger on SafeIgnition)
 | Output | Rename From | New Name |
@@ -511,73 +448,18 @@ All: OVC Protected, 10A, **Trigger:** `SafeIgnition` → DC
 - Mode: OVC Protected, 5A
 - **Trigger:** `MULTI_WARNING` → DC (or PWM 2Hz/50% for blinking effect)
 
+### LP8 — Alternator Exciter
+- Repurpose remaining spare → rename `AltExciter`
+- Mode: OVC Protected, 5A
+- **Trigger:** `SafeIgnition` → DC
+- OEM alternator D+ field wire cut and routed through LP8 (A21). Kill switch drops field immediately.
+
 ---
 
-## Step 7: Keypad LED Colors
+## Step 7: Keypad LED Colors — SKIP
 
-Go to **CAN2 Keypad** tab → select each button → configure LED colors.
-
-**Available colors:** White · Red · Green · Blue · Amber · Magenta · Cyan
-
-### Backlight Approach
-
-The AIM CAN Keypad 12 has one RGB LED per button. There is no separate backlight — the LED **is** the button illumination.
-
-**Design rule:**
-- **Rest (default):** White — all 12 buttons are uniformly lit white when idle. Provides even illumination in the cockpit regardless of function state.
-- **Active:** Color changes to the assigned function color when the button state changes. This makes active states immediately visible against the white background.
-
-There is no global brightness setting per-button in the current Race Studio version — brightness is determined by the color selected. White at rest gives a consistent baseline; colored states will be visually distinct.
-
-> **Note:** If Race Studio shows a "Backlight" or "Brightness" field separate from the LED condition, set it to a fixed value (e.g., 100%) so the keypad is always visible. The per-button LED color conditions below control the function indication.
-
-### Simple buttons (toggle / momentary)
-
-| Button | Function | Rest | Active | Notes |
-|---|---|---|---|---|
-| K33 | Starter | White | Green | Cranking = go |
-| K34 | Horn | White | Amber | Attention |
-| K36 | Coolsuit | White | Cyan | Cooling = cyan |
-| K37 | Fan Override | White | Red | Override = warning |
-| K38 | Fuel Override | White | Red | Override = warning |
-| K40 | Comms | White | Green | Active = confirmed |
-
-### K39 — Pit Limiter (two-condition LED)
-
-Race Studio allows multiple color conditions per button. Configure in this order (highest priority first):
-
-1. `PITLIMITER_ACTIVE = 1` → **Red** (limiter actively clamping speed — you're hitting the limit)
-2. `PitLimiter_KYD = 1` → **Green** (armed — speed gate not yet met, still entering pit lane)
-3. Rest → **White** (off)
-
-> Green = armed and on your way in. Red = the limiter is firing and holding your speed. If you see green but the car isn't slowing, you haven't hit 97 km/h yet.
-
-### K35 — Lights (multistatus, 3 positions)
-
-| Position | Label | Color |
-|---|---|---|
-| 0 | OFF | White |
-| 1 | LOW | Blue |
-| 2 | HIGH | Cyan |
-
-### K41 — Pit-In Laps (multistatus, 4 positions)
-
-Traffic light countdown — green = plenty of time, red = pit next lap.
-
-| Position | Label | Color |
-|---|---|---|
-| 0 | --- | White |
-| 1 | L+1 | Red |
-| 2 | L+2 | Amber |
-| 3 | L+3 | Green |
-
-### K42 — Wiper (multistatus, 3 positions)
-
-| Position | Label | Color |
-|---|---|---|
-| 0 | OFF | White |
-| 1 | SLOW | Blue |
-| 2 | FAST | Cyan |
+> **No CAN keypad in this build.** All keypad LED color assignments were deleted in Step 3.
+> Full LED configuration preserved in `guides/keypad-config-future.md` for future re-addition.
 
 ---
 
@@ -616,15 +498,17 @@ With PDM powered (via IGN toggle or direct 12V):
 |---|---|---|
 | SafeIgnition active | Flip IGN toggle ON | LP1-LP6 all energize |
 | Fuel prime | Flip IGN toggle ON | HP3 (fuel pump) ON for 3s then OFF |
-| Keypad responds | Press K01 | `StarterKYD` toggles |
-| Start interlock | Press K01 with ENGINE_RUNNING=0 | HP1 (starter) energizes |
-| Start interlock | Set RPM > 50 via CAN, press K01 | HP1 stays OFF |
-| Fan manual | Press K05 | HP2 (fan) ON at 100% |
-| Brake lights | Close Ch11 | MP4 (brake lights) ON |
-| Horn | Press K02 | MP3 (horn) ON while held |
+| Start interlock | Press START (Ch09) with ENGINE_RUNNING=0 | HP1 (starter) energizes |
+| Start interlock | Set RPM > 50 via CAN, press START (Ch09) | HP1 stays OFF |
+| Fan override | Flip Fan toggle (Ch01) ON | HP2 (fan) ON at 98% |
+| Wiper low | Flip Wiper Low (Ch02) ON | MP3 (wiper low) ON |
+| Wiper high | Flip Wiper High (Ch03) ON | MP6 (wiper high) ON, MP3 OFF |
+| Coolsuit | Flip Coolsuit (Ch04) ON | MP7 ON |
+| Defogger | Flip Defogger (Ch05) ON | MP8 ON |
+| Brake lights | Press brake pedal (Ch11) | MP4 (brake lights) ON |
+| Tail lights | Flip IGN toggle ON | MP5 (tail lights) ON |
 | Warning LED | Force `LOW_OIL_P` condition | LP7 ON |
-| Pit limiter LED | Press K07 while speed > 60 | K07 LED → RED |
-| Pit limiter activate | Press K07 with speed = 0 | K07 LED → WHITE, PITLIMITER_ACTIVE = 1 |
+| Alt exciter | Flip IGN toggle ON | LP8 (alt exciter) ON |
 
 ---
 
@@ -649,7 +533,7 @@ With PDM powered (via IGN toggle or direct 12V):
 | Ch11 (Brake switch) | Black | 26 |
 | Ch12 (spare) | Black | 27 |
 | CAN0 H / CAN0 L (Haltech) | Black | 22 / 11 |
-| CAN2 H / CAN2 L (Keypad) | Black | 28 / 29 |
+| CAN2 H / CAN2 L (Unused — future keypad) | Black | 28 / 29 |
 | CAN1 H / CAN1 L (AIM Expansion → DataHub) | Black | 30 / 31 |
 | +Vb out CAN (power to expansion devices) | Black | 33 |
 | +Vb ext CAN (external CAN power input) | Black | 32 |

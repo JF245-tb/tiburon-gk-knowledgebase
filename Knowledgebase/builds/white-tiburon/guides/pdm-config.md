@@ -578,7 +578,8 @@ This section documents what was removed or changed when the CAN keypad was exclu
 | File | Contents |
 |---|---|
 | `aim-pdm/pdm-pinout.md` | Full 35-pin ×2 connector pinout |
-| `aim-pdm/pdm-configuration-guide.md` | Logic stack theory, keypad config, PWM examples |
+| `aim-pdm/pdm-configuration-guide.md` | Logic stack theory, input config, PWM examples |
+| `guides/keypad-config-future.md` | Archived keypad button assignments, LED colors, variable names for future re-addition |
 | `signal-routing.md` | End-to-end signal trace for every wire |
 | `opengk/can-bus-messages.md` | CAN message IDs and byte definitions |
 | `cars/cop-ignition.md` | COP coil pinout and NSP settings |

@@ -115,8 +115,9 @@
       "hw_ref": "hw-aim-keypad12",
       "bus": "CAN2",
       "speed_kbps": 125,
-      "power_from": "pdm-LP8 (A21)",
-      "pdm_pins": { "CAN_H": "A28", "CAN_L": "A29" }
+      "pdm_pins": { "CAN_H": "A28", "CAN_L": "A29" },
+      "status": "not_installed",
+      "notes": "Excluded — physical switch panel used. Config preserved in guides/keypad-config-future.md."
     },
 
     {
@@ -396,7 +397,7 @@
       "load": "Starter motor relay / direct",
       "mode": "OVC Protected",
       "current_limit_a": 20,
-      "trigger": "STARTER_SAFE = (Key01 OR Ch09) AND SafeIgnition AND NOT ENGINE_RUNNING"
+      "trigger": "STARTER_SAFE = Ch09 AND SafeIgnition AND NOT ENGINE_RUNNING"
     },
     {
       "id": "pdm-HP2",
@@ -407,7 +408,7 @@
       "load": "Brushless cooling fan motor",
       "mode": "PWM 100Hz",
       "current_limit_a": 35,
-      "trigger": "ECT PWM curve: 25% @ 77°C, 50% @ 82°C, 75% @ 87°C, 100% @ 92°C + Key05 full override (100%)",
+      "trigger": "ECT PWM curve: 25% @ 77°C, 50% @ 82°C, 75% @ 87°C, 98% @ 92°C + Ch01 manual override (98%)",
       "note": "Thermostat is 170°F (77°C) — fan bands shifted vs OEM 82°C base"
     },
     {
@@ -419,7 +420,7 @@
       "load": "Fuel pump (in-tank)",
       "mode": "OVC Protected",
       "current_limit_a": 15,
-      "trigger": "3s IGN prime OR RPM > 50 OR Key06 override"
+      "trigger": "3s IGN prime OR RPM > 50"
     },
     {
       "id": "pdm-MP1",
@@ -446,12 +447,12 @@
     {
       "id": "pdm-MP3",
       "type": "pdm_output",
-      "label": "MP3 — Horn",
+      "label": "MP3 — Wiper Low",
       "output_tier": "MP",
       "pdm_pins": ["A4"],
       "mode": "OVC Protected",
-      "current_limit_a": 15,
-      "trigger": "Key02 momentary"
+      "current_limit_a": 10,
+      "trigger": "Ch02 AND NOT Ch03"
     },
     {
       "id": "pdm-MP4",
@@ -471,19 +472,19 @@
       "pdm_pins": ["A6"],
       "mode": "Fused",
       "current_limit_a": 10,
-      "trigger": "Key03 toggle"
+      "trigger": "SafeIgnition (always on when car is on)"
     },
     {
       "id": "pdm-MP6",
       "type": "pdm_output",
-      "label": "MP6 — Alternator Exciter",
+      "label": "MP6 — Wiper High",
       "output_tier": "MP",
       "pdm_pins": ["A7"],
-      "load": "Alternator exciter wire (replaces OEM connection)",
+      "load": "Wiper motor high speed",
       "mode": "OVC Protected",
-      "current_limit_a": 5,
-      "trigger": "SafeIgnition",
-      "notes": "Engine charging only active with ignition on."
+      "current_limit_a": 10,
+      "trigger": "Ch03",
+      "notes": "Overrides MP3 (wiper low) via AND NOT Ch03 guard in MP3 trigger."
     },
     {
       "id": "pdm-MP7",
@@ -493,7 +494,7 @@
       "pdm_pins": ["A8"],
       "mode": "OVC Protected",
       "current_limit_a": 10,
-      "trigger": "Key04 toggle"
+      "trigger": "Ch04 AND SafeIgnition"
     },
     {
       "id": "pdm-LP1",
@@ -568,12 +569,13 @@
     {
       "id": "pdm-LP8",
       "type": "pdm_output",
-      "label": "LP8 — CAN Keypad 12 Power",
+      "label": "LP8 — Alternator Exciter",
       "output_tier": "LP",
       "pdm_pins": ["A21"],
       "mode": "OVC Protected",
       "current_limit_a": 5,
-      "trigger": "SafeIgnition"
+      "trigger": "SafeIgnition",
+      "notes": "OEM alternator D+ field wire routed through LP8; kill switch drops field immediately; < 1A draw"
     },
 
     {
@@ -667,10 +669,10 @@
     { "source": "pdm-LP2",  "target": "dash-aim10",          "rel": "powered_by" },
     { "source": "pdm-LP3",  "target": "aim-smartycam",       "rel": "powered_by" },
     { "source": "pdm-LP4",  "target": "aim-gps08",           "rel": "powered_by" },
-    { "source": "pdm-LP8",  "target": "keypad-aim12",        "rel": "powered_by" },
+    { "source": "pdm-LP8",  "target": "comp-alternator",      "rel": "powered_by", "context": "Alternator exciter — D+ field wire through LP8" },
     { "source": "pdm-MP1",  "target": "comp-injector",       "rel": "powered_by" },
     { "source": "pdm-MP2",  "target": "sensor-cop-coil-1",  "rel": "powered_by", "note": "MP2 powers all 6 COP coils (pin D)" },
-    { "source": "pdm-MP6",  "target": "comp-alternator",     "rel": "powered_by", "context": "Alternator exciter only" },
+    { "source": "pdm-MP6",  "target": "comp-wiper-motor",    "rel": "powered_by", "context": "Wiper motor high speed" },
     { "source": "pdm-HP3",  "target": "comp-fuel-pressure-regulator", "rel": "powered_by", "context": "Powers in-tank fuel pump" },
 
     { "source": "ecu-26pin-23",  "target": "pdm-aim32", "rel": "signals_to", "context": "CAN ECU H @ 500 kbps → PDM A30" },
@@ -690,7 +692,7 @@
 
     { "source": "pdm-aim32",      "target": "ecu-haltech-2500",  "rel": "can_receives",  "bus": "CAN ECU",  "speed_kbps": 500,  "pdm_pins": "A30/A31", "signals": ["RPM", "ECT", "Oil P", "Oil T", "Fuel P", "TPS", "gear"] },
     { "source": "pdm-aim32",      "target": "aim-datahub-4way",  "rel": "expansion_bus", "bus": "CAN AiM",  "speed_kbps": 1000, "pdm_pins": "A22/A11" },
-    { "source": "pdm-aim32",      "target": "keypad-aim12",      "rel": "can_receives",  "bus": "CAN2",     "speed_kbps": 125,  "pdm_pins": "A28/A29" },
+    { "source": "pdm-aim32",      "target": "keypad-aim12",      "rel": "can_receives",  "bus": "CAN2",     "speed_kbps": 125,  "pdm_pins": "A28/A29", "status": "not_connected" },
     { "source": "pdm-aim32",      "target": "dash-aim10",        "rel": "lvds_drives",   "interface": "LVDS 4-pin Rosenberger" },
     { "source": "aim-datahub-4way", "target": "aim-gps08",      "rel": "device_port",   "port": 1 },
     { "source": "aim-datahub-4way", "target": "aim-smartycam",  "rel": "device_port",   "port": 2 },
@@ -706,10 +708,10 @@
       "HP3": { "id": "pdm-HP3", "pins": ["A24", "A25"], "load": "Fuel pump" },
       "MP1": { "id": "pdm-MP1", "pins": ["A2"],  "load": "Injector power" },
       "MP2": { "id": "pdm-MP2", "pins": ["A3"],  "load": "COP coil power" },
-      "MP3": { "id": "pdm-MP3", "pins": ["A4"],  "load": "Horn" },
+      "MP3": { "id": "pdm-MP3", "pins": ["A4"],  "load": "Wiper Low" },
       "MP4": { "id": "pdm-MP4", "pins": ["A5"],  "load": "Brake lights" },
       "MP5": { "id": "pdm-MP5", "pins": ["A6"],  "load": "Tail lights" },
-      "MP6": { "id": "pdm-MP6", "pins": ["A7"],  "load": "Alt exciter" },
+      "MP6": { "id": "pdm-MP6", "pins": ["A7"],  "load": "Wiper High" },
       "MP7": { "id": "pdm-MP7", "pins": ["A8"],  "load": "Coolsuit" },
       "LP1": { "id": "pdm-LP1", "pins": ["A14"], "load": "ECU power" },
       "LP2": { "id": "pdm-LP2", "pins": ["A15"], "load": "Dash power (LVDS)" },
@@ -718,7 +720,7 @@
       "LP5": { "id": "pdm-LP5", "pins": ["A18"], "load": "Wideband O2" },
       "LP6": { "id": "pdm-LP6", "pins": ["A19"], "load": "OEM cluster" },
       "LP7": { "id": "pdm-LP7", "pins": ["A20"], "load": "Warning LED" },
-      "LP8": { "id": "pdm-LP8", "pins": ["A21"], "load": "CAN Keypad 12 power" }
+      "LP8": { "id": "pdm-LP8", "pins": ["A21"], "load": "Alternator Exciter" }
     },
     "avi_assignments": {
       "AVI1":  "Fuel pressure    — 26-pin pin 13 (GY/Y shielded)",
@@ -756,8 +758,9 @@
         "internal_label": "CAN2",
         "speed_kbps": 125,
         "pdm_pins": { "H": "A28", "L": "A29" },
-        "devices": ["AIM CAN Keypad 12"],
-        "rs3_tab": "CAN2 Keypad"
+        "devices": [],
+        "rs3_tab": "CAN2 Keypad",
+        "status": "unused — available for future keypad or CAN device"
       }
     }
   }

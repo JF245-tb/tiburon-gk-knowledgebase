@@ -81,33 +81,41 @@ Physical Inputs (switches/buttons)
 
 ---
 
-## 1. Keypads (Input Definitions)
+## 1. Inputs (Channel Inputs and CAN Keypads)
 
-**What they are:** Named definitions for each physical button or switch input connected to a PDM channel input.
+**What they are:** Named definitions for each physical button, switch, or CAN keypad button connected to the PDM.
 
-### Button/Switch Types
+### Input Sources
+
+| Source | Connection | Use Case |
+|--------|-----------|----------|
+| **Channel Inputs (Ch01–Ch12)** | Physical switches wired to PDM Connector B | Toggle switches, momentary buttons, brake switch |
+| **Ignition Input (B23)** | Dedicated PDM input | Master power state (`SafeIgnition`) |
+| **CAN Keypad** | CAN2 bus (A28/A29, 125 kbps) | Optional — AIM CAN Keypad 12 with RGB buttons |
+
+### Switch/Button Types
 
 | Type | Behavior | Use Case |
 |------|----------|----------|
 | **Momentary** | On only while pressed; off when released | Starter, horn, momentary trigger |
-| **Latching / Toggle** | Two defined positions; stays in last position | Kill switch, light on/off |
+| **Latching / Toggle** | Two defined positions; stays in last position | Kill switch, light on/off, fan override |
 | **Multi-position** | 3+ defined positions (0=rest, 1=pos1, 2=pos2, ...) | Light dimmer, fan speed selector |
 
 **Rest status = Position 0** — this is the state the PDM boots into on power-up. Design your logic assuming the PDM will always start at rest.
 
 ### Naming Convention (Best Practice)
-Name keypads descriptively, including where they came from:
-- `Keypad_Starter` not just `Starter`
-- `Keypad_FanHigh` not just `FanHigh`
+Name inputs descriptively, including the source:
+- `Ch01_FanOverride` not just `FanOverride`
+- `Ch09_Start` not just `Start`
 
 This becomes critical when troubleshooting power output triggers — without the source in the name, you have to click into each trigger to find where an input came from.
 
 ### Feedback Indicators
-The display can show keypad status color:
+The display can show input status color:
 - **Green** = active/on as expected
 - **Red** = activated (input on) but output not working → fault condition
 
-This lets the driver know "I pushed the button but nothing happened — there's a fault."
+This lets the driver know "I flipped the switch but nothing happened — there's a fault."
 
 ---
 
@@ -142,7 +150,7 @@ Each trigger has:
 ### Key Condition Types
 | Condition | Example | Use |
 |-----------|---------|-----|
-| Keypad state | `Keypad_Starter = on` | Button-driven |
+| Input state | `Ch09 = on` or `Keypad_Starter = on` | Switch/button-driven |
 | Channel value | `RPM > 50` | Sensor-driven |
 | Timer | `after 3 seconds` | Time-based sequencing |
 | Variable state | `FuelPump_Status = active` | Cascaded logic |
@@ -171,7 +179,7 @@ Result:
 ### Starter Logic Example
 ```
 Trigger:
-  CONDITION: Keypad_Starter = on (momentary while button held)
+  CONDITION: Ch09 = on (momentary while start button held)
   ACTION:    Starter output → ON (continuous power, inductive)
 ```
 
@@ -241,7 +249,7 @@ Triggers:
 
 > Full Race Studio 3 setup (status variables, trigger logic, protection settings, step-by-step): `builds/white-tiburon/guides/pdm-config.md`
 >
-> **CAN keypad excluded from this build.** All driver controls use a physical switch panel. CAN2 bus unused.
+> **CAN keypad not installed.** All driver controls use a physical switch panel wired to channel inputs (Ch01–Ch05, Ch09, Ch11). CAN2 bus available for future keypad — see `builds/white-tiburon/guides/keypad-config-future.md`.
 
 ### Physical Inputs (8 inputs — physical switch panel)
 
