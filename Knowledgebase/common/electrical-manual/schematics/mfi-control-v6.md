@@ -17,7 +17,7 @@ last_verified: 2026-03-12
 | Sensor | Code | Pin 1 | Pin 2 | Pin 3 | Signal → ECM Pin | V |
 |--------|------|-------|-------|-------|------------------|---|
 | CKP | C113 | Power (O, 0.5) | Signal (Y, 0.5) | GND (B, 0.5) | C133-3 pin 8 | ✅ |
-| CMP | C114 | Power (O, 0.5) | Signal (B, 0.5) | GND (Br, 0.5) | C133-4 pin 6 | ✅ |
+| CMP | C114 | Power (O, 0.5) | Signal (B, 0.5) | GND (Br, 0.5) | C133-4 pin 7 | 🔧 |
 | TPS | C112 | +5V (G/W, 0.5) | GND (B, 0.5) | Signal (L, 0.5) | C133-3 pin 19 | 🔧 |
 | MAF | C125 | Power (bat) | GND | Signal (O, 0.5) | C133-3 pin 1 | 🔧 |
 | ECT | C111 | Signal (B, 0.5) | GND (S/W, 0.5) | — | C133-4 | ⬜ |
@@ -73,7 +73,7 @@ last_verified: 2026-03-12
 |---------------|---------|-------------|------------|-----------|
 | C133-3 | 15 | TPS signal | -- | 0.5B |
 | C133-3 | -- | TPS supply | -- | 0.5G/W |
-| C133-4 | 2 | CMP signal | -- | 0.5B |
+| C133-4 | 7 | CMP signal | -- | 0.5B |
 | -- | -- | CMP sensor ground | -- | 0.5B |
 | -- | -- | CKP signal | Y | 0.5Y |
 | -- | -- | CKP signal ground | -- | 0.5B |
@@ -383,7 +383,7 @@ Power steering switch (C144) → [0.5B] → GND (G22)
 
 | Pin | Signal Name | Wire Color | Wire Size | Connected To |
 |-----|-------------|------------|-----------|-------------|
-| 2 | CMP signal | -- | 0.5B | Camshaft position sensor C114 |
+| 7 | CMP signal | -- | 0.5B | Camshaft position sensor C114 |
 | 15 | Fuel sender signal | R | 0.5R | Fuel pump circuit |
 | 20 | Vehicle speed | -- | 0.5S/B | ABS control module / VSS |
 | 21 | MIL (check engine) | -- | 0.5L/B | Instrument cluster M10-2 pin 3 |
@@ -423,7 +423,7 @@ Power steering switch (C144) → [0.5B] → GND (G22)
 | Pin | Function | Wire Color | Wire Size | Connects To | V |
 |-----|----------|------------|-----------|-------------|---|
 | 1 | Power supply (battery voltage) | O | 0.5O | C142 joint connector (SNSR FUSE 10A) | ✅ |
-| 2 | CMP signal | B | 0.5B | ECM C133-4 pin 6 | ✅ |
+| 2 | CMP signal | B | 0.5B | ECM C133-4 pin 7 | 🔧 |
 | 3 | Sensor ground | Br | 0.5Br | ECM C133-4 | ✅ |
 
 ### Crankshaft Position Sensor (C113)

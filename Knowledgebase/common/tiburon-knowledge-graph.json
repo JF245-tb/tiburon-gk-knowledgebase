@@ -660,7 +660,7 @@
       "pin_count": 3,
       "quick_pinout": {
         "1": {"function": "power", "wire": "O", "size": "0.5", "to": "C142 joint connector (SNSR FUSE 10A)"},
-        "2": {"function": "signal", "wire": "B", "size": "0.5", "to": "ECM C133-4 pin 6"},
+        "2": {"function": "signal", "wire": "B", "size": "0.5", "to": "ECM C133-4 pin 7"},
         "3": {"function": "ground", "wire": "Br", "size": "0.5", "to": "ECM C133-4"}
       },
       "verification": "verified"
@@ -1299,7 +1299,7 @@
     { "source": "comp-knock-sensor",  "target": "conn-C123-2", "rel": "connector_code", "context": "ETM connector C123-2, 1-pin, CC-17, Control Harness (4) — rear bank" },
 
     { "source": "comp-ckp-sensor",    "target": "section-SD-78", "rel": "schematic_page", "context": "SD-78: MFI Control System (2.7L) — ECM pinout, CKP circuit" },
-    { "source": "comp-cmp-sensor",    "target": "section-SD-78", "rel": "schematic_page", "context": "SD-78: MFI Control System (2.7L) — CMP circuit, power via C142" },
+    { "source": "comp-cmp-sensor",    "target": "section-SD-78", "rel": "schematic_page", "context": "SD-78: MFI Control System (2.7L) — CMP circuit, signal (B, 0.5) to C133-4 pin 7, power via C142" },
     { "source": "comp-tps",           "target": "section-SD-78", "rel": "schematic_page", "context": "SD-78: TPS circuit — signal (L, 0.5) to C133-3 pin 19" },
     { "source": "comp-ect-sensor",    "target": "section-SD-81", "rel": "schematic_page", "context": "SD-81: ECT circuit — signal to C133-4" },
     { "source": "comp-injector",      "target": "section-SD-81", "rel": "schematic_page", "context": "SD-81: Injector circuits — C124-1 through C124-6" },

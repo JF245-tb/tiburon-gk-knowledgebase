@@ -186,10 +186,10 @@ The most commonly queried specs, pre-loaded here so an LLM can answer without op
 | Cam sprocket bolt | 90-110 Nm | shop-manual/engine-mechanical/specifications.md | EMA-5 | ✅ |
 | CKP signal wire | Yellow (Y), 0.5mm | schematics/mfi-control-v6.md | SD-78 | ✅ |
 | CMP signal wire | Black (B), 0.5mm | schematics/mfi-control-v6.md | SD-78 | ✅ |
-| CKP → ECM pin | C133-3 pin 8 | opengk/ecm-pinouts.md | — | ⬜ |
-| CMP → ECM pin | C133-4 pin 6 | opengk/ecm-pinouts.md | — | ⬜ |
+| CKP → ECM pin | C133-3 pin 8 | opengk/ecm-pinouts.md | — | ✅ |
+| CMP → ECM pin | C133-4 pin 7 | opengk/ecm-pinouts.md | — | 🔧 |
 | TPS signal wire | Blue (L), 0.5mm | schematics/mfi-control-v6.md | SD-78 | 🔧 |
-| MAF → ECM pin | C133-3 pin 1 | opengk/ecm-pinouts.md | — | ⬜ |
+| MAF → ECM pin | C133-3 pin 1 | opengk/ecm-pinouts.md | — | ✅ |
 | CKP sensor type | Hall effect | shop-manual/fuel-system/specifications.md | FLA-2 | ⬜ |
 | Coolant sensor type | NTC thermistor | opengk/sensor-information.md | — | ⬜ |
 

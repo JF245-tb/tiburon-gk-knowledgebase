@@ -7,10 +7,10 @@ source_urls:
 chapter: ECM Pinouts
 extraction_method: web_fetch
 extraction_date: 2026-03-07
-verification_status: unverified
-verified_fields: 0
+verification_status: spot_checked
+verified_fields: 4
 total_fields: 78
-last_verified: null
+last_verified: 2026-03-12
 ---
 
 # Siemens ECM Connector Pinouts
@@ -109,10 +109,10 @@ last_verified: null
 ### C133-3: Engine (52-pin)
 | Pin | AWG | Function | V |
 |-----|-----|----------|---|
-| 1 | 20 | MAF sensor input | ⬜ |
-| 8 | 20 | CKP sensor input | ⬜ |
+| 1 | 20 | MAF sensor input | ✅ |
+| 8 | 20 | CKP sensor input | ✅ |
 | 10 | 20 | TPS 5V supply output | ⬜ |
-| 19 | 20 | TPS input | ⬜ |
+| 19 | 20 | TPS input | ✅ |
 | 22, 24 | 20 | Temperature sensor outputs | ⬜ |
 | 26, 29-32 | 20 | Knock sensor inputs/grounds | ⬜ |
 | 33-38 | 20 | Fuel injector outputs (cyl 1-6) | ⬜ |
@@ -123,7 +123,7 @@ last_verified: null
 | Pin | AWG | Function | V |
 |-----|-----|----------|---|
 | 4 | 20 | Fuel tank pressure sensor supply | ⬜ |
-| 6 | 20 | CMP sensor input | ⬜ |
+| 7 | 20 | CMP sensor input | 🔧 |
 | 10 | 20 | Fuel pump relay output | ⬜ |
 | 13 | 20 | TPS PWM output | ⬜ |
 | 17 | 20 | Engine speed signal output | ⬜ |

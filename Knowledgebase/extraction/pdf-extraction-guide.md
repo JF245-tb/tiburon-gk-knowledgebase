@@ -105,7 +105,12 @@ For each section's PNG images, read them into Claude and extract structured mark
    - Torque values → include all units (N-m, kg-cm, lb-ft)
    - Diagrams → describe what they show, note figure codes (e.g., EAHA010A)
    - Callout numbers → map to component names
-3. **Write the section file** to `common/shop-manual/{chapter}/{section}.md`
+3. **Apply pitfall checks** (see "Known Extraction Pitfalls" below):
+   - Separate wire color from wire size into distinct columns
+   - Flag any `0.5O`/`0.50`-style ambiguities as `⚠️`
+   - For pin numbers, cross-reference against ecm-pinouts.md
+   - For sensor pinouts, verify pin 1 function against at least one other source
+4. **Write the section file** to `common/shop-manual/{chapter}/{section}.md`
 
 ### Phase 5: Add Verification Columns
 
@@ -131,6 +136,13 @@ After extraction, verify:
 - [ ] Cross-references to other chapters are noted (e.g., "See FLA-20 for injector specs")
 - [ ] Frontmatter includes all fields: source, chapter, section, pages, title, engine, extraction_method, extraction_date, verification_status, verified_fields, total_fields, last_verified
 - [ ] Generate 5-10 spot-check items in `validation/spot-checks.json` for the new file's critical values
+- [ ] **Cross-validation** (if file contains ECM pins or sensor pinouts):
+  - [ ] Run Sensor Pinout Triangle check (Rule 1) — SD vs FLA vs ecm-pinouts.md
+  - [ ] Run ECM Pin Uniqueness check (Rule 2) — no duplicate pin assignments
+  - [ ] Run Wire Color Consistency check (Rule 3) — same wire, same color at both ends
+  - [ ] Run Connector Pin Count Match (Rule 4) — matches connector-master-reference.md
+  - [ ] Flag any values matching known OCR confusions (5↔9, 6↔8, 0↔O, B↔Br)
+  - [ ] Mark flagged values as `⚠️` in V column rather than `⬜`
 
 ---
 
@@ -245,3 +257,109 @@ Final markdown files go in their permanent locations under `common/shop-manual/`
 - EM (I4 Engine Mechanical), EE, EC, CL, TR, DA, SS, ST, BR, BE, BD, HA, RT, GI, BCM
 
 See `extraction/README.md` for the full status table.
+
+---
+
+## Known Extraction Pitfalls (Lessons from Spot-Check Batch 001)
+
+The first 20-item spot-check session (2026-03-12) found **3 mismatches in 20 checks** — a 15% error rate. The errors clustered around specific, predictable failure modes. All future extractions MUST check for these patterns.
+
+### Pitfall 1: Wire Color vs Wire Size — The '0' / 'O' Confusion
+
+**Problem:** In Hyundai ETM wire notation, `0.5O` means "0.5mm gauge, Orange wire." But OCR reads `0.5O` as `0.50` (numeric), losing the wire color entirely.
+
+**Example:** MAF signal wire (SC-005) was extracted as `0.50` — ambiguous. Correct reading: `0.5O` = Orange wire, 0.5mm gauge.
+
+**Rule:** When extracting wire sizes from schematics:
+- If a wire notation ends in a letter that could be zero (O, D, possibly G), flag it as `⚠️` and note the ambiguity
+- Always separate wire color and wire size into distinct columns: `| Wire Color | Wire Size |`
+- Cross-check: Does the wire color make sense for the circuit? (e.g., sensor signals are often specific colors per Hyundai convention)
+
+### Pitfall 2: Pin Swap Errors — When All Pins Are Wrong
+
+**Problem:** The TPS (SC-003) had all 3 pins wrong. Pin 1 and 2 functions were swapped, and pin 3 had the wrong wire color. This was a single-point-of-failure error — one wrong assumption about pin numbering cascaded to all pins.
+
+**Root cause:** FLA-46 has a pin diagram where the physical pin layout doesn't match the left-to-right reading order. The extraction assumed left-to-right = pin 1, 2, 3 when the connector face orientation was reversed.
+
+**Rule:** For sensor connector pinouts:
+- NEVER assume pin numbering from visual position alone
+- Cross-reference at least 2 sources: schematic (SD.pdf) + component diagram (FLA chapter) + connector table (CC section)
+- If pin functions seem "backwards" (e.g., ground on pin 1 when +5V is usually pin 1), flag as `⚠️` and note in the extraction
+- For 3-pin sensors: the standard Hyundai pattern is Power/Signal/Ground but TPS is an exception (+5V/GND/Signal)
+
+### Pitfall 3: ECM Pin Number Errors — Multiple Sources, Multiple Answers
+
+**Problem:** CMP signal ECM pin was listed as pin 2 (SD.pdf extraction), then pin 6 (OpenGK wiki), but physically verified as **pin 7**. Three sources, three wrong answers.
+
+**Root cause:** SD.pdf schematics show ECM pins in a bottom row with poor labeling. OCR misreads pin numbers easily. OpenGK wiki is community-maintained (T2 authority) and can have transcription errors.
+
+**Rule:** For ECM pin assignments:
+- Always prefer physical manual page verification over any digital source
+- When two sources disagree on a pin number, mark BOTH as `⚠️ CONFLICT` and create a spot-check item
+- ECM pin numbers adjacent to the correct one (±1-2) are the most common error — check neighbors
+- The `ecm-pinouts.md` file (OpenGK source) should never be treated as ground truth without SD.pdf cross-reference
+
+### Pitfall 4: OCR Digit Substitution
+
+**Problem:** TPS ECM pin was extracted as pin 15 from SD.pdf, but correct pin is 19. Similar-looking digits are routinely swapped by OCR.
+
+**Common OCR confusions in this manual set:**
+| Reads as | May actually be | Context |
+|----------|----------------|---------|
+| 5 | 9 | Pin numbers (1-52 range) |
+| 6 | 8 | Pin numbers |
+| 1 | 7 | Pin numbers, especially with serifs |
+| 0 (zero) | O (letter) | Wire color codes |
+| B (Black) | Br (Brown) | Wire colors — always check if Br exists |
+| G/B | G/W | Slash notation wire colors |
+
+**Rule:** For any pin number or wire color that appears in a safety-critical table:
+- Compare against the ecm-pinouts.md (OpenGK) value as a sanity check
+- If the values differ, don't auto-resolve — create a spot-check item
+- Flag digits that are common OCR confusions (5/9, 6/8, 1/7) with `⚠️` for priority verification
+
+---
+
+## Cross-Validation Rules (Mandatory for New Extractions)
+
+Every new extraction that contains ECM pin assignments or sensor pinouts MUST pass these cross-checks before the file can be considered complete:
+
+### Rule 1: Sensor Pinout Triangle
+
+For each sensor, verify the pinout appears consistently across 3 sources:
+
+```
+SD.pdf (schematic) ←→ FLA chapter (component diagram) ←→ ecm-pinouts.md (OpenGK)
+```
+
+If any two disagree on pin number, wire color, or function → `⚠️ CONFLICT` → create spot-check item.
+
+### Rule 2: ECM Pin Uniqueness
+
+Each ECM pin should have exactly ONE function. After extraction:
+- Scan all `C133-x pin N` references in the file
+- Check for duplicates (same pin, different function = extraction error)
+- Check for gaps (pin referenced in schematic but missing from ecm-pinouts.md = potential data loss)
+
+### Rule 3: Wire Color Consistency
+
+The same wire should be the same color at both ends:
+- Sensor side: Color listed in the sensor connector pinout table
+- ECM side: Color listed in the ECM connector table (Master ECM Pinout Table)
+- If they differ → flag and investigate (could be a splice point, or could be an error)
+
+### Rule 4: Connector Pin Count Match
+
+The number of pins in a pinout table must match `connector-master-reference.md`:
+- If the reference says C113 has 3 pins, the pinout table must have exactly 3 rows
+- If they don't match → investigate (could be unused pins, or missing data)
+
+### Rule 5: Quick-Reference Table Audit
+
+After any correction to a detailed pinout table:
+- Also update the Quick Reference summary table at the top of the file
+- Also update the knowledge graph `quick_pinout` for that component
+- Also update `LLM-GUIDE.md` Quick Spec Reference if the value appears there
+- The spot-check JSON note should list all files that were corrected
+
+> **Principle:** Every fact must live in exactly one authoritative location, with all other references pointing back to it or being derived copies. When a correction is made, ALL derived copies must be updated in the same commit.

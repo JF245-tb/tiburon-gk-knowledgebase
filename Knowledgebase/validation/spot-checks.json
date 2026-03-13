@@ -202,10 +202,10 @@
       "priority": "medium",
       "safety_critical": true,
       "category": "pin_assignment",
-      "status": "pending",
-      "verified_value": null,
-      "verified_date": null,
-      "notes": "ECM pin numbers are critical for Haltech wiring. Wrong pin = wrong sensor input."
+      "status": "verified",
+      "verified_value": "CKP signal input",
+      "verified_date": "2026-03-12",
+      "notes": "Confirmed correct. C133-3 pin 8 = CKP signal."
     },
     {
       "id": "SC-014",
@@ -217,10 +217,10 @@
       "priority": "medium",
       "safety_critical": true,
       "category": "pin_assignment",
-      "status": "pending",
-      "verified_value": null,
-      "verified_date": null,
-      "notes": "mfi-control-v6.md originally said C133-4 pin 2 for CMP. ecm-pinouts.md says pin 6. Verify which is correct."
+      "status": "mismatch",
+      "verified_value": "CMP signal is on C133-4 pin 7, NOT pin 6",
+      "verified_date": "2026-03-12",
+      "notes": "CORRECTION: CMP signal is pin 7 on C133-4. OpenGK wiki had pin 6 — wrong. SD.pdf original extraction had pin 2 — also wrong. Three different sources, three different wrong answers until physical verification. Corrected in ecm-pinouts.md, mfi-control-v6.md, knowledge graph, and LLM-GUIDE.md."
     },
     {
       "id": "SC-015",
@@ -232,10 +232,10 @@
       "priority": "medium",
       "safety_critical": true,
       "category": "pin_assignment",
-      "status": "pending",
-      "verified_value": null,
-      "verified_date": null,
-      "notes": "Original extraction had C133-3 pin 15. Corrected to pin 19 per ecm-pinouts.md. Verify."
+      "status": "verified",
+      "verified_value": "TPS input on C133-3 pin 19",
+      "verified_date": "2026-03-12",
+      "notes": "Confirmed correct. Original SD.pdf extraction had pin 15 (OCR error), ecm-pinouts.md had pin 19 — ecm-pinouts.md was right."
     },
     {
       "id": "SC-016",
@@ -247,10 +247,10 @@
       "priority": "medium",
       "safety_critical": true,
       "category": "pin_assignment",
-      "status": "pending",
-      "verified_value": null,
-      "verified_date": null,
-      "notes": null
+      "status": "verified",
+      "verified_value": "MAF sensor input on C133-3 pin 1",
+      "verified_date": "2026-03-12",
+      "notes": "Confirmed correct."
     },
     {
       "id": "SC-017",
