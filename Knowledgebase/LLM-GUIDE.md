@@ -154,6 +154,45 @@ Used in `signal-routing.md` and other active-build files:
 - ⚠️ — Forum/community reported, not personally verified
 - 🔲 — Planned but not yet wired/tested
 
+### Extraction Verification Markers
+
+Used in the `V` column of spec/pinout tables to track OCR extraction accuracy:
+- ⬜ — Unverified (raw OCR/AI extraction)
+- ✅ — Verified (human confirmed against physical manual)
+- ⚠️ — Suspect (known or likely OCR error)
+- 🔧 — Corrected (was wrong, now fixed)
+
+See `validation/spot-checks.json` for the verification queue and `validation/spot-check-batch-001.md` for the current checklist.
+
+---
+
+## Quick Spec Reference (Top 20)
+
+The most commonly queried specs, pre-loaded here so an LLM can answer without opening another file.
+
+| Spec | Value | Source File | Page | V |
+|------|-------|-------------|------|---|
+| Cylinder bore | 86.7 mm | shop-manual/engine-mechanical/specifications.md | EMA-2 | ⬜ |
+| Stroke | 75 mm | shop-manual/engine-mechanical/specifications.md | EMA-2 | ⬜ |
+| Compression ratio | 10:1 | shop-manual/engine-mechanical/specifications.md | EMA-2 | ⬜ |
+| Displacement | 2,656 cc | shop-manual/engine-mechanical/specifications.md | EMA-2 | ⬜ |
+| Firing order | 1-2-3-4-5-6 | shop-manual/engine-mechanical/specifications.md | EMA-2 | ⬜ |
+| Final drive ratio | 4.050:1 | chassis/gk-chassis-specs.md | — | ✅ |
+| Coolant capacity | 7.0 L | shop-manual/engine-mechanical/specifications.md | EMA-4 | ⬜ |
+| Oil pressure (min) | 50 kPa at 75-90°C | shop-manual/engine-mechanical/specifications.md | EMA-4 | ⬜ |
+| Thermostat opens | 82±2°C | shop-manual/engine-mechanical/specifications.md | EMA-4 | ⬜ |
+| Spark plug | NGK BKR5ES-11 | shop-manual/fuel-system/specifications.md | FLA-2 | ⬜ |
+| Cylinder head bolt | 25+(58-62°)+(43-47°) Nm | shop-manual/engine-mechanical/specifications.md | EMA-5 | ⬜ |
+| Cam sprocket bolt | 90-110 Nm | shop-manual/engine-mechanical/specifications.md | EMA-5 | ⬜ |
+| CKP signal wire | Yellow (Y), 0.5mm | schematics/mfi-control-v6.md | SD-78 | ⬜ |
+| CMP signal wire | Black (B), 0.5mm | schematics/mfi-control-v6.md | SD-78 | ⬜ |
+| CKP → ECM pin | C133-3 pin 8 | opengk/ecm-pinouts.md | — | ⬜ |
+| CMP → ECM pin | C133-4 pin 6 | opengk/ecm-pinouts.md | — | ⬜ |
+| TPS signal wire | Green/White (G/W), 0.5mm | schematics/mfi-control-v6.md | SD-78 | ⬜ |
+| MAF → ECM pin | C133-3 pin 1 | opengk/ecm-pinouts.md | — | ⬜ |
+| CKP sensor type | Hall effect | shop-manual/fuel-system/specifications.md | FLA-2 | ⬜ |
+| Coolant sensor type | NTC thermistor | opengk/sensor-information.md | — | ⬜ |
+
 ---
 
 ## Common Queries and Where to Look

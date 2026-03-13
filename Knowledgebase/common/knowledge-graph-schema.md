@@ -111,6 +111,23 @@ A vehicle component or sensor. The central linking node.
 | `subsystem` | string | `"engine-management"` |
 | `engine` | `"V6"` \| `"I4"` \| `"both"` | |
 | `oem_location` | string | physical description |
+| `sensor_type` | string | `"Hall effect"`, `"Thermistor (NTC)"`, `"Variable resistor"` |
+| `connector_code` | string | `"C113"` — ETM connector code |
+| `pin_count` | number | `3` |
+| `quick_pinout` | object | Pin-by-pin wiring summary (see below) |
+| `verification` | string | `"unverified"` \| `"spot_checked"` \| `"verified"` |
+
+**`quick_pinout` structure** — enables zero-file-load answers for wire color queries:
+
+```json
+"quick_pinout": {
+  "1": {"function": "power", "wire": "O", "size": "0.5", "to": "C142 joint connector"},
+  "2": {"function": "signal", "wire": "Y", "size": "0.5", "to": "ECM C133-3 pin 8"},
+  "3": {"function": "ground", "wire": "B", "size": "0.5", "to": "ECM C133-3"}
+}
+```
+
+Fields per pin: `function` (power/signal/ground/control/+5V ref), `wire` (color abbreviation or null if unknown), `size` (mm gauge or null), `to` (destination component/pin). Only populated for sensor/actuator components with known pinouts.
 
 ### `part_number`
 An OEM or aftermarket part number. May be a direct replacement or an interchangeable part from another vehicle.

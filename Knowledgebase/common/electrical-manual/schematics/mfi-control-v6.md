@@ -4,6 +4,28 @@ chapter: SD
 section: SD-78 to SD-85
 pages: 78-85
 title: MFI Control System (2.7L V6)
+extraction_method: claude_vision
+extraction_date: 2026-03-07
+verification_status: unverified
+verified_fields: 0
+total_fields: 29
+last_verified: null
+---
+
+## Quick Reference — Sensor Wire Summary
+
+| Sensor | Code | Pin 1 | Pin 2 | Pin 3 | Signal → ECM Pin | V |
+|--------|------|-------|-------|-------|------------------|---|
+| CKP | C113 | Power (O, 0.5) | Signal (Y, 0.5) | GND (B, 0.5) | C133-3 pin 8 | ⬜ |
+| CMP | C114 | Power (O, 0.5) | Signal (B, 0.5) | GND (Br, 0.5) | C133-4 pin 6 | ⬜ |
+| TPS | C112 | GND (B, 0.5) | Signal (G/W, 0.5) | +5V (O, 0.5) | C133-3 pin 19 | ⬜ |
+| MAF | C125 | Power (bat) | GND | Signal (0.5) | C133-3 pin 1 | ⬜ |
+| ECT | C111 | Signal (B, 0.5) | GND (S/W, 0.5) | — | C133-4 | ⬜ |
+| IAT | C127 | Signal (B, 0.5) | GND (B, 0.5) | — | C133-4 | ⬜ |
+| ISC | C126 | Power (fuse) | Control (B, 0.5) | — | C133-3 | ⬜ |
+
+> LLM: Read this table first for wire color and ECM pin queries. Only load the full file if you need circuit paths, component tables, or detailed context.
+
 ---
 
 # MFI Control System (2.7L V6)
@@ -388,79 +410,79 @@ Power steering switch (C144) → [0.5B] → GND (G22)
 
 ### Throttle Position Sensor (C112)
 
-| Pin | Function | Wire Color | Wire Size | Connects To |
-|-----|----------|------------|-----------|-------------|
-| 1 | Sensor ground | -- | 0.5B | ECM C133-3 |
-| 2 | TPS signal output | -- | 0.5G/W | ECM C133-3 pin 19 |
-| 3 | +5V reference supply | -- | 0.5O | ECM C133-3 pin 10 |
+| Pin | Function | Wire Color | Wire Size | Connects To | V |
+|-----|----------|------------|-----------|-------------|---|
+| 1 | Sensor ground | -- | 0.5B | ECM C133-3 | ⬜ |
+| 2 | TPS signal output | -- | 0.5G/W | ECM C133-3 pin 19 | ⬜ |
+| 3 | +5V reference supply | -- | 0.5O | ECM C133-3 pin 10 | ⬜ |
 
 > **Source:** FLA-46 circuit diagram (3-pin connector). Pin 3 (+5V) is supplied by the ECM's internal voltage regulator, NOT by C142/SNSR FUSE. ECM pin numbers from ecm-pinouts.md (C133-3 pin 10=TPS 5V supply, pin 19=TPS input).
 
 ### Camshaft Position Sensor (C114)
 
-| Pin | Function | Wire Color | Wire Size | Connects To |
-|-----|----------|------------|-----------|-------------|
-| 1 | Power supply (battery voltage) | O | 0.5O | C142 joint connector (SNSR FUSE 10A) |
-| 2 | CMP signal | -- | 0.5B | ECM C133-4 pin 2 |
-| 3 | Sensor ground | Br | 0.5Br | ECM C133-4 |
+| Pin | Function | Wire Color | Wire Size | Connects To | V |
+|-----|----------|------------|-----------|-------------|---|
+| 1 | Power supply (battery voltage) | O | 0.5O | C142 joint connector (SNSR FUSE 10A) | ⬜ |
+| 2 | CMP signal | -- | 0.5B | ECM C133-4 pin 2 | ⬜ |
+| 3 | Sensor ground | Br | 0.5Br | ECM C133-4 | ⬜ |
 
 ### Crankshaft Position Sensor (C113)
 
-| Pin | Function | Wire Color | Wire Size | Connects To |
-|-----|----------|------------|-----------|-------------|
-| 1 | Power supply (battery voltage) | O | 0.5O | C142 joint connector (SNSR FUSE 10A) |
-| 2 | CKP signal | Y | 0.5Y | ECM C133-3 pin 8 |
-| 3 | Sensor ground | -- | 0.5B | ECM C133-3 |
+| Pin | Function | Wire Color | Wire Size | Connects To | V |
+|-----|----------|------------|-----------|-------------|---|
+| 1 | Power supply (battery voltage) | O | 0.5O | C142 joint connector (SNSR FUSE 10A) | ⬜ |
+| 2 | CKP signal | Y | 0.5Y | ECM C133-3 pin 8 | ⬜ |
+| 3 | Sensor ground | -- | 0.5B | ECM C133-3 | ⬜ |
 
 ### Mass Air Flow Sensor (C125/C135)
 
-| Pin | Function | Wire Color | Wire Size | Connects To |
-|-----|----------|------------|-----------|-------------|
-| 1 | Power supply (battery voltage) | -- | -- | MFI control relay (E42) |
-| 2 | Sensor ground | -- | -- | Ground |
-| 3 | MAF signal output | -- | 0.50 | ECM C133-3 pin 1 |
+| Pin | Function | Wire Color | Wire Size | Connects To | V |
+|-----|----------|------------|-----------|-------------|---|
+| 1 | Power supply (battery voltage) | -- | -- | MFI control relay (E42) | ⬜ |
+| 2 | Sensor ground | -- | -- | Ground | ⬜ |
+| 3 | MAF signal output | -- | 0.50 | ECM C133-3 pin 1 | ⬜ |
 
 > **Source:** FLA-40 circuit diagram (3-pin connector). Power supply is battery voltage via MFI control relay, NOT +5V reference. ECM pin from ecm-pinouts.md (C133-3 pin 1=MAF sensor input). Pin order at connector face unverified — may differ from physical layout.
 
 ### Idle Speed Control Actuator (C126)
 
-| Pin | Function | Wire Color | Wire Size | ECM Pin |
-|-----|----------|------------|-----------|---------|
-| 1 | Power supply | -- | -- | via fuse |
-| 2 | ISC control signal | -- | 0.5B | C133-3 |
+| Pin | Function | Wire Color | Wire Size | ECM Pin | V |
+|-----|----------|------------|-----------|---------|---|
+| 1 | Power supply | -- | -- | via fuse | ⬜ |
+| 2 | ISC control signal | -- | 0.5B | C133-3 | ⬜ |
 
 ### Canister Purge Valve (C121/C131)
 
-| Pin | Function | Wire Color | Wire Size | ECM Pin |
-|-----|----------|------------|-----------|---------|
-| 1 | Power supply | -- | 0.50 | via fuse |
-| 2 | Purge control | -- | 0.5B | C133-3 |
+| Pin | Function | Wire Color | Wire Size | ECM Pin | V |
+|-----|----------|------------|-----------|---------|---|
+| 1 | Power supply | -- | 0.50 | via fuse | ⬜ |
+| 2 | Purge control | -- | 0.5B | C133-3 | ⬜ |
 
 ### Engine Coolant Temperature Sensor (C111)
 
-| Pin | Function | Wire Color | Wire Size | ECM Pin |
-|-----|----------|------------|-----------|---------|
-| 1 | ECT signal | -- | 0.5B | C133-4 |
-| 2 | Sensor ground | -- | 0.5S/W | C133-4 |
+| Pin | Function | Wire Color | Wire Size | ECM Pin | V |
+|-----|----------|------------|-----------|---------|---|
+| 1 | ECT signal | -- | 0.5B | C133-4 | ⬜ |
+| 2 | Sensor ground | -- | 0.5S/W | C133-4 | ⬜ |
 
 ### Intake Air Temperature Sensor (C127)
 
-| Pin | Function | Wire Color | Wire Size | ECM Pin |
-|-----|----------|------------|-----------|---------|
-| 1 | IAT signal | -- | 0.5B | C133-4 |
-| 2 | Sensor ground | -- | 0.5B | C133-4 |
+| Pin | Function | Wire Color | Wire Size | ECM Pin | V |
+|-----|----------|------------|-----------|---------|---|
+| 1 | IAT signal | -- | 0.5B | C133-4 | ⬜ |
+| 2 | Sensor ground | -- | 0.5B | C133-4 | ⬜ |
 
 ### Knock Sensor #1 (C123-1)
 
-| Pin | Function | Wire Color | Wire Size | ECM Pin |
-|-----|----------|------------|-----------|---------|
-| 1 | Knock signal | -- | 0.5B | C133-4 |
+| Pin | Function | Wire Color | Wire Size | ECM Pin | V |
+|-----|----------|------------|-----------|---------|---|
+| 1 | Knock signal | -- | 0.5B | C133-4 | ⬜ |
 
 ### Knock Sensor #2 (C123-2)
 
-| Pin | Function | Wire Color | Wire Size | ECM Pin |
-|-----|----------|------------|-----------|---------|
-| 1 | Knock signal | -- | 0.5B | C133-4 |
+| Pin | Function | Wire Color | Wire Size | ECM Pin | V |
+|-----|----------|------------|-----------|---------|---|
+| 1 | Knock signal | -- | 0.5B | C133-4 | ⬜ |
 
 ### Power Steering Switch (C144)
 

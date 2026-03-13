@@ -655,7 +655,15 @@
       "sensor_type": "Hall effect",
       "oem_location": "Camshaft journal area — top of engine",
       "opengk_url": "https://opengk.org/",
-      "community_review": "pending"
+      "community_review": "pending",
+      "connector_code": "C114",
+      "pin_count": 3,
+      "quick_pinout": {
+        "1": {"function": "power", "wire": "O", "size": "0.5", "to": "C142 joint connector (SNSR FUSE 10A)"},
+        "2": {"function": "signal", "wire": "B", "size": "0.5", "to": "ECM C133-4 pin 6"},
+        "3": {"function": "ground", "wire": "Br", "size": "0.5", "to": "ECM C133-4"}
+      },
+      "verification": "unverified"
     },
     {
       "id": "comp-ckp-sensor",
@@ -665,7 +673,15 @@
       "system": "engine",
       "subsystem": "engine-management",
       "engine": "V6",
-      "sensor_type": "Hall effect"
+      "sensor_type": "Hall effect",
+      "connector_code": "C113",
+      "pin_count": 3,
+      "quick_pinout": {
+        "1": {"function": "power", "wire": "O", "size": "0.5", "to": "C142 joint connector (SNSR FUSE 10A)"},
+        "2": {"function": "signal", "wire": "Y", "size": "0.5", "to": "ECM C133-3 pin 8"},
+        "3": {"function": "ground", "wire": "B", "size": "0.5", "to": "ECM C133-3"}
+      },
+      "verification": "unverified"
     },
     {
       "id": "comp-ect-sensor",
@@ -676,7 +692,14 @@
       "subsystem": "engine-management",
       "engine": "V6",
       "sensor_type": "Thermistor (NTC)",
-      "thread_spec": "LOCTITE 962T sealant required"
+      "thread_spec": "LOCTITE 962T sealant required",
+      "connector_code": "C111",
+      "pin_count": 2,
+      "quick_pinout": {
+        "1": {"function": "signal", "wire": "B", "size": "0.5", "to": "ECM C133-4"},
+        "2": {"function": "ground", "wire": "S/W", "size": "0.5", "to": "ECM C133-4"}
+      },
+      "verification": "unverified"
     },
     {
       "id": "comp-iat-sensor",
@@ -686,7 +709,14 @@
       "system": "engine",
       "subsystem": "engine-management",
       "engine": "V6",
-      "sensor_type": "Thermistor"
+      "sensor_type": "Thermistor",
+      "connector_code": "C127",
+      "pin_count": 2,
+      "quick_pinout": {
+        "1": {"function": "signal", "wire": "B", "size": "0.5", "to": "ECM C133-4"},
+        "2": {"function": "ground", "wire": "B", "size": "0.5", "to": "ECM C133-4"}
+      },
+      "verification": "unverified"
     },
     {
       "id": "comp-tps",
@@ -696,7 +726,15 @@
       "system": "engine",
       "subsystem": "engine-management",
       "engine": "V6",
-      "sensor_type": "Variable resistor"
+      "sensor_type": "Variable resistor",
+      "connector_code": "C112",
+      "pin_count": 3,
+      "quick_pinout": {
+        "1": {"function": "ground", "wire": "B", "size": "0.5", "to": "ECM C133-3"},
+        "2": {"function": "signal", "wire": "G/W", "size": "0.5", "to": "ECM C133-3 pin 19"},
+        "3": {"function": "+5V ref", "wire": "O", "size": "0.5", "to": "ECM C133-3 pin 10"}
+      },
+      "verification": "unverified"
     },
     {
       "id": "comp-maf-sensor",
@@ -706,7 +744,31 @@
       "system": "engine",
       "subsystem": "engine-management",
       "engine": "V6",
-      "sensor_type": "Hot film"
+      "sensor_type": "Hot film",
+      "connector_code": "C125",
+      "pin_count": 3,
+      "quick_pinout": {
+        "1": {"function": "power", "wire": "bat_V", "size": null, "to": "MFI control relay (E42)"},
+        "2": {"function": "ground", "wire": null, "size": null, "to": "Ground"},
+        "3": {"function": "signal", "wire": null, "size": "0.5", "to": "ECM C133-3 pin 1"}
+      },
+      "verification": "unverified"
+    },
+    {
+      "id": "comp-isc-actuator",
+      "type": "component",
+      "label": "Idle Speed Control Actuator",
+      "aliases": ["ISC actuator", "ISC", "idle air control", "IACV"],
+      "system": "engine",
+      "subsystem": "engine-management",
+      "engine": "V6",
+      "connector_code": "C126",
+      "pin_count": 2,
+      "quick_pinout": {
+        "1": {"function": "power", "wire": null, "size": null, "to": "via fuse"},
+        "2": {"function": "control", "wire": "B", "size": "0.5", "to": "ECM C133-3"}
+      },
+      "verification": "unverified"
     },
     {
       "id": "comp-knock-sensor",
@@ -911,6 +973,15 @@
       "pin_count": 3,
       "connector_pn": "CR02F048",
       "etm_page_ref": "CC-18"
+    },
+    {
+      "id": "conn-C126",
+      "type": "connector",
+      "label": "ISC Actuator Connector C126",
+      "connector_code": "C126",
+      "harness": "control",
+      "pin_count": 2,
+      "etm_page_ref": "CC-17"
     },
     {
       "id": "conn-C127",
@@ -1223,6 +1294,7 @@
     { "source": "comp-vss",           "target": "conn-C109",   "rel": "connector_code", "context": "ETM connector C109, 3-pin, CC-17, Control Harness (4)" },
     { "source": "comp-maf-sensor",    "target": "conn-C125",   "rel": "connector_code", "context": "ETM connector C125, 3-pin, CC-18, Control Harness (4)" },
     { "source": "comp-iat-sensor",    "target": "conn-C127",   "rel": "connector_code", "context": "ETM connector C127, 3-pin, CC-18, Control Harness (4)" },
+    { "source": "comp-isc-actuator",  "target": "conn-C126",   "rel": "connector_code", "context": "ETM connector C126, 2-pin functional, CC-17, Control Harness (4)" },
     { "source": "comp-knock-sensor",  "target": "conn-C123-1", "rel": "connector_code", "context": "ETM connector C123-1, 1-pin, CC-17, Control Harness (4) — front bank" },
     { "source": "comp-knock-sensor",  "target": "conn-C123-2", "rel": "connector_code", "context": "ETM connector C123-2, 1-pin, CC-17, Control Harness (4) — rear bank" },
 
