@@ -1,0 +1,66 @@
+[
+  {
+    "post_number": 1,
+    "author": "JonGTR",
+    "date": "2014-07-30",
+    "content": "This is now running in my Beta, although I'm sure it will work just the same in your crappy Deltas.\n\n[IMAGE 1: Toyota COP coils installed on engine]\n\nJust modify the wiring for a third trigger. I've tinkered with this since like 2005, but didn't get around to installation and startup til now. You WILL need a standalone. I ditched the 300 coils and switched to these Toyota coils because they have internal ignitors. Total cost of coils and wiring should be well under $100 and are available through junkyards and ebay.\n\nThis is supplied in an effort to help the community, however as always, use at your own risk, no liability assumed.\n\n[IMAGE 2: wiring/install photo]\n[IMAGE 3: wiring/install photo]\n[IMAGE 4: wiring/install photo]\n\n[NOTE: Additional content was hidden behind a 'See more' collapse that could not be expanded during scraping. The full OP likely contains additional wiring diagrams, pinout details, and installation instructions.]",
+    "is_op": true,
+    "has_images": true
+  },
+  {
+    "post_number": 2,
+    "author": "Charlie-III",
+    "date": "2014-07-30",
+    "content": "Ahhh..... COP = Coil On Plug..... gotcha.\n\nWhy set it up as wasted spark (2 banks)? Is it a controller limitation or just a little easier?\n\nDid you notice any difference in engine running?\n\nIs there a specific model year range/engine size your parts are from?\nSomething like, \"Toyota 2.0L, 1998-2006 Corolla\" (add in engine model since I know they cross them to other platforms)\n\nSorry for the possible stupid questions, I don't do enough with newer Toyotas to know those parts just from looking at them.\n\nNice looking set-up though. Did you do the corrugated split tube over the wiring? Very clean.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 3,
+    "author": "JonGTR",
+    "date": "2014-07-30",
+    "content": "I wanted to wire up sequential, but was one output short of it on the Haltech E6k.  There is really no benefit.  Wiring it that way would be easy should I upgrade.\n\nThere is no difference unless you're extreme boosting, where you would be able to run a much larger gap on the plugs.  I will need this soon, so I got to work on it while I was wiring up the rest of the car.\n\nThese are available on several newer Toyota engines.  1.8, 2.4, 2.5, 5.7.....\nThe main difference is the mount location and plug length, although not significant.\n\n90919-A2005 (I have this)\n90080-19015\n90919-02239\n90080-19023\n90919-02234\n\nYes, I did the wiring.  It was a piece of cake compared to the rest of the haltech harness.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 4,
+    "author": "Charlie-III",
+    "date": "2014-07-30",
+    "content": "Thanks for the additional info, it may help out someone else.\n\nI'm assuming the PN's you listed are for the coils & boot under them?\n\nWasted spark won't hurt (as you know) and is usually used to keep part counts lower for the OEM. Thus a V6 Tib has 3 coils/6 outputs to cover 6 cylinders as opposed to 6 coils & their cost (along with more wiring & ECU pinouts).\n\nAgain, clean looking install. Thanks for sharing.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 5,
+    "author": "JonGTR",
+    "date": "2014-07-30",
+    "content": "You got that backwards.  3 signals / 6 coils.  Only 5 more wires would be needed, but 4 of them would be tapped early to the +/-.  The last one would go to the 3rd ECU signal.\n\nNo prob.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 6,
+    "author": "Charlie-III",
+    "date": "2014-07-30",
+    "content": "How do I have it wrong? A Tib V6 only has 3 coils (for 6 cylinders), they fire off a coil that has 2 outputs (plug wires) thus it's a \"wasted spark\" ignition system (exactly what you are using in your I4, but you have separate coils even though 2 are fired at once........).\nA stock Tib I4 only has 2 coils (I believe) each with 2 outputs, thus it's also a wasted spark ignition system.\n\nYour set-up has 4 coils, but the \"trigger\" (bank 1 & bank 2) is shared between 2 coils, basically the same but more coils than stock.......",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 7,
+    "author": "JonGTR",
+    "date": "2014-07-31",
+    "content": "You called them \"outputs\".  I understood that to mean signal outputs, not outputs=plug wires.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 8,
+    "author": "Charlie-III",
+    "date": "2014-07-31",
+    "content": "Fair enough, misunderstanding of terms.",
+    "is_op": false,
+    "has_images": false
+  }
+]

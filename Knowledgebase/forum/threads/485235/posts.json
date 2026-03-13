@@ -1,0 +1,26 @@
+[
+  {
+    "post_number": 1,
+    "author": "T!BU_R0N",
+    "date": "2026-03-06",
+    "content": "I've got an 06 Tiburon GT with the 2.7 V6 and recently replaced the spark plugs and coil packs because the car had around 150k miles and I figured it was time. The car runs stronger on the highway now but I've noticed the idle is a little rough when sitting at a light, almost like a slight vibration through the steering wheel and seats. No check engine light and it drives fine once moving, but the idle definitely wasn't like this before the plug change. I double checked the coil connections and everything seems seated correctly, so now I'm wondering if this is something common with these engines like vacuum lines, throttle body buildup, or maybe the intake needing a clean. For the Tiburon owners here who've worked on the 2.7 before, is there something specific I should recheck after doing plugs on this motor?",
+    "is_op": true,
+    "has_images": false
+  },
+  {
+    "post_number": 2,
+    "author": "Charlie-III",
+    "date": "2026-03-06",
+    "content": "What plugs did you use? I know any Bosch can create issues (just like in older Subaru).\nWhen putting the throttle body back on, did you get the bottom bracket between intake and throttle body (wrong) or to the right only against the throttle body (correct)?\nThere are 2 similar plugs in front of the throttle body, they physically can be swapped, but shouldn't. One pair is black, one is dark grey.\nDid you get the small bottom ground wire reattached?",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 3,
+    "author": "chase206",
+    "date": "2026-03-06",
+    "content": "Just to add to Charlie's info. You should only be using NGK or Denso spark plugs. The internal resistance of other reputable plug brands like Bosch, Autolite and Champion don't match our ignition system and cause problems.\n\nBest coil brand you can buy is Hyundai/Mando or NTK. Many others are sub standard and won't run right.\n\nMost common problem following a spark plug job is a vacuum leak. Start spraying brake clean around at all intake connectionpoints until the motor bogs a little bit to reveal the location if your vacuum leak.",
+    "is_op": false,
+    "has_images": false
+  }
+]

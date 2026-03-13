@@ -1,0 +1,258 @@
+[
+  {
+    "post_number": 1,
+    "author": "komokazi",
+    "date": "2007-09-08",
+    "content": "Alright, so I may not be a automotive expert, but this is what ive seen that you can possibly do to the tib to get the most power possible out of the v6 naturally (normally) aspirated without going F/I. \n\nThis can also help those out who don't know what to do next...\n\nHeres a mod list:\n\nIntake - A CAI will net more hp, but if you are scared of hydrolock stick with SRI. Most common are Injen and AEM.\n\nExhaust - Alright, unless you really want to go custom, or have a need to be custom (say.. a single exhaust for your turbo or something) then getting a pre-fabb'd one is probably your best bet. There are plenty of exhausts out there from companies like Borla, Injen, DC Sports, SSA, and quite a few more.\n\nHeaders - Headers replace the stock exhaust manifolds which have pre-cats inside... Headers can be relatively cheap, but they don't come ceramic coated and/or aren't equal length. Well equal length headers make more power due to less turbulence and I don't think anyone is making equal length headers at the moment... The only ones that were I think were Hotshots and RPW. Most headers for our car have the little bend to get the rear header which can cause a bit of restriction, so the only ones I've seen so far that have fixed that are SFR headers, which cost about double of what most other headers do. A few others that are most commonly used are DC sports and SSA. RIPP has been (atleast I see them on their site) producing long tube, equal length headers but they cost a little over 1,000 bucks.\n\nCams - The stock cams in our cars are pretty mild so you can get some others that will be more aggressive and make more power. Well, no one actually makes cams for our car, but you can get the stock ones reground by Crower (which is what is most commonly done). NGM doesn't really regrind cams unless hes building a long block for one of his customers (or so I have been told). Crane does regrinds as well. I believe they are more expensive than Crower though.. but they use more aggressive specs unless you send your own specs to Crower.\n\nPorted heads - Ported heads basically are just that... heads that are ported. What is done is someone will use a dremel-like tool and basically start porting the valves and ports. This allows for more air flow, which in turn means POWUH. You can either buy NGM's heads, or go to a shop. Only difference is you can get heads from NGM that replace basically the valves with oversized ones with new springs and all. You can buy the lightweight springs and valves and such and have a shop put them on for you if you don't want to get the NGM heads... but they can get pricey. NGM also will fully CNC machine your heads too... \n\nBBTB (Big bore throttle body) - Its basically a ported throttle body, which again allows more air much like the ported heads. You won't see THAT much of a difference, but if you are trying to go for the most power possible, then you will probably want to invest in it, especially with a higher hp level where its hard to squeeze out some ponies with anything else... Be sure to get the upper intake manifold port matched or else its a waste, unless you get the NGM Stg 4 IM.\n\nStg IV Upper IM - The Stage 4 upper intake manifold is made by NGM, which is a custom fabricated sheet metal intake for the most part. It doesn't really net that much horsepower, but really opens up the top end unlike the stock intake, which tends to rape the power curve after about 5.5k rpm. If you get cams, this won't really do much until a turbo is slapped in, due to the fact that all superchargers replace the intake manifold. \n\nPorted Lower IM - This is the stock lower intake manifold ported out to match the runners on the upper intake manifold. If you don't port-match the lower intake manifold, it won't be worth spending cash on the Stg 4 upper intake manifold.\n\nLightweight/Underdrive Pulleys - These basically either weigh less that stock, which then reduces rotational mass on the crank, rendering you some extra wheel horse power, or you can get the underdrive pulleys, which basically \"under\" drives your accessories, like A/C, netting you more whp. Ark sells a 2 pc kit that has a light weight crank pulley and power steering pulley.\n\nPlugs + Wires - Not really a huge power gain here... \n\nFuel Tuner - Like a Neo, which allows you to modify the signal from the MAF sensor (which meters the air coming through your intake to \"tell\" your ecu how much fuel to inject, the stock fuel injectors can handle about 220-230 whp so you don't need to drop bank on new ones) and basically add or reduce fuel to get a nice A/F ratio (air fuel ratio). For N/A applications, its generally a good idea to keep that A/F around 12.5-13.0.\n\nMotor mounts - This doesn't necessarily make more horsepower, but it keeps your motor from hitting your firewall, possibly damaging things.. It also helps you get a few more horses to the ground. You can get either polyurethane mounts or solid billet aluminum mounts... What is most commonly done is just a aluminum mount in the front, and a poly mount in the back to help reduce vibration because you will notice more vibrations in the cabin when you get new mounts... Being N/A, you probably wont need to worry about an aluminum mount just yet. You can get the aluminum mounts from NGM, and the poly ones from places like SFR. \n\nLightweight flywheel and clutch - This won't increase horsepower, but it will definitely help get it to the ground. A light weight flywheel will allow your motor to rev up quicker, and the clutch will help you keep that power to the ground. Theres a ton of companies out there that sell clutches and such for our car, but the most common are Fidanza, Clutchmasters, and ACT. You can search for these on eBay or almost any other tiburon vendor. You can't stick with the stocker for long because it will take a dump on your chest with too much more power over stock.. You could use it but it will start to slip and die before long. \n\nFlashed ECU - PowerChipGroup.com will reflash your ecu to raise your rev limiter, allowing you to make more power (that is if you have cams and such, or else you won't be doing anything cause stock IM is a huge bottleneck with stock cams) and can do stuff like ignition timing, etc...\n\nNote:\nThats about it... If you want any power over 220whp or so, F/I is MUCH cheaper, but for those who want to stay in a certain class or something like that, this is what you can do. \n\nRaising Compression:\nWell... I have recently learned of the ross racing 11.0:1 pistons... and that they also do custom orders... so if you want to get some of these... High compression pistons FTW! You will somehow need to work with your closed loop tune because it will run lean when you first start to get on it pretty hard before it switches to open loop... which means detonation. BAD. I think the mapecu2 allows you to control ignition timing so you could control it that way, along with the Hydra EMS.\n\nWeight Reduction:\n- You could possibly get lightweight pistons and connecting rods but again that will cost big bucks to get a shop to do for you. This would free up some weight off the crank thus allowing a faster rev, which obviously means faster track times.\n- If you want the fastest track time for a N/A tib, you will need to do a lot of weight reduction... A very good place to start with is the rims. A basic rule of thumb is, for every pound of rotational mass, is equivalent to 8 pounds of static mass. Meaning if you had a rim that weight 1 more lb, it would be like putting 8 lbs in the trunk, but since you have 4 rims, that would be like putting 32 lbs in the trunk. Another rule of thumb is, for every 100 pounds shaved from your cars weight, you can shave off a tenth of a second in the quarter. So getting 15 lb rims will definitely benefit over the stockers.\n- If you just got out of the crazy house, you can also put on light weight rotors, as someone has suggested, putting the Elantra rotors on, which are an inch smaller, but also weigh 5 lbs less.. So, that would be like shaving 160 lbs off! (theoretically lol) (5 lbs x 4 rotors = 20 lbs, 20 lbs x 8 (rotational mass converted to static mass) would be like 160 pounds!!!). Id only do this if your car is a drag car because smaller rotors = slower stopping. You would also need to replace the calipers since the rotors are smaller... (about 1 inch). Or just don't drive like a complete moron on the street.\n- You can also take your A/C and Power steering pump off. This will basically just free up your crank and render more whp and will free up a little weight.\n- Other weight reduction can be: Carbon fiber hood and latch. I believe the stock hood is 40 lbs or so, and the cf one is only 15 lbs or so... I don't know about the hatch just yet.\n\nOther Stuff:\nThere are no ITB kits for the v6... but there are universal, modular kits out there that someone could easily get to work with the tib if they had an intake manifold made...",
+    "is_op": true,
+    "has_images": false
+  },
+  {
+    "post_number": 2,
+    "author": "SIX_SEVEN_ONE",
+    "date": "2007-09-08",
+    "content": "Nice Thread Man",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 3,
+    "author": "Keyan",
+    "date": "2007-09-08",
+    "content": "Since you are doing the head, don't forget...\n\n1) Lightweight valves + springs\n2) Lightened crank/pistons/con rods\n3) Higher compression pistons\n\n4) Remove A/C\n5) Remove P/S\n6) Lightweight rims\n7) Lightweight custom axles\n\nand if you are really insane about rotational weight\n\n8) downgrade to elantra brakes (rotors are 1\" smaller and about 5lbs lighter)\n\nEDIT: oops, i didn't read your entire post so I re-mentioned some things, lol sorry.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 4,
+    "author": "AnthonyNTC3",
+    "date": "2007-09-08",
+    "content": "ur claim - \"Thats about it... I'm just going to tell you that going F/I to attain these power levels is MUCH cheaper\" - is absolutely 100 percent FALSE.\n\nfirst, you dont need all those things. i recall 98tib achieved 203whp with I/H/E cams, and lightweight pulley. and a tuner. STOCK redline and ECU.\n\nNEW PRICES:\nintake-150\nheaders-220 (SSA, also what 98tib ran)\nexhaust-500 (98tib actually had ebay exhaust i believe)\ncams-360\npulleys- 200\ntuner- 300\n\nthis equals 1730bux, and these are NEW prices. to acheive this whp through forced induction it would cost:\nan alpine stg 1 gets 193whp (website claim) - for $3350! (98 tib made 10 more whp)\nand a also recall a base sniper get a lil more, 210whp for $2800! (7 more whp for $1070 extra)\nthese are all similiar hp number BUT NA IS OVER 1000 dollars cheaper. it makes the same power on no boost. obviously if you want more whp then FI is a given, but it is DEFINATELY not cheaper to achieve the NA numbers though forced induction. a 200whp NA tib is faster than ALOT of cars out there too, not to mention is sounds sweet.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 5,
+    "author": "DHavenford",
+    "date": "2009-04-10",
+    "content": "what would you say the I4 would net with those same mods?",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 6,
+    "author": "AnthonyNTC3",
+    "date": "2007-09-08",
+    "content": "oops, subtract 1 or 2 hp, 98tib had a stgIV, but malogus has proved it gains maybe 1hp or 2 when added to cams, it is strictly bling factor if you have cams.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 7,
+    "author": "staw512",
+    "date": "2007-09-08",
+    "content": "headers are not headers... they are made from different thicknesses, some are ceramic coated, and some are equal length",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 8,
+    "author": "YamYZguy",
+    "date": "2007-09-08",
+    "content": "Nice write up........",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 9,
+    "author": "gsxtuner",
+    "date": "2007-09-08",
+    "content": "sticky? ? ? i'd like to see more of these type of threads i think it would cut down on the newbs to the site asking the samething over and over.. . .",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 10,
+    "author": "komokazi",
+    "date": "2007-09-08",
+    "content": "Well, there aren't a whole lot of equal length headers being produced anymore... If any. I think hotshots, and was it... i forget the austrailian company that made them, those were good too. RPW was it? Anything else isn't equal length to my knowledge...\n\nWhere could you get light weight axles from? \n\nI thought molagus had ported heads... Or am I just on crack. A port job is NOT cheap at all... a decent porting job by a shop on my friends ls1 heads took over 40 hours... Sure, you could buy the lightweight springs and stuff yourself... \n\nSure, you don't need any of what I posted up, but if you want to get the max out of the tib naturally aspirated, then tadaaa.\n\nI didn't mention lightweight internals because to my knowledge no one makes them... you'd have to get them custom made which means F/I time.\n\nI said it was cheaper because by the time you hit say.. 220whp, a s/c will be way cheaper... Sure you can get to 200 pretty cheap with n/a but after that you gotta go F/I. Besides, you are talking about superchargers, what about custom turbo? You can spend around 2000 bucks on a custom turbo setup and get up to around 250 whp no problem, and if you wanna be a gambler like zaion, then you could go a lot higher....\n\nOh, and with the price of those cams, add about a month or 2 of downtime unless you give out another 300 bucks or so for another stock set. Sure, its cheaper at that point, but to go any higher F/I is the way you want to go... I'm sorry I didn't make it clear.\n\nIll update to reflect all of your ideas.",
+    "is_op": false,
+    "has_images": true
+  },
+  {
+    "post_number": 11,
+    "author": "bluegtv6",
+    "date": "2007-09-08",
+    "content": "It's actually only about $150-$200 usually for a used set of stock cams depending on mileage. I just sold a set with 20k miles on them for $200. I've never seen a set for $300 or so.",
+    "is_op": false,
+    "has_images": true
+  },
+  {
+    "post_number": 12,
+    "author": "komokazi",
+    "date": "2007-09-08",
+    "content": "Hmm, I've seen some for 300, but that was once... the only time I actually looked for cams. Good thing I didn't buy them, I woulda got shafted",
+    "is_op": false,
+    "has_images": true
+  },
+  {
+    "post_number": 13,
+    "author": "thexflamesxburn",
+    "date": "2007-09-08",
+    "content": "def think this should be a sticky. the others have gotten quite old and the links dont work. this is easier being there are no links.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 14,
+    "author": "pauly",
+    "date": "2007-09-09",
+    "content": "i vote for thread cleaning and sticky ... this is good information +rep to poster",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 15,
+    "author": "Blind_Justice",
+    "date": "2007-09-09",
+    "content": "+1 good info and covers alot",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 16,
+    "author": "komokazi",
+    "date": "2007-09-09",
+    "content": "Thanks guys. Again if you see anything that you deem incorrect or left out feel free to leave suggestions..",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 17,
+    "author": "237",
+    "date": "2007-09-10",
+    "content": "Some Comments:\n\nIntake - Your thoughts here are a bit wrong. The comment \"pipe is pipe\" is not true. A good intake has the length of the pipe tuned to the application it supports. When you tune the intake pipe, you can cause it to resonate at specific RPMs, which will in turn caused increased power gains. An ebay intake will not get you this. \n\nExhaust - What reputable shops do you have near you that correctly tune their exhausts? Again like the intake, a lot of R&D and dyno time needs to occur to get a properly tuned exhaust. In this case custom exhaust < an exhaust manufactured by a reputable company like Borla, etc. \n\nFlashed ECU - I don't know where you got the idea that our engines are not high-revving machines and that you can possibly blow stuff up with a 7300 rpm rev limit. There are people running the Delta with 8000 rpms rev limiters, racing alot more than most of you, and have not blown the engine up due to overrevving. I have yet to see that in the 5.5 years I have been on this site.\n\nRaising Compression - You cannot easily raise the compression by milling the heads like you state. When you mill the heads, you also decrease the distance between the heads from each other, and also the crank. In doing so, you would either need to find a smaller timing belt, or develop some type of tensioner system to use with the OEM timing belt. IMO you cannot trust the stock autotensioner at that point, because you are asking it to do something it might not be designed to do (it has it's limits as far as how much it can extend). And given that the tib is an interference-type engine, you are just asking for trouble if the belt slips because the stock auto-tensioner fails. \n\nOn an old school v-style engine without overhead cams, you don't have that issue because by milling the heads, you don't move the cams closer to the crank (as they are static in that case). In overhead cam engines, milling the heads becomes an extremely risky and custom deal.\n\nAlso suggesting to take the power steering off is retarded. I've driven the tib without power steering, and it's close to impossible. Most cars without power steering have huge steering wheels to compensate. The tib has a tiny steering wheel, and at low speeds is rediculous to turn without power steering.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 18,
+    "author": "komokazi",
+    "date": "2007-09-10",
+    "content": "I didn't mean that AT 7.3k rpm that problems would happen, but like someone cranking it up to 8k+. Sure, you CAN but I bet those motors are fully built. I don't think anyone would try 8k rpm on a stock delta... \n\nI only said that its possible to mill your heads and that it hasn't been done yet. I wasn't telling people to go out and mill their heads down or anything... I also said that it wasn't exactly recommended... \n\nI would suggest taking power steering off only if you are not a DD or a street driven car... Ive driven the tib without p/s as well and it is kinda rough but its too bad I wasn't expecting it lmao. Its not like im writing the 10 commandments or anything. I didn't order people to take it off, considering I don't think anyone that has anything less than a drag racing machine would do so anyway.\n\nI live in dallas, theres a few decent shops around here that take a week or so to fab up an exhaust for you... and thats with the melting crayon and all that jazz. \n\nId like to see how much more hp you get out of a $300 pipe than the $100 pipe off ebay... it wont be more than say... 2 hp... maybe a larger difference with a s/c but it can't be that much better. Definitely wouldn't warrant another 200 bucks in my book but heh whatever peels your banana. Same thing with headers... the only ones that give a bit more performance (dare i say just marginally) cost nearly a grand. IE: RIPP LT headers and SFR.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 19,
+    "author": "237",
+    "date": "2007-09-10",
+    "content": "Actually, there is one guy who has a 8k rev limiter, that raced daily (to the point he drove with drag radials all the time) on a stock delta with cams and 209 whp. He doesn't post anymore, but look up some of his racing stories. His name was supertib. I only give the above suggestions because you make a definitive type thread titled how to make the MOST out of your N/A tib, and then proceed to recommend ebay parts, custom fabbed exhausts, and milling heads (which has not been done before, even NGM never tried it back when they were making NA only parts). Try googling for overhead cam engines with milled heads. You wont find many people who have done it on ANY car, let alone tibs. I read a few links, and the most I saw a guy do was .030\", and another site that recommended not doing more than .080. Thats not going to raise the compression enough to make it worth it. I think your post does recommend some good things, but it also recommends quite a few rediculous things that a good engine builder/tuner would not do. There are some tuned parts that are really worth investing in instead of ebay parts. I don't think many people would recommend an ebay Stage 5 manifold over the NGM stage 4 unit. Same thing goes for exhausts and intakes IMO.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 20,
+    "author": "komokazi",
+    "date": "2007-09-11",
+    "content": "Well, I was just saying that because I didn't feel that a pipe was so important, and that the filter is a bit more so. \n\nI didn't recommend milling the heads, I just said that its possible but as i stated, not exactly what I would do.\n\nI stated I would go with a custom exhaust because thats what I am going to do when I get my custom turbo all together.... yea doesn't make much sense making a thread like this if I'm going in a different direction lol.\n\nBut that stage 5 is a joke and if I was seriously trying to get people to buy one I would request someone here hire a hitman and kill me, or hell do it yourself. \n\nWell I learned something new about our delta... 8k is a bit higher than I expected from just a cammed v6.... Oh well thats higher than Id ever want to go.\n\nIf it makes everyone happy, ill just completely delete the milling heads and just tell ppl to get a freakin aem or injen intake lol",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 21,
+    "author": "237",
+    "date": "2007-09-11",
+    "content": "See, but milling the heads is NOT possible. Unless you call removing so little material that compression isn't changed enough to warrant even putting 89 octane in the car. Go ask Tim at NGM, he will give you the same answer. As for the intake, I put out 210 with a generic filter, but a AEM CAI. IMO, the tuning of the pipe is much more significant than the filter. Most cone filters are so big that they will flow much more than an NA engine can handle. You are suggesting a custom exhaust, because thats what you are planning on doing when you build your custom turbo. So really, your custom exhaust is not to get the most out of your N/A tib, but in preparation for further forced induction mods down the road. For everyone else that is not you with a custom turbo setup in the future a manufactured system will give them the most power, due to the R&D put into the high quality (read ARC, Borla, NOT SSA) systems. I'm not trying to dispute everything you write, because I think there is a lot of helpful info for newbies. But if you are going to post a thread like this where your making a definitive list of what people can/should do, you better have researched what you are posting, because I know myself and others will not be afraid to call you on any BS we see.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 22,
+    "author": "komokazi",
+    "date": "2007-09-11",
+    "content": "But I thought that it would be iffy to put milling heads but I know my friend did it, but his motor is ls1 so no ohc which I didn't think about the timing belt tension problems that would soon ensue... which is why I put it up there. \n\nAbout the whole custom exhaust thing, thats just what I was told by the exhaust shop... that any real exhaust done properly would probably yield better results due to all cars are basically different (not sure if hes full of bs, I wouldn't of thought so) so I just put it up there. \n\nThanks for the help.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 23,
+    "author": "237",
+    "date": "2007-09-11",
+    "content": "Well a custom exhaust from an exhaust shop is not done properly IMO. It's a last resort when they don't make a tuned cat back for your car, or if you have a custom setup like a turbo. For example, ARK knows the flow characteristics of their exhaust components, and spent months developing a cat-back exhaust for the tiburon, testing multiple tubing sizes (both the primary and secondary piping), performing multiple dyno runs, and generally investing a ton of time and effort into making sure their product gets the most gains possible. \n\nOn the other hand a good exhaust shop is going to probably put one man on the job, spending a week (and probably not a fully dedicated week) making a custom \"tuned\" exhaust. They will use whatever mufflers you bring in, and whatever tubing sizes you tell them. Or if you don't have a preference, they will use what they typically use, and what is best on a majority of cars. They won't dyno it, and then make changes to their work so you get the most power. And unless it's a higher end shop, you will get crush bent tubing on top of that. \n\nI'm not saying a custom exhaust can't be made to be efficient, but in most cases where you are remaining NA (which you are not), an aftermarket cat-back exhaust will perform better than any custom setup you get. So to get the MOST out of your NA tib (like your title suggests), you shouldn't be recommending people to run out and get a shop to make you a custom exhaust. \n\nAnd just on another note, believe it or not, the exhaust is not a huge bottleneck on the tiburon. Any aftermarket system will provide enough flow to handle all the NA mods you can throw at it. Once you have a set of headers (any brand) and exhaust, you should focus most of your attention on getting air into the engine, as thats where the real bottleneck in the system is.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 24,
+    "author": "Tlizzle6687",
+    "date": "2007-09-11",
+    "content": "nice thread bro!",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 25,
+    "author": "KevinSmith",
+    "date": "2007-09-11",
+    "content": "For you ECU Flash PowerChipGroup.com is one place that does v6 Tibs.\n\nOtherwise...good post!\n\nPlease do not post links to non-sponsor sites.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 26,
+    "author": "JPGreco",
+    "date": "2007-09-16",
+    "content": "maybe you should add approximate gains to the mods as well... cause thats the number 2 question after what kind of intake or exhaust should i get.. What kind of gains will this yield. I know its approximation and not 100% cumulative, but approximations would definitely help people who are searching.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 27,
+    "author": "tkdmatrix",
+    "date": "2009-07-31",
+    "content": "Sweet Post!",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 28,
+    "author": "NapTownTib",
+    "date": "2007-10-17",
+    "content": "KevinSmith ... pm me that link!",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 29,
+    "author": "dtak",
+    "date": "2007-12-07",
+    "content": "wait, can't you do the f/i along with the n/a mods? wouldn't it be a combination of more power?\n\nisn't 200 hp on the low power side? i always imagined it would reach at least 250",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 30,
+    "author": "komokazi",
+    "date": "2007-12-19",
+    "content": "Well, you can keep everything but the cams for supercharging the car. The cams won't work well with boost due to their specs. Underdrive pullies will have to go as well, because they will make it so you get less boost. You can still use lightweight pulley, cause its same size as OEM, just lighter. Oh, and if you get an upper intake manifold, say bye bye.\n\n230whp is the record set by a korean car because they have parts we don't get outside of korea. 210whp is the north american record as far as i know. \n\nWe don't have the fancy crap like stroker kits and high comp pistons and ITB setups. So we can't make super spectacular power n/a.\n\nTurbo, you'll have to toss out the intake and cams and if you have a borla exhaust or an exhaust thats smaller than 2.5\" you will need something else for FI. The most efficient for a turbo setup would be a single 3\" exhaust.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 31,
+    "author": "C-Shark",
+    "date": "2008-01-07",
+    "content": "This is some good information. Can somebody answer a few questions for me? My tib has a CAI and catback exhaust - no other performance upgrades. Also, I will not be going F/I at any time. \n\nIf I were to add one or more of the following upgrades to my car as it is now, would I notice any gain in performance? (hp, fuel efficiency +/-) Would I need to make any other tuning adjustments or other changes to accomodate these upgrades? \n\nBBTB\nUpper IM\nLower IM\n\nOnce again, thanks for the info.",
+    "is_op": false,
+    "has_images": false
+  },
+  {
+    "post_number": 32,
+    "author": "98tib",
+    "date": "2008-01-07",
+    "content": "stay away from the bbtb if you are not going for max na or fi - would be a waste of money for you\n\nuim and lim would be much better for performance, you do not NEED to tune with those two things but you would get better benifits from them if you did",
+    "is_op": false,
+    "has_images": false
+  }
+]

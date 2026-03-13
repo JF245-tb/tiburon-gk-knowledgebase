@@ -1,0 +1,136 @@
+{
+  "_meta": {
+    "description": "Source credibility registry — external sites and internal source categories with base credibility scores",
+    "version": "1.0",
+    "last_updated": "2026-03-12",
+    "schema_doc": "credibility/README.md",
+    "scoring_doc": "credibility/scoring-algorithm.md",
+    "notes": "base_credibility is the starting score (0-10) before post-level modifiers. Maps to authority_tier in ARCHITECTURE.md."
+  },
+
+  "sources": {
+    "hyundai-shop-manual": {
+      "label": "Hyundai Factory Shop Manual (2003 Tiburon)",
+      "type": "factory_manual",
+      "authority_tier": 1,
+      "base_credibility": 10,
+      "url": null,
+      "access": "private",
+      "content_types": ["specifications", "procedures", "torques", "dtc_tables", "diagrams"],
+      "coverage": {
+        "engine_mechanical": true,
+        "engine_electrical": true,
+        "fuel_system": true,
+        "emissions": true,
+        "drivetrain": true,
+        "suspension": true,
+        "brakes": true,
+        "body": true,
+        "hvac": true
+      },
+      "notes": "OCR-extracted to common/shop-manual/. Authoritative — no vetting needed.",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb"
+    },
+
+    "hyundai-etm": {
+      "label": "Hyundai Electrical Troubleshooting Manual (2003 Tiburon)",
+      "type": "factory_manual",
+      "authority_tier": 1,
+      "base_credibility": 10,
+      "url": null,
+      "access": "private",
+      "content_types": ["schematics", "connector_configs", "component_locations", "harness_layouts"],
+      "notes": "OCR-extracted to common/electrical-manual/. Authoritative — no vetting needed.",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb"
+    },
+
+    "manufacturer-datasheets": {
+      "label": "Manufacturer Technical Datasheets",
+      "type": "manufacturer_docs",
+      "authority_tier": 2,
+      "base_credibility": 9,
+      "url": null,
+      "access": "varies",
+      "content_types": ["specifications", "pinouts", "wiring_diagrams", "calibration_data"],
+      "examples": ["Haltech Elite 2500 manual", "AIM PDM32 user guide", "Lowdoller sensor datasheets", "Toyota TIS (COP coils)"],
+      "notes": "Factory docs from the device manufacturer. Equivalent to T1 for that specific device, T2 for GK Tiburon fitment context.",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb"
+    },
+
+    "opengk": {
+      "label": "OpenGK Community Wiki",
+      "type": "community_wiki",
+      "authority_tier": 2,
+      "base_credibility": 9,
+      "url": "https://opengk.org/",
+      "access": "public",
+      "content_types": ["ecu_pinouts", "protocols", "tuning", "sensor_crossref", "can_messages", "immobilizer"],
+      "coverage": {
+        "ecu_internals": true,
+        "k_line": true,
+        "smartra": true,
+        "gkflasher": true,
+        "can_bus": true,
+        "sensor_crossref": true,
+        "valvetrain": true,
+        "forced_induction": true
+      },
+      "editorial_process": "Peer-reviewed MediaWiki; maintainer spot-checks against T1 where possible",
+      "notes": "High quality reverse-engineering and tuning data. Not factory-verified — spot-check against shop manual for any overlap.",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb"
+    },
+
+    "newtiburon": {
+      "label": "NewTiburon Forum",
+      "type": "forum",
+      "authority_tier": 3,
+      "base_credibility": 3,
+      "url": "https://www.newtiburon.com/",
+      "access": "public",
+      "platform": "XenForo (Fora)",
+      "stats": {
+        "total_posts_approx": 3200000,
+        "total_members_approx": 63000,
+        "active_since": 2004
+      },
+      "content_types": ["discussion", "guides", "build_logs", "questions", "parts_reviews"],
+      "forum_section_map": "credibility/forum-sections.json",
+      "post_type_modifiers": "credibility/post-classification.md",
+      "known_contributors": "credibility/contributors.json",
+      "notes": "Base 3/10 for unvetted posts. Stickied guides get +2. Priority contributors get their individual weight. See scoring-algorithm.md for composite formula.",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb"
+    },
+
+    "rockauto": {
+      "label": "RockAuto Parts Catalog",
+      "type": "parts_catalog",
+      "authority_tier": 4,
+      "base_credibility": 4,
+      "url": "https://www.rockauto.com/",
+      "access": "public",
+      "content_types": ["part_numbers", "fitment_data", "pricing"],
+      "notes": "Good for part number cross-references. Fitment data is catalog-level, not installation-verified.",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb"
+    },
+
+    "_template": {
+      "_comment": "Copy this block and rename the key to add a new source",
+      "label": "",
+      "type": "forum",
+      "authority_tier": 4,
+      "base_credibility": 3,
+      "url": null,
+      "access": "public",
+      "content_types": [],
+      "notes": "",
+      "added": "",
+      "added_by": ""
+    }
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "_meta": {
+    "description": "NewTiburon.com forum section mapping to knowledgebase topics and credibility modifiers",
+    "source_url": "https://www.newtiburon.com/",
+    "version": "1.0",
+    "last_updated": "2026-03-12",
+    "notes": "thread_count and view_count are snapshots from March 2026. section_credibility_modifier is additive to the composite score per scoring-algorithm.md."
+  },
+
+  "forum_id": "newtiburon",
+
+  "sections": {
+    "gk-v6-na": {
+      "label": "V6 - Naturally Aspirated",
+      "forum_path": "GK Performance (03+) > V6 - Naturally Aspirated",
+      "subtopics": "Intakes, Exhaust, Headers, Pulleys, etc",
+      "thread_count_approx": 181000,
+      "view_count_approx": 23000000,
+      "topics": ["intakes", "exhaust", "headers", "pulleys", "cams", "engine_na"],
+      "kb_systems": ["engine", "intake", "exhaust", "valvetrain"],
+      "section_credibility_modifier": 0,
+      "notes": "Highest volume performance section. Broad range — signal-to-noise varies widely. Priority contributors highly weighted here."
+    },
+
+    "gk-v6-fi": {
+      "label": "V6 - Forced Induction",
+      "forum_path": "GK Performance (03+) > V6 - Forced Induction",
+      "subtopics": "Turbo / Supercharger Setups",
+      "thread_count_approx": 105000,
+      "view_count_approx": 11000000,
+      "topics": ["turbo", "supercharger", "intercooler", "boost_control", "fuel_upgrades"],
+      "kb_systems": ["engine", "fuel", "forced_induction"],
+      "section_credibility_modifier": 0,
+      "notes": "Specialized section — fewer contributors but deeper technical knowledge per thread."
+    },
+
+    "gk-i4-na": {
+      "label": "I4 - Naturally Aspirated",
+      "forum_path": "GK Performance (03+) > I4 - Naturally Aspirated",
+      "subtopics": "Intakes, Exhaust, Headers, Pulleys, etc",
+      "thread_count_approx": 31000,
+      "view_count_approx": 5800000,
+      "topics": ["intakes", "exhaust", "cams", "engine_na"],
+      "kb_systems": ["engine"],
+      "section_credibility_modifier": 0,
+      "relevance_note": "I4 Beta engine (G4GC). Less relevant to G6BA V6 builds but useful for shared-platform content (suspension, body, electrical)."
+    },
+
+    "gk-i4-fi": {
+      "label": "I4 - Forced Induction",
+      "forum_path": "GK Performance (03+) > I4 - Forced Induction",
+      "subtopics": "Turbo / Supercharger Setups",
+      "thread_count_approx": 31000,
+      "view_count_approx": 5300000,
+      "topics": ["turbo", "supercharger"],
+      "kb_systems": ["engine", "forced_induction"],
+      "section_credibility_modifier": 0,
+      "relevance_note": "I4-specific forced induction. Low relevance for V6 builds unless discussing shared components."
+    },
+
+    "gk-engine-management": {
+      "label": "Engine Management",
+      "forum_path": "GK Performance (03+) > Engine Management",
+      "subtopics": "ECU Piggyback Systems, Wiring Harnesses, Custom Wiring, etc",
+      "thread_count_approx": 24000,
+      "view_count_approx": 6400000,
+      "topics": ["ecu", "wiring_harness", "custom_wiring", "tuning", "sensors", "gauges", "standalone"],
+      "kb_systems": ["engine_management", "electrical", "sensors"],
+      "section_credibility_modifier": 1,
+      "notes": "High-value section: ECU tuning, wiring, standalone setups, Haltech/Megasquirt. +1 modifier because posts tend to be more technical and verifiable."
+    },
+
+    "gk-transmissions": {
+      "label": "Transmissions",
+      "forum_path": "GK Performance (03+) > Transmissions",
+      "subtopics": "Clutch, Flywheel, 5-spd, 6-spd, Automatic, Driveshafts, etc",
+      "thread_count_approx": 33000,
+      "view_count_approx": 7600000,
+      "topics": ["clutch", "flywheel", "5_speed", "6_speed", "automatic", "driveshaft", "lsd"],
+      "kb_systems": ["drivetrain", "transaxle", "clutch"],
+      "section_credibility_modifier": 0
+    },
+
+    "gk-wheel-tire-suspension": {
+      "label": "Wheel, Tire, & Suspension",
+      "forum_path": "GK Performance (03+) > Wheel, Tire, & Suspension",
+      "subtopics": "Lowering Springs, Coilovers, Shocks, Brakes, Wheels, Tires, etc",
+      "thread_count_approx": 111000,
+      "view_count_approx": 15000000,
+      "topics": ["springs", "coilovers", "shocks", "brakes", "wheel_fitment", "alignment", "sway_bars"],
+      "kb_systems": ["suspension", "brakes", "wheels"],
+      "section_credibility_modifier": 0
+    },
+
+    "gk-exterior": {
+      "label": "Exterior",
+      "forum_path": "GK Appearance / Audio (03+) > Exterior",
+      "subtopics": "Bodykits, Lips, CF Hoods, Spoilers, Etc",
+      "thread_count_approx": 227000,
+      "view_count_approx": 25000000,
+      "topics": ["bodykits", "lips", "hoods", "spoilers", "paint", "headlights", "taillights"],
+      "kb_systems": ["body_exterior"],
+      "section_credibility_modifier": -1,
+      "notes": "Highest volume section overall but mostly cosmetic. Lower technical density. -1 modifier for technical claims originating here."
+    },
+
+    "gk-interior": {
+      "label": "Interior",
+      "forum_path": "GK Appearance / Audio (03+) > Interior",
+      "subtopics": "Trim Kits, Racing Seats, Lighting, Gauges, etc",
+      "thread_count_approx": 40000,
+      "view_count_approx": 7300000,
+      "topics": ["trim", "racing_seats", "interior_lighting", "gauges", "steering_wheel"],
+      "kb_systems": ["body_interior"],
+      "section_credibility_modifier": -1,
+      "notes": "Mostly aesthetic. Exceptions: gauge wiring and racing seat mounting threads can be technically valuable."
+    },
+
+    "gk-audio-security": {
+      "label": "Audio & Security",
+      "forum_path": "GK Appearance / Audio (03+) > Audio & Security",
+      "subtopics": "Headunits, Speakers, Amps, Alarms, Radar Detectors, etc",
+      "thread_count_approx": 73000,
+      "view_count_approx": 10000000,
+      "topics": ["headunits", "speakers", "amplifiers", "subwoofers", "alarms", "immobilizer"],
+      "kb_systems": ["audio", "security", "bcm"],
+      "section_credibility_modifier": 0,
+      "notes": "Security/immobilizer threads are relevant to SMARTRA/BCM KB content. Audio threads have lower technical value for our purposes."
+    }
+  }
+}

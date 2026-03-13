@@ -1,0 +1,130 @@
+{
+  "_meta": {
+    "description": "Results from running KB validation test cases. Each run records the model, KB version, and per-component scoring.",
+    "version": "1.0",
+    "last_updated": "2026-03-12",
+    "entry_point": "Scheduled agents: append new run results here after each validation pass."
+  },
+
+  "runs": [
+    {
+      "run_id": "RUN-001",
+      "date": "2026-03-12",
+      "model": "claude-opus-4-6",
+      "kb_commit": "3351835",
+      "test_cases_run": ["TC-001", "TC-002"],
+
+      "results": {
+        "TC-001": {
+          "accuracy_score": 0.83,
+          "coverage_score": 0.42,
+          "critical_coverage_score": 0.33,
+
+          "component_results": [
+            {
+              "id": "EAC-1",
+              "status": "partial",
+              "kb_found": true,
+              "notes": "KB has NGK BKR5ES-11 node (pn-spark-plug-ngk-v6-unleaded) — correct part number, T1 authority. However, KB ALSO lists Champion RC10YPYP4 (pn-spark-plug-champion-v6-unleaded) as valid, which contradicts expert advice that Champion causes rough idle. No warning about brand sensitivity or internal resistance mismatch. A KB-only answer would recommend NGK OR Champion, which is partially wrong.",
+              "files_checked": ["common/tiburon-knowledge-graph.json:823-839"]
+            },
+            {
+              "id": "EAC-2",
+              "status": "miss",
+              "kb_found": false,
+              "notes": "No KB content on throttle body bracket position. Shop manual fuel system chapter covers TB removal/installation but does not warn about bracket orientation.",
+              "files_checked": ["common/shop-manual/fuel-system/"]
+            },
+            {
+              "id": "EAC-3",
+              "status": "miss",
+              "kb_found": false,
+              "notes": "No KB content on TB-area connector swap risk. Connector configurations doc (common/electrical-manual/connector-configurations.md) lists connectors but does not identify the swappable pair or warn about the risk.",
+              "files_checked": ["common/electrical-manual/connector-configurations.md"]
+            },
+            {
+              "id": "EAC-4",
+              "status": "miss",
+              "kb_found": false,
+              "notes": "Ground distribution exists in ETM schematics but no cross-reference to spark plug service context. A user asking about rough idle after plug change would not be directed to check the ground wire.",
+              "files_checked": ["common/electrical-manual/"]
+            },
+            {
+              "id": "EAC-5",
+              "status": "partial",
+              "kb_found": true,
+              "notes": "Vacuum leak diagnosis exists in fuel-system/general.md (line 191: 'Check for vacuum leaks') and fuel-system/dtc-troubleshooting.md (multiple vacuum leak checks). Emission control general.md also links rough idle to vacuum hose issues. However, the specific 'spray brake cleaner' field method is not explicitly documented.",
+              "files_checked": ["common/shop-manual/fuel-system/general.md:191", "common/shop-manual/fuel-system/dtc-troubleshooting.md:431", "common/shop-manual/emission-control-system/general.md:48"]
+            },
+            {
+              "id": "EAC-6",
+              "status": "partial",
+              "kb_found": true,
+              "notes": "Ignition coil node exists (comp-ignition-coil) with resistance specs and OEM part cross-references. CKP/CMP sensor NTK cross-references exist in gk-chassis-specs.md. But no explicit 'use OEM/Mando or NTK only' coil brand quality guidance. A KB-only answer could recommend any coil brand.",
+              "files_checked": ["common/tiburon-knowledge-graph.json:733-740", "common/chassis/gk-chassis-specs.md:148-149"]
+            }
+          ],
+
+          "new_gaps_discovered": [
+            {
+              "description": "Champion spark plug listed as valid alternative — contradicts expert advice",
+              "detail": "pn-spark-plug-champion-v6-unleaded (RC10YPYP4) is in the knowledge graph as a valid V6 spark plug from the factory manual. Expert consensus (Charlie-III, chase206) says Champion has incorrect internal resistance for the 2.7L Delta ignition and causes rough idle. The KB should add a warning note to this node or remove it and add a 'not_recommended' node with explanation.",
+              "system": "ignition",
+              "priority": "High",
+              "action": "Add warning to Champion plug node or deprecate it"
+            }
+          ],
+
+          "summary": "KB covers 2.5 of 6 expected components (42%). Of 3 critical components, only 1 is partially covered (33%). The spark plug brand sensitivity — the single most important diagnostic for this scenario — is undermined by the Champion listing. Vacuum leak diagnosis exists but lacks the field-expedient brake cleaner method. Throttle body bracket, connector swap, and ground strap gaps remain open."
+        },
+
+        "TC-002": {
+          "accuracy_score": 1.0,
+          "coverage_score": 1.0,
+          "critical_coverage_score": 1.0,
+
+          "component_results": [
+            {
+              "id": "EAC-1",
+              "status": "covered",
+              "kb_found": true,
+              "notes": "OP post in thread 34325 explicitly lists '18x8.5 Offset 35mm / 225/40-18 / Hub-to-lip: 2.85 inches — Rub, unless rolled fender'. Data is in forum/threads/34325/posts.json post #1.",
+              "files_checked": ["forum/threads/34325/posts.json:1"]
+            },
+            {
+              "id": "EAC-2",
+              "status": "covered",
+              "kb_found": true,
+              "notes": "OP provides threshold: 2.2-inch max for stock, 2.7-inch max for rolled. 2.85 exceeds both. Clear 'will rub' verdict.",
+              "files_checked": ["forum/threads/34325/posts.json:1"]
+            },
+            {
+              "id": "EAC-3",
+              "status": "covered",
+              "kb_found": true,
+              "notes": "OP provides stock specs: 17x7 ET46, 215/45-17, hub-to-lip 1.7 inches, hub-to-fender 2.7 inches.",
+              "files_checked": ["forum/threads/34325/posts.json:1"]
+            },
+            {
+              "id": "EAC-4",
+              "status": "covered",
+              "kb_found": true,
+              "notes": "kagame (post #26) provides real-world data: 18x8.5+35 225/40-18 on Tein coilovers = slight rear rub on bumps. Inner fender plastic and screw removal needed.",
+              "files_checked": ["forum/threads/34325/posts.json:26"]
+            }
+          ],
+
+          "new_gaps_discovered": [],
+          "summary": "KB covers 4/4 expected components (100%) from scraped thread data. This test validates that the forum scraping pipeline successfully captures the data needed to answer wheel fitment questions. All data comes from T3 source (forum) with credibility score 4.1."
+        }
+      },
+
+      "aggregate": {
+        "tests_run": 2,
+        "avg_accuracy": 0.92,
+        "avg_coverage": 0.71,
+        "avg_critical_coverage": 0.67
+      }
+    }
+  ]
+}

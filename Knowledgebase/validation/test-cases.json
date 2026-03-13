@@ -1,0 +1,199 @@
+{
+  "_meta": {
+    "description": "KB validation test cases derived from real forum questions. Each case has a question, expected answer components from expert responses, and coverage scoring.",
+    "version": "1.0",
+    "last_updated": "2026-03-12",
+    "methodology": "validation/README.md",
+    "entry_point": "Scheduled agents: read this file, run questions against KB, record results in test-results.json"
+  },
+
+  "test_cases": [
+    {
+      "id": "TC-001",
+      "title": "Rough idle after spark plug change on 2.7 V6",
+      "source_thread": {
+        "forum": "newtiburon",
+        "section": "gk-v6-na",
+        "url": "https://www.newtiburon.com/threads/anyone-else-dealing-with-rough-idle-on-a-2-7-v6-tiburon-after-replacing-plugs.485235/",
+        "thread_id": "485235"
+      },
+      "question": "I have an 06 Tiburon GT with the 2.7 V6. Recently replaced spark plugs and coil packs at 150K miles. Car runs stronger on highway but idle is rough — slight vibration through steering wheel and seats when sitting at a light. No CEL, drives fine once moving. Coil connections seem seated correctly. Is this common with these engines? Should I check vacuum lines, throttle body, or intake?",
+      "engine": "V6",
+      "model_year_range": "2003-2008",
+      "systems": ["ignition", "engine_mechanical", "fuel_system", "intake"],
+      "difficulty": "common",
+
+      "expected_answer_components": [
+        {
+          "id": "EAC-1",
+          "claim": "Only use NGK or Denso spark plugs. The 2.7L V6 Delta engine is sensitive to plug brand — Bosch, Autolite, and Champion have incorrect internal resistance for this ignition system and cause misfires or rough idle.",
+          "kb_source_file": "common/tiburon-knowledge-graph.json",
+          "kb_node_id": "pn-spark-plug-ngk-v6-unleaded",
+          "authority_tier": 1,
+          "critical": true,
+          "coverage_gap": false
+        },
+        {
+          "id": "EAC-2",
+          "claim": "Check the throttle body mounting bracket. There is a bracket between the intake manifold and throttle body that can be incorrectly positioned during reassembly. The bracket goes against the throttle body only (top), not between intake and TB (bottom).",
+          "kb_source_file": null,
+          "kb_node_id": null,
+          "authority_tier": null,
+          "critical": true,
+          "coverage_gap": true,
+          "gap_note": "No KB content on throttle body bracket position or torque. This is common tribal knowledge from Charlie-III."
+        },
+        {
+          "id": "EAC-3",
+          "claim": "Two similar connectors near the front of the throttle body can be physically swapped but should not be — one pair is black, one is dark grey. Swapping them causes rough running.",
+          "kb_source_file": null,
+          "kb_node_id": null,
+          "authority_tier": null,
+          "critical": true,
+          "coverage_gap": true,
+          "gap_note": "No KB content on TB-area connector swap risk. Shop manual does not warn about this. Charlie-III identifies this as a common mistake."
+        },
+        {
+          "id": "EAC-4",
+          "claim": "Check that the small ground wire near the rear bank was reattached. It can be disturbed during spark plug access and causes electrical gremlins including rough idle.",
+          "kb_source_file": null,
+          "kb_node_id": null,
+          "authority_tier": null,
+          "critical": false,
+          "coverage_gap": true,
+          "gap_note": "Ground distribution documented in common/electrical-manual/schematics/ but not linked to spark plug service procedure context."
+        },
+        {
+          "id": "EAC-5",
+          "claim": "Most common problem after a plug job is a vacuum leak. Spray brake cleaner around all intake connection points while the engine is idling — if RPM dips or stumbles, you found the leak location.",
+          "kb_source_file": "common/shop-manual/fuel-system/",
+          "kb_node_id": null,
+          "authority_tier": 1,
+          "critical": false,
+          "coverage_gap": false,
+          "gap_note": "Vacuum leak diagnosis procedure exists in fuel system chapter but may not be cross-linked to ignition/plug service context."
+        },
+        {
+          "id": "EAC-6",
+          "claim": "Best coil pack brands are Hyundai/Mando OEM or NTK. Many aftermarket coils are substandard and cause rough running even when new.",
+          "kb_source_file": "common/opengk/sensor-information.md",
+          "kb_node_id": null,
+          "authority_tier": 2,
+          "critical": false,
+          "coverage_gap": false,
+          "gap_note": "Partial coverage — OEM part numbers exist in sensor-information.md but coil brand quality ranking may not be explicit."
+        }
+      ],
+
+      "expert_responses": [
+        {
+          "contributor": "Charlie-III",
+          "credibility_weight": 5,
+          "key_points": ["plug brand matters (no Bosch)", "throttle body bracket position", "two swappable connectors near TB", "ground wire reattachment"],
+          "post_url": null
+        },
+        {
+          "contributor": "chase206",
+          "credibility_weight": 5,
+          "key_points": ["NGK or Denso only", "internal resistance mismatch with other brands", "Hyundai/Mando or NTK coils", "vacuum leak — spray brake cleaner method"],
+          "post_url": null
+        }
+      ],
+
+      "scoring": {
+        "total_expected_components": 6,
+        "critical_components": 3,
+        "kb_has_data_count": 3,
+        "kb_coverage_pct": 50,
+        "gaps_identified": [
+          "throttle_body_bracket_position",
+          "tb_connector_swap_risk",
+          "ground_strap_plug_access_context"
+        ]
+      },
+
+      "last_tested": "2026-03-12",
+      "last_result": "RUN-001",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb"
+    },
+    {
+      "id": "TC-002",
+      "title": "Wheel fitment: 18x8.5 ET35 with 225/40-18",
+      "source_thread": {
+        "forum": "newtiburon",
+        "section": "gk-wheel-tire-suspension",
+        "url": "https://www.newtiburon.com/threads/list-of-what-width-offset-will-rub-and-what-wont.34325/",
+        "thread_id": "34325"
+      },
+      "question": "Will 18x8.5 wheels with 35mm offset and 225/40-18 tires rub on a GK Tiburon at stock ride height?",
+      "engine": "both",
+      "model_year_range": "2003-2008",
+      "systems": ["suspension", "wheels"],
+      "difficulty": "common",
+
+      "expected_answer_components": [
+        {
+          "id": "EAC-1",
+          "claim": "Hub-to-rim-lip distance for 18x8.5 ET35 is 2.85 inches, which exceeds the 2.2-inch safe limit for stock fenders.",
+          "kb_source_file": "forum/threads/34325/posts.json",
+          "authority_tier": 3,
+          "critical": true,
+          "coverage_gap": false
+        },
+        {
+          "id": "EAC-2",
+          "claim": "This combo will rub at stock height. Even with rolled fenders (2.7-inch limit), it's borderline since 2.85 exceeds 2.7.",
+          "kb_source_file": "forum/threads/34325/posts.json",
+          "authority_tier": 3,
+          "critical": true,
+          "coverage_gap": false
+        },
+        {
+          "id": "EAC-3",
+          "claim": "Stock reference: 17x7 ET46, 215/45-17, hub-to-lip 1.7 inches, hub-to-fender 2.7 inches.",
+          "kb_source_file": "forum/threads/34325/posts.json",
+          "authority_tier": 3,
+          "critical": false,
+          "coverage_gap": false
+        },
+        {
+          "id": "EAC-4",
+          "claim": "Real-world confirmation: kagame ran 18x8.5 +35 225/40-18 on Tein coilovers and got slight rear rub on bumps. Required inner fender plastic trim and screw removal.",
+          "kb_source_file": "forum/threads/34325/posts.json",
+          "authority_tier": 3,
+          "critical": false,
+          "coverage_gap": false
+        }
+      ],
+
+      "expert_responses": [
+        {
+          "contributor": "aLiEn_sPoReZ",
+          "credibility_weight": 2,
+          "key_points": ["2.85-inch hub-to-lip", "rub unless rolled fender", "stock measurements"],
+          "post_url": null
+        },
+        {
+          "contributor": "kagame",
+          "credibility_weight": 2,
+          "key_points": ["real-world 18x8.5+35 225/40 on coilovers", "slight rear rub on bumps", "inner liner trim needed"],
+          "post_url": null
+        }
+      ],
+
+      "scoring": {
+        "total_expected_components": 4,
+        "critical_components": 2,
+        "kb_has_data_count": 4,
+        "kb_coverage_pct": 100,
+        "gaps_identified": []
+      },
+
+      "last_tested": "2026-03-12",
+      "last_result": "RUN-001",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb"
+    }
+  ]
+}

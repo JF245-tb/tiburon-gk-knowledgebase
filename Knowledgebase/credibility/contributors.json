@@ -1,0 +1,114 @@
+{
+  "_meta": {
+    "description": "Known contributor registry — forum and community members with credibility weights",
+    "version": "1.0",
+    "last_updated": "2026-03-12",
+    "schema_doc": "credibility/README.md",
+    "scoring_doc": "credibility/scoring-algorithm.md",
+    "default_new_contributor_weight": 2,
+    "weight_scale": "0-10 where 10=factory manual trust (never assigned to individuals), 7=max individual cap, 5=established expert, 2=unvetted member",
+    "notes": "Weights represent the contributor's individual credibility modifier. Combined with source and post-type modifiers per scoring-algorithm.md."
+  },
+
+  "contributors": {
+    "Charlie-III": {
+      "source_site": "newtiburon",
+      "profile_url": "https://www.newtiburon.com/members/charlie-iii/",
+      "role": "administrator",
+      "joined": "2013",
+      "post_count_approx": 11000,
+      "credibility_weight": 5,
+      "expertise_areas": [
+        "engine_mechanical",
+        "ignition_system",
+        "general_maintenance",
+        "diagnostics"
+      ],
+      "priority_contributor": true,
+      "weight_justification": "Forum administrator since 2013. 11K+ posts. Broad diagnostic knowledge, frequently first responder on technical questions. Specific expertise in plug compatibility and throttle body service.",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb",
+      "last_reviewed": "2026-03-12"
+    },
+
+    "chase206": {
+      "source_site": "newtiburon",
+      "profile_url": "https://www.newtiburon.com/members/chase206/",
+      "role": "super_moderator",
+      "joined": "2008",
+      "post_count_approx": 3100,
+      "credibility_weight": 5,
+      "expertise_areas": [
+        "engine_builds",
+        "suspension",
+        "race_prep",
+        "fabrication",
+        "lemons",
+        "ignition_system",
+        "vacuum_diagnostics"
+      ],
+      "priority_contributor": true,
+      "weight_justification": "Super Moderator since 2008. Deep hands-on race build experience (Lemons). Technical depth in engine, suspension, and custom fabrication. Already tagged as priority contributor in forum/thread-index.json.",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb",
+      "last_reviewed": "2026-03-12"
+    },
+
+    "eagleprime": {
+      "source_site": "newtiburon",
+      "profile_url": "https://www.newtiburon.com/members/eagleprime.137511/",
+      "role": "member",
+      "joined": "2022",
+      "post_count_approx": 1673,
+      "credibility_weight": 5,
+      "expertise_areas": [
+        "engine_diagnostics",
+        "general_maintenance",
+        "high_mileage_assessment"
+      ],
+      "priority_contributor": true,
+      "weight_justification": "base(2) + posts>=1000(+1) + expertise_overlap(+1) + maintainer_identified(+1) = 5. Active member since 2022, 1673+ posts. Demonstrates diagnostic skill (identified rod knock from audio, engine teardown assessment at 293K km). Active in member profiles and troubleshooting threads.",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb",
+      "last_reviewed": "2026-03-12"
+    },
+
+    "The_Evenger": {
+      "source_site": "newtiburon",
+      "profile_url": "https://www.newtiburon.com/members/the-evenger.48118/",
+      "role": "member",
+      "joined": "2015",
+      "post_count_approx": 2433,
+      "credibility_weight": 6,
+      "expertise_areas": [
+        "diagnostics",
+        "electrical",
+        "security_systems",
+        "hvac",
+        "body_collision",
+        "general_maintenance"
+      ],
+      "priority_contributor": true,
+      "weight_justification": "base(2) + posts>=1000(+1) + tenure>=5yr(+1, joined 2015 = 11yr) + expertise_overlap(+1) + maintainer_identified(+1) = 6. Active since 2015, 2433+ posts. Broad diagnostic and electrical knowledge: CEL/MAF/O2 troubleshooting, security system installs (Crimestopper SP-502), HVAC manual-to-auto conversion, body/collision assessment. Car nicknamed 'Neptune'.",
+      "added": "2026-03-12",
+      "added_by": "JF245-tb",
+      "last_reviewed": "2026-03-12"
+    },
+
+    "_template": {
+      "_comment": "Copy this block and rename the key to add a new contributor. See scoring-algorithm.md Section 2 for initial weight calculation.",
+      "source_site": "newtiburon",
+      "profile_url": null,
+      "role": "member",
+      "joined": null,
+      "post_count_approx": null,
+      "credibility_weight": 2,
+      "expertise_areas": [],
+      "priority_contributor": false,
+      "weight_justification": "",
+      "added": "",
+      "added_by": "",
+      "last_reviewed": ""
+    }
+  }
+}
