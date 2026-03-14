@@ -51,7 +51,7 @@
 | Ignition | Wasted spark, 3 coil packs | **Sequential COP — Toyota 90919-A2005 ×6** |
 | ECU | Siemens SIMK43 | **Haltech Elite 2500** |
 | Power dist. | OEM fuse/relay box | **AIM PDM 32** |
-| Fan control | OEM fan thermoswitch | **PDM PWM — 25/50/75/100% at 77/82/87/92°C** |
+| Fan control | OEM fan thermoswitch | **PDM HB1 PWM — 25/50/75/100% at 77/82/87/92°C** |
 
 ---
 
@@ -60,7 +60,7 @@
 |---|---|
 | Sensor supply +5V | 34-pin **pin 9** (O wire) — ratiometric sensors (Lowdoller, MAP, TPS) |
 | Sensor supply +8V | 34-pin **pin 12** (O/W wire) — NOT pin 3 |
-| CAN ECU to PDM | 26-pin **pin 23** (W) = CAN H → PDM **A30**; **pin 24** (L) = CAN L → PDM **A31** *(CAN1/CAN ECU bus, 500 kbps — NOT A22/A11 which is CAN AiM/expansion bus)* |
+| CAN ECU to PDM | 26-pin **pin 23** (W) = CAN H → PDM **B30**; **pin 24** (L) = CAN L → PDM **B31** *(CAN1/CAN ECU bus, 500 kbps — NOT B22/B11 which is CAN AiM/expansion bus)* |
 | VSS (speed) | 26-pin **pin 8** (SPI 1) ← transaxle Hall IC, 4 pulses/rev |
 | Tacho output | 34-pin **pin 18** (DPO 1, V/B) — 3 ppr, 12V active low |
 
@@ -89,39 +89,39 @@
 ### PDM — AIM PDM 32
 | Output | Name | Trigger |
 |---|---|---|
-| HP1 (A1+A13) | Starter | STARTER_SAFE (Ch01 AND IGN AND NOT RPM) |
-| HP2 (A12+A23) | Fan | ECT 4-band PWM (77–92°C) + Ch02 low / Ch03 high override |
-| HP3 (A24+A25) | FuelPump | FUEL_PRIME OR ENGINE_RUNNING |
-| MP1 (A2) | InjectorPwr | SafeIgnition |
-| MP2 (A3) | CoilPwr | SafeIgnition |
-| MP3 (A4) | Horn | Ch12 (Phase 2+) |
-| MP4 (A5) | BrakeLights | BRAKE_SWITCH (Ch09) |
-| MP5 (A6) | TailLights | SafeIgnition (always on) |
-| MP6 (A7) | Headlights | Ch04 AND SafeIgnition (Phase 2+) |
-| MP7 (A8) | Coolsuit | Ch10 AND SafeIgnition |
-| MP8 (A9) | Defogger | Ch11 AND SafeIgnition |
-| LP1–LP6 (A14–A19) | ECUPwr/Dash/SmartyCam/GPS/Wideband/Cluster | SafeIgnition |
-| LP7 (A20) | WarningLED | MULTI_WARNING |
-| LP8 (A21) | AltExciter | SafeIgnition (OEM D+ field wire) |
+| HP1 (B1+B13) | Starter | STARTER_SAFE (Ch01 AND IGN AND NOT RPM) |
+| HB1 (G1+G2) | Fan | ECT 4-band PWM (77–92°C) + Ch02 low / Ch03 high override |
+| HP3 (B24+B25) | FuelPump | FUEL_PRIME OR ENGINE_RUNNING |
+| MP1 (B2) | InjectorPwr | SafeIgnition |
+| MP2 (B3) | CoilPwr | SafeIgnition |
+| MP3 (B4) | Horn | Ch12 (Phase 2+) |
+| MP4 (B5) | BrakeLights | BRAKE_SWITCH (Ch09) |
+| MP5 (B6) | TailLights | SafeIgnition (always on) |
+| MP6 (B7) | Headlights | Ch04 AND SafeIgnition (Phase 2+) |
+| MP7 (B8) | Coolsuit | Ch10 AND SafeIgnition |
+| MP8 (B9) | Defogger | Ch11 AND SafeIgnition |
+| LP1–LP6 (B14–B19) | ECUPwr/Dash/SmartyCam/GPS/Wideband/Cluster | SafeIgnition |
+| LP7 (B20) | WarningLED | MULTI_WARNING |
+| LP8 (B21) | AltExciter | SafeIgnition (OEM D+ field wire) |
 
 > **MP1/MP2 Phase 1 (stock ECU):** Wired to OE main relay pin 87. **Phase 2 (Haltech):** MP1 → injector rail; MP2 → COP coil bus. No config change.
 
 ### Physical Switches (No CAN Keypad)
 | Input | PDM Connection | Function |
 |---|---|---|
-| IGN toggle | B23 (built-in IGN input) | Master power / SafeIgnition |
-| Start button | Ch01 (B26) | Momentary — crank engine (RPM interlock) |
-| Fan low | Ch02 (B27) | Manual fan low speed override |
-| Fan high | Ch03 (B28) | Manual fan high speed override |
-| Headlights | Ch04 (B29) | Headlights (Phase 2+) |
-| Wiper Low | Ch05 (B30) | Wiper motor low speed (future) |
-| Wiper High | Ch06 (B31) | Wiper motor high speed (future) |
-| Brake switch | Ch09 (B21) | Brake lights (always active) |
-| Coolsuit | Ch10 (B22) | Coolsuit pump on/off |
-| Defogger | Ch11 (A26) | Rear window defogger |
-| Horn | Ch12 (A27) | Horn (Phase 2+) |
+| IGN toggle | G23 (built-in IGN input) | Master power / SafeIgnition |
+| Start button | Ch01 (G26) | Momentary — crank engine (RPM interlock) |
+| Fan low | Ch02 (G27) | Manual fan low speed override |
+| Fan high | Ch03 (G28) | Manual fan high speed override |
+| Headlights | Ch04 (G29) | Headlights (Phase 2+) |
+| Wiper Low | Ch05 (G30) | Wiper motor low speed (future) |
+| Wiper High | Ch06 (G31) | Wiper motor high speed (future) |
+| Brake switch | Ch09 (G21) | Brake lights (always active) |
+| Coolsuit | Ch10 (G22) | Coolsuit pump on/off |
+| Defogger | Ch11 (B26) | Rear window defogger |
+| Horn | Ch12 (B27) | Horn (Phase 2+) |
 
-> **CAN2 unused** — keypad excluded from build. CAN2 pins A28/A29 available for future expansion.
+> **CAN2 unused** — keypad excluded from build. CAN2 pins B28/B29 available for future expansion.
 
 ---
 

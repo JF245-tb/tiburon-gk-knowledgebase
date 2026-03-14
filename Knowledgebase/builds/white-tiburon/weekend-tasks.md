@@ -56,7 +56,7 @@ PDM at home with laptop + fuel pump. All software work and bench testing — no 
 - [ ] Configure status variables: ENGINE_RUNNING, FUEL_PRIME, FAN_TEMP bands (77/82/87/92°C), FAN_FAILSAFE, STARTER_SAFE, MULTI_WARNING
 - [ ] Configure channel inputs: Ch02 (fan low), Ch03 (fan high), Ch10 (coolsuit), Ch11 (defogger), Ch12 (horn), Ch04 (headlights), Ch01 (starter), Ch09 (brake)
 - [ ] Verify CAN2 disabled (no keypad — preserved in `guides/keypad-config-future.md`)
-- [ ] Configure ECU Stream: Haltech CAN_V2_40 on CAN1 (A30/A31), 500 kbps
+- [ ] Configure ECU Stream: Haltech CAN_V2_40 on CAN1 (B30/B31), 500 kbps
   - Enable channels: RPM, ECT, Oil P, Oil T, Fuel P, TPS, Vehicle Speed, Battery V
 - [ ] Configure SmartyCam Stream: RPM, Speed (GPS-08), Gear, Coolant Temp, Oil P, TPS, Lat G, Long G
 - [ ] Transmit config to PDM via USB
@@ -69,7 +69,7 @@ PDM at home with laptop + fuel pump. All software work and bench testing — no 
 
 > **Full procedure:** `guides/pdm-build-guide.md` → "Fuel Pump Bench Test" section
 
-- [ ] Wire fuel pump to HP3 (A24+A25), 14 AWG minimum, battery GND to pump (−)
+- [ ] Wire fuel pump to HP3 (B24+B25), 14 AWG minimum, battery GND to pump (−)
 - [ ] IGN on → verify 3-second prime cycle → off
 - [ ] Force HP3 on → measure current (expected 5–10A continuous)
 - [ ] Measure voltage at pump (< 0.5V drop from supply)
@@ -101,7 +101,7 @@ PDM at home with laptop + fuel pump. All software work and bench testing — no 
 
 **Bench smoke test (all devices on Data Hub):**
 - [ ] Connect PDM → expansion cable → Data Hub → GPS-08 (port 1) + SmartyCam EXP (port 2) + Podium (port 3 via Binder-to-M8 adapter)
-- [ ] Wire LP3 (A16) → SmartyCam 7-pin power (Red +12V, Black GND) — or use fused bench tap
+- [ ] Wire LP3 (B16) → SmartyCam 7-pin power (Red +12V, Black GND) — or use fused bench tap
 - [ ] IGN on → verify SmartyCam LED (green/blue = CAN active), GPS-08 LED, Podium CAN LED (⇄)
 - [ ] RS3 Live Data → CAN AiM bus shows traffic
 - [ ] SmartyCam: press record → 10s → stop → check `.mp4` on SD (overlay labels visible, values = 0 expected)
@@ -163,9 +163,9 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 - [ ] Wire large terminal B → 150A breaker → starter B+ / alternator B+ (2 AWG)
 - [ ] Wire large terminal B → 120A breaker → PDM Surlok (+) (4 AWG)
 - [ ] Wire small terminal B → IGN toggle switch (new)
-- [ ] IGN toggle → PDM B23 AND Haltech 34-pin pin 13 (P wire)
+- [ ] IGN toggle → PDM G23 AND Haltech 34-pin pin 13 (P wire)
 - [ ] Connect PDM Surlok power cable
-- [ ] Connect PDM grounds (B13, B14, B18 to chassis)
+- [ ] Connect PDM grounds (G13, G14, G18 to chassis)
 
 > Kill switch diagram: `guides/pdm-build-guide.md` → "S.2 Kill Switch Wiring"
 
@@ -176,15 +176,15 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 [START]                                  (LED)
 ```
 
-- [ ] Start button → Ch01 (B26), momentary, active = GND
-- [ ] Fan low toggle → Ch02 (B27), active = 12V
-- [ ] Fan high toggle → Ch03 (B28), active = 12V
-- [ ] Coolsuit toggle → Ch10 (B22), active = 12V
-- [ ] Defogger toggle → Ch11 (A26), active = 12V
-- [ ] Brake light switch → Ch09 (B21), closed on press
-- [ ] Warning LED → LP7 (A20)
+- [ ] Start button → Ch01 (G26), momentary, active = GND
+- [ ] Fan low toggle → Ch02 (G27), active = 12V
+- [ ] Fan high toggle → Ch03 (G28), active = 12V
+- [ ] Coolsuit toggle → Ch10 (G22), active = 12V
+- [ ] Defogger toggle → Ch11 (B26), active = 12V
+- [ ] Brake light switch → Ch09 (G21), closed on press
+- [ ] Warning LED → LP7 (B20)
 
-> **2 spare panel positions** reserved for horn (Ch12/A27) and headlights (Ch04/B29) in Phase 2.
+> **2 spare panel positions** reserved for horn (Ch12/B27) and headlights (Ch04/G29) in Phase 2.
 > **Wiper switches** not installed — wiper logic being developed separately.
 
 ### S.4 First Power-Up in Car
@@ -210,8 +210,8 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 **OE Main Relay (MP1/MP2):**
 - [ ] Locate OE main relay in underhood fuse box
 - [ ] Pull the OE main relay
-- [ ] Insert PDM MP1 (A2) wire into relay socket pin 87 (power out)
-- [ ] Insert PDM MP2 (A3) wire into same pin 87 socket (parallel)
+- [ ] Insert PDM MP1 (B2) wire into relay socket pin 87 (power out)
+- [ ] Insert PDM MP2 (B3) wire into same pin 87 socket (parallel)
 - [ ] IGN on → verify stock ECU powers up via PDM; IGN off → stock ECU loses power
 - [ ] **Test:** Stock dash lights, check engine light, fuel gauge all work
 
@@ -219,12 +219,12 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 
 **Fuel Pump Relay (HP3):**
 - [ ] Pull OEM fuel pump relay
-- [ ] Insert PDM HP3 (A24+A25) wire into pin 87 socket
+- [ ] Insert PDM HP3 (B24+B25) wire into pin 87 socket
 - [ ] IGN on → verify 3-second fuel prime (listen for pump), then off
 - [ ] Verify in Race Studio: `FUEL_PRIME` timer fires
 
 **Starter (HP1 → direct to solenoid):**
-- [ ] Run HP1 (A1+A13) wire directly to starter solenoid S-terminal (10 AWG, ring terminal)
+- [ ] Run HP1 (B1+B13) wire directly to starter solenoid S-terminal (10 AWG, ring terminal)
 - [ ] Leave OEM starter relay in place as backup
 - [ ] Press START (Ch01) → engine cranks; release → stops
 - [ ] While engine running: press START → should NOT engage (RPM interlock)
@@ -236,29 +236,29 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 - [ ] Locate OEM alternator D+ exciter wire (thin ~18 AWG at alternator Yazaki connector)
 - [ ] Confirm with multimeter: 12V with IGN on, 0V with IGN off
 - [ ] Cut exciter wire at convenient point (leave length on both ends)
-- [ ] Fuse box side → wire to PDM LP8 (A21, Connector A)
+- [ ] Fuse box side → wire to PDM LP8 (B21, Black Connector)
 - [ ] Alternator D+ side → remains connected to alternator (load side)
 
 ### S.8 CAN0 Expansion Bus — AIM Devices + Podium
 
 > Data Hub is a passive star splitter — each device plugs into its own port.
-> GPS-08 and Podium get power through hub +Vb rail (A33, always on). SmartyCam needs **separate LP3 power** via 7-pin connector.
+> GPS-08 and Podium get power through hub +Vb rail (B33, always on). SmartyCam needs **separate LP3 power** via 7-pin connector.
 > All software config should be done Friday (F.3). Saturday is physical install + verification.
 
 **Install:**
-- [ ] Verify CAN0 expansion cable: A22 (H) / A11 (L) / A33 (+Vb out) / A10 (GND)
+- [ ] Verify CAN0 expansion cable: B22 (H) / B11 (L) / B33 (+Vb out) / B10 (GND)
 - [ ] Connect Data Hub male port to expansion cable
 - [ ] Hub port 1 → GPS-08 (5-pin Binder)
 - [ ] Hub port 2 → SmartyCam EXP port (5-pin Binder — CAN data only)
 - [ ] Hub port 3 → Podium Micro (Binder-to-M8 adapter)
-- [ ] Wire LP3 (A16) → SmartyCam 7-pin main power (Red = +12V, Black = GND)
+- [ ] Wire LP3 (B16) → SmartyCam 7-pin main power (Red = +12V, Black = GND)
 - [ ] Mount GPS-08 (roof or cowl — clear sky view, antenna face up)
 - [ ] Mount SmartyCam (windshield or roll bar bracket)
 - [ ] Podium already on electronics plate (S.1)
 
 **Verify:**
 - [ ] IGN on → SmartyCam powers up (CAN LED: green/blue solid)
-- [ ] GPS-08 LED active (powered via hub A33)
+- [ ] GPS-08 LED active (powered via hub B33)
 - [ ] Podium power LED on, CAN ⇄ LED active
 - [ ] RS3 Live Data → CAN AiM bus shows traffic
 - [ ] GPS channels appear in RS3 Channels tab after satellite lock (~30s with sky view)
@@ -328,8 +328,8 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 
 ### SU.6 Haltech CAN1 → PDM
 
-- [ ] Connect Haltech 26-pin pins 23/24 (CAN H/L) → PDM A30/A31 (CAN1)
-- [ ] Power Haltech from PDM LP1 (A14)
+- [ ] Connect Haltech 26-pin pins 23/24 (CAN H/L) → PDM B30/B31 (CAN1)
+- [ ] Power Haltech from PDM LP1 (B14)
 - [ ] Verify Haltech CAN_V2_40 protocol active — all enabled channels visible in Race Studio Live Data
 - [ ] Confirm fan temp bands react to live coolant temp on CAN
 - [ ] Confirm warning LED (LP7) triggers when sensor thresholds crossed (force values in NSP)
@@ -345,11 +345,11 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 
 **Try Option A first (reversible):**
 - [ ] Pull OEM fan relay
-- [ ] Insert HP2 (A12+A23) wire into fan relay pin 87 socket (12 AWG)
+- [ ] Insert HB1 (G1+G2) wire into fan relay pin 87 socket (12 AWG)
 - [ ] Warm up engine → verify fan bands activate at correct temps (25%@77°C, 50%@82°C, 75%@87°C, 98%@92°C)
 
 **If relay socket has too much resistance → Option B (direct):**
-- [ ] Run HP2 directly to fan motor connector
+- [ ] Run HB1 directly to fan motor connector
 - [ ] Leave OEM fan relay as backup
 
 - [ ] Verify fan override toggle (Ch02/Ch03) → 98% duty
@@ -357,7 +357,7 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 
 ### SU.7 Wideband AFR (Innovate LM2)
 
-- [ ] Wire LM2 power → PDM LP5 (A18) — already mounted on plate Saturday
+- [ ] Wire LM2 power → PDM LP5 (B18) — already mounted on plate Saturday
 - [ ] Wire LM2 Analog Out 1: Lime Green (+) → Haltech AVI 8 (26-pin pin 4); Yellow (−) → signal GND (26-pin pin 14/15/16)
 - [ ] Install wideband O2 sensor bung in exhaust post-collector (weld if not already in place)
 - [ ] Install O2 sensor, route proprietary cable through firewall → RIGHT trunk → footwell → LM2
@@ -405,62 +405,62 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 
 | Load | PDM Output | Pin(s) | Notes |
 |------|-----------|--------|-------|
-| Starter | HP1 | A1 + A13 | Via solenoid; inductive; series diode |
-| Fan | HP2 | A12 + A23 | PWM 100Hz; freewheeling diode |
-| Fuel Pump | HP3 | A24 + A25 | Via fuse box pin 87; freewheeling diode |
-| Injector Power / OE Relay | MP1 | A2 | **Phase 1:** OE relay box pin 87 (pull relay). **Phase 2:** → D3 pin 7 (injector rail + Haltech 34-pin pin 26) |
-| Coil Power / OE Relay | MP2 | A3 | **Phase 1:** OE relay box pin 87 (same socket). **Phase 2:** → D2 pin 7 (Pin D all 6 COPs) |
-| Horn | MP3 | A4 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → horn direct or relay socket; Ch12 button |
-| Headlights | MP6 | A7 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → headlight direct or relay socket; Ch04 toggle |
-| Alternator exciter | LP8 | A21 | D+ field wire cut and routed through LP8; SafeIgnition trigger; < 1A draw |
+| Starter | HP1 | B1 + B13 | Via solenoid; inductive; series diode |
+| Fan | HB1 | G1 + G2 | PWM 100Hz; Half Bridge 35A; freewheeling diode |
+| Fuel Pump | HP3 | B24 + B25 | Via fuse box pin 87; freewheeling diode |
+| Injector Power / OE Relay | MP1 | B2 | **Phase 1:** OE relay box pin 87 (pull relay). **Phase 2:** → D3 pin 7 (injector rail + Haltech 34-pin pin 26) |
+| Coil Power / OE Relay | MP2 | B3 | **Phase 1:** OE relay box pin 87 (same socket). **Phase 2:** → D2 pin 7 (Pin D all 6 COPs) |
+| Horn | MP3 | B4 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → horn direct or relay socket; Ch12 button |
+| Headlights | MP6 | B7 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → headlight direct or relay socket; Ch04 toggle |
+| Alternator exciter | LP8 | B21 | D+ field wire cut and routed through LP8; SafeIgnition trigger; < 1A draw |
 
 ### Cockpit
 
 | Load | PDM Output | Pin(s) | Notes |
 |------|-----------|--------|-------|
-| Brake Lights | MP4 | A5 | Always active (Ch09 trigger) |
-| Tail Lights | MP5 | A6 | SafeIgnition (always on) |
-| Coolsuit | MP7 | A8 | Ch10 AND SafeIgnition |
-| Defogger | MP8 | A9 | Ch11 AND SafeIgnition |
+| Brake Lights | MP4 | B5 | Always active (Ch09 trigger) |
+| Tail Lights | MP5 | B6 | SafeIgnition (always on) |
+| Coolsuit | MP7 | B8 | Ch10 AND SafeIgnition |
+| Defogger | MP8 | B9 | Ch11 AND SafeIgnition |
 | Fuel sender | — | — | OEM direct circuit, no PDM involvement |
 
 ### Accessories (SafeIgnition trigger)
 
 | Load | PDM Output | Pin |
 |------|-----------|-----|
-| ECU Power | LP1 | A14 |
-| Dash | LP2 | A15 |
-| SmartyCam | LP3 | A16 |
-| Spare (was GPS) | LP4 | A17 |
-| Wideband | LP5 | A18 |
-| Cluster | LP6 | A19 |
-| Warning LED | LP7 | A20 |
-| AltExciter | LP8 | A21 |
+| ECU Power | LP1 | B14 |
+| Dash | LP2 | B15 |
+| SmartyCam | LP3 | B16 |
+| Spare (was GPS) | LP4 | B17 |
+| Wideband | LP5 | B18 |
+| Cluster | LP6 | B19 |
+| Warning LED | LP7 | B20 |
+| AltExciter | LP8 | B21 |
 
 ### CAN Buses
 
 | Bus | PDM Pins | Device | Speed |
 |-----|----------|--------|-------|
-| CAN0 (AIM expansion) | A22 (H) / A11 (L) | Data Hub → GPS, SmartyCam, Podium | 1 Mbps |
-| CAN1 (ECU) | A30 (H) / A31 (L) | Haltech Elite 2500 | 500 kbps |
-| CAN2 | A28 (H) / A29 (L) | **Unused** — available for future CAN device | 125 kbps |
+| CAN0 (AIM expansion) | B22 (H) / B11 (L) | Data Hub → GPS, SmartyCam, Podium | 1 Mbps |
+| CAN1 (ECU) | B30 (H) / B31 (L) | Haltech Elite 2500 | 500 kbps |
+| CAN2 | B28 (H) / B29 (L) | **Unused** — available for future CAN device | 125 kbps |
 
 ### Switch Panel Inputs
 
 | Switch | PDM Input | Pin | Type |
 |--------|----------|-----|------|
-| Ignition | IGN input | B23 | Latching toggle, 12V |
-| Start | Ch01 | B26 | Momentary, active = GND |
-| Fan low | Ch02 | B27 | Latching toggle, 12V |
-| Fan high | Ch03 | B28 | Latching toggle, 12V |
-| Headlights | Ch04 | B29 | Latching toggle, 12V (Phase 2+) |
-| Brake switch | Ch09 | B21 | Closed on press |
-| Coolsuit | Ch10 | B22 | Latching toggle, 12V |
-| Defogger | Ch11 | A26 | Latching toggle, 12V |
-| Horn | Ch12 | A27 | Momentary, active = GND (Phase 2+) |
+| Ignition | IGN input | G23 | Latching toggle, 12V |
+| Start | Ch01 | G26 | Momentary, active = GND |
+| Fan low | Ch02 | G27 | Latching toggle, 12V |
+| Fan high | Ch03 | G28 | Latching toggle, 12V |
+| Headlights | Ch04 | G29 | Latching toggle, 12V (Phase 2+) |
+| Brake switch | Ch09 | G21 | Closed on press |
+| Coolsuit | Ch10 | G22 | Latching toggle, 12V |
+| Defogger | Ch11 | B26 | Latching toggle, 12V |
+| Horn | Ch12 | B27 | Momentary, active = GND (Phase 2+) |
 
-> **Wipers:** Ch05 (B30) / Ch06 (B31) reserved — wiper logic being developed separately.
-> **Spare:** Ch07 (B32), Ch08 (B33)
+> **Wipers:** Ch05 (G30) / Ch06 (G31) reserved — wiper logic being developed separately.
+> **Spare:** Ch07 (G32), Ch08 (G33)
 
 ---
 
@@ -495,7 +495,7 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 | Cyl 5 | IGN 5 | 34-pin pin 7 | Y/BR |
 | Cyl 6 | IGN 6 | 34-pin pin 8 | Y/L |
 
-Power: PDM MP2 (A3) → Pin D common bus
+Power: PDM MP2 (B3) → Pin D common bus
 Ground: Pin A → engine block
 
 ### Injector Harness
@@ -509,7 +509,7 @@ Ground: Pin A → engine block
 | Cyl 5 | INJ 5 | 34-pin pin 27 | L/O |
 | Cyl 6 | INJ 6 | 34-pin pin 28 | L/Y |
 
-Power: PDM MP1 (A2) → injector rail + Haltech 34-pin pin 26 (R/L)
+Power: PDM MP1 (B2) → injector rail + Haltech 34-pin pin 26 (R/L)
 
 ### ECU Sensitive Bundle (Shielded)
 
@@ -533,12 +533,12 @@ After track day with stock ECU + PDM, switch to Haltech running the engine. **No
 - [ ] Unplug stock ECU connectors (C133-1 through C133-4) — leave mounted, label for reversal
 - [ ] Unplug BCM connector — leave mounted
 - [ ] Pull MP1/MP2 spades from OE main relay pin 87 socket
-- [ ] Reroute MP1 (A2) → D3 pin 7 (injector rail + Haltech 34-pin pin 26)
-- [ ] Reroute MP2 (A3) → D2 pin 7 (COP coil Pin D common bus)
+- [ ] Reroute MP1 (B2) → D3 pin 7 (injector rail + Haltech 34-pin pin 26)
+- [ ] Reroute MP2 (B3) → D2 pin 7 (COP coil Pin D common bus)
 - [ ] Plug in D2 (coil Deutsch) — engine side already on coils
 - [ ] Plug in D3 (injector Deutsch) — engine side already on injectors
-- [ ] Add horn button → Ch12 (A27), wire MP3 (A4) → horn
-- [ ] Add headlight toggle → Ch04 (B29), wire MP6 (A7) → headlights
+- [ ] Add horn button → Ch12 (B27), wire MP3 (B4) → horn
+- [ ] Add headlight toggle → Ch04 (G29), wire MP6 (B7) → headlights
 - [ ] First fire on Haltech — base tune, confirm idle
 - [ ] Verify all PDM tests still pass with Haltech running
 - [ ] **Reversal test:** plug stock ECU + BCM back in, MP1/MP2 back to relay → car runs on stock
@@ -556,6 +556,6 @@ After track day with stock ECU + PDM, switch to Haltech running the engine. **No
 - [ ] Mount Lowdoller 1500 PSI brake sensor bracket (leave wires terminated, AVI 7+8 reserved)
 - [ ] Crankcase pressure sensor (valve cover or PCV port → available PDM/Haltech input)
 - [ ] IR tire temp sensor bracket + PDM channel input wiring
-- [ ] Wiper integration — relay-less park design: MP9 (B4) low, MP10 (B5) high, LP9 (B3) park sweep. Ch05/Ch06 switches. Math channels pre-configured in RS3.
+- [ ] Wiper integration — relay-less park design: MP9 (G4) low, MP10 (G5) high, LP9 (G3) park sweep. Ch05/Ch06 switches. Math channels pre-configured in RS3.
 - [ ] CAN Keypad 12 installation (Phase 3 — see `guides/keypad-config-future.md`)
 - [ ] Remove OE ECU, BCM, and relay box (Phase 3 — after proven reliability)
