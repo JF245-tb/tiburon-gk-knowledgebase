@@ -3,7 +3,7 @@
 **Scope:** Everything from first PDM power-up through car tests (PDM + stock ECU).
 **Today's sequence:** Race Studio config → fuel pump bench → PDM to fuse box → alternator exciter / kill switch → starter.
 
-> For Race Studio config: `guides/pdm-config.md`
+> For Race Studio config: `guides/pdm-build-guide.md`
 > For weekend build procedure: `weekend-tasks.md`
 
 ---
@@ -24,14 +24,14 @@
 ## Section 1 — Race Studio Config
 
 > **Do this section before powering the PDM for the first time as the Tiburon config.**
-> Full config reference: `guides/pdm-config.md`
+> Full config reference: `guides/pdm-build-guide.md`
 
 ### Quick-start order
 1. Open `Webinar complete.zconfig` in Race Studio 3
 2. **File → Save As** → `Tiburon_White_v1.zconfig` immediately
 3. Configure in order:
    - ECU Stream: Haltech CAN_V2_40 protocol on CAN1 (A30/A31)
-   - Channel inputs: Ch01–Ch05 (toggle switches), Ch09 (starter), Ch11 (brake switch)
+   - Channel inputs: Ch10 (fan), Ch12 (coolsuit), Ch05 (defogger), Ch06 (horn), Ch07 (headlights), Ch09 (starter), Ch11 (brake)
    - Math channels: ENGINE_RUNNING, FUEL_PRIME, FAN_TEMP bands, STARTER_SAFE, MULTI_WARNING
    - Power output renames and trigger assignments per output map
 4. **Transmit configuration to PDM** (USB)
@@ -52,10 +52,10 @@
 2. Race Studio Live Data → confirm `SafeIgnition` = 1
 3. Confirm LP1–LP6 show active in Outputs view (no loads connected yet — OK)
 4. Test each toggle switch:
-   - Fan toggle (Ch01) → verify variable changes in Live Data
+   - Fan toggle (Ch10) → verify variable changes in Live Data
    - Wiper Low (Ch02) → verify
    - Wiper High (Ch03) → verify; confirm MP3 forced off when Ch03 active
-   - Coolsuit (Ch04) → verify MP7 output follows
+   - Coolsuit (Ch12) → verify MP7 output follows
    - Defogger (Ch05) → verify MP8 output follows
 5. Press START button (Ch09) → verify `STARTER_SAFE` activates (with SafeIgnition on, ENGINE_RUNNING off)
 
@@ -237,10 +237,10 @@ After completing Sections 3–6, verify:
 | Kill switch kills engine | Engine stops on kill | |
 | Starter via Ch09 button | Cranks when `ENGINE_RUNNING` = 0 | |
 | Starter interlock | Does NOT crank while running | |
-| Fan toggle (Ch01) | HP2 at 98% when switch on | |
+| Fan toggle (Ch10) | HP2 at 98% when switch on | |
 | Wiper Low (Ch02) | MP3 on, MP6 off | |
 | Wiper High (Ch03) | MP6 on, MP3 forced off | |
-| Coolsuit (Ch04) | MP7 on | |
+| Coolsuit (Ch12) | MP7 on | |
 | Defogger (Ch05) | MP8 on | |
 | Brake lights (Ch11) | MP4 on with IGN off | |
 | Tail lights | MP5 on with IGN on (automatic) | |

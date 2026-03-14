@@ -150,5 +150,5 @@ Key 1 = top-left, Key 12 = bottom-right.
 |---|---|
 | `AIM PDM/PKP_2600_SI_Datasheet_REV1.pdf` | Source datasheet (Blink Marine) |
 | `hardware/aim/aim-pdm/pdm-pinout.md` | PDM connector pinout — CAN2, LP8, B18 locations |
-| `builds/white-tiburon/guides/pdm-config.md` | Full PDM configuration including keypad button logic |
-| `builds/white-tiburon/guides/pdm-session-1.md` | Step-by-step RS3 setup for CAN2 Keypad tab |
+| `builds/white-tiburon/guides/pdm-build-guide.md` | Full PDM configuration including keypad button logic |
+| `builds/white-tiburon/guides/keypad-config-future.md` | Preserved CAN keypad button/LED/variable config for Phase 3 |

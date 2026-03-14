@@ -30,9 +30,8 @@
 | 2 | `build-profile.json` | Machine-readable config: all 10 AVI pins, PDM output map, ignition type, CAN buses |
 | 3 | `signal-routing.md` | End-to-end wire traces for every signal (confidence: ✅ verified / ⚠️ forum / 🔲 planned) |
 | 4 | `weekend-tasks.md` | Phased build procedure with test gates — current active work |
-| 5 | `guides/pdm-session-1.md` | Race Studio 3 step-by-step config walkthrough (from webinar starting point) |
-| 6 | `guides/pdm-config.md` | PDM control scheme overview (physical switch panel, status variables, output logic) |
-| 7 | `guides/bench-test.md` | Consolidated bench test procedure: fuel pump, fuse box tap, alt exciter, starter |
+| 5 | `guides/pdm-build-guide.md` | Complete PDM config: Race Studio setup, ECU Stream channels, output logic, all 3 phases |
+| 6 | `guides/bench-test.md` | Bench test procedure: fuel pump, fuse box tap, alt exciter, starter |
 | 8 | `cluster-integration.md` | OEM cluster wiring into Haltech (tach, speedo, fuel, coolant) |
 | 9 | `build-profile.md` | Narrative build profile: parts list, mods, history |
 | 10 | `build-knowledge-graph.json` | Component/signal relationship graph for programmatic lookup |
@@ -73,7 +72,7 @@
 | Coil connector | A=GND (block), B=trigger (Haltech IGN), C=feedback (open), D=12V (PDM MP2) |
 | Dwell | ~2.1 ms |
 
-### AVI Assignments (Lowdoller combo sensors — PTC thermistor, NOT NTC)
+### AVI Assignments (Lowdoller = PTC thermistor, NOT NTC)
 | AVI | Signal | Pin | Wire |
 |---|---|---|---|
 | AVI 1 | Fuel pressure | 26-pin-13 | GY/Y shielded |
@@ -82,8 +81,8 @@
 | AVI 4 | Oil temp | 34-pin-2 | O/Y |
 | AVI 5 | Coolant pressure | 26-pin-20 | O/G |
 | AVI 6 | Coolant temp | 26-pin-12 | GY/O shielded |
-| AVI 7 | Brake pressure | 26-pin-3 | GY |
-| AVI 8 | Brake temp | 26-pin-4 | V |
+| AVI 7 | IAT | 26-pin-3 | GY |
+| AVI 8 | Wideband AFR (LM2) | 26-pin-4 | V |
 | AVI 9 | MAP | 34-pin-15 | Y |
 | AVI 10 | TPS | 34-pin-14 | W |
 
@@ -91,15 +90,15 @@
 | Output | Name | Trigger |
 |---|---|---|
 | HP1 (A1+A13) | Starter | STARTER_SAFE (Ch09 AND IGN AND NOT RPM) |
-| HP2 (A12+A23) | Fan | ECT 4-band PWM (77–92°C) + Ch01 override |
+| HP2 (A12+A23) | Fan | ECT 4-band PWM (77–92°C) + Ch10 override |
 | HP3 (A24+A25) | FuelPump | FUEL_PRIME OR ENGINE_RUNNING |
 | MP1 (A2) | InjectorPwr | SafeIgnition |
 | MP2 (A3) | CoilPwr | SafeIgnition |
-| MP3 (A4) | WiperLow | Ch02 AND NOT Ch03 |
+| MP3 (A4) | Horn | Ch06 (Phase 2+) |
 | MP4 (A5) | BrakeLights | BRAKE_SWITCH (Ch11) |
 | MP5 (A6) | TailLights | SafeIgnition (always on) |
-| MP6 (A7) | WiperHigh | Ch03 |
-| MP7 (A8) | Coolsuit | Ch04 AND SafeIgnition |
+| MP6 (A7) | Headlights | Ch07 AND SafeIgnition (Phase 2+) |
+| MP7 (A8) | Coolsuit | Ch12 AND SafeIgnition |
 | MP8 (A9) | Defogger | Ch05 AND SafeIgnition |
 | LP1–LP6 (A14–A19) | ECUPwr/Dash/SmartyCam/GPS/Wideband/Cluster | SafeIgnition |
 | LP7 (A20) | WarningLED | MULTI_WARNING |
@@ -111,10 +110,10 @@
 | Input | PDM Connection | Function |
 |---|---|---|
 | IGN toggle | B23 (built-in IGN input) | Master power / SafeIgnition |
-| Fan override | Ch01 (B26) | Manual fan 98% override |
-| Wiper Low | Ch02 (B27) | Wiper motor low speed |
-| Wiper High | Ch03 (B28) | Wiper motor high speed (overrides low) |
-| Coolsuit | Ch04 (B29) | Coolsuit pump on/off |
+| Fan override | Ch10 (B22) | Manual fan 98% override |
+| Wiper Low | Ch02 (B27) | Wiper motor low speed (future) |
+| Wiper High | Ch03 (B28) | Wiper motor high speed (future) |
+| Coolsuit | Ch12 (A27) | Coolsuit pump on/off |
 | Defogger | Ch05 (B30) | Rear window defogger |
 | Start button | Ch09 (B21) | Momentary — crank engine (RPM interlock) |
 | Brake switch | Ch11 (A26) | Brake lights (always active) |

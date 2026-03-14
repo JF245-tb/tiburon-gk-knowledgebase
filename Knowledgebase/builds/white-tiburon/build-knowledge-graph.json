@@ -57,8 +57,7 @@
       "docs": [
         "hardware/aim/aim-pdm/pdm-pinout.md",
         "hardware/aim/aim-pdm/pdm-configuration-guide.md",
-        "builds/white-tiburon/guides/pdm-config.md",
-        "builds/white-tiburon/guides/pdm-session-1.md",
+        "builds/white-tiburon/guides/pdm-build-guide.md",
         "builds/white-tiburon/guides/bench-test.md"
       ]
     },
@@ -103,7 +102,7 @@
       "bus": "CAN AiM",
       "hub_port": 2,
       "power_from": "pdm-LP3 (A16)",
-      "rs3_config": "builds/white-tiburon/guides/pdm-config.md — SmartyCam Stream step",
+      "rs3_config": "builds/white-tiburon/guides/pdm-build-guide.md — SmartyCam Stream section",
       "docs": ["hardware/aim/aim-smartycam/aim-smartycam.md"]
     },
 
@@ -408,7 +407,7 @@
       "load": "Brushless cooling fan motor",
       "mode": "PWM 100Hz",
       "current_limit_a": 35,
-      "trigger": "ECT PWM curve: 25% @ 77°C, 50% @ 82°C, 75% @ 87°C, 98% @ 92°C + Ch01 manual override (98%)",
+      "trigger": "ECT PWM curve: 25% @ 77°C, 50% @ 82°C, 75% @ 87°C, 98% @ 92°C + Ch10 manual override (98%)",
       "note": "Thermostat is 170°F (77°C) — fan bands shifted vs OEM 82°C base"
     },
     {
@@ -494,7 +493,7 @@
       "pdm_pins": ["A8"],
       "mode": "OVC Protected",
       "current_limit_a": 10,
-      "trigger": "Ch04 AND SafeIgnition"
+      "trigger": "Ch12 AND SafeIgnition"
     },
     {
       "id": "pdm-LP1",

@@ -9,10 +9,8 @@
 > - Signal routing: `signal-routing.md`
 >
 > **Supporting files:**
-> - `guides/pdm-config.md` — detailed PDM output logic (legacy, being consolidated)
-> - `guides/bench-test.md` — additional bench test notes and issues log
+> - `guides/bench-test.md` — bench test procedures, fuse box tap, notes log
 > - `guides/keypad-config-future.md` — Phase 3 CAN keypad config (preserved)
-> - `guides/pdm-session-1.md` — Race Studio 3 step-by-step walkthrough
 >
 > **CAN device docs:**
 > - `hardware/aim/aim-smartycam/aim-smartycam.md` — SmartyCam pinout, RS3 config
@@ -56,7 +54,7 @@ PDM at home with laptop + fuel pump. All software work and bench testing — no 
   - MP7 Coolsuit, MP8 Defogger
   - LP1–LP8 (ECU, dash, SmartyCam, GPS, wideband, cluster, warning LED, alt exciter)
 - [ ] Configure status variables: ENGINE_RUNNING, FUEL_PRIME, FAN_TEMP bands (77/82/87/92°C), FAN_FAILSAFE, STARTER_SAFE, MULTI_WARNING
-- [ ] Configure channel inputs: Ch01 (fan), Ch04 (coolsuit), Ch05 (defogger), Ch06 (horn), Ch07 (headlights), Ch09 (starter), Ch11 (brake)
+- [ ] Configure channel inputs: Ch10 (fan), Ch12 (coolsuit), Ch05 (defogger), Ch06 (horn), Ch07 (headlights), Ch09 (starter), Ch11 (brake)
 - [ ] Verify CAN2 disabled (no keypad — preserved in `guides/keypad-config-future.md`)
 - [ ] Configure ECU Stream: Haltech CAN_V2_40 on CAN1 (A30/A31), 500 kbps
   - Enable channels: RPM, ECT, Oil P, Oil T, Fuel P, TPS, Vehicle Speed, Battery V
@@ -179,8 +177,8 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 ```
 
 - [ ] Start button → Ch09 (B21), momentary, active = GND
-- [ ] Fan override toggle → Ch01 (B26), active = 12V
-- [ ] Coolsuit toggle → Ch04 (B29), active = 12V
+- [ ] Fan override toggle → Ch10 (B22), active = 12V
+- [ ] Coolsuit toggle → Ch12 (A27), active = 12V
 - [ ] Defogger toggle → Ch05 (B30), active = 12V
 - [ ] Brake light switch → Ch11 (A26), closed on press
 - [ ] Warning LED → LP7 (A20)
@@ -278,7 +276,7 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 - [ ] Verify fan works via stock BCM relay (should activate on its own at temp)
 - [ ] Verify horn works via steering wheel button (stock BCM)
 - [ ] Verify headlights work via stalk switch (stock BCM)
-- [ ] Verify coolsuit (Ch04) → MP7 on
+- [ ] Verify coolsuit (Ch12) → MP7 on
 - [ ] Verify defogger (Ch05) → MP8 on
 - [ ] Verify brake lights (Ch11) → MP4 on (test with IGN off too)
 - [ ] Verify tail lights → MP5 on with IGN (automatic)
@@ -353,7 +351,7 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 - [ ] Run HP2 directly to fan motor connector
 - [ ] Leave OEM fan relay as backup
 
-- [ ] Verify fan override toggle (Ch01) → 98% duty
+- [ ] Verify fan override toggle (Ch10) → 98% duty
 - [ ] Verify fan failsafe: disconnect Haltech CAN temporarily → fan goes to 98% after 5s → reconnect
 
 ### SU.7 Wideband AFR (Innovate LM2)
@@ -421,7 +419,7 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 |------|-----------|--------|-------|
 | Brake Lights | MP4 | A5 | Always active (Ch11 trigger) |
 | Tail Lights | MP5 | A6 | SafeIgnition (always on) |
-| Coolsuit | MP7 | A8 | Ch04 AND SafeIgnition |
+| Coolsuit | MP7 | A8 | Ch12 AND SafeIgnition |
 | Defogger | MP8 | A9 | Ch05 AND SafeIgnition |
 | Fuel sender | — | — | OEM direct circuit, no PDM involvement |
 
@@ -452,10 +450,10 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 |--------|----------|-----|------|
 | Ignition | IGN input | B23 | Latching toggle, 12V |
 | Start | Ch09 | B21 | Momentary, active = GND |
-| Fan override | Ch01 | B26 | Latching toggle, 12V |
+| Fan override | Ch10 | B22 | Latching toggle, 12V |
 | Horn | Ch06 | B31 | Momentary, active = GND (Phase 2+) |
 | Headlights | Ch07 | B32 | Latching toggle, 12V (Phase 2+) |
-| Coolsuit | Ch04 | B29 | Latching toggle, 12V |
+| Coolsuit | Ch12 | A27 | Latching toggle, 12V |
 | Defogger | Ch05 | B30 | Latching toggle, 12V |
 | Brake switch | Ch11 | A26 | Closed on press |
 

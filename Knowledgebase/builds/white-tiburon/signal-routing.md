@@ -221,10 +221,10 @@ All driver controls use a physical switch panel — no CAN keypad in this build.
 | PDM Pin | Function | Type | Notes |
 |---------|----------|------|-------|
 | **Conn B pin 23** (Ignition) | Ignition toggle switch | Latching, 12V when ON | Master PDM power state; source for `SafeIgnition`. Also spliced to Haltech 34-pin pin 13 (P, purple) — ECU IGN enable. Engine off without cutting battery. ✅ |
-| **Ch01 — B26** | Fan override toggle | Latching, 12V when ON | Manual fan 98% override 🔲 |
+| **Ch10 — B22** | Fan override toggle | Latching, 12V when ON | Manual fan 98% override 🔲 |
 | **Ch02 — B27** | Wiper Low toggle | Latching, 12V when ON | Wiper motor low speed 🔲 |
 | **Ch03 — B28** | Wiper High toggle | Latching, 12V when ON | Wiper motor high speed (overrides low) 🔲 |
-| **Ch04 — B29** | Coolsuit toggle | Latching, 12V when ON | Coolsuit pump on/off 🔲 |
+| **Ch12 — A27** | Coolsuit pump on/off 🔲 |
 | **Ch05 — B30** | Defogger toggle | Latching, 12V when ON | Rear window defogger 🔲 |
 | **Ch09 — B21** | Start button | Momentary, active = GND | Crank engine — gated by ignition and RPM interlock 🔲 |
 | **Ch11 — A26** | Brake light switch | Momentary, closed on press | Always active, independent of ignition 🔲 |
@@ -238,7 +238,7 @@ All driver controls use a physical switch panel — no CAN keypad in this build.
 | Output | PDM Pins | Name | Trigger | Load Notes |
 |--------|----------|------|---------|------------|
 | HP1 | A1 + A13 | Starter | `STARTER_SAFE` = Ch09 AND IGN AND NOT RPM | Inductive; HP1 has internal series diode |
-| HP2 | A12 + A23 | Fan | ECT 4-band PWM 77–92°C + Ch01 override | 100Hz; freewheeling diode |
+| HP2 | A12 + A23 | Fan | ECT 4-band PWM 77–92°C + Ch10 override | 100Hz; freewheeling diode |
 | HP3 | A24 + A25 | Fuel Pump | 3s prime OR RPM > 50 | Inductive; freewheeling diode |
 | MP1 | A2 | Injector Power | `SafeIgnition` | → Injector rail + Haltech 34-pin pin 26 (R/L) |
 | MP2 | A3 | Coil Power | `SafeIgnition` | → Pin D, all 6 Toyota 90919-A2005 COPs |
@@ -246,7 +246,7 @@ All driver controls use a physical switch panel — no CAN keypad in this build.
 | MP4 | A5 | Brake Lights | Ch11 direct (brake switch) | — |
 | MP5 | A6 | Tail Lights | `SafeIgnition` (always on when car is on) | — |
 | MP6 | A7 | Wiper High | Ch03 (overrides low speed) | Inductive (wiper motor) |
-| MP7 | A8 | Coolsuit | Ch04 AND SafeIgnition | Inductive |
+| MP7 | A8 | Coolsuit | Ch12 AND SafeIgnition | Inductive |
 | MP8 | A9 | Defogger | Ch05 AND SafeIgnition | Resistive heating element |
 | LP1 | A14 | ECU Power | `SafeIgnition` | → Haltech 26-pin pin 11 (R/W, 13.8V) |
 | LP2 | A15 | Dash | `SafeIgnition` | AIM 10" dash |
@@ -259,7 +259,7 @@ All driver controls use a physical switch panel — no CAN keypad in this build.
 
 > **MP1/MP2 temporary usage (Phase 1 — stock ECU):** While running on the stock ECU, MP1 and MP2 are wired to the OE main relay socket pin 87 (pull the relay). This provides switched 12V to the stock ECU and its loads whenever SafeIgnition is active. When switching to Haltech, reroute MP1 → injector rail and MP2 → COP coil power bus. No Race Studio config change needed — trigger is `SafeIgnition` in both phases.
 >
-> Full configuration details: `builds/white-tiburon/guides/pdm-config.md`
+> Full configuration details: `builds/white-tiburon/guides/pdm-build-guide.md`
 
 ---
 

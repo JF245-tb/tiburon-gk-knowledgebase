@@ -121,6 +121,6 @@ When the PDM's female expansion cable mates with the hub's male connector:
 |------|----------|
 | `hardware/aim/aim-pdm/pdm-pinout.md` | PDM CAN expansion cable pinout — CAN0 signals |
 | `hardware/aim/aim-smartycam/aim-smartycam.md` | SmartyCAM pinout, RS3 config, master device setup |
-| `builds/white-tiburon/guides/pdm-config.md` | CAN bus assignments — CAN0 AIM expansion bus |
+| `builds/white-tiburon/guides/pdm-build-guide.md` | CAN bus assignments — CAN0 AIM expansion bus |
 | `hardware/aim/aim-gps08/aim-gps08.md` | GPS-08 pinout, CAN behavior, part numbers |
 | `Pinout_DataHub_101_eng.pdf` | Source AIM document — original pinout diagrams |

@@ -122,7 +122,7 @@
       "installed_fully_open_temp_c": 92,
       "effect": "Engine stabilizes 77–87°C vs OEM 82–92°C. Fan bands and coolant alarm thresholds adjusted accordingly in PDM config."
     },
-    "fan_control": "AIM PDM 32 HP2 — 4-level PWM (25/50/75/100% at 77/82/87/92°C). See guides/pdm-config.md."
+    "fan_control": "AIM PDM 32 HP2 — 4-level PWM (25/50/75/100% at 77/82/87/92°C). See guides/pdm-build-guide.md."
   },
 
   "modifications": {
