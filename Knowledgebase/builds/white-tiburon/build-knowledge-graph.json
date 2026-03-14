@@ -371,18 +371,18 @@
     {
       "id": "pdm-connB-pin21",
       "type": "pdm_input",
-      "label": "PDM Ch09 (Conn B Pin 21) — Backup Start Button",
+      "label": "PDM Ch01 (Conn B Pin 26) — Start Button",
       "connector": "B",
-      "pin": 21,
-      "function": "Physical backup start button",
+      "pin": 26,
+      "function": "Physical start button",
       "switch_type": "momentary"
     },
     {
       "id": "pdm-connB-pin28",
       "type": "pdm_input",
-      "label": "PDM Ch11 (Conn B Pin 28) — Brake Light Switch",
+      "label": "PDM Ch09 (Conn B Pin 21) — Brake Light Switch",
       "connector": "B",
-      "pin": 28,
+      "pin": 21,
       "function": "Brake light switch (always active, no keypad logic)",
       "switch_type": "momentary (brake pedal)"
     },
@@ -396,7 +396,7 @@
       "load": "Starter motor relay / direct",
       "mode": "OVC Protected",
       "current_limit_a": 20,
-      "trigger": "STARTER_SAFE = Ch09 AND SafeIgnition AND NOT ENGINE_RUNNING"
+      "trigger": "STARTER_SAFE = Ch01 AND SafeIgnition AND NOT ENGINE_RUNNING"
     },
     {
       "id": "pdm-HP2",
@@ -407,7 +407,7 @@
       "load": "Brushless cooling fan motor",
       "mode": "PWM 100Hz",
       "current_limit_a": 35,
-      "trigger": "ECT PWM curve: 25% @ 77°C, 50% @ 82°C, 75% @ 87°C, 98% @ 92°C + Ch10 manual override (98%)",
+      "trigger": "ECT PWM curve: 25% @ 77°C, 50% @ 82°C, 75% @ 87°C, 98% @ 92°C + Ch02 low / Ch03 high manual override",
       "note": "Thermostat is 170°F (77°C) — fan bands shifted vs OEM 82°C base"
     },
     {
@@ -446,12 +446,13 @@
     {
       "id": "pdm-MP3",
       "type": "pdm_output",
-      "label": "MP3 — Wiper Low",
+      "label": "MP3 — Horn",
       "output_tier": "MP",
       "pdm_pins": ["A4"],
+      "load": "Horn",
       "mode": "OVC Protected",
       "current_limit_a": 10,
-      "trigger": "Ch02 AND NOT Ch03"
+      "trigger": "Ch12 (Phase 2+)"
     },
     {
       "id": "pdm-MP4",
@@ -461,7 +462,7 @@
       "pdm_pins": ["A5"],
       "mode": "Fused",
       "current_limit_a": 10,
-      "trigger": "Ch11 brake switch (direct — no keypad)"
+      "trigger": "Ch09 brake switch (direct — no keypad)"
     },
     {
       "id": "pdm-MP5",
@@ -476,14 +477,13 @@
     {
       "id": "pdm-MP6",
       "type": "pdm_output",
-      "label": "MP6 — Wiper High",
+      "label": "MP6 — Headlights",
       "output_tier": "MP",
       "pdm_pins": ["A7"],
-      "load": "Wiper motor high speed",
+      "load": "Headlights",
       "mode": "OVC Protected",
-      "current_limit_a": 10,
-      "trigger": "Ch03",
-      "notes": "Overrides MP3 (wiper low) via AND NOT Ch03 guard in MP3 trigger."
+      "current_limit_a": 15,
+      "trigger": "Ch04 AND SafeIgnition (Phase 2+)"
     },
     {
       "id": "pdm-MP7",
@@ -493,7 +493,7 @@
       "pdm_pins": ["A8"],
       "mode": "OVC Protected",
       "current_limit_a": 10,
-      "trigger": "Ch12 AND SafeIgnition"
+      "trigger": "Ch10 AND SafeIgnition"
     },
     {
       "id": "pdm-LP1",

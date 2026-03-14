@@ -7,7 +7,7 @@
 >
 > **Variable names are kept consistent** with the physical switch config. When a keypad is added,
 > the trigger logic uses OR to combine both inputs:
-> `STARTER_SAFE = (StarterKYD OR Ch09) AND SafeIgnition AND NOT ENGINE_RUNNING`
+> `STARTER_SAFE = (StarterKYD OR Ch01) AND SafeIgnition AND NOT ENGINE_RUNNING`
 > This means both the keypad button and the physical switch work simultaneously.
 
 ---
@@ -176,12 +176,13 @@ When keypad is installed, update these Math Channel triggers to use OR:
 
 | Status Variable | Current (Physical Only) | With Keypad |
 |---|---|---|
-| `STARTER_SAFE` | Ch09 AND SafeIgnition AND NOT ENGINE_RUNNING | **(StarterKYD OR Ch09)** AND SafeIgnition AND NOT ENGINE_RUNNING |
-| Fan override | Ch10 | **(FanKYD OR Ch10)** |
-| Coolsuit | Ch12 AND SafeIgnition | **(CoolsuitKYD OR Ch12)** AND SafeIgnition |
+| `STARTER_SAFE` | Ch01 AND SafeIgnition AND NOT ENGINE_RUNNING | **(StarterKYD OR Ch01)** AND SafeIgnition AND NOT ENGINE_RUNNING |
+| Fan low override | Ch02 | **(FanKYD OR Ch02)** |
+| Fan high override | Ch03 | **(FanKYD OR Ch03)** |
+| Coolsuit | Ch10 AND SafeIgnition | **(CoolsuitKYD OR Ch10)** AND SafeIgnition |
 | Horn | Fuse box spade (Phase 1) | **HornKYD** → MP horn output |
 | Lights | SafeIgnition (always on) | **LightsKYD** → position 1 = low, position 2 = high |
-| Wiper | Ch02 AND NOT Ch03 / Ch03 | **(WiperKYD=1 AND NOT WiperKYD=2 OR Ch02 AND NOT Ch03)** / **(WiperKYD=2 OR Ch03)** |
+| Wiper | Ch05 AND NOT Ch06 / Ch06 | **(WiperKYD=1 AND NOT WiperKYD=2 OR Ch05 AND NOT Ch06)** / **(WiperKYD=2 OR Ch06)** |
 | Fuel override | (none — cycle IGN) | **FuelOverride** → HP3 trigger |
 | Pit limiter | (not available) | **PITLIMITER_SAFE AND NOT (TPS > 60)** |
 | Comms | (not available) | **COMMS_YN** direct from K40 |

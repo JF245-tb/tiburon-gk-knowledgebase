@@ -221,15 +221,18 @@ All driver controls use a physical switch panel — no CAN keypad in this build.
 | PDM Pin | Function | Type | Notes |
 |---------|----------|------|-------|
 | **Conn B pin 23** (Ignition) | Ignition toggle switch | Latching, 12V when ON | Master PDM power state; source for `SafeIgnition`. Also spliced to Haltech 34-pin pin 13 (P, purple) — ECU IGN enable. Engine off without cutting battery. ✅ |
-| **Ch10 — B22** | Fan override toggle | Latching, 12V when ON | Manual fan 98% override 🔲 |
-| **Ch02 — B27** | Wiper Low toggle | Latching, 12V when ON | Wiper motor low speed 🔲 |
-| **Ch03 — B28** | Wiper High toggle | Latching, 12V when ON | Wiper motor high speed (overrides low) 🔲 |
-| **Ch12 — A27** | Coolsuit pump on/off 🔲 |
-| **Ch05 — B30** | Defogger toggle | Latching, 12V when ON | Rear window defogger 🔲 |
-| **Ch09 — B21** | Start button | Momentary, active = GND | Crank engine — gated by ignition and RPM interlock 🔲 |
-| **Ch11 — A26** | Brake light switch | Momentary, closed on press | Always active, independent of ignition 🔲 |
+| **Ch01 — B26** | Start button | Momentary, active = GND | Crank engine — gated by ignition and RPM interlock 🔲 |
+| **Ch02 — B27** | Fan Low override toggle | Latching, 12V when ON | Manual fan low speed override 🔲 |
+| **Ch03 — B28** | Fan High override toggle | Latching, 12V when ON | Manual fan high speed override 🔲 |
+| **Ch04 — B29** | Headlights toggle | Latching, 12V when ON | Headlights 🔲 |
+| **Ch05 — B30** | Wiper Low toggle | Latching, 12V when ON | Wiper motor low speed 🔲 |
+| **Ch06 — B31** | Wiper High toggle | Latching, 12V when ON | Wiper motor high speed (overrides low) 🔲 |
+| **Ch09 — B21** | Brake light switch | Momentary, closed on press | Always active, independent of ignition 🔲 |
+| **Ch10 — B22** | Coolsuit pump on/off | Latching, 12V when ON | 🔲 |
+| **Ch11 — A26** | Defogger toggle | Latching, 12V when ON | Rear window defogger 🔲 |
+| **Ch12 — A27** | Horn button | Momentary, active = GND | Horn 🔲 |
 
-**CAN2 bus unused** — available for future CAN keypad or other device. Ch06–Ch08, Ch10, Ch12 available for future inputs.
+**CAN2 bus unused** — available for future CAN keypad or other device. Ch07, Ch08 available for future inputs.
 
 ---
 
@@ -237,17 +240,20 @@ All driver controls use a physical switch panel — no CAN keypad in this build.
 
 | Output | PDM Pins | Name | Trigger | Load Notes |
 |--------|----------|------|---------|------------|
-| HP1 | A1 + A13 | Starter | `STARTER_SAFE` = Ch09 AND IGN AND NOT RPM | Inductive; HP1 has internal series diode |
-| HP2 | A12 + A23 | Fan | ECT 4-band PWM 77–92°C + Ch10 override | 100Hz; freewheeling diode |
+| HP1 | A1 + A13 | Starter | `STARTER_SAFE` = Ch01 AND IGN AND NOT RPM | Inductive; HP1 has internal series diode |
+| HP2 | A12 + A23 | Fan | ECT 4-band PWM 77–92°C + Ch02 low / Ch03 high override | 100Hz; freewheeling diode |
 | HP3 | A24 + A25 | Fuel Pump | 3s prime OR RPM > 50 | Inductive; freewheeling diode |
 | MP1 | A2 | Injector Power | `SafeIgnition` | → Injector rail + Haltech 34-pin pin 26 (R/L) |
 | MP2 | A3 | Coil Power | `SafeIgnition` | → Pin D, all 6 Toyota 90919-A2005 COPs |
-| MP3 | A4 | Wiper Low | Ch02 AND NOT Ch03 | Inductive (wiper motor) |
-| MP4 | A5 | Brake Lights | Ch11 direct (brake switch) | — |
+| MP3 | A4 | Horn | Ch12 | — |
+| MP4 | A5 | Brake Lights | Ch09 direct (brake switch) | — |
 | MP5 | A6 | Tail Lights | `SafeIgnition` (always on when car is on) | — |
-| MP6 | A7 | Wiper High | Ch03 (overrides low speed) | Inductive (wiper motor) |
-| MP7 | A8 | Coolsuit | Ch12 AND SafeIgnition | Inductive |
-| MP8 | A9 | Defogger | Ch05 AND SafeIgnition | Resistive heating element |
+| MP6 | A7 | Headlights | Ch04 AND SafeIgnition | — |
+| MP7 | A8 | Coolsuit | Ch10 AND SafeIgnition | Inductive |
+| MP8 | A9 | Defogger | Ch11 AND SafeIgnition | Resistive heating element |
+| MP9 | B4 | Wiper Low | Ch05 AND NOT Ch06 AND SafeIgnition | Inductive (wiper motor) |
+| MP10 | B5 | Wiper High | Ch06 AND SafeIgnition | Inductive (wiper motor) |
+| LP9 | B3 | Wiper Park | WIPER_PARKING AND SafeIgnition | Park sweep — Brown wire |
 | LP1 | A14 | ECU Power | `SafeIgnition` | → Haltech 26-pin pin 11 (R/W, 13.8V) |
 | LP2 | A15 | Dash | `SafeIgnition` | AIM 10" dash |
 | LP3 | A16 | SmartyCam | `SafeIgnition` | — |
@@ -263,5 +269,5 @@ All driver controls use a physical switch panel — no CAN keypad in this build.
 
 ---
 
-*Last updated: 2026-03-13*
+*Last updated: 2026-03-14*
 *Sources: Haltech Elite 2500 pinout PDFs (verified), factory electrical manual BE section, OpenGK ECM pinouts, Lowdoller product specs, AIM PDM 32 pinout*

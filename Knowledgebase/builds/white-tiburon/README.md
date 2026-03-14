@@ -89,17 +89,17 @@
 ### PDM — AIM PDM 32
 | Output | Name | Trigger |
 |---|---|---|
-| HP1 (A1+A13) | Starter | STARTER_SAFE (Ch09 AND IGN AND NOT RPM) |
-| HP2 (A12+A23) | Fan | ECT 4-band PWM (77–92°C) + Ch10 override |
+| HP1 (A1+A13) | Starter | STARTER_SAFE (Ch01 AND IGN AND NOT RPM) |
+| HP2 (A12+A23) | Fan | ECT 4-band PWM (77–92°C) + Ch02 low / Ch03 high override |
 | HP3 (A24+A25) | FuelPump | FUEL_PRIME OR ENGINE_RUNNING |
 | MP1 (A2) | InjectorPwr | SafeIgnition |
 | MP2 (A3) | CoilPwr | SafeIgnition |
-| MP3 (A4) | Horn | Ch06 (Phase 2+) |
-| MP4 (A5) | BrakeLights | BRAKE_SWITCH (Ch11) |
+| MP3 (A4) | Horn | Ch12 (Phase 2+) |
+| MP4 (A5) | BrakeLights | BRAKE_SWITCH (Ch09) |
 | MP5 (A6) | TailLights | SafeIgnition (always on) |
-| MP6 (A7) | Headlights | Ch07 AND SafeIgnition (Phase 2+) |
-| MP7 (A8) | Coolsuit | Ch12 AND SafeIgnition |
-| MP8 (A9) | Defogger | Ch05 AND SafeIgnition |
+| MP6 (A7) | Headlights | Ch04 AND SafeIgnition (Phase 2+) |
+| MP7 (A8) | Coolsuit | Ch10 AND SafeIgnition |
+| MP8 (A9) | Defogger | Ch11 AND SafeIgnition |
 | LP1–LP6 (A14–A19) | ECUPwr/Dash/SmartyCam/GPS/Wideband/Cluster | SafeIgnition |
 | LP7 (A20) | WarningLED | MULTI_WARNING |
 | LP8 (A21) | AltExciter | SafeIgnition (OEM D+ field wire) |
@@ -110,13 +110,16 @@
 | Input | PDM Connection | Function |
 |---|---|---|
 | IGN toggle | B23 (built-in IGN input) | Master power / SafeIgnition |
-| Fan override | Ch10 (B22) | Manual fan 98% override |
-| Wiper Low | Ch02 (B27) | Wiper motor low speed (future) |
-| Wiper High | Ch03 (B28) | Wiper motor high speed (future) |
-| Coolsuit | Ch12 (A27) | Coolsuit pump on/off |
-| Defogger | Ch05 (B30) | Rear window defogger |
-| Start button | Ch09 (B21) | Momentary — crank engine (RPM interlock) |
-| Brake switch | Ch11 (A26) | Brake lights (always active) |
+| Start button | Ch01 (B26) | Momentary — crank engine (RPM interlock) |
+| Fan low | Ch02 (B27) | Manual fan low speed override |
+| Fan high | Ch03 (B28) | Manual fan high speed override |
+| Headlights | Ch04 (B29) | Headlights (Phase 2+) |
+| Wiper Low | Ch05 (B30) | Wiper motor low speed (future) |
+| Wiper High | Ch06 (B31) | Wiper motor high speed (future) |
+| Brake switch | Ch09 (B21) | Brake lights (always active) |
+| Coolsuit | Ch10 (B22) | Coolsuit pump on/off |
+| Defogger | Ch11 (A26) | Rear window defogger |
+| Horn | Ch12 (A27) | Horn (Phase 2+) |
 
 > **CAN2 unused** — keypad excluded from build. CAN2 pins A28/A29 available for future expansion.
 

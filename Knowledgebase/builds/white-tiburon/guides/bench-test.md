@@ -31,7 +31,7 @@
 2. **File → Save As** → `Tiburon_White_v1.zconfig` immediately
 3. Configure in order:
    - ECU Stream: Haltech CAN_V2_40 protocol on CAN1 (A30/A31)
-   - Channel inputs: Ch10 (fan), Ch12 (coolsuit), Ch05 (defogger), Ch06 (horn), Ch07 (headlights), Ch09 (starter), Ch11 (brake)
+   - Channel inputs: Ch02 (fan low), Ch03 (fan high), Ch10 (coolsuit), Ch11 (defogger), Ch12 (horn), Ch04 (headlights), Ch01 (starter), Ch09 (brake)
    - Math channels: ENGINE_RUNNING, FUEL_PRIME, FAN_TEMP bands, STARTER_SAFE, MULTI_WARNING
    - Power output renames and trigger assignments per output map
 4. **Transmit configuration to PDM** (USB)
@@ -52,12 +52,13 @@
 2. Race Studio Live Data → confirm `SafeIgnition` = 1
 3. Confirm LP1–LP6 show active in Outputs view (no loads connected yet — OK)
 4. Test each toggle switch:
-   - Fan toggle (Ch10) → verify variable changes in Live Data
-   - Wiper Low (Ch02) → verify
-   - Wiper High (Ch03) → verify; confirm MP3 forced off when Ch03 active
-   - Coolsuit (Ch12) → verify MP7 output follows
-   - Defogger (Ch05) → verify MP8 output follows
-5. Press START button (Ch09) → verify `STARTER_SAFE` activates (with SafeIgnition on, ENGINE_RUNNING off)
+   - Fan Low (Ch02) → verify variable changes in Live Data
+   - Fan High (Ch03) → verify variable changes in Live Data
+   - Wiper Low (Ch05) → verify
+   - Wiper High (Ch06) → verify; confirm MP9 forced off when Ch06 active
+   - Coolsuit (Ch10) → verify MP7 output follows
+   - Defogger (Ch11) → verify MP8 output follows
+5. Press START button (Ch01) → verify `STARTER_SAFE` activates (with SafeIgnition on, ENGINE_RUNNING off)
 
 **Expected at this point:** All switches trigger correct outputs; no fault codes; `SafeIgnition` = 1 when IGN on.
 
@@ -186,7 +187,7 @@ The OEM alternator exciter wire provides a small 12V signal to the alternator's 
 ## Section 6 — Starter Test
 
 > **Prerequisite:** `STARTER_SAFE` logic in Race Studio must be configured before this test.
-> `STARTER_SAFE` = Ch09 AND SafeIgnition AND NOT ENGINE_RUNNING
+> `STARTER_SAFE` = Ch01 AND SafeIgnition AND NOT ENGINE_RUNNING
 
 ### Method A — Through Fuse Box (Try First)
 
@@ -203,7 +204,7 @@ The OEM starter relay in the fuse box has a pin 87 output that goes to the start
 
 **Test:**
 1. IGN on, engine not running (RPM = 0 → `ENGINE_RUNNING` = 0)
-2. Press START button (Ch09) → should hear starter engage
+2. Press START button (Ch01) → should hear starter engage
 3. While engine running: press START → should NOT engage (RPM interlock)
 4. Measure HP1 current during crank: expect 15–25A inrush spike then drop
 
@@ -235,14 +236,15 @@ After completing Sections 3–6, verify:
 | Alternator charging | 13.8–14.4V while running | |
 | Kill switch cuts charging | Voltage drops on kill | |
 | Kill switch kills engine | Engine stops on kill | |
-| Starter via Ch09 button | Cranks when `ENGINE_RUNNING` = 0 | |
+| Starter via Ch01 button | Cranks when `ENGINE_RUNNING` = 0 | |
 | Starter interlock | Does NOT crank while running | |
-| Fan toggle (Ch10) | HP2 at 98% when switch on | |
-| Wiper Low (Ch02) | MP3 on, MP6 off | |
-| Wiper High (Ch03) | MP6 on, MP3 forced off | |
-| Coolsuit (Ch12) | MP7 on | |
-| Defogger (Ch05) | MP8 on | |
-| Brake lights (Ch11) | MP4 on with IGN off | |
+| Fan Low (Ch02) | HP2 at low speed when switch on | |
+| Fan High (Ch03) | HP2 at high speed when switch on | |
+| Wiper Low (Ch05) | MP9 on, MP10 off | |
+| Wiper High (Ch06) | MP10 on, MP9 forced off | |
+| Coolsuit (Ch10) | MP7 on | |
+| Defogger (Ch11) | MP8 on | |
+| Brake lights (Ch09) | MP4 on with IGN off | |
 | Tail lights | MP5 on with IGN on (automatic) | |
 | Warning LED | LP7 triggers on forced alarm condition | |
 
