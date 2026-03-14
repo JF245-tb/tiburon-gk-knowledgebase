@@ -75,7 +75,7 @@
         "pin_L": "26-pin-24",
         "wire_H": "W",
         "wire_L": "L",
-        "connects_to": "AIM PDM 32 (A22=CANH, A11=CANL)"
+        "connects_to": "AIM PDM 32 (B22=CANH, B11=CANL)"
       }
     }
   },
@@ -83,19 +83,29 @@
   "pdm": {
     "make": "AIM",
     "model": "PDM 32",
-    "connector_A_pins": 35,
-    "connector_B_pins": 35,
+    "connector_Black_pins": 35,
+    "connector_Grey_pins": 35,
+    "_pin_prefix_note": "Black connector = B prefix, Grey connector = G prefix (Race Studio convention)",
     "outputs": {
-      "HP1": { "load": "starter_motor",         "trigger": "STARTER_SAFE",        "current_limit_a": 20, "pins": ["A1","A13"] },
-      "HP2": { "load": "alternator_field",       "trigger": "IGN_ON",              "current_limit_a": 15, "pins": ["A2","A14"] },
-      "HP3": { "load": "fuel_pump",              "trigger": "FP_PRIME_AND_RUN",    "current_limit_a": 15, "pins": ["A3","A15"], "overcurrent_a": 15 },
-      "HP4": { "load": "COP_coils_12V_bank_A",   "trigger": "IGN_ON",              "current_limit_a": 20, "pins": ["A4","A16"] },
-      "HP5": { "load": "injectors_12V",          "trigger": "IGN_ON",              "current_limit_a": 20, "pins": ["A5","A17"] },
-      "HP6": { "load": "cooling_fan_HI",         "trigger": "FAN_HI",              "current_limit_a": 20, "pins": ["A6","A18"] },
-      "HP7": { "load": "cooling_fan_LO",         "trigger": "FAN_LO",              "current_limit_a": 20, "pins": ["A7","A19"] },
-      "MP1": { "load": "Haltech_ECU_power",      "trigger": "IGN_ON",              "current_limit_a": 10, "pins": ["A8","A20"] },
-      "MP2": { "load": "COP_coils_12V_bank_B",   "trigger": "IGN_ON",              "current_limit_a": 10, "pins": ["A9","A21"] },
-      "LP7": { "load": "warning_LED",            "trigger": "CAN_WARN",            "current_limit_a": 3,  "pins": ["B7","B21"] }
+      "HP1":  { "load": "starter_motor",      "trigger": "STARTER_SAFE",                "current_limit_a": 20, "pins": ["B1","B13"] },
+      "HB1":  { "load": "cooling_fan",        "trigger": "ECT_PWM_4band + Ch02/Ch03",   "current_limit_a": 35, "pins": ["G1","G2"] },
+      "HP3":  { "load": "fuel_pump",           "trigger": "FUEL_PRIME OR ENGINE_RUNNING","current_limit_a": 15, "pins": ["B24","B25"] },
+      "MP1":  { "load": "injector_power",      "trigger": "SafeIgnition",                "current_limit_a": 15, "pins": ["B2"] },
+      "MP2":  { "load": "COP_coil_power",      "trigger": "SafeIgnition",                "current_limit_a": 15, "pins": ["B3"] },
+      "MP3":  { "load": "horn",                "trigger": "Ch12 (Phase 2+)",             "current_limit_a": 10, "pins": ["B4"] },
+      "MP4":  { "load": "brake_lights",        "trigger": "Ch09",                        "current_limit_a": 10, "pins": ["B5"] },
+      "MP5":  { "load": "tail_lights",         "trigger": "SafeIgnition",                "current_limit_a": 10, "pins": ["B6"] },
+      "MP6":  { "load": "headlights",          "trigger": "Ch04 AND SafeIgnition",       "current_limit_a": 15, "pins": ["B7"] },
+      "MP7":  { "load": "coolsuit_pump",       "trigger": "Ch10 AND SafeIgnition",       "current_limit_a": 10, "pins": ["B8"] },
+      "MP8":  { "load": "defogger",            "trigger": "Ch11 AND SafeIgnition",       "current_limit_a": 10, "pins": ["B9"] },
+      "LP1":  { "load": "ECU_power",           "trigger": "SafeIgnition",                "current_limit_a": 10, "pins": ["B14"] },
+      "LP2":  { "load": "dash_power",          "trigger": "SafeIgnition",                "current_limit_a": 10, "pins": ["B15"] },
+      "LP3":  { "load": "smartycam_power",     "trigger": "SafeIgnition",                "current_limit_a": 10, "pins": ["B16"] },
+      "LP4":  { "load": "GPS_power",           "trigger": "SafeIgnition",                "current_limit_a": 10, "pins": ["B17"] },
+      "LP5":  { "load": "wideband_O2_power",   "trigger": "SafeIgnition",                "current_limit_a": 2,  "pins": ["B18"], "_note": "LP5 max 2A" },
+      "LP6":  { "load": "cluster_power",       "trigger": "SafeIgnition",                "current_limit_a": 10, "pins": ["B19"] },
+      "LP7":  { "load": "warning_LED",         "trigger": "MULTI_WARNING",               "current_limit_a": 5,  "pins": ["B20"] },
+      "LP8":  { "load": "alt_exciter",         "trigger": "SafeIgnition",                "current_limit_a": 5,  "pins": ["B21"] }
     }
   },
 
@@ -122,7 +132,7 @@
       "installed_fully_open_temp_c": 92,
       "effect": "Engine stabilizes 77–87°C vs OEM 82–92°C. Fan bands and coolant alarm thresholds adjusted accordingly in PDM config."
     },
-    "fan_control": "AIM PDM 32 HP2 — 4-level PWM (25/50/75/100% at 77/82/87/92°C). See guides/pdm-build-guide.md."
+    "fan_control": "AIM PDM 32 HB1 — 4-level PWM (25/50/75/100% at 77/82/87/92°C). See guides/pdm-build-guide.md."
   },
 
   "modifications": {

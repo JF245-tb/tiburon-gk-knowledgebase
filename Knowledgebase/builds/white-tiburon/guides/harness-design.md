@@ -19,7 +19,7 @@
                                     │      PASSENGER FOOTWELL         │
                                     │  ┌─────────┐  ┌──────────────┐ │
                                     │  │ Haltech  │  │   AIM PDM    │ │
-                                    │  │ 34-pin   │  │  Conn A / B  │ │
+                                    │  │ 34-pin   │  │ Black / Grey │ │
                                     │  │ 26-pin   │  │              │ │
                                     │  └────┬─────┘  └──────┬───────┘ │
                                     │       │               │         │
@@ -47,12 +47,12 @@
                     │ Starter (direct) │    │                 │   │ Bank 1 Front    │
                     └──────────────────┘    │                 │   │ (Cyl 1,3,5)     │
                                            │                 │   │                 │
-                                           │                 │   │ HP2 Fan         │
+                                           │                 │   │ HB1 Fan         │
                                            └─────────────────┘   └─────────────────┘
 ```
 
 > **Phase structure:** See `guides/pdm-build-guide.md` for the 3-phase build plan. Phase 1 = stock ECU + fuse box spades. Phase 2 = Haltech + Deutsch connectors. Phase 3 = CAN keypad + OE removal.
-> **Wiper outputs:** MP9 (B4) low, MP10 (B5) high, LP9 (B3) park sweep — relay-less design using WIPER_PARKING math channel. Install when wipers are needed.
+> **Wiper outputs:** MP9 (G4) low, MP10 (G5) high, LP9 (G3) park sweep — relay-less design using WIPER_PARKING math channel. Install when wipers are needed.
 
 ---
 
@@ -117,8 +117,8 @@ All sensors on this connector are on or near the engine and go with it during a 
 | 4 | INJ 1 signal | Haltech 34-pin pin 19 | L | Injector 1 |
 | 5 | INJ 3 signal | Haltech 34-pin pin 21 | L/BR | Injector 3 |
 | 6 | INJ 5 signal | Haltech 34-pin pin 27 | L/O | Injector 5 |
-| 7 | +12V coil power | PDM MP2 (A3) branch | 14 AWG | Coil Pin D bus → 3 coils |
-| 8 | +12V injector power | PDM MP1 (A2) branch | 14 AWG | Injector rail branch → 3 injectors |
+| 7 | +12V coil power | PDM MP2 (B3) branch | 14 AWG | Coil Pin D bus → 3 coils |
+| 8 | +12V injector power | PDM MP1 (B2) branch | 14 AWG | Injector rail branch → 3 injectors |
 
 **Bank 1 ground wire (not in connector):**
 ```
@@ -152,8 +152,8 @@ Engine side — bundled with D2 pigtails:
 | 4 | INJ 2 signal | Haltech 34-pin pin 20 | L/B | Injector 2 |
 | 5 | INJ 4 signal | Haltech 34-pin pin 22 | L/R | Injector 4 |
 | 6 | INJ 6 signal | Haltech 34-pin pin 28 | L/Y | Injector 6 |
-| 7 | +12V coil power | PDM MP2 (A3) branch | 14 AWG | Coil Pin D bus → 3 coils |
-| 8 | +12V injector power | PDM MP1 (A2) branch | 14 AWG | Injector rail branch → 3 injectors |
+| 7 | +12V coil power | PDM MP2 (B3) branch | 14 AWG | Coil Pin D bus → 3 coils |
+| 8 | +12V injector power | PDM MP1 (B2) branch | 14 AWG | Injector rail branch → 3 injectors |
 
 **Bank 2 ground wire (not in connector):**
 ```
@@ -177,10 +177,10 @@ Engine side — bundled with D3 pigtails:
 With per-bank connectors, MP1 and MP2 each split into two branches on the chassis side of the firewall:
 
 ```
-PDM MP2 (A3) ── 14 AWG ── through firewall ──┬── branch → D2 pin 7 (Bank 1 coil power)
+PDM MP2 (B3) ── 14 AWG ── through firewall ──┬── branch → D2 pin 7 (Bank 1 coil power)
                                                └── branch → D3 pin 7 (Bank 2 coil power)
 
-PDM MP1 (A2) ── 14 AWG ── through firewall ──┬── branch → D2 pin 8 (Bank 1 injector power)
+PDM MP1 (B2) ── 14 AWG ── through firewall ──┬── branch → D2 pin 8 (Bank 1 injector power)
                                                ├── branch → D3 pin 8 (Bank 2 injector power)
                                                └── branch → Haltech 34-pin pin 26 (injector power sense, R/L)
 ```
@@ -257,9 +257,9 @@ These PDM outputs exceed Deutsch DT pin ratings (13A continuous @ 16 AWG) and ru
 
 | Load | PDM Output | Pins | Wire Gauge | Termination | Routing |
 |------|-----------|------|-----------|-------------|---------|
-| **Starter** | HP1 | A1 + A13 | 10 AWG | Ring terminal at solenoid S-terminal | Firewall → LEFT → bell housing |
-| **Fan** | HP2 | A12 + A23 | 12 AWG | OEM fan connector or ring terminal | Firewall → RIGHT → radiator |
-| **Fuel Pump** | HP3 | A24 + A25 | 14 AWG | Spade into fuse box pin 87 (Phase 1) | Firewall → CENTER → fuse box |
+| **Starter** | HP1 | B1 + B13 | 10 AWG | Ring terminal at solenoid S-terminal | Firewall → LEFT → bell housing |
+| **Fan** | HB1 | G1 + G2 | 12 AWG | OEM fan connector or ring terminal | Firewall → RIGHT → radiator |
+| **Fuel Pump** | HP3 | B24 + B25 | 14 AWG | Spade into fuse box pin 87 (Phase 1) | Firewall → CENTER → fuse box |
 
 **Starter:** unbolt ring terminal from solenoid S-terminal during engine swap.
 
@@ -271,13 +271,13 @@ These connect to chassis-mounted loads — no engine swap disconnect needed.
 
 | Load | PDM Output | Pin | Wire Gauge | Termination | Routing |
 |------|-----------|-----|-----------|-------------|---------|
-| **Horn** | MP3 | A4 | 16 AWG | Phase 1: not connected (BCM controls). Phase 2+: direct to horn or relay socket | Firewall → CENTER → horn |
-| **Headlights** | MP6 | A7 | 14 AWG | Phase 1: not connected (BCM controls). Phase 2+: direct to headlights or relay socket | Firewall → CENTER → headlight connector |
-| **Alt Exciter** | LP8 | A21 | 18 AWG | Splice to cut OEM D+ wire | Firewall → RIGHT → alternator area |
-| **MP1** | MP1 | A2 | 14 AWG | Phase 1: spade into OE relay pin 87. Phase 2: splits to D2 pin 8 + D3 pin 8 (injector power, both banks) + Haltech pin 26 sense | Firewall → CENTER → splice → both banks |
-| **MP2** | MP2 | A3 | 14 AWG | Phase 1: spade into OE relay pin 87. Phase 2: splits to D2 pin 7 + D3 pin 7 (coil power, both banks) | Firewall → CENTER → splice → both banks |
+| **Horn** | MP3 | B4 | 16 AWG | Phase 1: not connected (BCM controls). Phase 2+: direct to horn or relay socket | Firewall → CENTER → horn |
+| **Headlights** | MP6 | B7 | 14 AWG | Phase 1: not connected (BCM controls). Phase 2+: direct to headlights or relay socket | Firewall → CENTER → headlight connector |
+| **Alt Exciter** | LP8 | B21 | 18 AWG | Splice to cut OEM D+ wire | Firewall → RIGHT → alternator area |
+| **MP1** | MP1 | B2 | 14 AWG | Phase 1: spade into OE relay pin 87. Phase 2: splits to D2 pin 8 + D3 pin 8 (injector power, both banks) + Haltech pin 26 sense | Firewall → CENTER → splice → both banks |
+| **MP2** | MP2 | B3 | 14 AWG | Phase 1: spade into OE relay pin 87. Phase 2: splits to D2 pin 7 + D3 pin 7 (coil power, both banks) | Firewall → CENTER → splice → both banks |
 
-> **MP3 and MP6 repurposed** from wipers to horn and headlights. Wipers use MP9 (B4) low, MP10 (B5) high, LP9 (B3) park sweep on Connector B — relay-less park design, config pre-loaded.
+> **MP3 and MP6 repurposed** from wipers to horn and headlights. Wipers use MP9 (G4) low, MP10 (G5) high, LP9 (G3) park sweep on Grey Connector — relay-less park design, config pre-loaded.
 
 **Phase 2 transition for MP1/MP2:** Pull spades from OE relay socket. Reroute:
 - MP1 → 3-way splice: D2 pin 8 (Bank 1 injector power) + D3 pin 8 (Bank 2 injector power) + Haltech 34-pin pin 26 (injector power sense)
@@ -297,7 +297,7 @@ These connect to chassis-mounted loads — no engine swap disconnect needed.
 | MP2 CoilPwr | OE main relay pin 87 (relay pulled) | → 2-way splice: D2 pin 7 + D3 pin 7 |
 | HP3 FuelPump | Fuel pump relay pin 87 (relay pulled) | Direct to fuel pump + wire |
 | HP1 Starter | Direct to solenoid S-terminal (preferred) | Same |
-| HP2 Fan | Fan relay pin 87 (Phase 1B, after CAN verified) | Direct to fan motor |
+| HB1 Fan | Fan relay pin 87 (Phase 1B, after CAN verified) | Direct to fan motor |
 | MP3 Horn | Not connected Phase 1 (BCM controls) | Direct to horn or relay socket |
 | MP6 Headlights | Not connected Phase 1 (BCM controls) | Direct to headlight connector or relay socket |
 
@@ -311,7 +311,7 @@ The LM2 is on the electronics plate in the passenger footwell — all connection
 
 | Connection | LM2 Wire | Destination | Notes |
 |------------|----------|-------------|-------|
-| **Power** | LM2 power cable | PDM LP5 (A18) | 12V switched via SafeIgnition |
+| **Power** | LM2 power cable | PDM LP5 (B18) | 12V switched via SafeIgnition |
 | **Analog Out 1 (+)** | Cable 3811 — Lime Green | Haltech 26-pin pin 4 (AVI 8) | 0–5V, default 7.35–22.39 AFR |
 | **Analog Out 1 (−)** | Cable 3811 — Yellow | Haltech signal GND (26-pin pin 14/15/16) | Ground reference |
 | **O2 sensor cable** | LM2 sensor cable (proprietary) | Wideband O2 bung, post-collector exhaust | Runs through firewall → RIGHT trunk → exhaust |
@@ -370,7 +370,7 @@ All harnesses pass through a single center firewall grommet, then split into 3 t
 **RIGHT TRUNK (Passenger Side):**
 - D2 Bank 1 front cable (8 wires + 16 AWG ground) — routes forward to front bank, passenger side
 - D4 sensor bus branch to oil sensor (oil filter area, passenger side)
-- HP2 fan cable (12 AWG heavy, to radiator fan)
+- HB1 fan cable (12 AWG heavy, to radiator fan)
 - LP8 alt exciter (18 AWG, to alternator D+ splice)
 - LM2 O2 sensor cable (proprietary, to exhaust bung)
 
@@ -392,7 +392,7 @@ All harnesses pass through a single center firewall grommet, then split into 3 t
 | Trunk | Approx Wire Count | Suggested Loom |
 |-------|--------------------|----------------|
 | LEFT | ~22 wires + HP1 heavy + D3 ground | 1" split loom or braided sleeve |
-| RIGHT | ~18 wires + HP2 heavy + D2 ground + O2 cable | 1" split loom or braided sleeve |
+| RIGHT | ~18 wires + HB1 heavy + D2 ground + O2 cable | 1" split loom or braided sleeve |
 | CENTER | ~14 wires + HP3 heavy | 3/4" split loom |
 
 ---
@@ -411,7 +411,7 @@ All harnesses pass through a single center firewall grommet, then split into 3 t
 
 **Phase 2 switchover:** Disconnect stock coil/injector connectors on both banks. Plug in D2 (front bank) + D3 (rear bank). Bolt both ground ring terminals to respective head bolts. Pull MP1/MP2 spades from OE relay socket — splices route power to both Deutsch connectors automatically. Add horn button (Ch12) and headlight toggle (Ch04). Wire MP3 → horn, MP6 → headlights. No Race Studio config change. See `guides/pdm-build-guide.md` → "Phase 2 — Transition Procedure".
 
-**Wiper wiring (when needed):** MP9 (B4) → motor Green wire (low), MP10 (B5) → motor Yellow wire (high), LP9 (B3) → motor Brown wire (park sweep). Motor Black → chassis ground. No external relay — PDM WIPER_PARKING math channel handles park positioning. See `guides/pdm-build-guide.md` → "Wiper — Relay-Less Park Design".
+**Wiper wiring (when needed):** MP9 (G4) → motor Green wire (low), MP10 (G5) → motor Yellow wire (high), LP9 (G3) → motor Brown wire (park sweep). Motor Black → chassis ground. No external relay — PDM WIPER_PARKING math channel handles park positioning. See `guides/pdm-build-guide.md` → "Wiper — Relay-Less Park Design".
 
 ---
 

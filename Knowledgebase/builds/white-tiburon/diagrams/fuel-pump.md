@@ -9,7 +9,7 @@ Click any node to open the relevant knowledgebase file.
 
 ```mermaid
 flowchart TD
-    IGN(["🔑 Ignition Toggle<br/>PDM Conn B Pin 23<br/><i>SafeIgnition variable</i>"])
+    IGN(["🔑 Ignition Toggle<br/>PDM Grey Connector Pin G23<br/><i>SafeIgnition variable</i>"])
     RPM(["📊 RPM &gt; 50<br/>Haltech → CAN1 → PDM<br/><i>engine-running condition</i>"])
     PRIME(["⏱️ 3s Startup Prime<br/><i>on SafeIgnition rising edge</i>"])
 
@@ -17,7 +17,7 @@ flowchart TD
     PRIME -->|3s then off| HP3
     RPM -->|engine running| HP3
 
-    HP3["PDM HP3<br/>Pins A24 + A25<br/>15A OVC Protected<br/><i>freewheeling diode</i>"]
+    HP3["PDM HP3<br/>Pins B24 + B25<br/>15A OVC Protected<br/><i>freewheeling diode</i>"]
 
     HP3 -->|"12V switched"| FP["⛽ In-Tank Fuel Pump<br/><i>OEM or aftermarket</i>"]
 
@@ -55,9 +55,9 @@ flowchart TD
     SENSOR -->|"pressure 0.5–4.5V<br/><b>AVI 1</b><br/>26-pin Pin 13 — GY/Y shielded"| ECU["Haltech Elite 2500"]
     SENSOR -->|"temp PTC resistive<br/><b>AVI 2</b><br/>34-pin Pin 16 — O/B"| ECU
 
-    ECU -->|"Fuel P + Fuel T<br/>broadcast on CAN1<br/>500 kbps"| PDM["AIM PDM 32<br/>CAN1 — Pins A30/A31"]
+    ECU -->|"Fuel P + Fuel T<br/>broadcast on CAN1<br/>500 kbps"| PDM["AIM PDM 32<br/>CAN1 — Pins B30/B31"]
 
-    PDM -->|"Fuel P low<br/>→ MULTI_WARNING"| LED["⚠️ Warning LED<br/>LP7 — Pin A20<br/>5A OVC"]
+    PDM -->|"Fuel P low<br/>→ MULTI_WARNING"| LED["⚠️ Warning LED<br/>LP7 — Pin B20<br/>5A OVC"]
 
     click SENSOR "Knowledgebase/hardware/sensors/lowdoller-sensors.md" "Sensor specs and wiring"
     click PWR5V "Knowledgebase/hardware/haltech/main-connector-34-pin-elite2500.md" "34-pin pinout"

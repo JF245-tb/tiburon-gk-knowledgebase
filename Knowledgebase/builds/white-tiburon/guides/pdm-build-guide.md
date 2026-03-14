@@ -31,7 +31,7 @@
 
 ### Channel Inputs
 
-> **Ch01–Ch08** are analog-capable (0–5V or 0–12V) on PDM Connector B. **Ch09–Ch12** are digital-only on Connector B (Ch09–Ch10 = B21/B22) and Connector A (Ch11–Ch12 = A26/A27). Grouped by physical connector for clean wiring. Speed 1 (B20) and Speed 2 (B19) are dedicated speed inputs — unused since VSS routes to Haltech SPI 1 and PDM reads speed via CAN.
+> **Ch01–Ch10** are on the Grey connector (G). Ch01–Ch08 (G26–G33) are analog-capable (0–5V or 0–12V). Ch09–Ch10 (G21–G22) are digital-only. **Ch11–Ch12** are on the Black connector (B26–B27). **IGN input** is on Grey (G23). Power outputs MP1–MP8, LP1–LP8, HP1–HP4 are on the Black connector (B). Power outputs MP9–MP12, LP9–LP12, HB1–HB4 are on the Grey connector (G). Speed 1 and Speed 2 are dedicated speed inputs on Grey — unused since VSS routes to Haltech SPI 1 and PDM reads speed via CAN.
 >
 > **Naming:** Channel names must not duplicate power output names. All switch inputs use the `*SW` suffix (e.g., `StarterSW` not `Starter`).
 >
@@ -41,22 +41,22 @@
 
 | Ch | Pin | Name | Close To | Pull-Up | Physical Switch | Wiring |
 |----|-----|------|----------|---------|-----------------|--------|
-| IGN | B23 | *(built-in)* | VBatt | No | Latching toggle | 12V → switch → B23 |
-| 01 | B26 | `StarterSW` | Ground | ✅ 10kΩ | Momentary button | B26 → switch → GND |
-| 02 | B27 | `FanLoSW` | Ground | ✅ 10kΩ | Latching toggle | B27 → switch → GND |
-| 03 | B28 | `FanHiSW` | Ground | ✅ 10kΩ | Latching toggle | B28 → switch → GND |
-| 04 | B29 | `HeadlightSW` | Ground | ✅ 10kΩ | Latching toggle | B29 → switch → GND |
-| 05 | B30 | `WiperLoSW` | Ground | ✅ 10kΩ | Latching toggle | B30 → switch → GND (future) |
-| 06 | B31 | `WiperHiSW` | Ground | ✅ 10kΩ | Latching toggle | B31 → switch → GND (future) |
-| 07 | B32 | **SPARE** | — | — | — | Available for analog sensor (0–5V) |
-| 08 | B33 | **SPARE** | — | — | — | Available for analog sensor (0–5V) |
-| 09 | B21 | `BrakeSW` | VBatt | No | OEM brake switch | 12V → OEM switch → B21 |
-| 10 | B22 | `CoolsuitSW` | Ground | ✅ 10kΩ | Latching toggle | B22 → switch → GND |
-| 11 | A26 | `DefoggerSW` | Ground | ✅ 10kΩ | Latching toggle | A26 → switch → GND |
-| 12 | A27 | `HornSW` | Ground | ✅ 10kΩ | Momentary button | A27 → switch → GND |
-| Spd1 | B20 | **SPARE** | — | — | — | Speed input — available for wheel speed |
-| Spd2 | B19 | **SPARE** | — | — | — | Speed input — available |
-| Vref | B16 | *(sensor supply)* | — | — | — | +5V for future ratiometric sensors |
+| IGN | G23 | *(built-in)* | VBatt | No | Latching toggle | 12V → switch → G23 |
+| 01 | G26 | `StarterSW` | Ground | ✅ 10kΩ | Momentary button | G26 → switch → GND |
+| 02 | G27 | `FanLoSW` | Ground | ✅ 10kΩ | Latching toggle | G27 → switch → GND |
+| 03 | G28 | `FanHiSW` | Ground | ✅ 10kΩ | Latching toggle | G28 → switch → GND |
+| 04 | G29 | `HeadlightSW` | Ground | ✅ 10kΩ | Latching toggle | G29 → switch → GND |
+| 05 | G30 | `WiperLoSW` | Ground | ✅ 10kΩ | Latching toggle | G30 → switch → GND (future) |
+| 06 | G31 | `WiperHiSW` | Ground | ✅ 10kΩ | Latching toggle | G31 → switch → GND (future) |
+| 07 | G32 | **SPARE** | — | — | — | Available for analog sensor (0–5V) |
+| 08 | G33 | **SPARE** | — | — | — | Available for analog sensor (0–5V) |
+| 09 | G21 | `BrakeSW` | VBatt | No | OEM brake switch | 12V → OEM switch → G21 |
+| 10 | G22 | `CoolsuitSW` | Ground | ✅ 10kΩ | Latching toggle | G22 → switch → GND |
+| 11 | B26 | `DefoggerSW` | Ground | ✅ 10kΩ | Latching toggle | B26 → switch → GND |
+| 12 | B27 | `HornSW` | Ground | ✅ 10kΩ | Momentary button | B27 → switch → GND |
+| Spd1 | G20 | **SPARE** | — | — | — | Speed input — available for wheel speed |
+| Spd2 | G19 | **SPARE** | — | — | — | Speed input — available |
+| Vref | G16 | *(sensor supply)* | — | — | — | +5V for future ratiometric sensors |
 
 > **Close to Ground** = switch shorts pin to chassis ground when ON. Internal 10kΩ pull-up holds pin high (~5V) when switch is open. All custom panel switches use this — one wire to PDM, one wire to common ground bus. Simple.
 >
@@ -241,7 +241,7 @@ Open **Configuration → Channels → Ch##** for each channel. All channels use 
 > **Switch panel wiring:** All "Close to ground" switches share a common ground bus on the switch panel. One wire from each switch to the PDM channel pin, one wire to ground. The internal 10kΩ pull-up holds the pin high when the switch is open.
 
 > **VSS routing:** Transaxle VSS (Hall IC, 4 pulses/rev, connector C109) → Haltech SPI 1 (26-pin pin 8). PDM reads vehicle speed from CAN ECU Stream (CC45 ECU VehSpeed). No direct PDM speed input needed.
-> **Connector grouping:** Ch01–Ch10 + IGN + Speed all on Connector B (single harness run). Ch11–Ch12 on Connector A (short jumper wires to switch panel).
+> **Connector grouping:** Ch01–Ch10 + IGN + Speed all on Grey connector (G) — single harness run. Ch11–Ch12 on Black connector (B26–B27) — short jumper wires to switch panel.
 
 ### Status Variables (Math Channels)
 
@@ -349,13 +349,13 @@ This is the webinar's existing fuel pump variable. **Do not delete** — it work
 | Field | Value |
 |-------|-------|
 | Channel | `ECU CoolantTemp` (Device: Main Device - PDM32, Type: ECU) |
-| Operator | **hysteresis up to down** |
-| Activation Threshold | `160` °F |
-| Off Threshold | `170` °F |
+| Operator | **hysteresis down to up** |
+| Activation Threshold | `170` °F |
+| Off Threshold | `160` °F |
 | TRUE after a time of | `0` sec |
 | FALSE after a time of | `0` sec |
 
-> **Race Studio hysteresis naming is inverted:** "Activation Threshold" is the LOWER bound (OFF below this falling), "Off Threshold" is the UPPER bound (ON above this rising). So Activation=160 / Off=170 means: fan ON rising above 170°F, OFF falling below 160°F. 170°F = thermostat opening point.
+> **Hysteresis "down to up" explained:** Activation = upper bound (fan turns ON when temp rises above 170°F). Off = lower bound (fan turns OFF when temp falls below 160°F). This gives a 10°F dead band. 170°F = thermostat opening point.
 
 ---
 
@@ -368,9 +368,9 @@ Same structure as FAN_TEMP_25 except:
 | **Name** | `FAN_TEMP_50` |
 | **Sampling Frequency** | **1 Hz** |
 | **Rest/Active** | Label: `OFF`/`F50` |
-| **Operator** | hysteresis up to down |
-| **Activation Threshold** | `170` °F |
-| **Off Threshold** | `180` °F |
+| **Operator** | hysteresis down to up |
+| **Activation Threshold** | `180` °F |
+| **Off Threshold** | `170` °F |
 
 ---
 
@@ -381,9 +381,9 @@ Same structure as FAN_TEMP_25 except:
 | **Name** | `FAN_TEMP_75` |
 | **Sampling Frequency** | **1 Hz** |
 | **Rest/Active** | Label: `OFF`/`F75` |
-| **Operator** | hysteresis up to down |
-| **Activation Threshold** | `180` °F |
-| **Off Threshold** | `190` °F |
+| **Operator** | hysteresis down to up |
+| **Activation Threshold** | `190` °F |
+| **Off Threshold** | `180` °F |
 
 ---
 
@@ -394,9 +394,9 @@ Same structure as FAN_TEMP_25 except:
 | **Name** | `FAN_TEMP_100` |
 | **Sampling Frequency** | **1 Hz** |
 | **Rest/Active** | Label: `OFF`/`F100` |
-| **Operator** | hysteresis up to down |
-| **Activation Threshold** | `190` °F |
-| **Off Threshold** | `200` °F |
+| **Operator** | hysteresis down to up |
+| **Activation Threshold** | `200` °F |
+| **Off Threshold** | `190` °F |
 
 > Thermostat estimated fully open at ~200°F with 170°F unit. Fan at 98% when thermostat is maxed.
 
@@ -451,7 +451,7 @@ Race Studio AND logic: chain conditions using the condition editor's AND gate.
 | 2 | AND `SafeIgnition` (Status Variables) | equal to | `1` | 0 sec | 0 sec |
 | 3 | AND `ENGINE_RUNNING` (Status Variables) | equal to | `0` | 0 sec | 0 sec |
 
-> Start button (Ch01, B26) must be held, ignition must be on, engine must not be running. All zero-delay for instant response.
+> Start button (Ch01, G26) must be held, ignition must be on, engine must not be running. All zero-delay for instant response.
 
 ---
 
@@ -669,7 +669,7 @@ Race Studio AND logic: chain conditions using the condition editor's AND gate.
 
 1. Go to **ECU Stream** tab
 2. Click **Change ECU** dropdown → select **HALTECH - CAN_V2_40 (ver. 02.00.03) 1 Mbit/sec**
-3. Bus: CAN1 (A30/A31), **500 kbps**
+3. Bus: CAN1 (B30/B31), **500 kbps**
 4. **Enable the CAN Bus 120 Ohm Resistor** ✅ — bus is PDM ↔ Haltech (two endpoints, both terminated)
 5. **Silent on CAN Bus** ☐ — leave unchecked (PDM must transmit to send pit limiter CAN message to Haltech in Phase 3)
 6. Enable channels per the list below
@@ -761,8 +761,9 @@ Race Studio AND logic: chain conditions using the condition editor's AND gate.
 ### SmartyCam Stream
 
 1. Go to **SmartyCam Stream** tab
-2. Enable SmartyCam on **CAN AiM** bus (CAN0, A22/A11)
+2. Enable SmartyCam on **CAN AiM** bus (CAN0, B22/B11)
 3. Assign: RPM, Speed (GPS-08), Gear, Coolant Temp, Oil Pressure, TPS, Lat G, Long G
+
 
 ### CAN2 — Disable
 
@@ -770,83 +771,454 @@ Remove or disable the CAN Keypad 12 config. Delete all `*KYD` variables. CAN2 is
 
 ### Output Map (All Phases)
 
-| Output | Name | Pin(s) | Mode | MaxLoad | Inductive | PWM | Trigger |
-|--------|------|--------|------|---------|-----------|-----|---------|
-| **HP1** | Starter | A1+A13 | OVC | 20A | Yes | DC | STARTER_SAFE |
-| **HP2** | Fan | A12+A23 | Fused | 35A | No | 100Hz | Fan PWM curve + Ch02 low / Ch03 high override |
-| **HP3** | FuelPump | A24+A25 | OVC | 15A | Yes | DC | FUEL_PRIME OR ENGINE_RUNNING |
-| HP4 | Spare | A34+A35 | — | — | — | — | — |
-| **MP1** | InjPwr | A2 | OVC | 15A | Yes | DC | SafeIgnition |
-| **MP2** | CoilPwr | A3 | OVC | 15A | No | DC | SafeIgnition |
-| **MP3** | Horn | A4 | OVC | 10A | Yes | DC | Ch12 |
-| **MP4** | BrakeLights | A5 | Fused | 10A | No | DC | Ch09 (always active) |
-| **MP5** | TailLights | A6 | Fused | 10A | No | DC | SafeIgnition |
-| **MP6** | Headlights | A7 | OVC | 15A | No | DC | Ch04 AND SafeIgnition |
-| **MP7** | Coolsuit | A8 | OVC | 10A | Yes | DC | Ch10 AND SafeIgnition |
-| **MP8** | Defogger | A9 | OVC | 10A | No | DC | Ch11 AND SafeIgnition |
-| **LP1** | ECU_Power | A14 | OVC | 10A | No | DC | SafeIgnition |
-| **LP2** | Dash | A15 | OVC | 10A | No | DC | SafeIgnition |
-| **LP3** | SmartyCam | A16 | OVC | 10A | No | DC | SafeIgnition |
-| **LP4** | Spare (was GPS) | A17 | OVC | 10A | No | DC | SafeIgnition |
-| **LP5** | Wideband | A18 | OVC | 10A | No | DC | SafeIgnition |
-| **LP6** | Cluster | A19 | OVC | 10A | No | DC | SafeIgnition |
-| **LP7** | WarningLED | A20 | OVC | 5A | No | DC | MULTI_WARNING |
-| **LP8** | AltExciter | A21 | OVC | 5A | No | DC | SafeIgnition |
-| **MP9** | WiperLow | B4 | OVC | 10A | No | DC | Ch05 AND NOT Ch06 AND SafeIgnition |
-| **MP10** | WiperHigh | B5 | OVC | 10A | No | DC | Ch06 AND SafeIgnition |
-| **LP9** | WiperPark | B3 | OVC | 10A | No | DC | WIPER_PARKING AND SafeIgnition |
+> **Column key:** "Drive" = Race Studio radio button (Continuous / PWM / Square Wave). "Max Load" = Maximum Value of Requested Load field. Pins reference the Black (B) or Grey (G) 35-pin AMP connector.
 
-> **MP3 and MP6 repurposed** from wipers to horn and headlights. Wipers use MP9 (B4), MP10 (B5), LP9 (B3) on Connector B — relay-less park design using WIPER_PARKING math channel.
+| Output | Name | Pin(s) | Inductive | Drive | Max Load | Trigger |
+|--------|------|--------|-----------|-------|----------|---------|
+| **HP1** | Starter | B1+B13 | ✅ Yes | Continuous | 20A | STARTER_SAFE |
+| **HB1** | Fan | G1+G2 | ☐ No | PWM 100Hz | 35A | Fan PWM curve + Ch02 low / Ch03 high |
+| **HP3** | FuelPump | B24+B25 | ✅ Yes | Continuous | 15A | FUEL_PRIME OR ENGINE_RUNNING |
+| HP4 | Spare | B34+B35 | — | — | — | — |
+| **MP1** | InjPwr | B2 | ✅ Yes | Continuous | 15A | SafeIgnition |
+| **MP2** | CoilPwr | B3 | ☐ No | Continuous | 15A | SafeIgnition |
+| **MP3** | Horn | B4 | ✅ Yes | Continuous | 10A | Ch12 |
+| **MP4** | BrakeLights | B5 | ☐ No | Continuous | 10A | Ch09 (always active) |
+| **MP5** | TailLights | B6 | ☐ No | Continuous | 10A | SafeIgnition |
+| **MP6** | Headlights | B7 | ☐ No | Continuous | 15A | Ch04 AND SafeIgnition |
+| **MP7** | Coolsuit | B8 | ✅ Yes | Continuous | 10A | Ch10 AND SafeIgnition |
+| **MP8** | Defogger | B9 | ☐ No | Continuous | 10A | Ch11 AND SafeIgnition |
+| **LP1** | ECU_Power | B14 | ☐ No | Continuous | 10A | SafeIgnition |
+| **LP2** | Dash | B15 | ☐ No | Continuous | 10A | SafeIgnition |
+| **LP3** | SmartyCam | B16 | ☐ No | Continuous | 10A | SafeIgnition |
+| **LP4** | Spare | B17 | ☐ No | Continuous | 10A | SafeIgnition |
+| **LP5** | Wideband | B18 | ☐ No | Continuous | 2A | SafeIgnition |
+| **LP6** | Cluster | B19 | ☐ No | Continuous | 10A | SafeIgnition |
+| **LP7** | WarningLED | B20 | ☐ No | Continuous | 5A | MULTI_WARNING |
+| **LP8** | AltExciter | B21 | ☐ No | Continuous | 5A | SafeIgnition |
+| **MP9** | WiperLow | G4 | ✅ Yes | Continuous | 10A | Ch05 AND NOT Ch06 AND SafeIgnition |
+| **MP10** | WiperHigh | G5 | ✅ Yes | Continuous | 10A | Ch06 AND SafeIgnition |
+| **LP9** | WiperPark | G3 | ✅ Yes | Continuous | 10A | WIPER_PARKING AND SafeIgnition |
 
-### HP2 Fan — Detailed Logic
+> **MP3 and MP6 repurposed** from wipers to horn and headlights. Wipers use MP9 (G4), MP10 (G5), LP9 (G3) on Grey connector — relay-less park design using WIPER_PARKING math channel.
+>
+> **Related Channels:** Each output auto-generates two logging channels: `<Name>Current` (amps, 1 decimal) and `<Name>Status` (fault code). Status legend is universal: 0=ok, 1=sc (short circuit), 2=open (open circuit), 4=htemp (high temperature), 8=ovcur (over current), 16=unvol (under voltage), 32=ovvol (over voltage). Enable Log Values on outputs you want to review post-session.
 
-```
-Action 1: ON @ 25% duty  | Priority 1 | Trigger: FAN_TEMP_25 (>170°F)
-Action 2: ON @ 50% duty  | Priority 2 | Trigger: FAN_TEMP_50 (>180°F)
-Action 3: ON @ 75% duty  | Priority 3 | Trigger: FAN_TEMP_75 (>190°F)
-Action 4: ON @ 98% duty  | Priority 4 | Trigger: FAN_TEMP_100 (>200°F) OR FAN_FAILSAFE
-Manual Low:  ON @ 50% duty  | Priority 5 | Trigger: Ch02 (fan low toggle)
-Manual High: ON @ 98% duty  | Priority 6 | Trigger: Ch03 (fan high toggle — overrides low)
+---
 
-Soft Start: 1.0s (reduce inrush)
-Hysteresis: 10°F per band (ON at threshold, OFF at threshold − 10°F)
-Failsafe: CAN coolant_T lost > 5s → 98% duty
-```
+### Race Studio Output Signal Settings
 
-### HP1 Starter — Detailed Logic
+Open **Configuration → Power Outputs → Output ##** for each output. These match the "Modify Output Signal" dialog exactly.
 
-```
-Trigger: STARTER_SAFE
-  = Ch01 AND SafeIgnition AND NOT ENGINE_RUNNING
+---
 
-OVC Retries: 1, Latch Off: 5s
-Add 10s timeout: if HP1 ON > 10s → force off (motor protection)
-HP1 has internal series diode (back-EMF protection)
-```
+##### HP1 — `Starter`
 
-### HP3 Fuel Pump — Detailed Logic
+> High Power Out 1 on Black Connector (35 Pin Male) Pin: 1; 13;
 
-```
-Trigger: FUEL_PRIME OR ENGINE_RUNNING
+| Field | Value |
+|-------|-------|
+| **Name** | `Starter` |
+| **Log values** | ☐ No |
+| **Sampling Frequency** | 10 Hz |
+| **Inductive Load** | ✅ Yes |
+| **Drive** | ◉ Continuous |
+| **Max Value of Requested Load** | `20` A |
+| **Over Current Latch-Off Time** | `1` sec |
+| **Number of Retries** | `1` |
+| **Retry Delay** | `0.5` sec |
+| **Minimum Current** | `0` A |
+| **Soft Start** | ☐ No |
+| **Soft Stop** | ☐ No |
+| **Condition mode** | Same condition for activation and deactivation |
+| **ON verified for at least** | `0` sec |
+| **OFF not verified for at least** | `0` sec |
 
-FUEL_PRIME:     3s one-shot on SafeIgnition rising edge
-ENGINE_RUNNING: CAN RPM > 50 (2s off-delay for stall protection)
+**Condition:**
 
-OVC Retries: 3 (pump may spike on initial prime)
-Latch Off: 5s
-No manual fuel override — cycle IGN off/on for 3s prime
-```
+| Channel | Operator | Value |
+|---------|----------|-------|
+| `STARTER_SAFE` [PDM32] | equal to | `ON` |
 
-### Wiper — Relay-Less Park Design (Future — Connector B)
+> HP1 has internal series diode (back-EMF protection from starter motor). Add 10s timeout in the condition if Race Studio supports it — if HP1 ON > 10s, force off (motor protection).
+
+---
+
+##### HB1 — `Fan`
+
+> Half Bridge Power Out 1 on Grey Connector (35 Pin Male) Pin: 1; 2;
+
+| Field | Value |
+|-------|-------|
+| **Name** | `Fan` |
+| **Log values** | ☐ No |
+| **Sampling Frequency** | 10 Hz |
+| **Inductive Load** | ☐ No |
+| **Drive** | ◉ PWM |
+| **PWM Frequency** | `100` Hz |
+| **Max Value of Requested Load** | `35` A |
+| **Over Current Latch-Off Time** | `1` sec |
+| **Number of Retries** | `1` |
+| **Retry Delay** | `0.5` sec |
+| **Minimum Current** | `0` A |
+| **Soft Start** | ✅ Yes, `1.0` sec |
+| **Soft Stop** | ☐ No |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Actions (multi-level PWM — add via the Actions tab):**
+
+| Priority | Duty | Trigger | Notes |
+|----------|------|---------|-------|
+| 1 | 25% | `FAN_TEMP_25` = ON | >170°F, off <160°F |
+| 2 | 50% | `FAN_TEMP_50` = ON | >180°F, off <170°F |
+| 3 | 75% | `FAN_TEMP_75` = ON | >190°F, off <180°F |
+| 4 | 98% | `FAN_TEMP_100` = ON OR `FAN_FAILSAFE` = ON | >200°F or CAN lost |
+| 5 | 50% | Ch02 (`FanLoSW`) = ON | Manual low override |
+| 6 | 98% | Ch03 (`FanHiSW`) = ON | Manual high override |
+
+> Higher priority overrides lower. Fan failsafe (CAN coolant temp lost >5s) forces 98%.
+
+---
+
+##### HP3 — `FuelPump`
+
+> High Power Out 3 on Black Connector (35 Pin Male) Pin: 24; 25;
+
+| Field | Value |
+|-------|-------|
+| **Name** | `FuelPump` |
+| **Log values** | ✅ Yes |
+| **Sampling Frequency** | 10 Hz |
+| **Inductive Load** | ✅ Yes |
+| **Drive** | ◉ Continuous |
+| **Max Value of Requested Load** | `15` A |
+| **Over Current Latch-Off Time** | `1` sec |
+| **Number of Retries** | `3` |
+| **Retry Delay** | `0.5` sec |
+| **Minimum Current** | `0` A |
+| **Soft Start** | ☐ No |
+| **Soft Stop** | ☐ No |
+| **Condition mode** | Same condition for activation and deactivation |
+| **ON verified for at least** | `0` sec |
+| **OFF not verified for at least** | `0` sec |
+
+**Condition (compound OR):**
+
+| # | Channel | Operator | Value |
+|---|---------|----------|-------|
+| 1 | `FUEL_PRIME` [PDM32] | equal to | `ON` |
+| 2 | OR `ENGINE_RUNNING` [PDM32] | equal to | `ON` |
+
+> 3 retries because fuel pump may spike on initial prime. No manual override — cycle IGN off/on for another 3s prime.
+
+---
+
+##### MP1 — `InjPwr`
+
+> Mid Power Out 1 on Black Connector (35 Pin Male) Pin: 2;
+
+| Field | Value |
+|-------|-------|
+| **Name** | `InjPwr` |
+| **Log values** | ☐ No |
+| **Sampling Frequency** | 10 Hz |
+| **Inductive Load** | ✅ Yes |
+| **Drive** | ◉ Continuous |
+| **Max Value of Requested Load** | `15` A |
+| **Over Current Latch-Off Time** | `1` sec |
+| **Number of Retries** | `1` |
+| **Retry Delay** | `0.5` sec |
+| **Minimum Current** | `0` A |
+| **Soft Start** | ☐ No |
+| **Soft Stop** | ☐ No |
+
+**Condition:** `SafeIgnition` [PDM32] equal to `ON`
+
+---
+
+##### MP2 — `CoilPwr`
+
+> Mid Power Out 2 on Black Connector (35 Pin Male) Pin: 3;
+
+Same as MP1 except:
+
+| Field | Value |
+|-------|-------|
+| **Name** | `CoilPwr` |
+| **Inductive Load** | ☐ No |
+
+**Condition:** `SafeIgnition` [PDM32] equal to `ON`
+
+---
+
+##### MP3 — `Horn`
+
+> Mid Power Out 3 on Black Connector (35 Pin Male) Pin: 4;
+
+| Field | Value |
+|-------|-------|
+| **Name** | `Horn` |
+| **Log values** | ☐ No |
+| **Sampling Frequency** | 10 Hz |
+| **Inductive Load** | ✅ Yes |
+| **Drive** | ◉ Continuous |
+| **Max Value of Requested Load** | `10` A |
+| **Over Current Latch-Off Time** | `1` sec |
+| **Number of Retries** | `1` |
+| **Retry Delay** | `0.5` sec |
+| **Minimum Current** | `0` A |
+| **Soft Start** | ☐ No |
+| **Soft Stop** | ☐ No |
+
+**Condition:** Ch12 (`HornSW`) [PDM32] equal to `ON`
+
+> Horn works independent of SafeIgnition — always active when PDM is powered.
+
+---
+
+##### MP4 — `BrakeLights`
+
+> Mid Power Out 4 on Black Connector (35 Pin Male) Pin: 5;
+
+| Field | Value |
+|-------|-------|
+| **Name** | `BrakeLights` |
+| **Log values** | ☐ No |
+| **Sampling Frequency** | 10 Hz |
+| **Inductive Load** | ☐ No |
+| **Drive** | ◉ Continuous |
+| **Max Value of Requested Load** | `10` A |
+| **Over Current Latch-Off Time** | `1` sec |
+| **Number of Retries** | `1` |
+| **Retry Delay** | `0.5` sec |
+| **Minimum Current** | `0` A |
+| **Soft Start** | ☐ No |
+| **Soft Stop** | ☐ No |
+
+**Condition:** Ch09 (`BrakeSW`) [PDM32] equal to `ON`
+
+> Brake lights work independent of SafeIgnition — always active when PDM is powered.
+
+---
+
+##### MP5 — `TailLights`
+
+> Mid Power Out 5 on Black Connector (35 Pin Male) Pin: 6;
+
+Same as MP4 except:
+
+| Field | Value |
+|-------|-------|
+| **Name** | `TailLights` |
+| **Max Value of Requested Load** | `10` A |
+
+**Condition:** `SafeIgnition` [PDM32] equal to `ON`
+
+---
+
+##### MP6 — `Headlights`
+
+> Mid Power Out 6 on Black Connector (35 Pin Male) Pin: 7;
+
+| Field | Value |
+|-------|-------|
+| **Name** | `Headlights` |
+| **Log values** | ☐ No |
+| **Sampling Frequency** | 10 Hz |
+| **Inductive Load** | ☐ No |
+| **Drive** | ◉ Continuous |
+| **Max Value of Requested Load** | `15` A |
+| **Over Current Latch-Off Time** | `1` sec |
+| **Number of Retries** | `1` |
+| **Retry Delay** | `0.5` sec |
+| **Minimum Current** | `0` A |
+| **Soft Start** | ☐ No |
+| **Soft Stop** | ☐ No |
+
+**Condition (compound AND):**
+
+| # | Channel | Operator | Value |
+|---|---------|----------|-------|
+| 1 | Ch04 (`HeadlightSW`) [PDM32] | equal to | `ON` |
+| 2 | AND `SafeIgnition` [PDM32] | equal to | `ON` |
+
+---
+
+##### MP7 — `Coolsuit`
+
+> Mid Power Out 7 on Black Connector (35 Pin Male) Pin: 8;
+
+| Field | Value |
+|-------|-------|
+| **Name** | `Coolsuit` |
+| **Inductive Load** | ✅ Yes |
+| **Drive** | ◉ Continuous |
+| **Max Value of Requested Load** | `10` A |
+
+**Condition (compound AND):**
+
+| # | Channel | Operator | Value |
+|---|---------|----------|-------|
+| 1 | Ch10 (`CoolsuitSW`) [PDM32] | equal to | `ON` |
+| 2 | AND `SafeIgnition` [PDM32] | equal to | `ON` |
+
+> Remaining fields same as MP6 (OC Latch-Off=1s, Retries=1, Retry Delay=0.5s, Min Current=0, no soft start/stop, 10 Hz, no log).
+
+---
+
+##### MP8 — `Defogger`
+
+> Mid Power Out 8 on Black Connector (35 Pin Male) Pin: 9;
+
+Same structure as MP7 except:
+
+| Field | Value |
+|-------|-------|
+| **Name** | `Defogger` |
+| **Inductive Load** | ☐ No |
+
+**Condition (compound AND):**
+
+| # | Channel | Operator | Value |
+|---|---------|----------|-------|
+| 1 | Ch11 (`DefoggerSW`) [PDM32] | equal to | `ON` |
+| 2 | AND `SafeIgnition` [PDM32] | equal to | `ON` |
+
+---
+
+##### LP1–LP6 — SafeIgnition Group
+
+All six outputs share identical settings. Only the name and max load differ.
+
+| Field | Value |
+|-------|-------|
+| **Inductive Load** | ☐ No |
+| **Drive** | ◉ Continuous |
+| **Over Current Latch-Off Time** | `1` sec |
+| **Number of Retries** | `1` |
+| **Retry Delay** | `0.5` sec |
+| **Minimum Current** | `0` A |
+| **Soft Start** | ☐ No |
+| **Soft Stop** | ☐ No |
+| **Condition** | `SafeIgnition` [PDM32] equal to `ON` |
+
+| Output | Name | Max Load | Log | Notes |
+|--------|------|----------|-----|-------|
+| LP1 (B14) | `ECU_Power` | 10A | ☐ | Haltech 26-pin pin 11 |
+| LP2 (B15) | `Dash` | 10A | ☐ | AIM 10" dash |
+| LP3 (B16) | `SmartyCam` | 10A | ☐ | SmartyCam 3 Corsa 7-pin power |
+| LP4 (B17) | `Spare` | 10A | ☐ | Available (GPS via hub +Vb) |
+| LP5 (B18) | `Wideband` | **2A** | ☐ | LP5 max is 2A — LM2 draws ~1–2A |
+| LP6 (B19) | `Cluster` | 10A | ☐ | OEM instrument cluster |
+
+---
+
+##### LP7 — `WarningLED`
+
+> Low Power Out 7 on Black Connector (35 Pin Male) Pin: 20;
+
+Same as LP1–LP6 except:
+
+| Field | Value |
+|-------|-------|
+| **Name** | `WarningLED` |
+| **Max Value of Requested Load** | `5` A |
+
+**Condition:** `MULTI_WARNING` [PDM32] equal to `ON`
+
+> Fires on any alarm: low oil pressure, high coolant temp, high oil temp, or low fuel pressure.
+
+---
+
+##### LP8 — `AltExciter`
+
+> Low Power Out 8 on Black Connector (35 Pin Male) Pin: 21;
+
+Same as LP1–LP6 except:
+
+| Field | Value |
+|-------|-------|
+| **Name** | `AltExciter` |
+| **Max Value of Requested Load** | `5` A |
+
+**Condition:** `SafeIgnition` [PDM32] equal to `ON`
+
+> OEM alternator D+ field wire routed through LP8. Kill switch → SafeIgnition drops → LP8 off → alternator field collapses immediately. < 1A draw.
+
+---
+
+##### MP9 — `WiperLow` (future)
+
+> Mid Power Out 9 on Grey Connector (35 Pin Male) Pin: 4;
+
+| Field | Value |
+|-------|-------|
+| **Name** | `WiperLow` |
+| **Inductive Load** | ✅ Yes |
+| **Drive** | ◉ Continuous |
+| **Max Value of Requested Load** | `10` A |
+
+**Condition (compound AND):**
+
+| # | Channel | Operator | Value |
+|---|---------|----------|-------|
+| 1 | Ch05 (`WiperLoSW`) [PDM32] | equal to | `ON` |
+| 2 | AND Ch06 (`WiperHiSW`) [PDM32] | equal to | `OFF` |
+| 3 | AND `SafeIgnition` [PDM32] | equal to | `ON` |
+
+---
+
+##### MP10 — `WiperHigh` (future)
+
+> Mid Power Out 10 on Grey Connector (35 Pin Male) Pin: 5;
+
+| Field | Value |
+|-------|-------|
+| **Name** | `WiperHigh` |
+| **Inductive Load** | ✅ Yes |
+| **Drive** | ◉ Continuous |
+| **Max Value of Requested Load** | `10` A |
+
+**Condition (compound AND):**
+
+| # | Channel | Operator | Value |
+|---|---------|----------|-------|
+| 1 | Ch06 (`WiperHiSW`) [PDM32] | equal to | `ON` |
+| 2 | AND `SafeIgnition` [PDM32] | equal to | `ON` |
+
+> High speed overrides low. When Ch06 is ON, MP9 condition #2 (Ch06 = OFF) fails, so only MP10 fires.
+
+---
+
+##### LP9 — `WiperPark` (future)
+
+> Low Power Out 9 on Grey Connector (35 Pin Male) Pin: 3;
+
+| Field | Value |
+|-------|-------|
+| **Name** | `WiperPark` |
+| **Inductive Load** | ✅ Yes |
+| **Drive** | ◉ Continuous |
+| **Max Value of Requested Load** | `10` A |
+
+**Condition (compound AND):**
+
+| # | Channel | Operator | Value |
+|---|---------|----------|-------|
+| 1 | `WIPER_PARKING` [PDM32] | equal to | `ON` |
+| 2 | AND `SafeIgnition` [PDM32] | equal to | `ON` |
+
+---
+
+### Wiper — Relay-Less Park Design (Future — Grey Connector)
 
 Three PDM outputs replace the OEM park relay. The motor's internal cam disc handles park positioning.
 
 **Motor wires:** Green = low speed, Yellow = high speed, Brown = park common, Black = ground/dynamic brake.
 
 ```
-MP9  (B4)  → Green wire (low speed)   | Trigger: Ch05 AND NOT Ch06 AND SafeIgnition
-MP10 (B5)  → Yellow wire (high speed)  | Trigger: Ch06 AND SafeIgnition
-LP9  (B3)  → Brown wire (park sweep)   | Trigger: WIPER_PARKING AND SafeIgnition
+MP9  (G4)  → Green wire (low speed)   | Trigger: Ch05 AND NOT Ch06 AND SafeIgnition
+MP10 (G5)  → Yellow wire (high speed)  | Trigger: Ch06 AND SafeIgnition
+LP9  (G3)  → Brown wire (park sweep)   | Trigger: WIPER_PARKING AND SafeIgnition
 
 Motor Black wire → chassis ground (always connected)
 Motor Gray wire → leave disconnected (washer or unused)
@@ -865,22 +1237,26 @@ Motor Gray wire → leave disconnected (washer or unused)
 
 ### Protection Settings
 
-| Output | Mode | MaxLoad | Inductive | OVC Retries | Latch Off | Soft Start |
-|--------|------|---------|-----------|-------------|-----------|------------|
-| HP1 Starter | OVC | 20A | Yes | 1 | 5s | No |
-| HP2 Fan | Fused | 35A | No | — | — | 1.0s |
-| HP3 FuelPump | OVC | 15A | Yes | 3 | 5s | No |
-| MP1 InjPwr | OVC | 15A | Yes | 1 | 5s | No |
-| MP2 CoilPwr | OVC | 15A | No | 1 | 5s | No |
-| MP3 Horn | OVC | 10A | Yes | 1 | 5s | No |
-| MP4 BrakeLights | Fused | 10A | No | — | — | No |
-| MP5 TailLights | Fused | 10A | No | — | — | No |
-| MP6 Headlights | OVC | 15A | No | 1 | 5s | No |
-| MP7 Coolsuit | OVC | 10A | Yes | 1 | 5s | No |
-| MP8 Defogger | OVC | 10A | No | 1 | 5s | No |
-| LP1–LP6 | OVC | 10A | No | 1 | 5s | No |
-| LP7 WarningLED | OVC | 5A | No | 1 | 5s | No |
-| LP8 AltExciter | OVC | 5A | No | 1 | 5s | No |
+| Output | Max Load | Inductive | OC Latch-Off | Retries | Retry Delay | Soft Start |
+|--------|----------|-----------|--------------|---------|-------------|------------|
+| HP1 Starter | 20A | Yes | 1s | 1 | 0.5s | No |
+| HB1 Fan | 35A | No | 1s | 1 | 0.5s | 1.0s |
+| HP3 FuelPump | 15A | Yes | 1s | 3 | 0.5s | No |
+| MP1 InjPwr | 15A | Yes | 1s | 1 | 0.5s | No |
+| MP2 CoilPwr | 15A | No | 1s | 1 | 0.5s | No |
+| MP3 Horn | 10A | Yes | 1s | 1 | 0.5s | No |
+| MP4 BrakeLights | 10A | No | 1s | 1 | 0.5s | No |
+| MP5 TailLights | 10A | No | 1s | 1 | 0.5s | No |
+| MP6 Headlights | 15A | No | 1s | 1 | 0.5s | No |
+| MP7 Coolsuit | 10A | Yes | 1s | 1 | 0.5s | No |
+| MP8 Defogger | 10A | No | 1s | 1 | 0.5s | No |
+| LP1–LP6 | 10A (LP5=2A) | No | 1s | 1 | 0.5s | No |
+| LP7 WarningLED | 5A | No | 1s | 1 | 0.5s | No |
+| LP8 AltExciter | 5A | No | 1s | 1 | 0.5s | No |
+| MP9/MP10 Wiper | 10A | Yes | 1s | 1 | 0.5s | No |
+| LP9 WiperPark | 10A | Yes | 1s | 1 | 0.5s | No |
+
+> **All outputs use the same OC Latch-Off (1s) and Retry Delay (0.5s)** — these are Race Studio defaults from the webinar config. Adjust retries only: HP3 gets 3 retries for fuel pump inrush spikes. All others get 1.
 
 ### Alarm Thresholds (Tune on Track)
 
@@ -939,13 +1315,13 @@ After PDM config is transmitted, connect USB-C directly to SmartyCam 3 Corsa:
 
 ```
 PDM HP3 outputs:
-  A24 ─────┬────── Pump positive (+)
-  A25 ─────┘
+  B24 ─────┬────── Pump positive (+)
+  B25 ─────┘
 
   Battery GND ─── Pump negative (−)
 ```
 
-Both A24 and A25 carry HP3 — connect both for full current capacity. Use 14 AWG minimum.
+Both B24 and B25 carry HP3 — connect both for full current capacity. Use 14 AWG minimum.
 
 ### Test Sequence
 
@@ -1000,7 +1376,7 @@ PDM acts as a smart fuse box with kill switch integration. Stock ECU and BCM rem
 | MP1/MP2 (main relay → stock ECU circuits) | 15–25A | ECU + injectors + coils + O2 heaters |
 | HP3 (fuel pump) | 5–10A | Continuous while running |
 | HP1 (starter) | 15–20A | Momentary only |
-| HP2 (fan, when added) | 10–35A | PWM dependent on temp |
+| HB1 (fan, when added) | 10–35A | PWM dependent on temp |
 | LP1–LP8 + MP4/MP5 | 10–15A | Accessories + lights |
 | **Total (no fan, no starter)** | **~40–50A** | Well under 120A breaker |
 | **Total (with fan peak)** | **~75–85A** | Comfortable margin |
@@ -1031,7 +1407,7 @@ Battery (+) ─── 2 AWG ─── Kill Switch [Large Terminal A]
                                 │                      │
                                 │                      └─── 4 AWG ─── 120A Breaker ─── PDM Surlok (+)
                                 │
-                     Kill Switch [Small Terminal B] ─── IGN toggle ───┬─── PDM B23 (IGN input)
+                     Kill Switch [Small Terminal B] ─── IGN toggle ───┬─── PDM G23 (IGN input)
                                                                       └─── Haltech 34-pin pin 13 (ECU IGN)
 ```
 
@@ -1039,9 +1415,9 @@ Battery (+) ─── 2 AWG ─── Kill Switch [Large Terminal A]
 - [ ] Large terminal B → 150A breaker → starter B+ / alternator B+ (2 AWG)
 - [ ] Large terminal B → 120A breaker → PDM Surlok (+) (4 AWG)
 - [ ] Small terminal B → IGN toggle switch
-- [ ] IGN toggle → PDM B23 AND Haltech 34-pin pin 13 (P wire)
+- [ ] IGN toggle → PDM G23 AND Haltech 34-pin pin 13 (P wire)
 - [ ] Connect PDM Surlok power cable
-- [ ] Connect PDM grounds: B13, B14, B18 to chassis
+- [ ] Connect PDM grounds: G13, G14, G18 to chassis
 
 #### S.3 Switch Panel Wiring
 
@@ -1056,16 +1432,16 @@ Momentary:
   [START]                                       (RED warning LED)
 ```
 
-- [ ] IGN toggle → B23 (already wired in S.2)
-- [ ] Start button → Ch01 (B26), close to GND, pull-up 10kΩ
-- [ ] Fan low → Ch02 (B27), close to GND, pull-up 10kΩ
-- [ ] Fan high → Ch03 (B28), close to GND, pull-up 10kΩ
-- [ ] Coolsuit → Ch10 (B22), close to GND, pull-up 10kΩ
-- [ ] Defogger → Ch11 (A26), close to GND, pull-up 10kΩ
-- [ ] Brake light switch → Ch09 (B21), close to VBatt, no pull-up (OEM switch provides 12V)
-- [ ] Warning LED → LP7 (A20)
+- [ ] IGN toggle → G23 (already wired in S.2)
+- [ ] Start button → Ch01 (G26), close to GND, pull-up 10kΩ
+- [ ] Fan low → Ch02 (G27), close to GND, pull-up 10kΩ
+- [ ] Fan high → Ch03 (G28), close to GND, pull-up 10kΩ
+- [ ] Coolsuit → Ch10 (G22), close to GND, pull-up 10kΩ
+- [ ] Defogger → Ch11 (B26), close to GND, pull-up 10kΩ
+- [ ] Brake light switch → Ch09 (G21), close to VBatt, no pull-up (OEM switch provides 12V)
+- [ ] Warning LED → LP7 (B20)
 
-> **Phase 2 additions:** Add horn button → Ch12 (A27, close to GND, pull-up 10kΩ) and headlight toggle → Ch04 (B29, close to GND, pull-up 10kΩ) when BCM is unplugged.
+> **Phase 2 additions:** Add horn button → Ch12 (B27, close to GND, pull-up 10kΩ) and headlight toggle → Ch04 (G29, close to GND, pull-up 10kΩ) when BCM is unplugged.
 
 #### S.4 First Power-Up
 
@@ -1090,19 +1466,19 @@ Momentary:
 **Main Relay (MP1 + MP2 → OE main relay pin 87):**
 - [ ] Locate OE main relay in underhood fuse box
 - [ ] Pull the relay
-- [ ] Insert MP1 (A2) wire into pin 87 socket
-- [ ] Insert MP2 (A3) wire into same pin 87 socket (parallel)
+- [ ] Insert MP1 (B2) wire into pin 87 socket
+- [ ] Insert MP2 (B3) wire into same pin 87 socket (parallel)
 - [ ] IGN on → verify stock ECU powers up; IGN off → ECU loses power
 - [ ] **Test:** Stock dash lights, check engine light, fuel gauge all work
 
 **Fuel Pump Relay (HP3 → fuel pump relay pin 87):**
 - [ ] Pull OEM fuel pump relay
-- [ ] Insert HP3 (A24+A25) wire into pin 87 socket
+- [ ] Insert HP3 (B24+B25) wire into pin 87 socket
 - [ ] IGN on → listen for 3-second fuel prime → off
 - [ ] Verify in Race Studio: `FUEL_PRIME` fires, `FuelSV` active → inactive
 
 **Starter (HP1 → solenoid S-terminal):**
-- [ ] Run HP1 (A1+A13) wire directly to starter solenoid S-terminal (10 AWG, ring terminal)
+- [ ] Run HP1 (B1+B13) wire directly to starter solenoid S-terminal (10 AWG, ring terminal)
 - [ ] Press START (Ch01) → engine cranks; release → stops
 - [ ] Start engine → press START again → should NOT engage (RPM interlock)
 
@@ -1113,20 +1489,20 @@ Momentary:
 - [ ] Locate OEM alternator D+ exciter wire (~18 AWG at alternator Yazaki connector)
 - [ ] Confirm with multimeter: 12V with IGN on, 0V with IGN off
 - [ ] Cut exciter wire; leave length on both ends
-- [ ] Fuse box side → wire to PDM LP8 (A21)
+- [ ] Fuse box side → wire to PDM LP8 (B21)
 - [ ] Alternator D+ side → remains connected to alternator
 
 #### S.8 CAN0 Expansion Bus — AIM Devices + Podium
 
-> The Data Hub is a passive star splitter — each device plugs into its own hub port. GPS-08 and Podium get power through the hub's +Vb rail (PDM A33, always on). SmartyCam Corsa needs **separate 12V** from LP3 (A16) via its 7-pin main power connector — the 5-pin EXP port carries CAN data only.
+> The Data Hub is a passive star splitter — each device plugs into its own hub port. GPS-08 and Podium get power through the hub's +Vb rail (PDM B33, always on). SmartyCam Corsa needs **separate 12V** from LP3 (B16) via its 7-pin main power connector — the 5-pin EXP port carries CAN data only.
 
 **Physical connections:**
-- [ ] Verify CAN0 expansion cable: A22 (H) / A11 (L) / A33 (+Vb) / A10 (GND)
+- [ ] Verify CAN0 expansion cable: B22 (H) / B11 (L) / B33 (+Vb) / B10 (GND)
 - [ ] Connect AIM CAN Data Hub (4-way) male port to expansion cable
 - [ ] Hub port 1 → GPS-08 (5-pin Binder male cable)
 - [ ] Hub port 2 → SmartyCam 3 Corsa EXP port (5-pin Binder — CAN data only)
 - [ ] Hub port 3 → Podium Micro (Binder-to-M8 adapter cable)
-- [ ] Wire LP3 (A16) → SmartyCam 7-pin main power connector (Red = +12V, Black = GND)
+- [ ] Wire LP3 (B16) → SmartyCam 7-pin main power connector (Red = +12V, Black = GND)
 
 **Mounting:**
 - [ ] Mount GPS-08 (roof/cowl — clear sky view, antenna face up)
@@ -1143,7 +1519,7 @@ Momentary:
 
 > **Podium is NOT visible in Race Studio.** It's an Autosport Labs device, not AIM. Verify via the RaceCapture app (phone/tablet), not RS3. See `hardware/aim/aim-podium/aim-podium-micro.md` for config.
 
-> **LP4 (A17):** Listed as "GPS" in output map but GPS-08 gets power through the hub's +Vb rail (A33, always on). LP4 is currently a spare — repurpose if needed for another accessory.
+> **LP4 (B17):** Listed as "GPS" in output map but GPS-08 gets power through the hub's +Vb rail (B33, always on). LP4 is currently a spare — repurpose if needed for another accessory.
 
 ### Test Gate — Phase 1A (Saturday)
 
@@ -1176,8 +1552,8 @@ After sensors are installed and Haltech CAN data is confirmed flowing to PDM.
 
 #### SU.6 Verify CAN1 (Haltech → PDM)
 
-- [ ] Connect Haltech 26-pin pins 23/24 (CAN H/L) → PDM A30/A31 (CAN1)
-- [ ] Power Haltech from PDM LP1 (A14)
+- [ ] Connect Haltech 26-pin pins 23/24 (CAN H/L) → PDM B30/B31 (CAN1)
+- [ ] Power Haltech from PDM LP1 (B14)
 - [ ] Verify in Race Studio Live Data: RPM, Coolant Temp, Oil Pressure visible
 - [ ] Confirm `FAN_TEMP_25` through `FAN_TEMP_100` react to live coolant temp
 - [ ] Confirm `MULTI_WARNING` triggers when alarm thresholds crossed (force values in NSP)
@@ -1190,11 +1566,11 @@ Now that CAN temp data is confirmed, move fan from stock relay to PDM.
 
 **Option A — Through relay socket (reversible, try first):**
 - [ ] Pull OEM fan relay
-- [ ] Insert HP2 (A12+A23) wire into fan relay pin 87 socket (12 AWG)
+- [ ] Insert HB1 (G1+G2) wire into fan relay pin 87 socket (12 AWG)
 - [ ] Test: warm up engine → verify fan bands activate at correct temps
 
 **Option B — Direct to fan motor (if relay socket has too much resistance):**
-- [ ] Run HP2 (A12+A23) directly to fan motor connector
+- [ ] Run HB1 (G1+G2) directly to fan motor connector
 - [ ] Leave OEM fan relay in place as backup (can be reinstalled)
 - [ ] Test: same as Option A
 
@@ -1215,8 +1591,8 @@ Now that CAN temp data is confirmed, move fan from stock relay to PDM.
 
 | Load | Why It Stays | Phase 2 Migration |
 |------|-------------|-------------------|
-| Horn | BCM + steering wheel button works perfectly | MP3 (A4) + Ch12 button |
-| Headlights | BCM + stalk switch works, has features (delay, hi/lo) | MP6 (A7) + Ch04 toggle |
+| Horn | BCM + steering wheel button works perfectly | MP3 (B4) + Ch12 button |
+| Headlights | BCM + stalk switch works, has features (delay, hi/lo) | MP6 (B7) + Ch04 toggle |
 
 These loads move to PDM in Phase 2 when BCM is unplugged. The outputs (MP3, MP6) are already configured in Race Studio — just need physical wiring and switch panel additions.
 
@@ -1235,13 +1611,13 @@ Haltech takes over engine control. Stock ECU and BCM are unplugged but left moun
 | Engine ECU | Stock SIMK43 (connected) | Haltech Elite 2500 (active) |
 | Stock ECU | Powered via MP1/MP2 → main relay pin 87 | Unplugged, mounted |
 | BCM | Connected and active | Unplugged, mounted |
-| MP1 wire | OE main relay pin 87 | 3-way splice → D2 pin 8 + D3 pin 8 (both banks injector power) + Haltech pin 26 |
+| MP1 wire | OE main relay pin 87 | 3-way splice → D2 pin 8 + D3 pin 8 (both banks injector power) + Haltech 34-pin pin 26 |
 | MP2 wire | OE main relay pin 87 | 2-way splice → D2 pin 7 + D3 pin 7 (both banks coil power) |
 | HP3 wire | Fuel pump relay pin 87 | Direct to fuel pump (or leave on relay socket) |
 | Coils | Stock harness (OE ECU drives) | D2 (Bank 1) + D3 (Bank 2) → 6× Toyota 90919-A2005 via Haltech IGN 1–6 |
 | Injectors | Stock harness (OE ECU drives) | D2 (Bank 1) + D3 (Bank 2) → 6× injectors via Haltech INJ 1–6 |
-| Horn | BCM + steering wheel | MP3 (A4) → horn relay pin 87 or direct; Ch12 button |
-| Headlights | BCM + stalk switch | MP6 (A7) → headlight relay pin 87 or direct; Ch04 toggle |
+| Horn | BCM + steering wheel | MP3 (B4) → horn relay pin 87 or direct; Ch12 button |
+| Headlights | BCM + stalk switch | MP6 (B7) → headlight relay pin 87 or direct; Ch04 toggle |
 | Relay box | Powered, relays pulled selectively | Unpowered — all relays can go back in (no current) |
 | Race Studio config | **No change** | **No change** |
 
@@ -1261,12 +1637,12 @@ Haltech takes over engine control. Stock ECU and BCM are unplugged but left moun
 
 **Step 3 — Reroute MP1 (injector power)**
 - [ ] Pull MP1 spade from OE main relay pin 87 socket
-- [ ] Connect MP1 (A2) to 3-way splice: D2 pin 8 (Bank 1) + D3 pin 8 (Bank 2) + Haltech 34-pin pin 26 (R/L, injector power sense)
+- [ ] Connect MP1 (B2) to 3-way splice: D2 pin 8 (Bank 1) + D3 pin 8 (Bank 2) + Haltech 34-pin pin 26 (R/L, injector power sense)
 - [ ] See `guides/harness-design.md` → "MP1/MP2 Power Distribution" for splice diagram
 
 **Step 4 — Reroute MP2 (coil power)**
 - [ ] Pull MP2 spade from OE main relay pin 87 socket
-- [ ] Connect MP2 (A3) to 2-way splice: D2 pin 7 (Bank 1) + D3 pin 7 (Bank 2)
+- [ ] Connect MP2 (B3) to 2-way splice: D2 pin 7 (Bank 1) + D3 pin 7 (Bank 2)
 - [ ] D2/D3 pin 7 → Coil Pin D bus on each bank (3 coils per bank)
 
 **Step 5 — Put main relay back**
@@ -1282,13 +1658,13 @@ Haltech takes over engine control. Stock ECU and BCM are unplugged but left moun
 - [ ] Verify D4 (Lowdoller sensors) connected — oil/coolant/fuel to Haltech AVIs
 
 **Step 7 — Add horn + headlight controls**
-- [ ] Add momentary horn button → Ch12 (A27), close to GND, pull-up 10kΩ
-- [ ] Add latching headlight toggle → Ch04 (B29), close to GND, pull-up 10kΩ
-- [ ] Wire MP3 (A4) → horn (direct to horn or through relay socket)
-- [ ] Wire MP6 (A7) → headlights (direct or through relay socket)
+- [ ] Add momentary horn button → Ch12 (B27), close to GND, pull-up 10kΩ
+- [ ] Add latching headlight toggle → Ch04 (G29), close to GND, pull-up 10kΩ
+- [ ] Wire MP3 (B4) → horn (direct to horn or through relay socket)
+- [ ] Wire MP6 (B7) → headlights (direct or through relay socket)
 
 **Step 8 — First fire on Haltech**
-- [ ] Haltech powered via LP1 (A14)
+- [ ] Haltech powered via LP1 (B14)
 - [ ] Verify base tune loaded in Haltech NSP
 - [ ] IGN on → fuel prime → press START → engine fires
 - [ ] Confirm idle, check for fault codes
@@ -1343,14 +1719,14 @@ Full commitment to PDM + Haltech. OE ECU, BCM, and relay box physically removed.
 | Fan wiring | Through relay socket or direct | Direct only |
 | Horn wiring | Through relay socket or direct | Direct only |
 | Headlights | Through relay socket or direct | Direct only |
-| Wipers | Not installed | MP9 (B4) / MP10 (B5) via keypad or toggle |
+| Wipers | Not installed | MP9 (G4) / MP10 (G5) via keypad or toggle |
 | Race Studio config | **UPDATE REQUIRED** | Add CAN2 keypad + OR triggers |
 
 ### Race Studio Config Changes
 
 1. **Enable CAN2** → 125 kbps, AIM CAN Keypad 12 protocol
 2. **Add keypad buttons** K33–K42 (see `guides/keypad-config-future.md` for full assignments)
-3. **Add keypad power output** — use a spare LP (LP9 B3 or repurpose)
+3. **Add keypad power output** — use a spare LP (LP9 G3 or repurpose)
 4. **Update Math Channel triggers** to OR keypad + physical switch:
 
 | Trigger | Phase 2 | Phase 3 |
@@ -1368,7 +1744,7 @@ Full commitment to PDM + Haltech. OE ECU, BCM, and relay box physically removed.
    - PodiumConnect comms (K40), pit-in laps (K41)
 
 6. **Add wipers** if needed (relay-less park design):
-   - MP9 (B4) → Green (low), MP10 (B5) → Yellow (high), LP9 (B3) → Brown (park)
+   - MP9 (G4) → Green (low), MP10 (G5) → Yellow (high), LP9 (G3) → Brown (park)
    - Math channels: WIPER_ACTIVE, WIPER_ACTIVE_DLY (3s delay off), WIPER_PARKING — already configured
    - Trigger: WiperKYD positions OR physical toggles on Ch05/Ch06
    - Motor Black wire → chassis ground. No external relay needed.
@@ -1377,10 +1753,10 @@ Full commitment to PDM + Haltech. OE ECU, BCM, and relay box physically removed.
 
 | PDM Pin | Connector | Signal | Keypad Side |
 |---------|-----------|--------|-------------|
-| A28 (CAN2 H) | Black | CAN H | Deutsch pin 2 (White) |
-| A29 (CAN2 L) | Black | CAN L | Deutsch pin 1 (Blue) |
+| B28 (CAN2 H) | Black | CAN H | Deutsch pin 2 (White) |
+| B29 (CAN2 L) | Black | CAN L | Deutsch pin 1 (Blue) |
 | LP power output | Black | +12V | Deutsch pin 4 (Red) |
-| B18 (GND) | Grey | GND | Deutsch pin 3 (Black) |
+| G18 (GND) | Grey | GND | Deutsch pin 3 (Black) |
 
 > Full keypad config preserved in `guides/keypad-config-future.md` — button assignments, LED colors, variable names, cable pinout.
 
@@ -1390,14 +1766,14 @@ With the relay box removed, all loads wire directly to PDM outputs:
 
 | Load | PDM Output | Wiring |
 |------|-----------|--------|
-| Fan motor | HP2 (A12+A23) | Direct to fan motor connector, 12 AWG |
-| Fuel pump | HP3 (A24+A25) | Direct to pump, 14 AWG |
-| Starter | HP1 (A1+A13) | Direct to solenoid S, 10 AWG (already done) |
-| Horn | MP3 (A4) | Direct to horn, 16 AWG |
-| Headlights | MP6 (A7) | Direct to headlight connector, 14 AWG |
-| Wiper low | MP9 (B4) | Direct to motor Green wire, 16 AWG |
-| Wiper high | MP10 (B5) | Direct to motor Yellow wire, 16 AWG |
-| Wiper park | LP9 (B3) | Direct to motor Brown wire, 16 AWG |
+| Fan motor | HB1 (G1+G2) | Direct to fan motor connector, 12 AWG |
+| Fuel pump | HP3 (B24+B25) | Direct to pump, 14 AWG |
+| Starter | HP1 (B1+B13) | Direct to solenoid S, 10 AWG (already done) |
+| Horn | MP3 (B4) | Direct to horn, 16 AWG |
+| Headlights | MP6 (B7) | Direct to headlight connector, 14 AWG |
+| Wiper low | MP9 (G4) | Direct to motor Green wire, 16 AWG |
+| Wiper high | MP10 (G5) | Direct to motor Yellow wire, 16 AWG |
+| Wiper park | LP9 (G3) | Direct to motor Brown wire, 16 AWG |
 
 ---
 
@@ -1413,17 +1789,17 @@ With the relay box removed, all loads wire directly to PDM outputs:
 
 ## Reference — CAN Bus Configuration
 
-### CAN0 — AIM Expansion (A22 H / A11 L)
+### CAN0 — AIM Expansion (B22 H / B11 L)
 
 | Setting | Value |
 |---------|-------|
 | Speed | 1 Mbps |
 | Devices | CAN Data Hub (star topology) → GPS-08 (port 1), SmartyCam (port 2), Podium (port 3) |
 | Cable | Pre-wired CAN expansion harness (5-pin Binder, 22 AWG) |
-| Power | A33 (+Vb out CAN, always on) powers GPS-08 + Podium via hub. SmartyCam powered separately via LP3 (A16, SafeIgnition). |
+| Power | B33 (+Vb out CAN, always on) powers GPS-08 + Podium via hub. SmartyCam powered separately via LP3 (B16, SafeIgnition). |
 | Note | Dash connects via LVDS, not CAN0 |
 
-### CAN1 — Haltech ECU (A30 H / A31 L)
+### CAN1 — Haltech ECU (B30 H / B31 L)
 
 | Setting | Value |
 |---------|-------|
@@ -1431,55 +1807,55 @@ With the relay box removed, all loads wire directly to PDM outputs:
 | Protocol | Haltech CAN_V2_40 |
 | Termination | 120Ω at PDM end if Haltech doesn't self-terminate |
 | Silent on CAN | OFF initially; enable if Haltech logs CAN errors |
-| Haltech wiring | 26-pin pin 23 (W) → A30; pin 24 (L) → A31 |
-| Note | A30/A31 shared with RS232 — RS232 unavailable when CAN1 active |
+| Haltech wiring | 26-pin pin 23 (W) → B30; pin 24 (L) → B31 |
+| Note | B30/B31 shared with RS232 — RS232 unavailable when CAN1 active |
 
 ### CAN2 — Unused (Phase 1/2) / Keypad (Phase 3)
 
 | Setting | Value |
 |---------|-------|
-| Pins | A28 (H) / A29 (L) |
+| Pins | B28 (H) / B29 (L) |
 | Speed | 125 kbps (when keypad connected) |
 | Phase 1/2 | Disabled |
 | Phase 3 | AIM CAN Keypad 12 |
 
-> **CRITICAL:** Never wire CAN2 devices to CAN0 (A11/A22). CAN0 = 1 Mbps. Mixing speeds = both buses fail.
+> **CRITICAL:** Never wire CAN2 devices to CAN0 (B11/B22). CAN0 = 1 Mbps. Mixing speeds = both buses fail.
 
 ---
 
 ## Reference — PDM Physical Connections by Phase
 
-### Connector A (Black) — All Phases
+### Black Connector (B) — Power Outputs, All Phases
 
 | Pin | Output | Load | Ph1 | Ph2 | Ph3 |
 |-----|--------|------|-----|-----|-----|
-| A1+A13 | HP1 | Starter solenoid S | Direct | Direct | Direct |
-| A2 | MP1 | Power | Main relay pin 87 | D3 pin 7 (inj) | Direct to inj rail |
-| A3 | MP2 | Power | Main relay pin 87 | D2 pin 7 (coils) | Direct to coil bus |
-| A4 | MP3 | Horn | Not connected | Horn relay/direct | Direct |
-| A5 | MP4 | Brake lights | Connected | Same | Same |
-| A6 | MP5 | Tail lights | Connected | Same | Same |
-| A7 | MP6 | Headlights | Not connected | Relay/direct | Direct |
-| A8 | MP7 | Coolsuit | Connected | Same | Same |
-| A9 | MP8 | Defogger | Connected | Same | Same |
-| A12+A23 | HP2 | Fan | Ph1B: relay/direct | Direct | Direct |
-| A14 | LP1 | Haltech ECU | Connected | Same | Same |
-| A15 | LP2 | Dash | Connected | Same | Same |
-| A16 | LP3 | SmartyCam | Connected | Same | Same |
-| A17 | LP4 | GPS | Connected | Same | Same |
-| A18 | LP5 | LM2 Wideband | Connected | Same | Same |
-| A19 | LP6 | Cluster | Connected | Same | Same |
-| A20 | LP7 | Warning LED | Connected | Same | Same |
-| A21 | LP8 | Alt exciter | Connected | Same | Same |
-| A24+A25 | HP3 | Fuel pump | Relay pin 87 | Direct | Direct |
+| B1+B13 | HP1 | Starter solenoid S | Direct | Direct | Direct |
+| B2 | MP1 | Power | Main relay pin 87 | D3 pin 7 (inj) | Direct to inj rail |
+| B3 | MP2 | Power | Main relay pin 87 | D2 pin 7 (coils) | Direct to coil bus |
+| B4 | MP3 | Horn | Not connected | Horn relay/direct | Direct |
+| B5 | MP4 | Brake lights | Connected | Same | Same |
+| B6 | MP5 | Tail lights | Connected | Same | Same |
+| B7 | MP6 | Headlights | Not connected | Relay/direct | Direct |
+| B8 | MP7 | Coolsuit | Connected | Same | Same |
+| B9 | MP8 | Defogger | Connected | Same | Same |
+| B14 | LP1 | Haltech ECU | Connected | Same | Same |
+| B15 | LP2 | Dash | Connected | Same | Same |
+| B16 | LP3 | SmartyCam | Connected | Same | Same |
+| B17 | LP4 | GPS | Connected | Same | Same |
+| B18 | LP5 | LM2 Wideband | Connected | Same | Same |
+| B19 | LP6 | Cluster | Connected | Same | Same |
+| B20 | LP7 | Warning LED | Connected | Same | Same |
+| B21 | LP8 | Alt exciter | Connected | Same | Same |
+| B24+B25 | HP3 | Fuel pump | Relay pin 87 | Direct | Direct |
 
-### Connector B (Grey) — Wiper + Phase 3 Additions
+### Grey Connector (G) — Fan, Wipers, Channel Inputs
 
-| Pin | Output | Load | Ph3 |
-|-----|--------|------|-----|
-| B3 | LP9 | Wiper Park (Brown) | Direct to motor Brown wire |
-| B4 | MP9 | Wiper Low (Green) | Direct to motor Green wire |
-| B5 | MP10 | Wiper High (Yellow) | Direct to motor Yellow wire |
+| Pin | Output | Load | Ph1 | Ph2 | Ph3 |
+|-----|--------|------|-----|-----|-----|
+| G1+G2 | HB1 | Fan | Ph1B: relay/direct | Direct | Direct |
+| G3 | LP9 | Wiper Park (Brown) | — | — | Direct to motor Brown wire |
+| G4 | MP9 | Wiper Low (Green) | — | — | Direct to motor Green wire |
+| G5 | MP10 | Wiper High (Yellow) | — | — | Direct to motor Yellow wire |
 
 ---
 
@@ -1514,7 +1890,7 @@ Starting point: `Webinar complete.zconfig`. This table maps what was renamed/rep
 | Webinar Output | Webinar HW | Tiburon Output | Notes |
 |---|---|---|---|
 | `Starter` | HP (series diode) | **HP1 Starter** | Keep — OVC 20A, inductive |
-| `FanSpeed` | HP | **HP2 Fan** | Keep — add 4-level PWM bands |
+| `FanSpeed` | HP | **HB1 Fan** | Keep — add 4-level PWM bands; move to HB1 (G1+G2) for 35A rating |
 | `Fuel1A` + `Fuel1B` | 2× MP | **HP3 FuelPump** | Consolidate to single HP3 |
 | `Siren` | MP | **MP3 Horn** | Rename |
 | `Ignition` | LP/MP | **MP1 InjectorPwr** | Repurpose |
