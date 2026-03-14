@@ -54,14 +54,14 @@ PDM at home with laptop + fuel pump. All software work and bench testing — no 
   - MP7 Coolsuit, MP8 Defogger
   - LP1–LP8 (ECU, dash, SmartyCam, GPS, wideband, cluster, warning LED, alt exciter)
 - [ ] Configure status variables: ENGINE_RUNNING, FUEL_PRIME, FAN_TEMP bands (77/82/87/92°C), FAN_FAILSAFE, STARTER_SAFE, MULTI_WARNING
-- [ ] Configure channel inputs: Ch10 (fan), Ch12 (coolsuit), Ch05 (defogger), Ch06 (horn), Ch07 (headlights), Ch09 (starter), Ch11 (brake)
+- [ ] Configure channel inputs: Ch02 (fan low), Ch03 (fan high), Ch10 (coolsuit), Ch11 (defogger), Ch12 (horn), Ch04 (headlights), Ch01 (starter), Ch09 (brake)
 - [ ] Verify CAN2 disabled (no keypad — preserved in `guides/keypad-config-future.md`)
 - [ ] Configure ECU Stream: Haltech CAN_V2_40 on CAN1 (A30/A31), 500 kbps
   - Enable channels: RPM, ECT, Oil P, Oil T, Fuel P, TPS, Vehicle Speed, Battery V
 - [ ] Configure SmartyCam Stream: RPM, Speed (GPS-08), Gear, Coolant Temp, Oil P, TPS, Lat G, Long G
 - [ ] Transmit config to PDM via USB
 
-> **Wiper logic:** Being added separately. Ch02/Ch03 left spare for now.
+> **Wiper logic:** Being added separately. Ch05/Ch06 left spare for now.
 
 > **✓ TEST:** Force-test each output in Race Studio Live Measures (no loads — just verify logic triggers)
 
@@ -176,14 +176,15 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 [START]                                  (LED)
 ```
 
-- [ ] Start button → Ch09 (B21), momentary, active = GND
-- [ ] Fan override toggle → Ch10 (B22), active = 12V
-- [ ] Coolsuit toggle → Ch12 (A27), active = 12V
-- [ ] Defogger toggle → Ch05 (B30), active = 12V
-- [ ] Brake light switch → Ch11 (A26), closed on press
+- [ ] Start button → Ch01 (B26), momentary, active = GND
+- [ ] Fan low toggle → Ch02 (B27), active = 12V
+- [ ] Fan high toggle → Ch03 (B28), active = 12V
+- [ ] Coolsuit toggle → Ch10 (B22), active = 12V
+- [ ] Defogger toggle → Ch11 (A26), active = 12V
+- [ ] Brake light switch → Ch09 (B21), closed on press
 - [ ] Warning LED → LP7 (A20)
 
-> **2 spare panel positions** reserved for horn (Ch06/B31) and headlights (Ch07/B32) in Phase 2.
+> **2 spare panel positions** reserved for horn (Ch12/A27) and headlights (Ch04/B29) in Phase 2.
 > **Wiper switches** not installed — wiper logic being developed separately.
 
 ### S.4 First Power-Up in Car
@@ -225,7 +226,7 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 **Starter (HP1 → direct to solenoid):**
 - [ ] Run HP1 (A1+A13) wire directly to starter solenoid S-terminal (10 AWG, ring terminal)
 - [ ] Leave OEM starter relay in place as backup
-- [ ] Press START (Ch09) → engine cranks; release → stops
+- [ ] Press START (Ch01) → engine cranks; release → stops
 - [ ] While engine running: press START → should NOT engage (RPM interlock)
 
 > **Horn, headlights, fan relays left in place.** Stock BCM controls them normally through Phase 1.
@@ -276,9 +277,9 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 - [ ] Verify fan works via stock BCM relay (should activate on its own at temp)
 - [ ] Verify horn works via steering wheel button (stock BCM)
 - [ ] Verify headlights work via stalk switch (stock BCM)
-- [ ] Verify coolsuit (Ch12) → MP7 on
-- [ ] Verify defogger (Ch05) → MP8 on
-- [ ] Verify brake lights (Ch11) → MP4 on (test with IGN off too)
+- [ ] Verify coolsuit (Ch10) → MP7 on
+- [ ] Verify defogger (Ch11) → MP8 on
+- [ ] Verify brake lights (Ch09) → MP4 on (test with IGN off too)
 - [ ] Verify tail lights → MP5 on with IGN (automatic)
 - [ ] **Kill switch test:** engine running → flip kill switch → engine dies, all power drops, alternator stops charging
 
@@ -351,7 +352,7 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 - [ ] Run HP2 directly to fan motor connector
 - [ ] Leave OEM fan relay as backup
 
-- [ ] Verify fan override toggle (Ch10) → 98% duty
+- [ ] Verify fan override toggle (Ch02/Ch03) → 98% duty
 - [ ] Verify fan failsafe: disconnect Haltech CAN temporarily → fan goes to 98% after 5s → reconnect
 
 ### SU.7 Wideband AFR (Innovate LM2)
@@ -409,18 +410,18 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 | Fuel Pump | HP3 | A24 + A25 | Via fuse box pin 87; freewheeling diode |
 | Injector Power / OE Relay | MP1 | A2 | **Phase 1:** OE relay box pin 87 (pull relay). **Phase 2:** → D3 pin 7 (injector rail + Haltech 34-pin pin 26) |
 | Coil Power / OE Relay | MP2 | A3 | **Phase 1:** OE relay box pin 87 (same socket). **Phase 2:** → D2 pin 7 (Pin D all 6 COPs) |
-| Horn | MP3 | A4 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → horn direct or relay socket; Ch06 button |
-| Headlights | MP6 | A7 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → headlight direct or relay socket; Ch07 toggle |
+| Horn | MP3 | A4 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → horn direct or relay socket; Ch12 button |
+| Headlights | MP6 | A7 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → headlight direct or relay socket; Ch04 toggle |
 | Alternator exciter | LP8 | A21 | D+ field wire cut and routed through LP8; SafeIgnition trigger; < 1A draw |
 
 ### Cockpit
 
 | Load | PDM Output | Pin(s) | Notes |
 |------|-----------|--------|-------|
-| Brake Lights | MP4 | A5 | Always active (Ch11 trigger) |
+| Brake Lights | MP4 | A5 | Always active (Ch09 trigger) |
 | Tail Lights | MP5 | A6 | SafeIgnition (always on) |
-| Coolsuit | MP7 | A8 | Ch12 AND SafeIgnition |
-| Defogger | MP8 | A9 | Ch05 AND SafeIgnition |
+| Coolsuit | MP7 | A8 | Ch10 AND SafeIgnition |
+| Defogger | MP8 | A9 | Ch11 AND SafeIgnition |
 | Fuel sender | — | — | OEM direct circuit, no PDM involvement |
 
 ### Accessories (SafeIgnition trigger)
@@ -449,16 +450,17 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 | Switch | PDM Input | Pin | Type |
 |--------|----------|-----|------|
 | Ignition | IGN input | B23 | Latching toggle, 12V |
-| Start | Ch09 | B21 | Momentary, active = GND |
-| Fan override | Ch10 | B22 | Latching toggle, 12V |
-| Horn | Ch06 | B31 | Momentary, active = GND (Phase 2+) |
-| Headlights | Ch07 | B32 | Latching toggle, 12V (Phase 2+) |
-| Coolsuit | Ch12 | A27 | Latching toggle, 12V |
-| Defogger | Ch05 | B30 | Latching toggle, 12V |
-| Brake switch | Ch11 | A26 | Closed on press |
+| Start | Ch01 | B26 | Momentary, active = GND |
+| Fan low | Ch02 | B27 | Latching toggle, 12V |
+| Fan high | Ch03 | B28 | Latching toggle, 12V |
+| Headlights | Ch04 | B29 | Latching toggle, 12V (Phase 2+) |
+| Brake switch | Ch09 | B21 | Closed on press |
+| Coolsuit | Ch10 | B22 | Latching toggle, 12V |
+| Defogger | Ch11 | A26 | Latching toggle, 12V |
+| Horn | Ch12 | A27 | Momentary, active = GND (Phase 2+) |
 
-> **Wipers:** Ch02 (B27) / Ch03 (B28) reserved — wiper logic being developed separately.
-> **Spare:** Ch08 (B33), Ch10 (B22), Ch12 (A27)
+> **Wipers:** Ch05 (B30) / Ch06 (B31) reserved — wiper logic being developed separately.
+> **Spare:** Ch07 (B32), Ch08 (B33)
 
 ---
 
@@ -535,8 +537,8 @@ After track day with stock ECU + PDM, switch to Haltech running the engine. **No
 - [ ] Reroute MP2 (A3) → D2 pin 7 (COP coil Pin D common bus)
 - [ ] Plug in D2 (coil Deutsch) — engine side already on coils
 - [ ] Plug in D3 (injector Deutsch) — engine side already on injectors
-- [ ] Add horn button → Ch06 (B31), wire MP3 (A4) → horn
-- [ ] Add headlight toggle → Ch07 (B32), wire MP6 (A7) → headlights
+- [ ] Add horn button → Ch12 (A27), wire MP3 (A4) → horn
+- [ ] Add headlight toggle → Ch04 (B29), wire MP6 (A7) → headlights
 - [ ] First fire on Haltech — base tune, confirm idle
 - [ ] Verify all PDM tests still pass with Haltech running
 - [ ] **Reversal test:** plug stock ECU + BCM back in, MP1/MP2 back to relay → car runs on stock
@@ -554,6 +556,6 @@ After track day with stock ECU + PDM, switch to Haltech running the engine. **No
 - [ ] Mount Lowdoller 1500 PSI brake sensor bracket (leave wires terminated, AVI 7+8 reserved)
 - [ ] Crankcase pressure sensor (valve cover or PCV port → available PDM/Haltech input)
 - [ ] IR tire temp sensor bracket + PDM channel input wiring
-- [ ] Wiper integration — relay-less park design: MP9 (B4) low, MP10 (B5) high, LP9 (B3) park sweep. Ch02/Ch03 switches. Math channels pre-configured in RS3.
+- [ ] Wiper integration — relay-less park design: MP9 (B4) low, MP10 (B5) high, LP9 (B3) park sweep. Ch05/Ch06 switches. Math channels pre-configured in RS3.
 - [ ] CAN Keypad 12 installation (Phase 3 — see `guides/keypad-config-future.md`)
 - [ ] Remove OE ECU, BCM, and relay box (Phase 3 — after proven reliability)

@@ -2,7 +2,7 @@
 ## Deutsch Connector Architecture for Engine Swap + Serviceability
 
 **Car:** White 2003 Tiburon GK | Haltech Elite 2500 + AIM PDM 32
-**Goal:** Every engine-mounted connection unplugs with a Deutsch connector. Pull 4 connectors + unbolt starter = engine is free.
+**Goal:** Every engine-mounted connection unplugs with a Deutsch connector. Pull 4 connectors + 2 ground ring terminals + unbolt starter = engine is free.
 
 > **Connector stock:** 12-pin, 8-pin, 4-pin, 3-pin Deutsch DT series
 > **Injector connectors:** New pigtails (pre-terminated, short leads)
@@ -40,13 +40,15 @@
                     │ [D1] 12-pin      │    │ Fuse box spades │   │ [D4] 8-pin      │
                     │ Engine Sensors   │    │ (Phase 1)       │   │ Lowdoller       │
                     │                  │    │ HP3, MP1/MP2    │   │ Sensors (all 3) │
-                    │ [D2] 8-pin      │    │                 │   │                 │
-                    │ Coil Harness    │    │ Horn MP3 (Ph2+) │   │ LP8 Alt Exciter │
-                    │                  │    │ Lights MP6(Ph2+)│   │                 │
-                    │ Starter (direct) │    │                 │   │ HP2 Fan         │
-                    └──────────────────┘    │ [D3] 8-pin     │   │ (relay/direct)  │
-                                           │ Injector Harness│   └─────────────────┘
-                                           └─────────────────┘
+                    │ [D3] 8-pin      │    │                 │   │                 │
+                    │ Bank 2 Rear     │    │ Horn MP3 (Ph2+) │   │ LP8 Alt Exciter │
+                    │ (Cyl 2,4,6)     │    │ Lights MP6(Ph2+)│   │                 │
+                    │                  │    │                 │   │ [D2] 8-pin      │
+                    │ Starter (direct) │    │                 │   │ Bank 1 Front    │
+                    └──────────────────┘    │                 │   │ (Cyl 1,3,5)     │
+                                           │                 │   │                 │
+                                           │                 │   │ HP2 Fan         │
+                                           └─────────────────┘   └─────────────────┘
 ```
 
 > **Phase structure:** See `guides/pdm-build-guide.md` for the 3-phase build plan. Phase 1 = stock ECU + fuse box spades. Phase 2 = Haltech + Deutsch connectors. Phase 3 = CAN keypad + OE removal.
@@ -59,13 +61,13 @@
 | ID | Pins | Location | Purpose | Disconnect For |
 |----|------|----------|---------|----------------|
 | **D1** | 12-pin | Near engine, driver side upper | Cam, crank, knock, IAT, MAP, TPS | Engine swap |
-| **D2** | 8-pin | Near engine, top/rear between banks | Coil triggers (IGN 1–6) + power + ground | Engine swap |
-| **D3** | 8-pin | Near fuel rail, top of engine | Injector signals (INJ 1–6) + power | Engine swap |
+| **D2** | 8-pin | Front bank (cyl 1,3,5), passenger side | Bank 1: IGN 1/3/5 + INJ 1/3/5 + coil power + injector power | Engine swap |
+| **D3** | 8-pin | Rear bank (cyl 2,4,6), driver side near firewall | Bank 2: IGN 2/4/6 + INJ 2/4/6 + coil power + injector power | Engine swap |
 | **D4** | 8-pin | Convenient central point in engine bay | All 3 Lowdoller sensors (oil/coolant/fuel) | Sensor service |
 
-**Engine swap disconnect sequence:** Unplug D1 + D2 + D3 + D4 (if oil sensor goes with engine), unbolt starter ring terminal, disconnect alternator B+. Engine is free.
+**Engine swap disconnect sequence:** Unplug D1 + D2 + D3 + D4 (if oil sensor goes with engine), unbolt 2× bank ground ring terminals (front head bolt + rear head bolt), unbolt starter ring terminal, disconnect alternator B+. Engine is free.
 
-**Total Deutsch connectors:** 1× 12-pin, 3× 8-pin.
+**Total Deutsch connectors:** 1× 12-pin, 3× 8-pin. Each bank also has a separate 16 AWG ground wire with ring terminal to its head bolt.
 
 ---
 
@@ -100,53 +102,90 @@ All sensors on this connector are on or near the engine and go with it during a 
 
 ---
 
-## D2 — Coil Harness (8-Pin Deutsch)
+## D2 — Bank 1 Front (Cyl 1, 3, 5) — 8-Pin Deutsch
 
-**Location:** Top/rear of engine, between banks. Accessible from above.
-**Chassis side:** Haltech harness trunk from firewall (trigger wires) + PDM MP2 power wire.
-**Engine side:** Short pigtails to 6× Toyota 90919-A2005 coil connectors (new pre-terminated pigtails).
+**Location:** Front bank, passenger side of engine. Accessible from above.
+**Chassis side:** Haltech harness trunk from firewall (3× IGN triggers + 3× INJ signals) + MP2 coil power branch + MP1 injector power branch.
+**Engine side:** Short pigtails to 3× Toyota 90919-A2005 coil connectors + 3× injector connectors.
+**Ground:** Separate 16 AWG wire bundled with pigtails → ring terminal → front cylinder head bolt.
 
 | Pin | Signal | Source | Wire | Engine-Side Destination |
 |-----|--------|--------|------|------------------------|
-| 1 | IGN 1 trigger | Haltech 34-pin pin 3 | Y/B | Coil 1, Pin B (Cyl 1) |
-| 2 | IGN 2 trigger | Haltech 34-pin pin 4 | Y/R | Coil 2, Pin B (Cyl 2) |
-| 3 | IGN 3 trigger | Haltech 34-pin pin 5 | Y/O | Coil 3, Pin B (Cyl 3) |
-| 4 | IGN 4 trigger | Haltech 34-pin pin 6 | Y/G | Coil 4, Pin B (Cyl 4) |
-| 5 | IGN 5 trigger | Haltech 34-pin pin 7 | Y/BR | Coil 5, Pin B (Cyl 5) |
-| 6 | IGN 6 trigger | Haltech 34-pin pin 8 | Y/L | Coil 6, Pin B (Cyl 6) |
-| 7 | +12V coil power | PDM MP2 (A3) | 14 AWG | Pin D common bus → all 6 coils |
-| 8 | Ground | Engine block | 14 AWG | Pin A common bus → all 6 coils |
+| 1 | IGN 1 trigger | Haltech 34-pin pin 3 | Y/B | Coil 1 Pin B |
+| 2 | IGN 3 trigger | Haltech 34-pin pin 5 | Y/O | Coil 3 Pin B |
+| 3 | IGN 5 trigger | Haltech 34-pin pin 7 | Y/BR | Coil 5 Pin B |
+| 4 | INJ 1 signal | Haltech 34-pin pin 19 | L | Injector 1 |
+| 5 | INJ 3 signal | Haltech 34-pin pin 21 | L/BR | Injector 3 |
+| 6 | INJ 5 signal | Haltech 34-pin pin 27 | L/O | Injector 5 |
+| 7 | +12V coil power | PDM MP2 (A3) branch | 14 AWG | Coil Pin D bus → 3 coils |
+| 8 | +12V injector power | PDM MP1 (A2) branch | 14 AWG | Injector rail branch → 3 injectors |
+
+**Bank 1 ground wire (not in connector):**
+```
+Engine side — bundled with D2 pigtails:
+  Coil 1 Pin A ──┐
+  Coil 3 Pin A ──┼── splice (solder + heat shrink) ── 16 AWG ── ring terminal ── front head bolt
+  Coil 5 Pin A ──┘
+```
 
 **Notes:**
-- Pin 7 carries up to 15A total for all 6 coils. At ~2.1 ms dwell × 6 coils sequential, average current is well under the 13A DT pin rating.
-- Coil Pin C (feedback) left open on all 6.
-- **Phase 1 (stock ECU):** D2 is built but NOT plugged in. MP2 routes to OE relay spades. Stock ECU drives coils through OE harness.
-- **Phase 2 (Haltech):** Disconnect stock coil connectors. Plug in D2. Reroute MP2 from OE relay spade → D2 pin 7 (chassis side).
+- Coil Pin C (feedback) left open on all 3.
+- Pin 7 carries ~7.5A max (3 of 6 coils). Sequential firing means only 1 coil dwells at a time on this bank — well under 13A DT pin rating.
+- Pin 8 carries injector power for 3 cylinders. Haltech INJ outputs are ground-side drivers (low current on signal pins 4–6).
+- **Phase 1 (stock ECU):** D2 is built but NOT plugged in. MP2 routes to OE relay spades. Stock ECU drives coils/injectors through OE harness.
+- **Phase 2 (Haltech):** Disconnect stock front bank coil/injector connectors. Plug in D2. Bolt ground ring terminal to front head bolt. Reroute MP2 branch → D2 pin 7, MP1 branch → D2 pin 8 (chassis side).
 
 ---
 
-## D3 — Injector Harness (8-Pin Deutsch)
+## D3 — Bank 2 Rear (Cyl 2, 4, 6) — 8-Pin Deutsch
 
-**Location:** Near fuel rail, top of engine. Accessible from above.
-**Chassis side:** Haltech harness trunk (INJ signal wires) + PDM MP1 power wire.
-**Engine side:** Short pigtails to 6× injector connectors (new pre-terminated pigtails).
+**Location:** Rear bank, driver side of engine near firewall. Short wire run. Accessible from above.
+**Chassis side:** Haltech harness trunk from firewall (3× IGN triggers + 3× INJ signals) + MP2 coil power branch + MP1 injector power branch.
+**Engine side:** Short pigtails to 3× Toyota 90919-A2005 coil connectors + 3× injector connectors.
+**Ground:** Separate 16 AWG wire bundled with pigtails → ring terminal → rear cylinder head bolt.
 
 | Pin | Signal | Source | Wire | Engine-Side Destination |
 |-----|--------|--------|------|------------------------|
-| 1 | INJ 1 | Haltech 34-pin pin 19 | L | Injector 1 |
-| 2 | INJ 2 | Haltech 34-pin pin 20 | L/B | Injector 2 |
-| 3 | INJ 3 | Haltech 34-pin pin 21 | L/BR | Injector 3 |
-| 4 | INJ 4 | Haltech 34-pin pin 22 | L/R | Injector 4 |
-| 5 | INJ 5 | Haltech 34-pin pin 27 | L/O | Injector 5 |
-| 6 | INJ 6 | Haltech 34-pin pin 28 | L/Y | Injector 6 |
-| 7 | +12V injector power | PDM MP1 (A2) | 14 AWG | Injector rail 12V + Haltech 34-pin pin 26 (R/L) |
-| 8 | Spare | — | — | Future use |
+| 1 | IGN 2 trigger | Haltech 34-pin pin 4 | Y/R | Coil 2 Pin B |
+| 2 | IGN 4 trigger | Haltech 34-pin pin 6 | Y/G | Coil 4 Pin B |
+| 3 | IGN 6 trigger | Haltech 34-pin pin 8 | Y/L | Coil 6 Pin B |
+| 4 | INJ 2 signal | Haltech 34-pin pin 20 | L/B | Injector 2 |
+| 5 | INJ 4 signal | Haltech 34-pin pin 22 | L/R | Injector 4 |
+| 6 | INJ 6 signal | Haltech 34-pin pin 28 | L/Y | Injector 6 |
+| 7 | +12V coil power | PDM MP2 (A3) branch | 14 AWG | Coil Pin D bus → 3 coils |
+| 8 | +12V injector power | PDM MP1 (A2) branch | 14 AWG | Injector rail branch → 3 injectors |
+
+**Bank 2 ground wire (not in connector):**
+```
+Engine side — bundled with D3 pigtails:
+  Coil 2 Pin A ──┐
+  Coil 4 Pin A ──┼── splice (solder + heat shrink) ── 16 AWG ── ring terminal ── rear head bolt
+  Coil 6 Pin A ──┘
+```
 
 **Notes:**
-- Pin 7 feeds both the injector rail (physical 12V) AND Haltech 34-pin pin 26 (ECU injector power sense). Splice these on the chassis side of D3.
-- Haltech INJ outputs are ground-side drivers (0–8A peak / 0–2A hold per injector). Low current on signal pins.
-- **Phase 1 (stock ECU):** D3 is built but NOT plugged in. MP1 routes to OE relay spades. Stock ECU drives injectors through OE harness.
-- **Phase 2 (Haltech):** Disconnect stock injector connectors. Plug in D3. Reroute MP1 from OE relay spade → D3 pin 7 (chassis side).
+- Identical pin layout to D2 — same connector, same pin functions, different cylinders.
+- Rear bank is close to the firewall — shortest wire run of any Deutsch connector.
+- Coil Pin C (feedback) left open on all 3.
+- **Phase 1 (stock ECU):** D3 is built but NOT plugged in. MP2 routes to OE relay spades. Stock ECU drives coils/injectors through OE harness.
+- **Phase 2 (Haltech):** Disconnect stock rear bank coil/injector connectors. Plug in D3. Bolt ground ring terminal to rear head bolt. Reroute MP2 branch → D3 pin 7, MP1 branch → D3 pin 8 (chassis side).
+
+---
+
+## MP1/MP2 Power Distribution (Chassis Side)
+
+With per-bank connectors, MP1 and MP2 each split into two branches on the chassis side of the firewall:
+
+```
+PDM MP2 (A3) ── 14 AWG ── through firewall ──┬── branch → D2 pin 7 (Bank 1 coil power)
+                                               └── branch → D3 pin 7 (Bank 2 coil power)
+
+PDM MP1 (A2) ── 14 AWG ── through firewall ──┬── branch → D2 pin 8 (Bank 1 injector power)
+                                               ├── branch → D3 pin 8 (Bank 2 injector power)
+                                               └── branch → Haltech 34-pin pin 26 (injector power sense, R/L)
+```
+
+**Splice location:** Engine bay side of firewall, before the trunks diverge. Use solder + heat shrink or Posi-Tap for serviceability. The MP1 splice is a 3-way (D2 + D3 + Haltech sense). The MP2 splice is a 2-way (D2 + D3).
 
 ---
 
@@ -235,14 +274,15 @@ These connect to chassis-mounted loads — no engine swap disconnect needed.
 | **Horn** | MP3 | A4 | 16 AWG | Phase 1: not connected (BCM controls). Phase 2+: direct to horn or relay socket | Firewall → CENTER → horn |
 | **Headlights** | MP6 | A7 | 14 AWG | Phase 1: not connected (BCM controls). Phase 2+: direct to headlights or relay socket | Firewall → CENTER → headlight connector |
 | **Alt Exciter** | LP8 | A21 | 18 AWG | Splice to cut OEM D+ wire | Firewall → RIGHT → alternator area |
-| **MP1** | MP1 | A2 | 14 AWG | Phase 1: spade into OE relay pin 87. Phase 2: D3 pin 7 (injector power) | Firewall → CENTER → fuse box / Deutsch |
-| **MP2** | MP2 | A3 | 14 AWG | Phase 1: spade into OE relay pin 87. Phase 2: D2 pin 7 (coil power) | Firewall → CENTER → fuse box / Deutsch |
+| **MP1** | MP1 | A2 | 14 AWG | Phase 1: spade into OE relay pin 87. Phase 2: splits to D2 pin 8 + D3 pin 8 (injector power, both banks) + Haltech pin 26 sense | Firewall → CENTER → splice → both banks |
+| **MP2** | MP2 | A3 | 14 AWG | Phase 1: spade into OE relay pin 87. Phase 2: splits to D2 pin 7 + D3 pin 7 (coil power, both banks) | Firewall → CENTER → splice → both banks |
 
 > **MP3 and MP6 repurposed** from wipers to horn and headlights. Wipers use MP9 (B4) low, MP10 (B5) high, LP9 (B3) park sweep on Connector B — relay-less park design, config pre-loaded.
 
 **Phase 2 transition for MP1/MP2:** Pull spades from OE relay socket. Reroute:
-- MP1 → D3 pin 7 (injector power, chassis side of Deutsch)
-- MP2 → D2 pin 7 (coil power, chassis side of Deutsch)
+- MP1 → 3-way splice: D2 pin 8 (Bank 1 injector power) + D3 pin 8 (Bank 2 injector power) + Haltech 34-pin pin 26 (injector power sense)
+- MP2 → 2-way splice: D2 pin 7 (Bank 1 coil power) + D3 pin 7 (Bank 2 coil power)
+- See "MP1/MP2 Power Distribution" section above for splice diagram.
 
 ---
 
@@ -253,8 +293,8 @@ These connect to chassis-mounted loads — no engine swap disconnect needed.
 
 | PDM Output | Fuse Box Target | Phase 2 (Direct) |
 |-----------|----------------|-------------------|
-| MP1 InjPwr | OE main relay pin 87 (relay pulled) | → D3 pin 7 (injector Deutsch) |
-| MP2 CoilPwr | OE main relay pin 87 (relay pulled) | → D2 pin 7 (coil Deutsch) |
+| MP1 InjPwr | OE main relay pin 87 (relay pulled) | → 3-way splice: D2 pin 8 + D3 pin 8 + Haltech pin 26 |
+| MP2 CoilPwr | OE main relay pin 87 (relay pulled) | → 2-way splice: D2 pin 7 + D3 pin 7 |
 | HP3 FuelPump | Fuel pump relay pin 87 (relay pulled) | Direct to fuel pump + wire |
 | HP1 Starter | Direct to solenoid S-terminal (preferred) | Same |
 | HP2 Fan | Fan relay pin 87 (Phase 1B, after CAN verified) | Direct to fan motor |
@@ -324,34 +364,36 @@ All harnesses pass through a single center firewall grommet, then split into 3 t
 
 **LEFT TRUNK (Driver Side):**
 - D1 engine sensor cable (12 wires, includes shielded pairs for crank/cam)
-- D2 coil harness cable (8 wires) — routes over/around engine to both banks
+- D3 Bank 2 rear cable (8 wires + 16 AWG ground) — short run, rear bank is near firewall on driver side
 - HP1 starter cable (10 AWG heavy, to bell housing)
 
 **RIGHT TRUNK (Passenger Side):**
+- D2 Bank 1 front cable (8 wires + 16 AWG ground) — routes forward to front bank, passenger side
 - D4 sensor bus branch to oil sensor (oil filter area, passenger side)
 - HP2 fan cable (12 AWG heavy, to radiator fan)
 - LP8 alt exciter (18 AWG, to alternator D+ splice)
 - LM2 O2 sensor cable (proprietary, to exhaust bung)
 
 **CENTER TRUNK (Underhood):**
-- D3 injector harness cable (8 wires, to fuel rail top of engine)
 - D4 sensor connector (8 wires — positioned centrally, sensor wires fan out from here)
 - D4 sensor bus branch to coolant sensor (manifold tee)
 - D4 sensor bus branch to fuel sensor (return line tap)
 - HP3 fuel pump (14 AWG, to fuse box)
-- MP1/MP2 (14 AWG, to OE relay Phase 1 / Deutsch Phase 2)
+- MP1/MP2 trunk (14 AWG each, to OE relay Phase 1 / splice point Phase 2)
 - MP3 horn (16 AWG, Phase 2+ only)
 - MP6 headlights (14 AWG, Phase 2+ only)
 - +5V sensor supply trunk
 - Signal GND trunk
 
+> **MP1/MP2 splice point:** Located in the center trunk near the firewall. MP1 and MP2 each split here — branches route left to D3 (rear bank) and right to D2 (front bank). See "MP1/MP2 Power Distribution" section.
+
 ### Bundle Sizing
 
 | Trunk | Approx Wire Count | Suggested Loom |
 |-------|--------------------|----------------|
-| LEFT | ~22 wires + HP1 heavy | 1" split loom or braided sleeve |
-| RIGHT | ~8 wires + HP2 heavy + O2 cable | 3/4" split loom |
-| CENTER | ~20 wires + HP3 heavy | 1" split loom |
+| LEFT | ~22 wires + HP1 heavy + D3 ground | 1" split loom or braided sleeve |
+| RIGHT | ~18 wires + HP2 heavy + D2 ground + O2 cable | 1" split loom or braided sleeve |
+| CENTER | ~14 wires + HP3 heavy | 3/4" split loom |
 
 ---
 
@@ -360,13 +402,14 @@ All harnesses pass through a single center firewall grommet, then split into 3 t
 1. **Lowdoller sensor pigtails** — crimp Deutsch DT pins onto each sensor's bare wires. Tie red wires together → pin 7, tie black+white wires together → pin 8. Do on bench before installing sensors.
 2. **D4 chassis side** — run 8 wires from Haltech AVI pins through firewall to D4 location. Terminate with 8-pin Deutsch.
 3. **D1 engine sensor harness** — build chassis-side cable (12 wires from Haltech 26-pin/34-pin through firewall). Build engine-side pigtails to cam, crank, knock, IAT, MAP, TPS. Terminate both sides with 12-pin Deutsch.
-4. **D2 coil harness** — build chassis-side cable (6× IGN triggers from Haltech + MP2 power wire + ground). Build engine-side branches to 6× coil pigtail connectors. Terminate with 8-pin Deutsch.
-5. **D3 injector harness** — build chassis-side cable (6× INJ wires from Haltech + MP1 power wire). Build engine-side branches to 6× injector pigtail connectors. Terminate with 8-pin Deutsch.
-6. **LM2 analog cable** — short cockpit run: Lime Green → AVI 8, Yellow → signal GND.
+4. **D2 Bank 1 front harness** — build chassis-side cable (3× IGN + 3× INJ from Haltech + MP2 coil power branch + MP1 injector power branch). Build engine-side pigtails to 3× coil connectors (cyl 1,3,5) + 3× injector connectors (cyl 1,3,5). Build ground splice (3× coil Pin A → 16 AWG → ring terminal). Terminate signal/power with 8-pin Deutsch. Bundle ground wire alongside but terminate separately at front head bolt.
+5. **D3 Bank 2 rear harness** — identical to D2 but for cylinders 2,4,6. Shorter wire run (rear bank near firewall). Ground ring terminal → rear head bolt.
+6. **MP1/MP2 splice** — on engine bay side of firewall, splice MP1 into 3-way (D2 pin 8 + D3 pin 8 + Haltech pin 26 sense) and MP2 into 2-way (D2 pin 7 + D3 pin 7). Solder + heat shrink or Posi-Tap.
+7. **LM2 analog cable** — short cockpit run: Lime Green → AVI 8, Yellow → signal GND.
 
-**Phase 1 note:** D2 and D3 are built but NOT plugged in. MP1/MP2 go to OE relay spades. Stock ECU drives coils/injectors through OE harness. Horn (MP3) and headlights (MP6) are not connected — BCM controls them.
+**Phase 1 note:** D2 and D3 are built but NOT plugged in. Ground ring terminals NOT bolted (stock coils ground through OE harness). MP1/MP2 go to OE relay spades. Stock ECU drives coils/injectors through OE harness. Horn (MP3) and headlights (MP6) are not connected — BCM controls them.
 
-**Phase 2 switchover:** Disconnect stock coil/injector connectors, plug in D2 + D3, reroute MP1 → D3 pin 7 and MP2 → D2 pin 7. Add horn button (Ch06) and headlight toggle (Ch07). Wire MP3 → horn, MP6 → headlights. No Race Studio config change. See `guides/pdm-build-guide.md` → "Phase 2 — Transition Procedure".
+**Phase 2 switchover:** Disconnect stock coil/injector connectors on both banks. Plug in D2 (front bank) + D3 (rear bank). Bolt both ground ring terminals to respective head bolts. Pull MP1/MP2 spades from OE relay socket — splices route power to both Deutsch connectors automatically. Add horn button (Ch12) and headlight toggle (Ch04). Wire MP3 → horn, MP6 → headlights. No Race Studio config change. See `guides/pdm-build-guide.md` → "Phase 2 — Transition Procedure".
 
 **Wiper wiring (when needed):** MP9 (B4) → motor Green wire (low), MP10 (B5) → motor Yellow wire (high), LP9 (B3) → motor Brown wire (park sweep). Motor Black → chassis ground. No external relay — PDM WIPER_PARKING math channel handles park positioning. See `guides/pdm-build-guide.md` → "Wiper — Relay-Less Park Design".
 
