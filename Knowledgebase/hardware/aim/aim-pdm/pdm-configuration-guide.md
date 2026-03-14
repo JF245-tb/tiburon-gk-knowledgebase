@@ -247,7 +247,7 @@ Triggers:
 
 ## White Tiburon — Finalized PDM Configuration
 
-> Full Race Studio 3 setup (status variables, trigger logic, protection settings, step-by-step): `builds/white-tiburon/guides/pdm-config.md`
+> Full Race Studio 3 setup (status variables, trigger logic, protection settings, ECU Stream channels): `builds/white-tiburon/guides/pdm-build-guide.md`
 >
 > **CAN keypad not installed.** All driver controls use a physical switch panel wired to channel inputs (Ch01–Ch05, Ch09, Ch11). CAN2 bus available for future keypad — see `builds/white-tiburon/guides/keypad-config-future.md`.
 
@@ -321,6 +321,6 @@ AIM's official pin labels (from PDM32 tech sheet Ver. 1.17):
 | File | Contents |
 |------|----------|
 | `aim-pdm/pdm-pinout.md` | Full connector pinout (both 35-pin connectors) |
-| `builds/white-tiburon/guides/pdm-config.md` | Full Race Studio 3 config: status vars, triggers, LED colors, step-by-step setup |
+| `builds/white-tiburon/guides/pdm-build-guide.md` | Full Race Studio 3 config: status vars, triggers, ECU Stream channels, step-by-step setup |
 | `cars/white-tiburon-weekend-tasks.md` | Wiring bundle assignments and build task list |
 | `haltech/main-connector-26-pin-elite2500.md` | Haltech CAN bus pins (23=H, 24=L) |

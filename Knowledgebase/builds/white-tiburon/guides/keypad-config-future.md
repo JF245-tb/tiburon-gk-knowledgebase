@@ -177,8 +177,8 @@ When keypad is installed, update these Math Channel triggers to use OR:
 | Status Variable | Current (Physical Only) | With Keypad |
 |---|---|---|
 | `STARTER_SAFE` | Ch09 AND SafeIgnition AND NOT ENGINE_RUNNING | **(StarterKYD OR Ch09)** AND SafeIgnition AND NOT ENGINE_RUNNING |
-| Fan override | Ch01 | **(FanKYD OR Ch01)** |
-| Coolsuit | Ch04 AND SafeIgnition | **(CoolsuitKYD OR Ch04)** AND SafeIgnition |
+| Fan override | Ch10 | **(FanKYD OR Ch10)** |
+| Coolsuit | Ch12 AND SafeIgnition | **(CoolsuitKYD OR Ch12)** AND SafeIgnition |
 | Horn | Fuse box spade (Phase 1) | **HornKYD** → MP horn output |
 | Lights | SafeIgnition (always on) | **LightsKYD** → position 1 = low, position 2 = high |
 | Wiper | Ch02 AND NOT Ch03 / Ch03 | **(WiperKYD=1 AND NOT WiperKYD=2 OR Ch02 AND NOT Ch03)** / **(WiperKYD=2 OR Ch03)** |
@@ -209,5 +209,4 @@ When keypad is installed, update these Math Channel triggers to use OR:
 |------|----------|
 | `hardware/aim/aim-can-keypad/aim-can-keypad.md` | Full keypad hardware spec |
 | `hardware/aim/aim-pdm/pdm-pinout.md` | CAN2 pins A28/A29, LP8 A21 |
-| `guides/pdm-config.md` | Current physical switch config (authoritative) |
-| `guides/pdm-session-1.md` | Race Studio 3 walkthrough (physical switch version) |
+| `guides/pdm-build-guide.md` | Current physical switch config, Race Studio walkthrough (authoritative) |

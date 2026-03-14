@@ -31,58 +31,512 @@
 
 ### Channel Inputs
 
-| PDM Input | Pin | Assignment | Type | Notes |
-|-----------|-----|------------|------|-------|
-| **IGN Input** | B23 | Ignition switch | Built-in | Latching toggle, 12V when ON |
-| **Ch01** | B26 | Fan override | Digital, latching | 12V when ON |
-| **Ch02** | B27 | Spare (was Wiper Low) | — | Available for future use |
-| **Ch03** | B28 | Spare (was Wiper High) | — | Available for future use |
-| **Ch04** | B29 | Coolsuit | Digital, latching | 12V when ON |
-| **Ch05** | B30 | Defogger | Digital, latching | 12V when ON |
-| **Ch06** | B31 | Horn | Digital, momentary | Phase 2+: momentary button, active = GND |
-| **Ch07** | B32 | Headlights | Digital, latching | Phase 2+: toggle, 12V when ON |
-| **Ch09** | B21 | Start button | Digital, momentary | Active = GND |
-| **Ch11** | A26 | Brake light switch | Digital | Closed on press |
+> **Ch01–Ch08** are analog-capable (0–5V or 0–12V). **Ch09–Ch12** are digital-only. Switches use digital channels to preserve analog channels for future sensors. Speed 1 (B20) and Speed 2 (B19) are dedicated speed inputs — unused since VSS routes to Haltech SPI 1 and PDM reads speed via CAN.
 
-Ch08, Ch10, Ch12 are **spare**.
+| PDM Input | Pin | Capability | Assignment | Type | Notes |
+|-----------|-----|-----------|------------|------|-------|
+| **IGN Input** | B23 | Built-in | Ignition switch | Latching toggle | 12V when ON |
+| **Ch01** | B26 | Analog/Digital | **SPARE** | — | Available for future analog sensor (0–5V) |
+| **Ch02** | B27 | Analog/Digital | Wiper Low (future) | — | Reserved for wiper install |
+| **Ch03** | B28 | Analog/Digital | Wiper High (future) | — | Reserved for wiper install |
+| **Ch04** | B29 | Analog/Digital | **SPARE** | — | Available for future analog sensor (0–5V) |
+| **Ch05** | B30 | Analog/Digital | Defogger | Digital, latching | 12V when ON (no more digital channels) |
+| **Ch06** | B31 | Analog/Digital | Horn | Digital, momentary | Phase 2+: momentary button, active = GND |
+| **Ch07** | B32 | Analog/Digital | Headlights | Digital, latching | Phase 2+: toggle, 12V when ON |
+| **Ch08** | B33 | Analog/Digital | **SPARE** | — | Available for future analog sensor (0–5V) |
+| **Ch09** | B21 | Digital only | Start button | Momentary | Active = GND |
+| **Ch10** | B22 | Digital only | Fan override | Latching | 12V when ON |
+| **Ch11** | A26 | Digital only | Brake light switch | Digital | Closed on press |
+| **Ch12** | A27 | Digital only | Coolsuit | Latching | 12V when ON |
+| Speed 1 | B20 | Speed input | **SPARE** | — | Available for wheel speed / driveshaft sensor |
+| Speed 2 | B19 | Speed input | **SPARE** | — | Available |
+| +5V Vref | B16 | Reference | Sensor supply | — | For future ratiometric analog sensors |
+
+> **VSS routing:** Transaxle VSS (Hall IC, 4 pulses/rev, connector C109) → Haltech SPI 1 (26-pin pin 8). PDM reads vehicle speed from CAN ECU Stream (CC45 ECU VehSpeed). No direct PDM speed input needed.
 
 ### Status Variables (Math Channels)
 
-Configure all of these now — they work across all phases.
+Configure all of these now — they work across all phases. Open **Configuration → Status Variables → Add Status Variable** in Race Studio 3.
 
-| Variable | Logic | Used By |
-|----------|-------|---------|
-| `SafeIgnition` | IGN input ON and stable (built-in) | Master permissive for engine outputs |
-| `ENGINE_RUNNING` | CAN RPM > 50 (2s off-delay for stall protection) | Starter interlock, fuel pump, oil P alarm |
-| `FUEL_PRIME` | 3s one-shot timer on SafeIgnition rising edge | Fuel pump prime on ignition ON |
-| `FAN_TEMP_25` | CAN Coolant_T > 77°C (hysteresis −5°C, off at 72°C) | Fan 25% — 170°F thermostat opens here |
-| `FAN_TEMP_50` | CAN Coolant_T > 82°C (hysteresis −5°C) | Fan 50% |
-| `FAN_TEMP_75` | CAN Coolant_T > 87°C (hysteresis −5°C) | Fan 75% |
-| `FAN_TEMP_100` | CAN Coolant_T > 92°C | Fan 98% — thermostat est. fully open |
-| `FAN_FAILSAFE` | CAN Coolant_T signal timeout > 5s | Fan 98% failsafe (CAN lost) |
-| `STARTER_SAFE` | Ch09 AND SafeIgnition AND NOT ENGINE_RUNNING | Safe to crank |
-| `LOW_OIL_P` | CAN Oil_P < 15 PSI AND ENGINE_RUNNING AND RPM > 500 | Warning LED |
-| `HIGH_COOLANT_T` | CAN Coolant_T > 95°C | Warning LED |
-| `HIGH_OIL_T` | CAN Oil_T > 130°C | Warning LED |
-| `LOW_FUEL_P` | CAN Fuel_P < 40 PSI AND ENGINE_RUNNING AND RPM > 500 | Warning LED |
-| `MULTI_WARNING` | LOW_OIL_P OR HIGH_COOLANT_T OR HIGH_OIL_T OR LOW_FUEL_P | Red LED trigger |
-| `WIPER_ACTIVE` | Ch02 OR Ch03 | Wiper switch state (future) |
-| `WIPER_ACTIVE_DLY` | WIPER_ACTIVE with Delay Off = 3000ms | Stays TRUE 3s after switches off |
-| `WIPER_PARKING` | WIPER_ACTIVE_DLY AND NOT WIPER_ACTIVE | 3s one-shot for park sweep (future) |
+> **Sampling frequency guide:** 10 Hz is correct for anything gating driver actions (starter, fuel pump). Fan/alarm temperature bands can use **1 Hz** — temps change slowly and this reduces CAN bus + logging load.
+
+---
+
+#### `ENGINE_RUNNING`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `ENGINE_RUNNING` |
+| **Sampling Frequency** | 10 Hz |
+| **Log values** | ✅ Yes |
+| **Work As** | Momentary |
+| **Use timing** | No |
+| **Rest Status** | Label: `OFF`, Value: `0` |
+| **Active Status** | Label: `RUN`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition:**
+| Field | Value |
+|-------|-------|
+| Channel | `ECU RPM` (Device: Main Device - PDM32, Type: ECU) |
+| Operator | greater than |
+| Compare to | constant ✅, `50` rpm |
+| TRUE after a time of | `0` sec |
+| FALSE after a time of | `2` sec |
+
+> The 2s FALSE delay is stall protection — if engine briefly dips below 50 RPM during a stumble, fuel pump and other ENGINE_RUNNING-gated outputs stay on.
+
+---
+
+#### `FUEL_PRIME`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `FUEL_PRIME` |
+| **Sampling Frequency** | 10 Hz |
+| **Log values** | ✅ Yes |
+| **Work As** | Momentary |
+| **Use timing** | No |
+| **Rest Status** | Label: `OFF`, Value: `0` |
+| **Active Status** | Label: `PUMP`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+| **Duration of status On (1)** | `3.0` sec |
+| **Generate Square Wave** | ☐ No |
+
+**Activation condition:**
+| Field | Value |
+|-------|-------|
+| Channel | `SafeIgnition` (Device: Main Device - PDM32, Type: Status Variables) |
+| Operator | equal to |
+| Compare to | constant ✅, `1` |
+| TRUE after a time of | `0` sec |
+| FALSE after a time of | `0` sec |
+
+> This fires a 3-second one-shot on the rising edge of SafeIgnition (IGN toggle ON). The "Duration of status On" field creates the one-shot timer. After 3s, FUEL_PRIME drops and only ENGINE_RUNNING keeps the pump on.
+
+---
+
+#### `FAN_TEMP_25`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `FAN_TEMP_25` |
+| **Sampling Frequency** | **1 Hz** |
+| **Log values** | ☐ No |
+| **Work As** | Momentary |
+| **Use timing** | No |
+| **Rest Status** | Label: `OFF`, Value: `0` |
+| **Active Status** | Label: `F25`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition:**
+| Field | Value |
+|-------|-------|
+| Channel | `ECU CoolantTemp` (Device: Main Device - PDM32, Type: ECU) |
+| Operator | **hysteresis up to down** |
+| Compare to | constant ✅, upper: `77` °C, lower: `72` °C |
+| TRUE after a time of | `0` sec |
+| FALSE after a time of | `0` sec |
+
+> Hysteresis operator handles the 5°C band natively: activates rising through 77°C, deactivates falling through 72°C. 170°F thermostat starts opening at 77°C.
+
+---
+
+#### `FAN_TEMP_50`
+
+Same structure as FAN_TEMP_25 except:
+
+| Field | Value |
+|-------|-------|
+| **Name** | `FAN_TEMP_50` |
+| **Sampling Frequency** | **1 Hz** |
+| **Rest/Active** | Label: `OFF`/`F50` |
+| **Operator** | hysteresis up to down |
+| **Thresholds** | upper: `82` °C, lower: `77` °C |
+
+---
+
+#### `FAN_TEMP_75`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `FAN_TEMP_75` |
+| **Sampling Frequency** | **1 Hz** |
+| **Rest/Active** | Label: `OFF`/`F75` |
+| **Operator** | hysteresis up to down |
+| **Thresholds** | upper: `87` °C, lower: `82` °C |
+
+---
+
+#### `FAN_TEMP_100`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `FAN_TEMP_100` |
+| **Sampling Frequency** | **1 Hz** |
+| **Rest/Active** | Label: `OFF`/`F100` |
+| **Operator** | hysteresis up to down |
+| **Thresholds** | upper: `92` °C, lower: `87` °C |
+
+> Thermostat estimated fully open at ~92°C with 170°F unit. Fan at 98% when thermostat is maxed.
+
+---
+
+#### `FAN_FAILSAFE`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `FAN_FAILSAFE` |
+| **Sampling Frequency** | **1 Hz** |
+| **Log values** | ✅ Yes |
+| **Work As** | Momentary |
+| **Use timing** | No |
+| **Rest Status** | Label: `OK`, Value: `0` |
+| **Active Status** | Label: `FAIL`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition:**
+| Field | Value |
+|-------|-------|
+| Channel | `ECU CoolantTemp` (Type: ECU) |
+| Operator | equal to |
+| Compare to | constant ✅, `0` |
+| TRUE after a time of | `5` sec |
+| FALSE after a time of | `0` sec |
+
+> When CAN coolant temp is lost, the channel reads 0 for >5s, triggering failsafe fan. If CAN is restored, FAILSAFE clears immediately (0s FALSE delay). If Race Studio provides a dedicated "signal timeout" condition, use that instead of `equal to 0`.
+
+---
+
+#### `STARTER_SAFE`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `STARTER_SAFE` |
+| **Sampling Frequency** | 10 Hz |
+| **Log values** | ✅ Yes |
+| **Work As** | Momentary |
+| **Use timing** | No |
+| **Rest Status** | Label: `LOCK`, Value: `0` |
+| **Active Status** | Label: `CRNK`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition (compound — all must be true):**
+
+Race Studio AND logic: chain conditions using the condition editor's AND gate.
+
+| # | Channel | Operator | Value | TRUE delay | FALSE delay |
+|---|---------|----------|-------|------------|-------------|
+| 1 | Ch09 (Trigger Commands) | equal to | `1` | 0 sec | 0 sec |
+| 2 | AND `SafeIgnition` (Status Variables) | equal to | `1` | 0 sec | 0 sec |
+| 3 | AND `ENGINE_RUNNING` (Status Variables) | equal to | `0` | 0 sec | 0 sec |
+
+> Start button must be held, ignition must be on, engine must not be running. All zero-delay for instant response.
+
+---
+
+#### `LOW_OIL_P`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `LOW_OIL_P` |
+| **Sampling Frequency** | 10 Hz |
+| **Log values** | ✅ Yes |
+| **Work As** | Momentary |
+| **Rest Status** | Label: `OK`, Value: `0` |
+| **Active Status** | Label: `LOW`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition (compound AND):**
+
+| # | Channel | Operator | Value | TRUE delay | FALSE delay |
+|---|---------|----------|-------|------------|-------------|
+| 1 | `ECU OilPress` (ECU) | less than | `1.03` bar (= 15 PSI) | 0 sec | 0 sec |
+| 2 | AND `ENGINE_RUNNING` (Status Variables) | equal to | `1` | 0 sec | 0 sec |
+| 3 | AND `ECU RPM` (ECU) | greater than | `500` rpm | 0 sec | 0 sec |
+
+> Factory min 7.3 PSI; normal hot idle ~20–30 PSI. RPM > 500 guard prevents false alarms at cranking. **Unit conversion:** Haltech CAN sends pressure in bar. 15 PSI = 1.03 bar.
+
+---
+
+#### `HIGH_COOLANT_T`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `HIGH_COOLANT_T` |
+| **Sampling Frequency** | **1 Hz** |
+| **Log values** | ✅ Yes |
+| **Work As** | Momentary |
+| **Rest Status** | Label: `OK`, Value: `0` |
+| **Active Status** | Label: `HOT`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition:**
+| Field | Value |
+|-------|-------|
+| Channel | `ECU CoolantTemp` (ECU) |
+| Operator | greater than |
+| Compare to | constant ✅, `95` °C |
+| TRUE after a time of | `0` sec |
+| FALSE after a time of | `0` sec |
+
+> 170°F thermostat: normal 77–87°C, fully open ~92°C. 95°C means fan is maxed and temp is still climbing — problem.
+
+---
+
+#### `HIGH_OIL_T`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `HIGH_OIL_T` |
+| **Sampling Frequency** | **1 Hz** |
+| **Log values** | ✅ Yes |
+| **Work As** | Momentary |
+| **Rest Status** | Label: `OK`, Value: `0` |
+| **Active Status** | Label: `HOT`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition:**
+| Field | Value |
+|-------|-------|
+| Channel | `ECU OilTemp` (ECU) |
+| Operator | greater than |
+| Compare to | constant ✅, `130` °C |
+| TRUE after a time of | `0` sec |
+| FALSE after a time of | `0` sec |
+
+> Normal operating ~90–110°C.
+
+---
+
+#### `LOW_FUEL_P`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `LOW_FUEL_P` |
+| **Sampling Frequency** | 10 Hz |
+| **Log values** | ✅ Yes |
+| **Work As** | Momentary |
+| **Rest Status** | Label: `OK`, Value: `0` |
+| **Active Status** | Label: `LOW`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition (compound AND):**
+
+| # | Channel | Operator | Value | TRUE delay | FALSE delay |
+|---|---------|----------|-------|------------|-------------|
+| 1 | `ECU FuelPress` (ECU) | less than | `2.76` bar (= 40 PSI) | 0 sec | 0 sec |
+| 2 | AND `ENGINE_RUNNING` (Status Variables) | equal to | `1` | 0 sec | 0 sec |
+| 3 | AND `ECU RPM` (ECU) | greater than | `500` rpm | 0 sec | 0 sec |
+
+> Factory idle fuel pressure 46–49 PSI (3.17–3.38 bar). 40 PSI (2.76 bar) catches a failing pump while above injector deadband.
+
+---
+
+#### `MULTI_WARNING`
+
+| Field | Value |
+|-------|-------|
+| **Name** | `MULTI_WARNING` |
+| **Sampling Frequency** | 10 Hz |
+| **Log values** | ✅ Yes |
+| **Work As** | Momentary |
+| **Rest Status** | Label: `OK`, Value: `0` |
+| **Active Status** | Label: `WARN`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition (compound OR):**
+
+| # | Channel | Operator | Value | TRUE delay | FALSE delay |
+|---|---------|----------|-------|------------|-------------|
+| 1 | `LOW_OIL_P` (Status Variables) | equal to | `1` | 0 sec | 0 sec |
+| 2 | OR `HIGH_COOLANT_T` (Status Variables) | equal to | `1` | 0 sec | 0 sec |
+| 3 | OR `HIGH_OIL_T` (Status Variables) | equal to | `1` | 0 sec | 0 sec |
+| 4 | OR `LOW_FUEL_P` (Status Variables) | equal to | `1` | 0 sec | 0 sec |
+
+---
+
+#### `WIPER_ACTIVE` (Future — configure now)
+
+| Field | Value |
+|-------|-------|
+| **Name** | `WIPER_ACTIVE` |
+| **Sampling Frequency** | 10 Hz |
+| **Log values** | ☐ No |
+| **Work As** | Momentary |
+| **Rest Status** | Label: `OFF`, Value: `0` |
+| **Active Status** | Label: `ON`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition (compound OR):**
+
+| # | Channel | Operator | Value | TRUE delay | FALSE delay |
+|---|---------|----------|-------|------------|-------------|
+| 1 | Ch02 (Trigger Commands) | equal to | `1` | 0 sec | 0 sec |
+| 2 | OR Ch03 (Trigger Commands) | equal to | `1` | 0 sec | 0 sec |
+
+---
+
+#### `WIPER_ACTIVE_DLY` (Future — configure now)
+
+| Field | Value |
+|-------|-------|
+| **Name** | `WIPER_ACTIVE_DLY` |
+| **Sampling Frequency** | 10 Hz |
+| **Log values** | ☐ No |
+| **Work As** | Momentary |
+| **Rest Status** | Label: `OFF`, Value: `0` |
+| **Active Status** | Label: `DLY`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition:**
+| Field | Value |
+|-------|-------|
+| Channel | `WIPER_ACTIVE` (Status Variables) |
+| Operator | equal to |
+| Compare to | constant ✅, `1` |
+| TRUE after a time of | `0` sec |
+| FALSE after a time of | `3` sec |
+
+> The 3s FALSE delay is the park sweep window. When switches turn off, WIPER_ACTIVE_DLY stays TRUE for 3 more seconds.
+
+---
+
+#### `WIPER_PARKING` (Future — configure now)
+
+| Field | Value |
+|-------|-------|
+| **Name** | `WIPER_PARKING` |
+| **Sampling Frequency** | 10 Hz |
+| **Log values** | ☐ No |
+| **Work As** | Momentary |
+| **Rest Status** | Label: `OFF`, Value: `0` |
+| **Active Status** | Label: `PARK`, Value: `1` |
+| **Condition mode** | Same condition for activation and deactivation |
+
+**Activation condition (compound AND):**
+
+| # | Channel | Operator | Value | TRUE delay | FALSE delay |
+|---|---------|----------|-------|------------|-------------|
+| 1 | `WIPER_ACTIVE_DLY` (Status Variables) | equal to | `1` | 0 sec | 0 sec |
+| 2 | AND `WIPER_ACTIVE` (Status Variables) | equal to | `0` | 0 sec | 0 sec |
+
+> Only TRUE during the 3s window after switches turn off — LP9 powers Brown wire for park sweep. See wiper section below.
+
+---
+
+#### Sampling Frequency Summary
+
+| Variable | Frequency | Reason |
+|----------|-----------|--------|
+| `ENGINE_RUNNING` | 10 Hz | Gates starter interlock — needs responsive |
+| `FUEL_PRIME` | 10 Hz | 3s timer accuracy |
+| `FAN_TEMP_25/50/75/100` | **1 Hz** | Temperature changes slowly; reduces CAN load |
+| `FAN_FAILSAFE` | **1 Hz** | 5s timeout — 1 Hz is sufficient |
+| `STARTER_SAFE` | 10 Hz | Must respond to button press instantly |
+| `LOW_OIL_P` | 10 Hz | Oil pressure can spike/dip quickly |
+| `HIGH_COOLANT_T` | **1 Hz** | Temperature changes slowly |
+| `HIGH_OIL_T` | **1 Hz** | Temperature changes slowly |
+| `LOW_FUEL_P` | 10 Hz | Fuel pressure can fluctuate |
+| `MULTI_WARNING` | 10 Hz | Inherits urgency from fastest alarm |
+| `WIPER_*` | 10 Hz | Park timing accuracy |
 
 > **RPM > 500 guard** on oil/fuel alarms prevents false alarms at cranking and idle.
 > **Wiper variables** are pre-configured but inactive until Ch02/Ch03 switches are installed. No relay needed — see wiper section below.
+> **Unit note:** Haltech CAN sends pressure in **bar**, not PSI. Conversions: 15 PSI = 1.03 bar, 40 PSI = 2.76 bar.
 
 ### ECU Stream (CAN1 — Haltech)
 
 1. Go to **ECU Stream** tab
-2. Select **Haltech CAN_V2_40** protocol
+2. Click **Change ECU** dropdown → select **HALTECH - CAN_V2_40 (ver. 02.00.03) 1 Mbit/sec**
 3. Bus: CAN1 (A30/A31), **500 kbps**
-4. Enable **120Ω termination** if Haltech does not self-terminate
-5. Leave **"Silent on CAN Bus"** OFF initially; enable if Haltech logs CAN errors
-6. Enable channels: RPM, Coolant Temp (ECT), Oil Pressure, Oil Temp, Fuel Pressure, TPS, Vehicle Speed, Battery Voltage
+4. **Enable the CAN Bus 120 Ohm Resistor** ✅ — bus is PDM ↔ Haltech (two endpoints, both terminated)
+5. **Silent on CAN Bus** ☐ — leave unchecked (PDM must transmit to send pit limiter CAN message to Haltech in Phase 3)
+6. Enable channels per the list below
 
-> **Max 120 channels** in Race Studio ECU stream (Haltech protocol has ~267). Uncheck header row first, then manually enable only the channels listed above plus any logging channels you want.
+> **WARNING — Max 120 channels.** The Haltech CAN_V2_40 protocol has ~267 channels. Race Studio enforces a 120-channel maximum. **Uncheck the header row** to disable ALL channels first, then manually enable only these (~72 total, well under 120).
+
+#### Required — PDM Alarm/Logic Channels
+
+| CC ID | Channel Name | Unit | Purpose |
+|---|---|---|---|
+| CC01 | ECU RPM | rpm | ENGINE_RUNNING, STARTER_SAFE, alarm guards |
+| CC04 | ECU ThrottlePos | % | PITLIMITER_ACTIVE (Phase 3: TPS > 60% bypass) |
+| CC05 | ECU OilPress | bar | LOW_OIL_P alarm |
+| CC06 | ECU FuelPress | bar | LOW_FUEL_P alarm |
+| CC30 | ECU BrakePress | bar | Brake pressure (AVI7 Lowdoller sensor) |
+| CC45 | ECU VehSpeed | km/h | PITLIMITER_SAFE — threshold = 97 km/h (= 60 mph) |
+| CC52 | ECU BatteryVolt | V | Battery health |
+| CC69 | ECU CoolantTemp | °F | Fan bands, HIGH_COOLANT_T alarm |
+| CC71 | ECU OilTemp | °C | HIGH_OIL_T alarm |
+| CC94 | ECU Oil Press Li | # | ECU oil pressure warning flag |
+| CC117 | PitLane SpLimErr | # | Pit lane speed limiter error feedback |
+| CC119 | PitLane SpdLimSS | # | Pit lane set speed reference |
+| CC249 | ECU PLIGHT STATE | # | Engine protection / fault flag |
+
+#### Logging Channels
+
+| CC ID | Channel Name | Unit | Notes |
+|---|---|---|---|
+| CC02 | ECU ManifPress | bar | Manifold pressure (MAP) |
+| CC03 | ECU CoolantPres | bar | Coolant pressure (AVI5 Lowdoller) |
+| CC08 | ECU EngineDeman | % | Engine load / demand |
+| CC09 | ECU IgnAngLead | deg | Ignition advance — shows retard events |
+| CC10 | ECU InjDT2 | % | Injector duty cycle bank 2 |
+| CC11 | ECU InjDT1 | % | Injector duty cycle bank 1 |
+| CC15 | ECU Avg Inj 1 | ms | Injection pulse width |
+| CC16 | ECU Avg Inj 2 | ms | Injection pulse width |
+| CC17 | ECU Avg Inj 3 | ms | Injection pulse width |
+| CC23 | ECU TrigSyncLev | # | Trigger sync level — tune health |
+| CC24 | ECU TrigErrCount | # | Trigger error count — tune health |
+| CC26 | ECU KnockLev2 | # | Knock bank 2 — critical for tune |
+| CC27 | ECU KnockLev1 | # | Knock bank 1 — critical for tune |
+| CC28 | ECU LateralG | g | Lateral acceleration |
+| CC36 | ECU ExhCamAng1 | deg | Exhaust cam angle bank 1 (VVT) |
+| CC37 | ECU ExhCamAng2 | deg | Exhaust cam angle bank 2 (VVT) |
+| CC38 | ECU LongG | g | Longitudinal acceleration |
+| CC46 | ECU IntakeCamA1 | deg | Intake cam angle bank 1 (VVT) |
+| CC47 | ECU IntakeCamA2 | deg | Intake cam angle bank 2 (VVT) |
+| CC50 | ECU BaromPress | bar | Barometric pressure |
+| CC65 | ECU Amb Air T | °C | Ambient air temp |
+| CC66 | ECU Rel Humidity | % | Relative humidity |
+| CC67 | ECU Abs Humidity | # | Absolute humidity |
+| CC68 | ECU Spec Humi | # | Specific humidity |
+| CC70 | ECU AirTemp | °C | Air temp (°C) |
+| CC72 | ECU FuelTemp | °C | Fuel temperature |
+| CC73 | ECU DiffOilTemp | °C | Diff/trans oil temp |
+| CC74 | ECU GearOilTemp | °C | Gearbox oil temp |
+| CC76 | ECU FuelLevel | l | Fuel level |
+| CC77 | ECU FuelTrimSTB1 | % | Short-term fuel trim bank 1 |
+| CC78 | ECU FuelTrimSTB2 | % | Short-term fuel trim bank 2 |
+| CC79 | ECU FuelTrimLTB1 | % | Long-term fuel trim bank 1 |
+| CC80 | ECU FuelTrimLTB2 | % | Long-term fuel trim bank 2 |
+| CC91 | ECU CheckEngLtSw | # | Check engine light status |
+| CC107 | ECU TPSAct | # | TPS active status |
+| CC134 | ECU TargLambda | lambda | Target lambda |
+| CC138 | ECU CrankCPress | bar | Crankcase pressure |
+| CC141 | ECU InjectionDT4 | % | Injector duty cycle 4 |
+| CC142 | ECU IgnitionAng1 | deg | Ignition angle cyl 1 |
+| CC143 | ECU IgnitionAng2 | deg | Ignition angle cyl 2 |
+| CC144 | ECU RaceTimer | ms | Session timing |
+| CC149 | ECU TorqCIgnCorr | deg | Torque/ignition correction |
+| CC166 | ECU Temperature | °C | ECU internal temperature |
+| CC167 | ECU Gear Sel Pos | gear | Gear display |
+| CC168 | ECU WIDEBAND B2 | lambda | AFR bank 2 |
+| CC169 | ECU WIDEBAND OVE | lambda | AFR average |
+| CC170 | ECU WIDEBAND B1 | lambda | AFR bank 1 |
+| CC172 | ECU Inj Pres D | bar | Injector pressure delta |
+| CC173 | ECU Acc Ped Pos | % | Accelerator pedal position |
+| CC210 | ECU VERTICAL G | g | Vertical acceleration |
+| CC211 | ECU PITCH RATE | deg/s | Pitch rate |
+| CC212 | ECU ROLL RATE | deg/s | Roll rate |
+| CC213 | ECU YAW RATE | deg/s | Yaw rate |
+| CC227 | ECU ENG LIM MAX | deg/s | Rev limiter threshold |
+| CC254 | ECU FUEL TRIPMT | l | Fuel used — endurance reference |
+| CC255 | Trip Meter | m | Distance |
+| CC261 | ECU AIR TEMP | °F | IAT |
+
+> ⚠️ **Disable CC260 (ECU H2O INJ DUTY)** — no water injection on this car.
 
 ### SmartyCam Stream
 
@@ -99,7 +553,7 @@ Remove or disable the CAN Keypad 12 config. Delete all `*KYD` variables. CAN2 is
 | Output | Name | Pin(s) | Mode | MaxLoad | Inductive | PWM | Trigger |
 |--------|------|--------|------|---------|-----------|-----|---------|
 | **HP1** | Starter | A1+A13 | OVC | 20A | Yes | DC | STARTER_SAFE |
-| **HP2** | Fan | A12+A23 | Fused | 35A | No | 100Hz | Fan PWM curve + Ch01 override |
+| **HP2** | Fan | A12+A23 | Fused | 35A | No | 100Hz | Fan PWM curve + Ch10 override |
 | **HP3** | FuelPump | A24+A25 | OVC | 15A | Yes | DC | FUEL_PRIME OR ENGINE_RUNNING |
 | HP4 | Spare | A34+A35 | — | — | — | — | — |
 | **MP1** | InjPwr | A2 | OVC | 15A | Yes | DC | SafeIgnition |
@@ -108,7 +562,7 @@ Remove or disable the CAN Keypad 12 config. Delete all `*KYD` variables. CAN2 is
 | **MP4** | BrakeLights | A5 | Fused | 10A | No | DC | Ch11 (always active) |
 | **MP5** | TailLights | A6 | Fused | 10A | No | DC | SafeIgnition |
 | **MP6** | Headlights | A7 | OVC | 15A | No | DC | Ch07 AND SafeIgnition |
-| **MP7** | Coolsuit | A8 | OVC | 10A | Yes | DC | Ch04 AND SafeIgnition |
+| **MP7** | Coolsuit | A8 | OVC | 10A | Yes | DC | Ch12 AND SafeIgnition |
 | **MP8** | Defogger | A9 | OVC | 10A | No | DC | Ch05 AND SafeIgnition |
 | **LP1** | ECU_Power | A14 | OVC | 10A | No | DC | SafeIgnition |
 | **LP2** | Dash | A15 | OVC | 10A | No | DC | SafeIgnition |
@@ -131,7 +585,7 @@ Action 1: ON @ 25% duty  | Priority 1 | Trigger: FAN_TEMP_25 (>77°C)
 Action 2: ON @ 50% duty  | Priority 2 | Trigger: FAN_TEMP_50 (>82°C)
 Action 3: ON @ 75% duty  | Priority 3 | Trigger: FAN_TEMP_75 (>87°C)
 Action 4: ON @ 98% duty  | Priority 4 | Trigger: FAN_TEMP_100 (>92°C) OR FAN_FAILSAFE
-Manual:   ON @ 98% duty  | Priority 5 | Trigger: Ch01 (fan override toggle)
+Manual:   ON @ 98% duty  | Priority 5 | Trigger: Ch10 (fan override toggle)
 
 Soft Start: 1.0s (reduce inrush)
 Hysteresis: 5°C per band (ON at threshold, OFF at threshold − 5°C)
@@ -383,8 +837,8 @@ Momentary:
 
 - [ ] IGN toggle → B23 (already wired in S.2)
 - [ ] Start button → Ch09 (B21), momentary, active = GND
-- [ ] Fan override → Ch01 (B26), latching, active = 12V
-- [ ] Coolsuit → Ch04 (B29), latching, active = 12V
+- [ ] Fan override → Ch10 (B22), latching, active = 12V
+- [ ] Coolsuit → Ch12 (A27), latching, active = 12V
 - [ ] Defogger → Ch05 (B30), latching, active = 12V
 - [ ] Brake light switch → Ch11 (A26), closed on press
 - [ ] Warning LED → LP7 (A20)
@@ -522,7 +976,7 @@ Now that CAN temp data is confirmed, move fan from stock relay to PDM.
 - [ ] Leave OEM fan relay in place as backup (can be reinstalled)
 - [ ] Test: same as Option A
 
-- [ ] Verify fan override toggle (Ch01) → 98% duty
+- [ ] Verify fan override toggle (Ch10) → 98% duty
 - [ ] Verify fan failsafe: disconnect Haltech CAN temporarily → fan goes to 98% after 5s
 - [ ] Reconnect CAN
 
@@ -677,8 +1131,8 @@ Full commitment to PDM + Haltech. OE ECU, BCM, and relay box physically removed.
 | Trigger | Phase 2 | Phase 3 |
 |---------|---------|---------|
 | STARTER_SAFE | Ch09 AND SafeIgnition AND NOT ENGINE_RUNNING | **(StarterKYD OR Ch09)** AND SafeIgnition AND NOT ENGINE_RUNNING |
-| Fan override | Ch01 | **(FanKYD OR Ch01)** |
-| Coolsuit | Ch04 AND SafeIgnition | **(CoolsuitKYD OR Ch04)** AND SafeIgnition |
+| Fan override | Ch10 | **(FanKYD OR Ch10)** |
+| Coolsuit | Ch12 AND SafeIgnition | **(CoolsuitKYD OR Ch12)** AND SafeIgnition |
 | Horn | Ch06 | **(HornKYD OR Ch06)** |
 | Headlights | Ch07 AND SafeIgnition | **(LightsKYD OR Ch07)** AND SafeIgnition |
 
@@ -827,14 +1281,53 @@ Physical panel remains as backup. CAN keypad provides redundant controls with LE
 
 ---
 
+## Reference — Webinar Config → Tiburon Mapping
+
+Starting point: `Webinar complete.zconfig`. This table maps what was renamed/repurposed.
+
+| Webinar Output | Webinar HW | Tiburon Output | Notes |
+|---|---|---|---|
+| `Starter` | HP (series diode) | **HP1 Starter** | Keep — OVC 20A, inductive |
+| `FanSpeed` | HP | **HP2 Fan** | Keep — add 4-level PWM bands |
+| `Fuel1A` + `Fuel1B` | 2× MP | **HP3 FuelPump** | Consolidate to single HP3 |
+| `Siren` | MP | **MP3 Horn** | Rename |
+| `Ignition` | LP/MP | **MP1 InjectorPwr** | Repurpose |
+| `High Beams` | MP | **MP2 CoilPwr** | Repurpose |
+| `Low Beams` | MP | **MP4 BrakeLights** | Repurpose |
+| `MidPO3` spare | MP | **MP5 TailLights** | Enable |
+| `MidPO4` spare | MP | **MP6 Headlights** | Enable |
+| `MidPO5` spare | MP | **MP7 Coolsuit** | Enable |
+| `LowPO2–7` spares | LP | **LP1–LP6** Accessories | Enable |
+| `LowPO8` spare | LP | **LP7 WarningLED** | Enable |
+
+**Webinar variables to delete:** `StarterKYD`, `SirenKYD`, `LightsKYD`, `FanKYD`, `IgnitionKYD`, `ColorsConditionK01–K12`, `BitRed/Green/BlueX15–X1C`. Keep `SafeIgnition`, `FuelSV` (update logic), `momentary_SW` (repurpose → Ch09 START).
+
+---
+
+## Reference — Pit Limiter CAN Output (Phase 3)
+
+To send `PITLIMITER_ACTIVE` to the Haltech when CAN keypad is added:
+
+**Option A (CAN — recommended):**
+1. CAN Output 1 → create new CAN message
+2. Destination: Haltech CAN address (check Haltech NSP CAN Receive page for message ID and byte)
+3. Map `PITLIMITER_ACTIVE` to the correct byte/bit
+4. In Haltech NSP: Configure → Speed Limiter → Enable via CAN → set target speed (35 mph for pit lane)
+
+**Option B (Wire):**
+1. Assign `PITLIMITER_ACTIVE` → spare LP output
+2. Wire that LP output → Haltech SPI pin configured as digital input
+3. In Haltech NSP: Configure → Speed Limiter → Enable via digital input pin
+
+---
+
 ## Cross-References
 
 | File | Contents |
 |------|----------|
 | `guides/harness-design.md` | Deutsch connector pin maps, wire routing, bundle sizing |
-| `guides/bench-test.md` | Additional bench test procedures and notes log |
+| `guides/bench-test.md` | Bench test procedures, fuse box tap procedure, notes log |
 | `guides/keypad-config-future.md` | Full CAN keypad button/LED/variable config for Phase 3 |
-| `guides/pdm-session-1.md` | Step-by-step Race Studio 3 walkthrough |
 | `signal-routing.md` | End-to-end signal trace for every wire |
 | `weekend-tasks.md` | Current weekend build tasks (sensor install, harness fab) |
 | `hardware/aim/aim-pdm/pdm-pinout.md` | Full 35-pin ×2 connector pinout |

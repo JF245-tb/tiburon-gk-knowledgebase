@@ -379,7 +379,6 @@ All harnesses pass through a single center firewall grommet, then split into 3 t
 | `guides/pdm-build-guide.md` | **Primary:** 3-phase PDM build guide, output maps, Race Studio config, test gates |
 | `weekend-tasks.md` | Weekend build schedule — sensor install, harness fab, test procedures |
 | `signal-routing.md` | Complete pin-to-pin signal trace |
-| `guides/pdm-config.md` | Detailed PDM output logic (legacy reference) |
 | `guides/bench-test.md` | Additional bench test procedures and notes log |
 | `guides/keypad-config-future.md` | Phase 3 CAN keypad button/LED/variable config |
 | `hardware/haltech/main-connector-26-pin-elite2500.md` | Haltech 26-pin pinout |

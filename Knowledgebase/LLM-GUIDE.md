@@ -200,9 +200,9 @@ The most commonly queried specs, pre-loaded here so an LLM can answer without op
 | Question | File(s) |
 |---|---|
 | What pin is AVI 3 on? | `builds/white-tiburon/build-profile.json` → ecu.avi_assignments.AVI3 |
-| How does the fuel pump trigger? | `builds/white-tiburon/guides/pdm-config.md` → HP3 section |
+| How does the fuel pump trigger? | `builds/white-tiburon/guides/pdm-build-guide.md` → HP3 section |
 | What's the PDM connector A pin for the fan? | `hardware/aim/aim-pdm/pdm-pinout.md` |
-| How do I configure fan PWM in Race Studio? | `builds/white-tiburon/guides/pdm-session-1.md` → Step 6, HP2 |
+| How do I configure fan PWM in Race Studio? | `builds/white-tiburon/guides/pdm-build-guide.md` → HP2 Fan section |
 | What wire color is CAN H on the Haltech? | `hardware/haltech/main-connector-26-pin-elite2500.md` → pin 23 |
 | What is the OEM coolant temp sensor resistance? | `common/opengk/sensor-information.md` |
 | What torque for cam cap bolts? | `common/shop-manual/engine-mechanical/specifications.md` or `main-moving-system.md` |

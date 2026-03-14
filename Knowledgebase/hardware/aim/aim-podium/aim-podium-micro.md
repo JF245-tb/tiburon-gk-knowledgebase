@@ -207,5 +207,5 @@ The PDM broadcasts ECU data (via SmartyCam Stream or direct CAN forwarding) that
 | `hardware/aim/aim-smartycam/aim-smartycam.md` | SmartyCam config — shares CAN0 bus with Podium |
 | `hardware/aim/aim-gps08/aim-gps08.md` | GPS-08 — provides speed/position data Podium reads |
 | `hardware/aim/aim-pdm/pdm-pinout.md` | PDM CAN0 pins (A22/A11/A33) |
-| `builds/white-tiburon/guides/pdm-config.md` | PDM RS3 config — SmartyCam Stream channels Podium can decode |
+| `builds/white-tiburon/guides/pdm-build-guide.md` | PDM RS3 config — SmartyCam Stream channels Podium can decode |
 | `builds/white-tiburon/build-profile.md` | Build profile — Podium Micro SN: 1QTV5KM, mounted in passenger footwell |
