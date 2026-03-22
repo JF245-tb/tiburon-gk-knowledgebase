@@ -44,8 +44,18 @@ Logging/dash display only — routed to PDM analog inputs. Data reaches the Halt
 |------|-----------------|--------|-------|
 | Fuel temp signal | TBD | Lowdoller 899404 green | Fuel combo sensor, monitoring only |
 | Coolant pressure signal | TBD | Lowdoller LDM899TP100 yellow | Coolant combo sensor, monitoring only |
+| Crankcase pressure signal | TBD | TBD | On hose between valve covers, monitoring only |
 | +5V supply | TBD | Sensor red wires | PDM analog supply or shared from Haltech |
 | Signal GND | TBD | Sensor black+white wires | PDM analog ground |
+
+### Vacuum Hose — Haltech Internal MAP Sensor
+
+The Elite 2500 has a built-in MAP sensor with a barb on the ECU housing. A vacuum hose runs through the firewall to a vacuum manifold block on the plenum. The same manifold block feeds the fuel pressure regulator (engine-bay side only, no firewall pass-through).
+
+| Item | Route |
+|------|-------|
+| MAP vacuum hose | Haltech ECU barb → through firewall → vacuum manifold block on plenum |
+| FPR vacuum hose | Vacuum manifold block → fuel pressure regulator (engine-bay only) |
 
 ### Stays Cabin-Side (No Firewall)
 
@@ -56,14 +66,15 @@ Logging/dash display only — routed to PDM analog inputs. Data reaches the Halt
 
 ### Phase 1 Firewall Wire Count
 
-| Item | Wires |
+| Item | Count |
 |------|-------|
 | PDM power runs — active (starter, fan, fuel pump, alt exciter) | 4 heavy-gauge |
 | PDM power runs — coiled & capped (inj power, coil power, headlights, horn) | 4 |
 | Haltech ECU-critical sensors (fuel press, oil press, oil temp, coolant temp + supply + gnd) | 6 |
-| PDM analog sensors (fuel temp, coolant press + supply + gnd) | 4 |
+| PDM analog sensors (fuel temp, coolant press, crankcase press + supply + gnd) | 5 |
+| MAP vacuum hose | 1 hose |
 | LM2 O2 sensor cable (if installed) | 1 proprietary cable |
-| **Total** | **~18 wires + O2 cable** |
+| **Total** | **~19 wires + 1 hose + O2 cable** |
 
 ---
 
@@ -82,11 +93,11 @@ All PDM power wires are already through the firewall from Phase 1. This phase ad
 | Knock 1 | 26-pin-21 | Knock sensor, driver block |
 | Knock 2 | 26-pin-22 | Knock sensor, driver block |
 | IAT signal | 26-pin-3 (AVI7) | IAT, back of plenum |
-| MAP signal | 34-pin-15 (AVI9) | MAP sensor, plenum tap |
 | TPS signal | 34-pin-14 (AVI10) | Throttle body |
-| +8V supply | 34-pin-12 | MAP sensor power |
-| Signal GND | 26-pin-14/15/16 | IAT/MAP return + shield drains |
+| Signal GND | 26-pin-14/15/16 | IAT/TPS return + shield drains |
 | Shield drain | — | Crank/cam shield ties |
+
+MAP uses the Haltech internal sensor — vacuum hose already routed in Phase 1, no electrical wire needed.
 
 ### Ignition Triggers (6× COP — Toyota 90919-A2005)
 
@@ -141,23 +152,26 @@ All PDM power wires are already through the firewall from Phase 1. This phase ad
 
 | Item | Wires |
 |------|-------|
-| Engine sensors (crank, cam, knock, IAT, MAP, TPS + supply + gnd + shield) | 12 |
+| Engine sensors (crank, cam, knock, IAT, TPS + gnd + shield) | 10 |
 | Ignition triggers (IGN 1–6) | 6 |
 | Injector drives (INJ 1–6) | 6 |
 | LM2 O2 cable | 1 |
-| **Phase 2 additions** | **~24 wires + O2 cable** |
+| **Phase 2 additions** | **~22 wires + O2 cable** |
 
 ### Combined Firewall Total (Phase 1 + Phase 2)
 
-| Item | Wires |
+| Item | Count |
 |------|-------|
-| PDM power runs (from Phase 1) | 8 |
-| Haltech ECU-critical sensors (from Phase 1) | 6 |
-| PDM analog sensors (from Phase 1) | 4 |
-| Engine sensors | 12 |
-| Ignition triggers (IGN 1–6) | 6 |
-| Injector drives (INJ 1–6) | 6 |
-| LM2 O2 cable | 1 |
-| **Total** | **~42 wires + O2 cable** |
+| PDM power runs (from Phase 1) | 8 wires |
+| Haltech ECU-critical sensors (from Phase 1) | 6 wires |
+| PDM analog sensors (from Phase 1) | 5 wires |
+| MAP vacuum hose (from Phase 1) | 1 hose |
+| Engine sensors | 10 wires |
+| Ignition triggers (IGN 1–6) | 6 wires |
+| Injector drives (INJ 1–6) | 6 wires |
+| LM2 O2 cable | 1 cable |
+| **Total** | **~41 wires + 1 hose + O2 cable** |
 
-Note: Coil/injector grounds are engine-bay local (ring terminals to head bolts) — they do not pass through the firewall.
+Notes:
+- Coil/injector grounds are engine-bay local (ring terminals to head bolts) — they do not pass through the firewall.
+- FPR vacuum hose is engine-bay only (from vacuum manifold block to regulator) — does not pass through the firewall.
