@@ -19,12 +19,12 @@
 | Device | AIM CAN Keypad 12 (Blink Marine PKP-2600-SI) |
 | Buttons | 12 RGB-backlit |
 | Connector | 4-pin Deutsch DT04-4P |
-| Bus | CAN2 (PDM A28 H / A29 L) — **125 kbps only** |
-| Power | PDM LP8 (A21) — OVC Protected, 5A, SafeIgnition trigger |
-| GND | PDM B18 (NOT A10 — that's reserved for CAN0 expansion cable) |
+| Bus | CAN2 (PDM B28 H / B29 L) — **125 kbps only** |
+| Power | PDM LP8 (B21) — OVC Protected, 5A, SafeIgnition trigger |
+| GND | PDM G18 (NOT B10 — that's reserved for CAN0 expansion cable) |
 | Hardware spec | `hardware/aim/aim-can-keypad/aim-can-keypad.md` |
 
-> **Do NOT wire keypad to CAN0 (A22/A11).** CAN0 runs AIM expansion devices at 1 Mbps. Keypad at 125 kbps on CAN0 = both buses fail.
+> **Do NOT wire keypad to CAN0 (B22/B11).** CAN0 runs AIM expansion devices at 1 Mbps. Keypad at 125 kbps on CAN0 = both buses fail.
 
 ---
 
@@ -32,11 +32,11 @@
 
 | Binder Pin | Amazon Color | PDM Pin | Connector | Deutsch Pin | Keypad Color | Signal |
 |-----------|-------------|---------|-----------|------------|-------------|--------|
-| 1 | Red | A21 (LP8 — Keypad power) | Black | 4 | Red | Vbatt |
-| 2 | White | A28 (CAN2 High) | Black | 2 | White | CAN H |
+| 1 | Red | B21 (LP8 — Keypad power) | Black | 4 | Red | Vbatt |
+| 2 | White | B28 (CAN2 High) | Black | 2 | White | CAN H |
 | 3 | Yellow | — | — | — | — | Spare — not connected |
-| 4 | Green | A29 (CAN2 Low) | Black | 1 | Blue | CAN L |
-| 5 | Black | B18 (GND) | Grey | 3 | Black | GND |
+| 4 | Green | B29 (CAN2 Low) | Black | 1 | Blue | CAN L |
+| 5 | Black | G18 (GND) | Grey | 3 | Black | GND |
 
 > Green (Binder) → Blue (Deutsch) for CAN L — only color mismatch. Label the loom.
 
@@ -209,5 +209,5 @@ When keypad is installed, update these Math Channel triggers to use OR:
 | File | Contents |
 |------|----------|
 | `hardware/aim/aim-can-keypad/aim-can-keypad.md` | Full keypad hardware spec |
-| `hardware/aim/aim-pdm/pdm-pinout.md` | CAN2 pins A28/A29, LP8 A21 |
+| `hardware/aim/aim-pdm/pdm-pinout.md` | CAN2 pins B28/B29, LP8 B21 |
 | `guides/pdm-build-guide.md` | Current physical switch config, Race Studio walkthrough (authoritative) |

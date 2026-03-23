@@ -13,8 +13,8 @@
     "notes": [
       "Nodes in this graph extend hardware-graph.json (device capabilities) and common graph (OEM components).",
       "Build-specific edges override common behavior (e.g., COP coils replace OEM wasted spark).",
-      "CAN bus naming uses official AIM labels: CAN AiM (A22/A11, 1 Mbps), CAN ECU (A30/A31, 500 kbps), CAN2 (A28/A29, 125 kbps).",
-      "IMPORTANT: Haltech CAN connects to PDM A30/A31 (CAN ECU), NOT A22/A11 (CAN AiM = AIM expansion bus)."
+      "CAN bus naming uses official AIM labels: CAN AiM (B22/B11, 1 Mbps), CAN ECU (B30/B31, 500 kbps), CAN2 (B28/B29, 125 kbps).",
+      "IMPORTANT: Haltech CAN connects to PDM B30/B31 (CAN ECU), NOT B22/B11 (CAN AiM = AIM expansion bus)."
     ]
   },
 
@@ -53,7 +53,7 @@
       "label": "AIM PDM 32",
       "device_type": "PDM",
       "hw_ref": "hw-aim-pdm32",
-      "connectors": ["Conn-A (35-pin)", "Conn-B (35-pin)"],
+      "connectors": ["Black (35-pin, B prefix)", "Grey (35-pin, G prefix)"],
       "docs": [
         "hardware/aim/aim-pdm/pdm-pinout.md",
         "hardware/aim/aim-pdm/pdm-configuration-guide.md",
@@ -69,8 +69,8 @@
       "device_type": "passive_splitter",
       "hw_ref": "hw-aim-datahub-4way",
       "bus": "CAN AiM",
-      "power_from": "PDM A33 (+Vb CAN)",
-      "connected_to_pdm": "CAN AiM expansion cable (female 5-pin Binder)",
+      "power_from": "PDM B33 (+Vb CAN)",
+      "connected_to_pdm": "CAN AiM expansion cable (female 5-pin Binder, B22/B11)",
       "port_assignments": {
         "1": "GPS-08",
         "2": "SmartyCam",
@@ -88,7 +88,7 @@
       "hw_ref": "hw-aim-gps08",
       "bus": "CAN AiM",
       "hub_port": 1,
-      "power_from": "pdm-LP4 (A17)",
+      "power_from": "pdm-LP4 (B17)",
       "mount": "roof — antenna facing skyward",
       "docs": ["hardware/aim/aim-gps08/aim-gps08.md"]
     },
@@ -101,7 +101,7 @@
       "hw_ref": "hw-aim-smartycam3",
       "bus": "CAN AiM",
       "hub_port": 2,
-      "power_from": "pdm-LP3 (A16)",
+      "power_from": "pdm-LP3 (B16)",
       "rs3_config": "builds/white-tiburon/guides/pdm-build-guide.md — SmartyCam Stream section",
       "docs": ["hardware/aim/aim-smartycam/aim-smartycam.md"]
     },
@@ -114,7 +114,7 @@
       "hw_ref": "hw-aim-keypad12",
       "bus": "CAN2",
       "speed_kbps": 125,
-      "pdm_pins": { "CAN_H": "A28", "CAN_L": "A29" },
+      "pdm_pins": { "CAN_H": "B28", "CAN_L": "B29" },
       "status": "not_installed",
       "notes": "Excluded — physical switch panel used. Config preserved in guides/keypad-config-future.md."
     },
@@ -126,7 +126,7 @@
       "device_type": "display",
       "hw_ref": "hw-aim-dash10",
       "interface": "LVDS (4-pin Rosenberger — NOT CAN)",
-      "power_from": "pdm-LP2 (A15)"
+      "power_from": "pdm-LP2 (B15)"
     },
 
     {
@@ -137,10 +137,10 @@
       "pin_number": 23,
       "function": "CAN H",
       "wire_color": "W",
-      "destination": "PDM A30 (CAN ECU H)",
+      "destination": "PDM B30 (CAN ECU H)",
       "bus": "CAN ECU",
       "speed_kbps": 500,
-      "note": "Goes to PDM A30 (CAN ECU / CAN1). NOT A22 which is CAN AiM expansion bus."
+      "note": "Goes to PDM B30 (CAN ECU / CAN1). NOT B22 which is CAN AiM expansion bus."
     },
     {
       "id": "ecu-26pin-24",
@@ -150,7 +150,7 @@
       "pin_number": 24,
       "function": "CAN L",
       "wire_color": "L",
-      "destination": "PDM A31 (CAN ECU L)",
+      "destination": "PDM B31 (CAN ECU L)",
       "bus": "CAN ECU",
       "speed_kbps": 500
     },
@@ -162,7 +162,7 @@
       "pin_number": 13,
       "wire_color": "P",
       "function": "IGN Enable",
-      "notes": "Spliced from ignition switch toggle (also goes to PDM B23). ECU shuts down engine when de-energized."
+      "notes": "Spliced from ignition switch toggle (also goes to PDM G23). ECU shuts down engine when de-energized."
     },
     {
       "id": "ecu-34pin-9",
@@ -359,29 +359,29 @@
     },
 
     {
-      "id": "pdm-connB-pin23",
+      "id": "pdm-connG-pin23",
       "type": "pdm_input",
-      "label": "PDM Conn B Pin 23 — Ignition Input",
-      "connector": "B",
+      "label": "PDM Grey Connector Pin G23 — Ignition Input",
+      "connector": "Grey",
       "pin": 23,
       "function": "Ignition input (SafeIgnition)",
       "switch_type": "latching toggle",
       "notes": "Also spliced to Haltech 34-pin pin 13 (ECU IGN enable). SafeIgnition status variable derived from this."
     },
     {
-      "id": "pdm-connB-pin21",
+      "id": "pdm-connG-pin26",
       "type": "pdm_input",
-      "label": "PDM Ch01 (Conn B Pin 26) — Start Button",
-      "connector": "B",
+      "label": "PDM Ch01 (Grey Connector Pin G26) — Start Button",
+      "connector": "Grey",
       "pin": 26,
       "function": "Physical start button",
       "switch_type": "momentary"
     },
     {
-      "id": "pdm-connB-pin28",
+      "id": "pdm-connG-pin21",
       "type": "pdm_input",
-      "label": "PDM Ch09 (Conn B Pin 21) — Brake Light Switch",
-      "connector": "B",
+      "label": "PDM Ch09 (Grey Connector Pin G21) — Brake Light Switch",
+      "connector": "Grey",
       "pin": 21,
       "function": "Brake light switch (always active, no keypad logic)",
       "switch_type": "momentary (brake pedal)"
@@ -392,18 +392,18 @@
       "type": "pdm_output",
       "label": "HP1 — Starter Motor",
       "output_tier": "HP",
-      "pdm_pins": ["A1", "A13"],
+      "pdm_pins": ["B1", "B13"],
       "load": "Starter motor relay / direct",
       "mode": "OVC Protected",
       "current_limit_a": 20,
       "trigger": "STARTER_SAFE = Ch01 AND SafeIgnition AND NOT ENGINE_RUNNING"
     },
     {
-      "id": "pdm-HP2",
+      "id": "pdm-HB1",
       "type": "pdm_output",
-      "label": "HP2 — Cooling Fan",
-      "output_tier": "HP",
-      "pdm_pins": ["A12", "A23"],
+      "label": "HB1 — Cooling Fan",
+      "output_tier": "HB",
+      "pdm_pins": ["G1", "G2"],
       "load": "Brushless cooling fan motor",
       "mode": "PWM 100Hz",
       "current_limit_a": 35,
@@ -415,7 +415,7 @@
       "type": "pdm_output",
       "label": "HP3 — Fuel Pump",
       "output_tier": "HP",
-      "pdm_pins": ["A24", "A25"],
+      "pdm_pins": ["B24", "B25"],
       "load": "Fuel pump (in-tank)",
       "mode": "OVC Protected",
       "current_limit_a": 15,
@@ -426,7 +426,7 @@
       "type": "pdm_output",
       "label": "MP1 — Injector Power",
       "output_tier": "MP",
-      "pdm_pins": ["A2"],
+      "pdm_pins": ["B2"],
       "load": "Fuel injector power rail (×6)",
       "mode": "OVC Protected",
       "current_limit_a": 15,
@@ -437,7 +437,7 @@
       "type": "pdm_output",
       "label": "MP2 — COP Coil Power",
       "output_tier": "MP",
-      "pdm_pins": ["A3"],
+      "pdm_pins": ["B3"],
       "load": "COP coil +12V supply (×6 — Toyota 90919-A2005 pin D)",
       "mode": "OVC Protected",
       "current_limit_a": 15,
@@ -448,7 +448,7 @@
       "type": "pdm_output",
       "label": "MP3 — Horn",
       "output_tier": "MP",
-      "pdm_pins": ["A4"],
+      "pdm_pins": ["B4"],
       "load": "Horn",
       "mode": "OVC Protected",
       "current_limit_a": 10,
@@ -459,7 +459,7 @@
       "type": "pdm_output",
       "label": "MP4 — Brake Lights",
       "output_tier": "MP",
-      "pdm_pins": ["A5"],
+      "pdm_pins": ["B5"],
       "mode": "Fused",
       "current_limit_a": 10,
       "trigger": "Ch09 brake switch (direct — no keypad)"
@@ -469,7 +469,7 @@
       "type": "pdm_output",
       "label": "MP5 — Tail / Running Lights",
       "output_tier": "MP",
-      "pdm_pins": ["A6"],
+      "pdm_pins": ["B6"],
       "mode": "Fused",
       "current_limit_a": 10,
       "trigger": "SafeIgnition (always on when car is on)"
@@ -479,7 +479,7 @@
       "type": "pdm_output",
       "label": "MP6 — Headlights",
       "output_tier": "MP",
-      "pdm_pins": ["A7"],
+      "pdm_pins": ["B7"],
       "load": "Headlights",
       "mode": "OVC Protected",
       "current_limit_a": 15,
@@ -490,7 +490,7 @@
       "type": "pdm_output",
       "label": "MP7 — Coolsuit Pump",
       "output_tier": "MP",
-      "pdm_pins": ["A8"],
+      "pdm_pins": ["B8"],
       "mode": "OVC Protected",
       "current_limit_a": 10,
       "trigger": "Ch10 AND SafeIgnition"
@@ -500,7 +500,7 @@
       "type": "pdm_output",
       "label": "LP1 — ECU Power (Haltech Elite 2500)",
       "output_tier": "LP",
-      "pdm_pins": ["A14"],
+      "pdm_pins": ["B14"],
       "mode": "OVC Protected",
       "current_limit_a": 10,
       "trigger": "SafeIgnition"
@@ -510,7 +510,7 @@
       "type": "pdm_output",
       "label": "LP2 — AIM Dash Power",
       "output_tier": "LP",
-      "pdm_pins": ["A15"],
+      "pdm_pins": ["B15"],
       "mode": "OVC Protected",
       "current_limit_a": 10,
       "trigger": "SafeIgnition"
@@ -520,7 +520,7 @@
       "type": "pdm_output",
       "label": "LP3 — SmartyCam Power",
       "output_tier": "LP",
-      "pdm_pins": ["A16"],
+      "pdm_pins": ["B16"],
       "mode": "OVC Protected",
       "current_limit_a": 10,
       "trigger": "SafeIgnition"
@@ -530,7 +530,7 @@
       "type": "pdm_output",
       "label": "LP4 — GPS Module Power",
       "output_tier": "LP",
-      "pdm_pins": ["A17"],
+      "pdm_pins": ["B17"],
       "mode": "OVC Protected",
       "current_limit_a": 10,
       "trigger": "SafeIgnition"
@@ -540,7 +540,7 @@
       "type": "pdm_output",
       "label": "LP5 — Wideband O2 Power",
       "output_tier": "LP",
-      "pdm_pins": ["A18"],
+      "pdm_pins": ["B18"],
       "mode": "OVC Protected",
       "current_limit_a": 10,
       "trigger": "SafeIgnition"
@@ -550,7 +550,7 @@
       "type": "pdm_output",
       "label": "LP6 — OEM Cluster Power",
       "output_tier": "LP",
-      "pdm_pins": ["A19"],
+      "pdm_pins": ["B19"],
       "mode": "OVC Protected",
       "current_limit_a": 10,
       "trigger": "SafeIgnition"
@@ -560,7 +560,7 @@
       "type": "pdm_output",
       "label": "LP7 — Warning LED",
       "output_tier": "LP",
-      "pdm_pins": ["A20"],
+      "pdm_pins": ["B20"],
       "mode": "OVC Protected",
       "current_limit_a": 5,
       "trigger": "MULTI_WARNING = (oil P low) OR (ECT high) OR (oil T high) OR (fuel P low)"
@@ -570,7 +570,7 @@
       "type": "pdm_output",
       "label": "LP8 — Alternator Exciter",
       "output_tier": "LP",
-      "pdm_pins": ["A21"],
+      "pdm_pins": ["B21"],
       "mode": "OVC Protected",
       "current_limit_a": 5,
       "trigger": "SafeIgnition",
@@ -642,7 +642,7 @@
       "avi_channel": 8,
       "haltech_pin": "26-pin pin 4 (V)",
       "signal": "0–5V (7.35–22.39 AFR)",
-      "power_from": "pdm-LP5 (A18)",
+      "power_from": "pdm-LP5 (B18)",
       "notes": "LM2 Analog Out 1: Lime Green (+), Yellow (−). Cable 3811. Cockpit run only."
     },
     {
@@ -666,7 +666,7 @@
       "pin_A": "GND (engine block)",
       "pin_B": "Trigger → Haltech 34-pin pin 3 (IGN1)",
       "pin_C": "Feedback (leave open)",
-      "pin_D": "12V → PDM MP2 (A3)",
+      "pin_D": "12V → PDM MP2 (B3)",
       "docs": "hardware/sensors/cop-ignition.md"
     }
 
@@ -674,12 +674,12 @@
 
   "edges": [
 
-    { "source": "pdm-connB-pin23",  "target": "pdm-aim32",       "rel": "input_to" },
-    { "source": "pdm-connB-pin21",  "target": "pdm-aim32",       "rel": "input_to" },
-    { "source": "pdm-connB-pin28",  "target": "pdm-aim32",       "rel": "input_to" },
+    { "source": "pdm-connG-pin23",  "target": "pdm-aim32",       "rel": "input_to" },
+    { "source": "pdm-connG-pin26",  "target": "pdm-aim32",       "rel": "input_to" },
+    { "source": "pdm-connG-pin21",  "target": "pdm-aim32",       "rel": "input_to" },
 
     { "source": "pdm-aim32", "target": "pdm-HP1",  "rel": "drives" },
-    { "source": "pdm-aim32", "target": "pdm-HP2",  "rel": "drives" },
+    { "source": "pdm-aim32", "target": "pdm-HB1",  "rel": "drives" },
     { "source": "pdm-aim32", "target": "pdm-HP3",  "rel": "drives" },
     { "source": "pdm-aim32", "target": "pdm-MP1",  "rel": "drives" },
     { "source": "pdm-aim32", "target": "pdm-MP2",  "rel": "drives" },
@@ -707,9 +707,9 @@
     { "source": "pdm-MP6",  "target": "comp-wiper-motor",    "rel": "powered_by", "context": "Wiper motor high speed" },
     { "source": "pdm-HP3",  "target": "comp-fuel-pressure-regulator", "rel": "powered_by", "context": "Powers in-tank fuel pump" },
 
-    { "source": "ecu-26pin-23",  "target": "pdm-aim32", "rel": "signals_to", "context": "CAN ECU H @ 500 kbps → PDM A30" },
-    { "source": "ecu-26pin-24",  "target": "pdm-aim32", "rel": "signals_to", "context": "CAN ECU L @ 500 kbps → PDM A31" },
-    { "source": "ecu-34pin-13",  "target": "pdm-connB-pin23", "rel": "spliced_from", "note": "Same IGN switch feeds both ECU pin 13 and PDM B23" },
+    { "source": "ecu-26pin-23",  "target": "pdm-aim32", "rel": "signals_to", "context": "CAN ECU H @ 500 kbps → PDM B30" },
+    { "source": "ecu-26pin-24",  "target": "pdm-aim32", "rel": "signals_to", "context": "CAN ECU L @ 500 kbps → PDM B31" },
+    { "source": "ecu-34pin-13",  "target": "pdm-connG-pin23", "rel": "spliced_from", "note": "Same IGN switch feeds both ECU pin 13 and PDM G23" },
 
     { "source": "sensor-lowdoller-fuel",    "target": "ecu-26pin-13", "rel": "signals_to", "context": "Pressure (0.5–4.5V ratiometric)" },
     { "source": "sensor-lowdoller-fuel",    "target": "ecu-34pin-16", "rel": "signals_to", "context": "Temp (PTC resistive)" },
@@ -723,9 +723,9 @@
 
     { "source": "sensor-cop-coil-1", "target": "ecu-34pin-3", "rel": "triggered_by", "context": "Pin B of COP coil ← IGN1" },
 
-    { "source": "pdm-aim32",      "target": "ecu-haltech-2500",  "rel": "can_receives",  "bus": "CAN ECU",  "speed_kbps": 500,  "pdm_pins": "A30/A31", "signals": ["RPM", "ECT", "Oil P", "Oil T", "Fuel P", "TPS", "gear"] },
-    { "source": "pdm-aim32",      "target": "aim-datahub-4way",  "rel": "expansion_bus", "bus": "CAN AiM",  "speed_kbps": 1000, "pdm_pins": "A22/A11" },
-    { "source": "pdm-aim32",      "target": "keypad-aim12",      "rel": "can_receives",  "bus": "CAN2",     "speed_kbps": 125,  "pdm_pins": "A28/A29", "status": "not_connected" },
+    { "source": "pdm-aim32",      "target": "ecu-haltech-2500",  "rel": "can_receives",  "bus": "CAN ECU",  "speed_kbps": 500,  "pdm_pins": "B30/B31", "signals": ["RPM", "ECT", "Oil P", "Oil T", "Fuel P", "TPS", "gear"] },
+    { "source": "pdm-aim32",      "target": "aim-datahub-4way",  "rel": "expansion_bus", "bus": "CAN AiM",  "speed_kbps": 1000, "pdm_pins": "B22/B11" },
+    { "source": "pdm-aim32",      "target": "keypad-aim12",      "rel": "can_receives",  "bus": "CAN2",     "speed_kbps": 125,  "pdm_pins": "B28/B29", "status": "not_connected" },
     { "source": "pdm-aim32",      "target": "dash-aim10",        "rel": "lvds_drives",   "interface": "LVDS 4-pin Rosenberger" },
     { "source": "aim-datahub-4way", "target": "aim-gps08",      "rel": "device_port",   "port": 1 },
     { "source": "aim-datahub-4way", "target": "aim-smartycam",  "rel": "device_port",   "port": 2 },
@@ -736,24 +736,24 @@
 
   "quick_lookup": {
     "pdm_outputs": {
-      "HP1": { "id": "pdm-HP1", "pins": ["A1", "A13"],  "load": "Starter" },
-      "HP2": { "id": "pdm-HP2", "pins": ["A12", "A23"], "load": "Fan (PWM)" },
-      "HP3": { "id": "pdm-HP3", "pins": ["A24", "A25"], "load": "Fuel pump" },
-      "MP1": { "id": "pdm-MP1", "pins": ["A2"],  "load": "Injector power" },
-      "MP2": { "id": "pdm-MP2", "pins": ["A3"],  "load": "COP coil power" },
-      "MP3": { "id": "pdm-MP3", "pins": ["A4"],  "load": "Wiper Low" },
-      "MP4": { "id": "pdm-MP4", "pins": ["A5"],  "load": "Brake lights" },
-      "MP5": { "id": "pdm-MP5", "pins": ["A6"],  "load": "Tail lights" },
-      "MP6": { "id": "pdm-MP6", "pins": ["A7"],  "load": "Wiper High" },
-      "MP7": { "id": "pdm-MP7", "pins": ["A8"],  "load": "Coolsuit" },
-      "LP1": { "id": "pdm-LP1", "pins": ["A14"], "load": "ECU power" },
-      "LP2": { "id": "pdm-LP2", "pins": ["A15"], "load": "Dash power (LVDS)" },
-      "LP3": { "id": "pdm-LP3", "pins": ["A16"], "load": "SmartyCam power" },
-      "LP4": { "id": "pdm-LP4", "pins": ["A17"], "load": "GPS-08 power (via Data Hub)" },
-      "LP5": { "id": "pdm-LP5", "pins": ["A18"], "load": "Wideband O2" },
-      "LP6": { "id": "pdm-LP6", "pins": ["A19"], "load": "OEM cluster" },
-      "LP7": { "id": "pdm-LP7", "pins": ["A20"], "load": "Warning LED" },
-      "LP8": { "id": "pdm-LP8", "pins": ["A21"], "load": "Alternator Exciter" }
+      "HP1": { "id": "pdm-HP1", "pins": ["B1", "B13"],  "load": "Starter" },
+      "HB1": { "id": "pdm-HB1", "pins": ["G1", "G2"],  "load": "Fan (PWM)" },
+      "HP3": { "id": "pdm-HP3", "pins": ["B24", "B25"], "load": "Fuel pump" },
+      "MP1": { "id": "pdm-MP1", "pins": ["B2"],  "load": "Injector power" },
+      "MP2": { "id": "pdm-MP2", "pins": ["B3"],  "load": "COP coil power" },
+      "MP3": { "id": "pdm-MP3", "pins": ["B4"],  "load": "Horn" },
+      "MP4": { "id": "pdm-MP4", "pins": ["B5"],  "load": "Brake lights" },
+      "MP5": { "id": "pdm-MP5", "pins": ["B6"],  "load": "Tail lights" },
+      "MP6": { "id": "pdm-MP6", "pins": ["B7"],  "load": "Headlights" },
+      "MP7": { "id": "pdm-MP7", "pins": ["B8"],  "load": "Coolsuit" },
+      "LP1": { "id": "pdm-LP1", "pins": ["B14"], "load": "ECU power" },
+      "LP2": { "id": "pdm-LP2", "pins": ["B15"], "load": "Dash power (LVDS)" },
+      "LP3": { "id": "pdm-LP3", "pins": ["B16"], "load": "SmartyCam power" },
+      "LP4": { "id": "pdm-LP4", "pins": ["B17"], "load": "GPS-08 power (via Data Hub)" },
+      "LP5": { "id": "pdm-LP5", "pins": ["B18"], "load": "Wideband O2" },
+      "LP6": { "id": "pdm-LP6", "pins": ["B19"], "load": "OEM cluster" },
+      "LP7": { "id": "pdm-LP7", "pins": ["B20"], "load": "Warning LED" },
+      "LP8": { "id": "pdm-LP8", "pins": ["B21"], "load": "Alternator Exciter" }
     },
     "avi_assignments": {
       "AVI1":  "Fuel pressure    — 26-pin pin 13 (GY/Y shielded)",
@@ -772,7 +772,7 @@
         "aim_label": "CAN AiM",
         "internal_label": "CAN0",
         "speed_kbps": 1000,
-        "pdm_pins": { "H": "A22", "L": "A11" },
+        "pdm_pins": { "H": "B22", "L": "B11" },
         "devices": ["AIM Data Hub → GPS-08", "AIM Data Hub → SmartyCam"],
         "rs3_tab": "SmartyCam Stream / Channels tab",
         "notes": "AIM expansion bus. Always-on. GPS-08 auto-broadcasts. Do NOT connect keypad here."
@@ -781,7 +781,7 @@
         "aim_label": "CAN ECU",
         "internal_label": "CAN1",
         "speed_kbps": 500,
-        "pdm_pins": { "H": "A30", "L": "A31" },
+        "pdm_pins": { "H": "B30", "L": "B31" },
         "haltech_pins": { "H": "26-pin pin 23 (W)", "L": "26-pin pin 24 (L)" },
         "devices": ["Haltech Elite 2500"],
         "rs3_tab": "ECU Stream"
@@ -790,7 +790,7 @@
         "aim_label": "CAN2",
         "internal_label": "CAN2",
         "speed_kbps": 125,
-        "pdm_pins": { "H": "A28", "L": "A29" },
+        "pdm_pins": { "H": "B28", "L": "B29" },
         "devices": [],
         "rs3_tab": "CAN2 Keypad",
         "status": "unused — available for future keypad or CAN device"

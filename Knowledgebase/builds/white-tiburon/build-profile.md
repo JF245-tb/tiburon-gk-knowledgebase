@@ -81,12 +81,12 @@ All combo sensors: 0.5–4.5V pressure + PTC resistive temp (5-wire: red/black/y
 
 **Kill switch:** 4-pole OMP kill switch, left of steering wheel.
 - **Large poles:** 2 AWG battery cable → kill switch → 150A breaker → starter B+ / alternator B+ AND 4 AWG → 120A breaker → PDM Surlok (+)
-- **Small poles:** Jumpered from battery side large terminal. Output side → IGN toggle switch → PDM Conn B pin 23 (IGN input) + Haltech 34-pin pin 13 (ECU IGN enable)
+- **Small poles:** Jumpered from battery side large terminal. Output side → IGN toggle switch → PDM Grey Connector pin G23 (IGN input) + Haltech 34-pin pin 13 (ECU IGN enable)
 - Kill switch OFF = all 4 poles open = everything dies instantly (PDM, ECU, alternator field, starter)
 
-**PDM Surlok:** 4 AWG from kill switch large terminal B → 120A breaker → PDM Surlok (+). PDM ground lugs (B13, B14, B18) to chassis.
+**PDM Surlok:** 4 AWG from kill switch large terminal B → 120A breaker → PDM Surlok (+). PDM ground lugs (G13, G14, G18) to chassis.
 
-**Alternator exciter:** OEM D+ field wire cut and routed through PDM LP8 (A21). SafeIgnition trigger — kill switch drops field immediately.
+**Alternator exciter:** OEM D+ field wire cut and routed through PDM LP8 (B21). SafeIgnition trigger — kill switch drops field immediately.
 
 ### Mounting
 - PDM, Haltech Elite 2500, Podium Micro (SN: 1QTV5KM), Innovate LM2 all mounted on a plate in the **passenger footwell**
@@ -95,14 +95,14 @@ All combo sensors: 0.5–4.5V pressure + PTC resistive temp (5-wire: red/black/y
 
 ### Ignition & Switches
 - **Physical switch panel** with 7 latching toggles + 1 momentary starter + warning LED
-- **Ignition switch:** Dedicated latching toggle — goes to PDM Conn B pin 23 (Ignition input) AND Haltech 34-pin pin 13 (ECU IGN enable). Turns engine off without cutting PDM/battery power.
-- **Start switch:** Momentary push button — PDM Ch01 (B26). Gated by ignition and RPM interlock.
-- **Fan Low:** Latching toggle — PDM Ch02 (B27). Forces fan to ~50% duty.
-- **Fan High:** Latching toggle — PDM Ch03 (B28). Forces fan to 98% duty.
-- **Wiper Low:** Latching toggle — PDM Ch05 (B30). Wiper motor low speed (future).
-- **Wiper High:** Latching toggle — PDM Ch06 (B31). Wiper motor high speed (future).
-- **Coolsuit:** Latching toggle — PDM Ch10 (B22). Coolsuit pump on/off.
-- **Defogger:** Latching toggle — PDM Ch11 (A26). Rear window defogger.
+- **Ignition switch:** Dedicated latching toggle — goes to PDM Grey Connector pin G23 (Ignition input) AND Haltech 34-pin pin 13 (ECU IGN enable). Turns engine off without cutting PDM/battery power.
+- **Start switch:** Momentary push button — PDM Ch01 (G26). Gated by ignition and RPM interlock.
+- **Fan Low:** Latching toggle — PDM Ch02 (G27). Forces fan to ~50% duty.
+- **Fan High:** Latching toggle — PDM Ch03 (G28). Forces fan to 98% duty.
+- **Wiper Low:** Latching toggle — PDM Ch05 (G30). Wiper motor low speed (future).
+- **Wiper High:** Latching toggle — PDM Ch06 (G31). Wiper motor high speed (future).
+- **Coolsuit:** Latching toggle — PDM Ch10 (G22). Coolsuit pump on/off.
+- **Defogger:** Latching toggle — PDM Ch11 (B26). Rear window defogger.
 - **CAN keypad not installed** — all controls are physical switches. Keypad config preserved in `guides/keypad-config-future.md`.
 - OEM ignition cylinder **removed** from loop.
 

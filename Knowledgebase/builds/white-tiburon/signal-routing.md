@@ -118,9 +118,9 @@ See `cars/cop-ignition.md` for full coil pinout (A/B/C/D), wiring diagram, and p
 
 | Signal | From Pin | To Device | To Pin | Wire | Protocol | Notes |
 |--------|----------|-----------|--------|------|----------|-------|
-| CAN H | Haltech 26-pin pin 23 | AIM PDM (CAN0) | PDM Connector A pin 22 | W (white) | ISO 11898, 500 kbps | ✅ Haltech broadcasts RPM, coolant temp, throttle, etc. |
-| CAN L | Haltech 26-pin pin 24 | AIM PDM (CAN0) | PDM Connector A pin 11 | L (blue) | | ✅ PDM uses CAN data for: fuel pump RPM trigger, fan temp trigger |
-| CAN H (PDM → dash) | PDM Connector A pin 22 | AIM 10" Dash | — | — | | ⚠️ AIM dash may daisy-chain from PDM or use its own CAN port |
+| CAN H | Haltech 26-pin pin 23 | AIM PDM (CAN1) | PDM Black Connector B30 | W (white) | ISO 11898, 500 kbps | ✅ Haltech broadcasts RPM, coolant temp, throttle, etc. |
+| CAN L | Haltech 26-pin pin 24 | AIM PDM (CAN1) | PDM Black Connector B31 | L (blue) | | ✅ PDM uses CAN data for: fuel pump RPM trigger, fan temp trigger |
+| CAN H (PDM → dash) | PDM Black Connector B22 | AIM 10" Dash | — | — | | ⚠️ AIM dash may daisy-chain from PDM or use its own CAN port |
 | CAN H (PDM → GPS) | PDM CAN | AIM GPS | — | — | | 🔲 GPS adds lap timing |
 | CAN H (PDM → Smartycam) | PDM CAN | AIM Smartycam | — | — | | 🔲 Smartycam overlays data on video |
 | CAN H (PDM → Podium) | PDM CAN | AIM Podium | — | — | | 🔲 Podium = telemetry uplink |
@@ -220,17 +220,17 @@ All driver controls use a physical switch panel — no CAN keypad in this build.
 
 | PDM Pin | Function | Type | Notes |
 |---------|----------|------|-------|
-| **Conn B pin 23** (Ignition) | Ignition toggle switch | Latching, 12V when ON | Master PDM power state; source for `SafeIgnition`. Also spliced to Haltech 34-pin pin 13 (P, purple) — ECU IGN enable. Engine off without cutting battery. ✅ |
-| **Ch01 — B26** | Start button | Momentary, active = GND | Crank engine — gated by ignition and RPM interlock 🔲 |
-| **Ch02 — B27** | Fan Low override toggle | Latching, 12V when ON | Manual fan low speed override 🔲 |
-| **Ch03 — B28** | Fan High override toggle | Latching, 12V when ON | Manual fan high speed override 🔲 |
-| **Ch04 — B29** | Headlights toggle | Latching, 12V when ON | Headlights 🔲 |
-| **Ch05 — B30** | Wiper Low toggle | Latching, 12V when ON | Wiper motor low speed 🔲 |
-| **Ch06 — B31** | Wiper High toggle | Latching, 12V when ON | Wiper motor high speed (overrides low) 🔲 |
-| **Ch09 — B21** | Brake light switch | Momentary, closed on press | Always active, independent of ignition 🔲 |
-| **Ch10 — B22** | Coolsuit pump on/off | Latching, 12V when ON | 🔲 |
-| **Ch11 — A26** | Defogger toggle | Latching, 12V when ON | Rear window defogger 🔲 |
-| **Ch12 — A27** | Horn button | Momentary, active = GND | Horn 🔲 |
+| **Grey Connector G23** (Ignition) | Ignition toggle switch | Latching, 12V when ON | Master PDM power state; source for `SafeIgnition`. Also spliced to Haltech 34-pin pin 13 (P, purple) — ECU IGN enable. Engine off without cutting battery. ✅ |
+| **Ch01 — G26** | Start button | Momentary, active = GND | Crank engine — gated by ignition and RPM interlock 🔲 |
+| **Ch02 — G27** | Fan Low override toggle | Latching, 12V when ON | Manual fan low speed override 🔲 |
+| **Ch03 — G28** | Fan High override toggle | Latching, 12V when ON | Manual fan high speed override 🔲 |
+| **Ch04 — G29** | Headlights toggle | Latching, 12V when ON | Headlights 🔲 |
+| **Ch05 — G30** | Wiper Low toggle | Latching, 12V when ON | Wiper motor low speed 🔲 |
+| **Ch06 — G31** | Wiper High toggle | Latching, 12V when ON | Wiper motor high speed (overrides low) 🔲 |
+| **Ch09 — G21** | Brake light switch | Momentary, closed on press | Always active, independent of ignition 🔲 |
+| **Ch10 — G22** | Coolsuit pump on/off | Latching, 12V when ON | 🔲 |
+| **Ch11 — B26** | Defogger toggle | Latching, 12V when ON | Rear window defogger 🔲 |
+| **Ch12 — B27** | Horn button | Momentary, active = GND | Horn 🔲 |
 
 **CAN2 bus unused** — available for future CAN keypad or other device. Ch07, Ch08 available for future inputs.
 
@@ -240,28 +240,28 @@ All driver controls use a physical switch panel — no CAN keypad in this build.
 
 | Output | PDM Pins | Name | Trigger | Load Notes |
 |--------|----------|------|---------|------------|
-| HP1 | A1 + A13 | Starter | `STARTER_SAFE` = Ch01 AND IGN AND NOT RPM | Inductive; HP1 has internal series diode |
-| HP2 | A12 + A23 | Fan | ECT 4-band PWM 77–92°C + Ch02 low / Ch03 high override | 100Hz; freewheeling diode |
-| HP3 | A24 + A25 | Fuel Pump | 3s prime OR RPM > 50 | Inductive; freewheeling diode |
-| MP1 | A2 | Injector Power | `SafeIgnition` | → Injector rail + Haltech 34-pin pin 26 (R/L) |
-| MP2 | A3 | Coil Power | `SafeIgnition` | → Pin D, all 6 Toyota 90919-A2005 COPs |
-| MP3 | A4 | Horn | Ch12 | — |
-| MP4 | A5 | Brake Lights | Ch09 direct (brake switch) | — |
-| MP5 | A6 | Tail Lights | `SafeIgnition` (always on when car is on) | — |
-| MP6 | A7 | Headlights | Ch04 AND SafeIgnition | — |
-| MP7 | A8 | Coolsuit | Ch10 AND SafeIgnition | Inductive |
-| MP8 | A9 | Defogger | Ch11 AND SafeIgnition | Resistive heating element |
-| MP9 | B4 | Wiper Low | Ch05 AND NOT Ch06 AND SafeIgnition | Inductive (wiper motor) |
-| MP10 | B5 | Wiper High | Ch06 AND SafeIgnition | Inductive (wiper motor) |
-| LP9 | B3 | Wiper Park | WIPER_PARKING AND SafeIgnition | Park sweep — Brown wire |
-| LP1 | A14 | ECU Power | `SafeIgnition` | → Haltech 26-pin pin 11 (R/W, 13.8V) |
-| LP2 | A15 | Dash | `SafeIgnition` | AIM 10" dash |
-| LP3 | A16 | SmartyCam | `SafeIgnition` | — |
-| LP4 | A17 | GPS | `SafeIgnition` | — |
-| LP5 | A18 | Wideband | `SafeIgnition` | Innovate LM2 power |
-| LP6 | A19 | Cluster | `SafeIgnition` | OEM instrument cluster |
-| LP7 | A20 | Warning LED | `MULTI_WARNING` | Low oil P / high ECT / high oil T / low fuel P |
-| LP8 | A21 | AltExciter | `SafeIgnition` | OEM alternator D+ field wire routed through LP8; kill switch drops field immediately; < 1A draw |
+| HP1 | B1 + B13 | Starter | `STARTER_SAFE` = Ch01 AND IGN AND NOT RPM | Inductive; HP1 has internal series diode |
+| HB1 | G1 + G2 | Fan | ECT 4-band PWM 77–92°C + Ch02 low / Ch03 high override | 100Hz; Half Bridge 35A; freewheeling diode |
+| HP3 | B24 + B25 | Fuel Pump | 3s prime OR RPM > 50 | Inductive; freewheeling diode |
+| MP1 | B2 | Injector Power | `SafeIgnition` | → Injector rail + Haltech 34-pin pin 26 (R/L) |
+| MP2 | B3 | Coil Power | `SafeIgnition` | → Pin D, all 6 Toyota 90919-A2005 COPs |
+| MP3 | B4 | Horn | Ch12 | — |
+| MP4 | B5 | Brake Lights | Ch09 direct (brake switch) | — |
+| MP5 | B6 | Tail Lights | `SafeIgnition` (always on when car is on) | — |
+| MP6 | B7 | Headlights | Ch04 AND SafeIgnition | — |
+| MP7 | B8 | Coolsuit | Ch10 AND SafeIgnition | Inductive |
+| MP8 | B9 | Defogger | Ch11 AND SafeIgnition | Resistive heating element |
+| MP9 | G4 | Wiper Low | Ch05 AND NOT Ch06 AND SafeIgnition | Inductive (wiper motor) |
+| MP10 | G5 | Wiper High | Ch06 AND SafeIgnition | Inductive (wiper motor) |
+| LP9 | G3 | Wiper Park | WIPER_PARKING AND SafeIgnition | Park sweep — Brown wire |
+| LP1 | B14 | ECU Power | `SafeIgnition` | → Haltech 26-pin pin 11 (R/W, 13.8V) |
+| LP2 | B15 | Dash | `SafeIgnition` | AIM 10" dash |
+| LP3 | B16 | SmartyCam | `SafeIgnition` | — |
+| LP4 | B17 | GPS | `SafeIgnition` | — |
+| LP5 | B18 | Wideband | `SafeIgnition` | Innovate LM2 power (LP5 max 2A) |
+| LP6 | B19 | Cluster | `SafeIgnition` | OEM instrument cluster |
+| LP7 | B20 | Warning LED | `MULTI_WARNING` | Low oil P / high ECT / high oil T / low fuel P |
+| LP8 | B21 | AltExciter | `SafeIgnition` | OEM alternator D+ field wire routed through LP8; kill switch drops field immediately; < 1A draw |
 
 > **MP1/MP2 temporary usage (Phase 1 — stock ECU):** While running on the stock ECU, MP1 and MP2 are wired to the OE main relay socket pin 87 (pull the relay). This provides switched 12V to the stock ECU and its loads whenever SafeIgnition is active. When switching to Haltech, reroute MP1 → injector rail and MP2 → COP coil power bus. No Race Studio config change needed — trigger is `SafeIgnition` in both phases.
 >
