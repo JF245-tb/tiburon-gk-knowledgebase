@@ -29,7 +29,8 @@
 - **6AN PTFE hoses** to replace soft fuel lines (ready to install)
 
 ### ECU & Electronics
-- **Haltech Elite 2500** ECU — currently being installed
+- **Currently running stock Siemens ECU** — Haltech Elite 2500 not yet active
+- **Haltech Elite 2500** ECU — installed but not yet running the car
   - 26-pin main connector (see `/Knowledgebase/haltech/main-connector-26-pin-elite2500.md`)
   - 34-pin main connector (see `/Knowledgebase/haltech/main-connector-34-pin-elite2500.md`)
   - Wiring diagram: `/Knowledgebase/haltech/elite-2500-wiring-diagram---rev-6.md`
@@ -45,7 +46,7 @@ Full signal routing: `builds/white-tiburon/signal-routing.md`
 **Combo pressure/temp sensors (Lowdoller, 2 AVI each):**
 - **Fuel:** PN 899404 (150 PSI / 500°F, 1/8" NPT) → AVI 1 + AVI 2 — on return line via line tap w/ hose barbs
 - **Oil:** PN 899404 (150 PSI / 500°F, 1/8" NPT) → AVI 3 + AVI 4 — direct mount to engine
-- **Coolant:** LDM899TP100 (100 PSI / 500°F, M12x1.5) → AVI 5 + AVI 6 — confirm thread fits manifold
+- **Coolant:** LDM899TP100 (100 PSI / 500°F, M12x1.5) → AVI 5 + AVI 6 — installed
 
 **Single-channel sensors:**
 - **IAT:** Intake air temp → AVI 7 (26-pin pin 3, Haltech default)
@@ -72,9 +73,8 @@ All combo sensors: 0.5–4.5V pressure + PTC resistive temp (5-wire: red/black/y
 ## Electrical
 
 ### AIM PDM 32
-- **AIM PDM 32** — currently being installed
-- **AIM 10" dash** — being installed alongside PDM
-- PDM came with its own harness (currently being labeled)
+- **AIM PDM 32** — installed
+- **AIM 10" dash** — installed alongside PDM
 - Pinout: `/Knowledgebase/aim-pdm/pdm-pinout.md`
 
 ### Power & Grounding
@@ -173,10 +173,10 @@ All combo sensors: 0.5–4.5V pressure + PTC resistive temp (5-wire: red/black/y
 ### Service History
 | Date | Work Performed | Notes |
 |------|---------------|-------|
-| In progress | Haltech Elite 2500 install | Bench testing underway — cam/crank confirmed, knock next |
-| In progress | AIM PDM 32 + 10" dash install | PDM on spade connectors in fuse box (pin 87) for bench logic testing |
+| In progress | Haltech Elite 2500 install | Installed but not yet running the car — still on stock ECU |
+| Installed | AIM PDM 32 + 10" dash | Installed and operational |
 | Planned | Radium FPR + 6AN PTFE fuel lines | Parts ready |
-| Planned | Lowdoller combo temp/pressure sensors | Fuel (AVI 1+2), oil (AVI 3+4), coolant (AVI 5+6). Brake + trans = future expansion |
+| Installed | Lowdoller combo temp/pressure sensors | Fuel (AVI 1+2), oil (AVI 3+4), coolant (AVI 5+6) — all installed. Brake + trans = future expansion |
 | Confirmed | Coil-on-plug conversion | Toyota 90919-A2005 ×6 — see `cars/cop-ignition.md` |
 
 ---
@@ -186,7 +186,7 @@ All combo sensors: 0.5–4.5V pressure + PTC resistive temp (5-wire: red/black/y
 - **Heim pin fitment for custom control arms** — no off-the-shelf pin fits Tiburon knuckle; current pins reamed to fit; need to find/make correct size
 - **Rear bank header bend** — problematic bend, want to straighten or replace eventually
 - **REM-less Haltech build** — repurposing REM harness without the REM unit
-- **Haltech/PDM/Dash integration** — bench testing phase: cam/crank signals verified, knock sensor next; PDM connected via fuse box spade connectors for logic testing alongside stock ECU
+- **Haltech ECU switchover** — Haltech installed but car still running on stock Siemens ECU; PDM and sensors are installed and operational
 
 ---
 
