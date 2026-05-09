@@ -99,6 +99,81 @@ The two bores are **not the same taper** — don't assume interchangeability whe
 
 ---
 
+---
+
+## Verification Plan
+
+### Why calipers aren't enough
+
+Measuring inside a tapered blind hole with calipers introduces error because the jaw tips don't seat consistently at the same depth on each reading. Measured error vs. predicted values for known tapers is ~0.14–0.38mm — enough to mistake a 1:8 for a 1:10. The methods below eliminate that ambiguity.
+
+### Option 1 — OEM stud measurement (do this first)
+
+Buy the MOOG replacement parts. The tapered shank is external and easy to measure accurately at multiple points with calipers. This gives you the OEM taper from the part itself without needing precision gauges.
+
+| Part | Expected MOOG P/N | Cost est. |
+|------|------------------|-----------|
+| Lower arm ball joint | K90349 (verify fitment for 2003 GK V6) | ~$20–35 |
+| Tie rod end (outer) | ES3493 or similar (verify) | ~$15–25 |
+
+Measure the stud at the top and bottom of the tapered section and calculate the same way as the bore measurements. Cross-check against the two candidate standards.
+
+### Option 2 — Taper plug gauges + Prussian blue
+
+Precision-ground plugs at exact taper ratios. Coat with Prussian blue / layout dye, insert into bore, rotate 1/4 turn, pull. Uniform dye removal = correct taper. One-sided contact = wrong ratio.
+
+Buy the two bracketing candidates for each bore:
+
+| Bore | Gauge 1 | Gauge 2 | Why |
+|------|---------|---------|-----|
+| Ball joint | 1:10 | 1:8 | Measured 6.11° sits between them |
+| Tie rod end | 1:6 | 1:7 | Measured 8.99° sits between them |
+
+Source: MSC Industrial, McMaster-Carr, Travers Tool. ~$25–60 per gauge. A set of all 4 = ~$100–200.
+
+### Option 3 — Telescoping bore gauge + outside micrometer
+
+Telescoping gauges seat flat at a controlled depth and give a true internal diameter at that specific point. Measure at the top, middle, and bottom of each bore, then recalculate the taper. Tightens error to ±0.05mm vs ±0.3mm+ with calipers.
+
+Decent Starrett or Mitutoyo telescoping set: $60–100. Requires an outside micrometer to read.
+
+### Recommended sequence
+
+1. **Buy the MOOG parts** — cheapest, fastest, you need them anyway
+2. **Measure the OEM studs** externally with calipers — should be definitive for the ball joint
+3. **If tie rod stud is still ambiguous**, buy the 1:6 and 1:7 taper plug gauges and test with Prussian blue
+
+---
+
+## Cross-Platform Reference
+
+### Same-platform candidates (highest confidence)
+
+These share the GK/EF-era Hyundai corporate suspension platform and are most likely to use the same taper specs:
+
+| Vehicle | Notes |
+|---------|-------|
+| Hyundai Elantra XD (2001–2006) | Same corporate generation, MacPherson front |
+| Kia Spectra (2004–2009) | Corporate sibling |
+| Kia Optima / Magentis (2001–2006) | EF-derived platform |
+| Hyundai Sonata EF (1998–2005) | Platform predecessor, shares lower arm design |
+
+If a Tiburon GK ball joint stud matches an Elantra XD stud by measurement, that confirms the taper and opens up a much larger aftermarket parts pool for test fits.
+
+### Tie rod end — steeper taper (~1:6)
+
+The ~9° tie rod taper is steeper than most US domestic tie rod ends (which tend toward 7°–7.15°). Vehicles known to use steeper metric tie rod tapers that may be worth measuring for comparison:
+
+| Vehicle | Basis for suggestion |
+|---------|---------------------|
+| Honda Civic EK / CR-V RD (1996–2001) | Known to run steeper tie rod taper than US-market norm |
+| Mazda Protegé / 323 (BJ/BG gen) | Similar era JDM platform |
+| VW Golf / Jetta Mk4 (1999–2005) | European metric taper standards, steeper than SAE |
+
+> **Caveat:** The cross-platform suggestions above are based on platform and engineering lineage knowledge, not confirmed taper measurements. Treat as starting points for test-fits, not confirmed matches.
+
+---
+
 ## Related
 
 - `gk-chassis-specs.md` — platform overview, front MacPherson strut suspension
