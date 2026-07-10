@@ -64,8 +64,14 @@
 
     "injection": {
       "mode": "sequential",
-      "injector_flow_cc_min": null,
-      "injector_deadtime_ms": null
+      "injector_part_number": "Kefico 9260930004",
+      "injector_type": "EV6",
+      "injector_impedance_ohm": 14.2,
+      "injector_flow_cc_min": 194,
+      "injector_flow_reference_psi": 45,
+      "injector_flow_cc_min_at_43.5psi": 190,
+      "injector_deadtime_ms": null,
+      "_note": "Confirmed stock 2.0L/2.7L fitment per common/opengk/fuel-injectors.md (dead-time table available there, not yet transcribed here). Flow rate reference pressure matters: Radium FPR (not yet installed) targets 300 kPa / 43.5 psi; if running on the stock regulator (330-350 kPa / ~47-50 psi) for the pre-swap Haltech test, the 45 psi column is closer but still not exact — expect to retune once the Radium FPR is actually in."
     },
 
     "can_buses": {

@@ -59,11 +59,11 @@ Can happen anytime, and ideally happens *before* Group 4 (corner weighting) sinc
 - Adjust bump stops (same session as coilovers).
 - Rear sway bar link fix, informed by what the tab check above finds.
 
-### 2.5. Minimal coil + Haltech ignition test — de-risk on the current engine
+### 2.5. Minimal coil + fuel injection test — de-risk Haltech on the current engine
 
-**Decision made:** rather than the "don't touch the current engine" default from Group 3, validate Haltech-controlled COP ignition on the current, known-good engine first — kept deliberately minimal (ignition only, not fuel/AVI/harness), so it doesn't create much rework later. Full steps in **"Coil + Haltech Ignition — Minimal On-Engine Test"** above. This can happen in parallel with Group 1/2, anytime before the engine-out window.
+**Decision made:** rather than the "don't touch the current engine" default from Group 3, run Haltech in full control of **both ignition and fuel injection** on the current, known-good engine first — stock ECU unplugged entirely for this test. Full steps in **"Coil + Fuel Injection — Minimal Haltech On-Engine Test"** above. This can happen in parallel with Group 1/2, anytime before the engine-out window.
 
-Why this doesn't conflict with the "don't do engine-mounted work twice" logic in Group 3: the coils, their trigger wiring, and the CKP/CMP taps are cheap/fast to redo on the new engine (a few hours, not a full sensor-and-harness rebuild), and proving ignition control works before combining it with a brand-new, unrun engine build is worth that cost. The full AVI sensor suite, FPR/PTFE lines, and Deutsch harness are a much bigger redo cost — those stay deferred to Group 3.
+Why this doesn't conflict with the "don't do engine-mounted work twice" logic in Group 3: the coils, injector triggering, and the CKP/CMP taps are cheap/fast to redo on the new engine (a few hours, not a full rebuild) — worth proving Haltech can actually run the car before combining that with a brand-new, unrun engine. What's *still* deferred to Group 3 because it's expensive to redo: the full AVI sensor suite (oil/coolant/MAP/fuel pressure), the PTFE lines + Radium FPR (default is this test runs on the current engine's existing fuel delivery, not the new plumbing), and the production Deutsch harness. Base fuel map tuning done now will need revisiting once the Radium FPR changes the actual fuel pressure — expected, not wasted work.
 
 ### 3. Engine-out window — batch everything that needs the bay open or is engine-mounted
 
@@ -113,13 +113,15 @@ Parts are on hand ("ready to install" per `build-profile.md`). Full task detail 
 
 ---
 
-## Coil + Haltech Ignition — Minimal On-Engine Test (De-Risk Before Swap)
+## Coil + Fuel Injection — Minimal Haltech On-Engine Test (De-Risk Before Swap)
 
-**Decision:** validate COP coils + Haltech ignition control on the *current* engine first, kept as minimal as possible — not the full Phase 2 switchover (see Master Sequence, Group 2.5). Stock ECU keeps controlling fuel injection and everything else; only ignition moves to Haltech for this test. No AVI sensor wiring, no PDM output map changes beyond what's already there (MP2), no production Deutsch harness — hand-wire/temporary connections are fine since this gets redone properly during the engine swap anyway.
+**Decision:** validate Haltech running **both ignition and fuel injection** on the *current* engine first — not deferred to the new engine (see Master Sequence, Group 2.5). Stock ECU steps back from engine control entirely for this test; AVI sensors (oil/coolant/MAP/fuel pressure), the Deutsch production harness, and the PTFE lines/Radium FPR still stay deferred to the engine swap (Group 3) — see the default call below.
 
-> Per `hardware/sensors/cop-ignition.md`, COP coil firing has been bench-tested (coils sparking off the engine) but **not yet physically mounted on any engine** — this is that next step. Cam and crank signals to Haltech show ✅ in `signal-routing.md`, but confirm that's an actual in-car splice off the CKP/CMP sensors (not just the bench validation) before assuming it's done — it needs to feed Haltech *simultaneously* with the stock ECU, which still needs its own cam/crank signal to keep running fuel injection.
+> Per `hardware/sensors/cop-ignition.md`, COP coil firing has been bench-tested (coils sparking off the engine) but **not yet physically mounted on any engine** — this is that next step. Cam and crank signals to Haltech show ✅ in `signal-routing.md`, but confirm that's an actual in-car splice off the CKP/CMP sensors (not just the bench validation) before assuming it's done — it needs to feed Haltech *simultaneously* with the stock ECU's connections until they're fully unplugged below.
 
-- [ ] **Confirm/complete CKP + CMP taps to Haltech.** Splice into the existing sensor signal wires so Haltech gets its own read without disturbing the stock ECU's connection — 26-pin pins 1/5 (crank +/−) and 2/6 (cam +/−), per `signal-routing.md`.
+### Ignition
+
+- [ ] **Confirm/complete CKP + CMP taps to Haltech.** Splice into the existing sensor signal wires — 26-pin pins 1/5 (crank +/−) and 2/6 (cam +/−), per `signal-routing.md`.
 - [ ] **Remove OEM ignition module bracket + the 3 stock wasted-spark coils** (per `hardware/sensors/cop-ignition.md` → "Coil Mounting").
 - [ ] **Mount the 6 Toyota 90919-A2005 coils** into the plug wells — verify fit/seal per the same checklist, torque or retention clip.
 - [ ] **Wire the coils (temporary/hand-wired is fine for this test):**
@@ -127,12 +129,28 @@ Parts are on hand ("ready to install" per `build-profile.md`). Full task detail 
   - Pin D (12V, all 6, shared bus) → PDM MP2
   - Pin B (trigger, individual) → Haltech 34-pin pins 3–8 (IGN1–6)
   - Pin C (feedback) → leave open
-- [ ] **Set NSP config before first trigger:** Ignition mode = Sequential COP, Coil type = Smart coil, Dwell = ~2.1 ms. Do not leave at default wasted-spark dwell — smart coils have an internal igniter and wrong dwell will overheat/damage them.
+- [ ] **Set NSP ignition config before first trigger:** Ignition mode = Sequential COP, Coil type = Smart coil, Dwell = ~2.1 ms. Do not leave at default wasted-spark dwell — smart coils have an internal igniter and wrong dwell will overheat/damage them.
 - [ ] **Verify the firing order before wiring cylinder → IGN output.** The KB has 1-2-3-4-5-6 from `common/shop-manual/engine-mechanical/specifications.md`, but that value is flagged **unverified (⬜)** in the KB's own spot-check tracking — cross-check it against something physical before trusting it for coil sequencing.
-- [ ] **Stage A — spark check before attempting a start.** Crank the engine with fuel disabled (or plugs out) and verify with a timing light or spark tester that each coil fires in the correct sequence relative to TDC. This catches a wiring or firing-order mistake before risking a real start attempt.
-- [ ] **Stage B — first start attempt.** Haltech-controlled ignition + stock ECU fuel. Verify coil dwell/trigger with an oscilloscope on first startup per `cop-ignition.md`'s own warning. Confirm idle.
 
-> **Open risk, not yet resolved in the KB:** removing the stock ignition module/coils means the stock ECU no longer sees whatever ignition feedback it normally expects — whether the Siemens SIMK43 tolerates that gracefully (vs. throwing codes or entering limp mode while fuel injection is still needed from it) isn't documented here. Worth a quick check before Stage B, not just assumed fine.
+### Fuel
+
+- [ ] **Wire injectors to Haltech (temporary/hand-wired is fine for this test):**
+  - Injector power in (12V from injector relay/PDM) → Haltech 34-pin pin 26 (R/L) — **required**
+  - INJ 1–6 ground-side triggers → 34-pin pins 19, 20, 21, 22, 27, 28
+- [ ] **Reroute injector power from the stock main relay to Haltech-triggered supply** — this is the same MP1 reroute the old "NEXT WEEKEND — Phase 2" section describes (`MP1 (A2) → injector rail + 34-pin pin 26`); doing it now instead of later.
+- [ ] **Enter injector data in NSP:** stock injectors are Kefico 9260930004 (per `common/opengk/fuel-injectors.md`, confirmed 2.0L/2.7L stock fitment) — 194cc/min @ 45 psi, 190cc/min @ 43.5 psi, EV6, 14.2Ω, dead-time table available in the same file for calibration.
+- [ ] **Check what fuel pressure the current engine is actually running before trusting either flow number above.** The Radium FPR (still deferred — see below) targets 300±1.5 kPa / 43.5 psi to match the injector table's 43.5 psi column. If the current engine is still on the stock regulator (OEM spec 330–350 kPa / 47–50 psi per `common/shop-manual/fuel-system/specifications.md` FLA-3), use the 45 psi column instead, and expect to retune the base fuel map once the Radium FPR goes in later — that's an expected, cheap redo, not a sign something's wrong.
+- [ ] **Stock ECU fully out of the loop for this test:** unplug stock ECU connectors (C133-1–4) and BCM connector — leave both mounted, label for reversal. Pull MP1/MP2 spades from the OE main relay pin 87 socket now that Haltech drives both.
+
+> **Default call — flag if wrong:** this test runs on whatever fuel delivery hardware the current engine already has (stock regulator, presumably — the PTFE lines and Radium FPR are listed "ready to install" but not yet installed anywhere). The PTFE lines + Radium FPR mount stay deferred to the new engine in Group 3, since that's engine-mounted plumbing work that's expensive to redo, not cheap like the coil/injector wiring above. Say if you actually want the FPR/PTFE lines installed on the current engine now instead.
+
+### Test sequence
+
+- [ ] **Stage A — spark + injector pulse check before attempting a start.** Crank with fuel disabled (or plugs out) and confirm each coil fires in correct sequence via timing light/spark tester; separately confirm injector pulse (noid light or multimeter) fires in the right order relative to TDC. Catches wiring/firing-order/injector-sequence mistakes before a real start attempt.
+- [ ] **Stage B — first start attempt.** Full Haltech control: ignition + fuel. Verify coil dwell/trigger with an oscilloscope per `cop-ignition.md`'s own warning. Confirm idle, then base fuel map tuning (expect it to need real tuning time, not just a first-start check).
+- [ ] **Reversal test, if wanted:** plug stock ECU + BCM back in, MP1/MP2 back to relay → confirm car still runs on stock. Optional safety net, not required to consider the test successful.
+
+> **Open risk, not yet resolved in the KB:** with the stock ECU fully unplugged for this test there's no ambiguity about it fighting Haltech for control — that risk from the ignition-only version of this plan goes away. What's still unverified: whether the base fuel map converges quickly enough on the 45 psi injector data to get a clean start/idle on the first attempt, or whether this turns into a longer tuning session. Budget shop time accordingly rather than assuming a quick test.
 
 ---
 
@@ -711,7 +729,7 @@ Power: PDM MP1 (A2) → injector rail + Haltech 34-pin pin 26 (R/L)
 ## NEXT WEEKEND — Phase 2: Haltech Takes Over Engine
 
 > **Full Phase 2 procedure:** `guides/pdm-build-guide.md` → "Phase 2 — PDM + Haltech ECU"
-> **Re-timed by the Master Sequence above:** the *ignition* piece of this is being de-risked early on the current engine (Group 2.5 — "Coil + Haltech Ignition — Minimal On-Engine Test"), since it's cheap to redo later and worth proving before combining with an all-new engine build. The rest of this procedure — full injector/fuel takeover, AVI sensors, Deutsch harness, stock ECU removal — stays deferred to the new engine during the engine-out window (Group 3), since that labor is expensive to redo.
+> **Superseded by the Master Sequence above (Group 2.5):** this section's substance — stock ECU/BCM unplugged, Haltech takes over ignition and injectors — is now happening early on the *current* engine as "Coil + Fuel Injection — Minimal Haltech On-Engine Test," not deferred to a later weekend. What that section deliberately still leaves out (AVI sensors, PTFE/FPR, production Deutsch harness) stays deferred to the new engine during the engine-out window (Group 3). Kept this section as-is below for its wiring reference detail.
 
 After track day with stock ECU + PDM, switch to Haltech running the engine. **No Race Studio config change needed.** Physical wiring only.
 
