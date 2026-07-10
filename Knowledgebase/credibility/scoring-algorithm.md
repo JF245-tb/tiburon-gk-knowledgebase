@@ -84,7 +84,7 @@ Map the composite score back to a display tier:
 | >= 5.5 | T3 | Credible forum content from known contributors |
 | < 5.5 | T4 | Unvetted, low confidence, or question posts |
 
-**Important:** The effective tier is advisory. Actual tier promotion still requires the maintainer-driven GitHub Issues workflow (ARCHITECTURE.md Section 7). A high credibility score helps prioritize which claims to review first.
+**Important:** The effective tier is advisory. Actual tier promotion is a manual editorial decision following the Trust Ladder (ARCHITECTURE.md Section 2). A high credibility score helps prioritize which claims to look at first.
 
 ---
 
@@ -213,7 +213,7 @@ Scheduled agents that compute or update credibility scores should follow these w
    - Contributor still exists in contributors.json
    - Post type classification is consistent with post-classification.md rules
    - credibility_score matches formula output (recompute and compare)
-   - corroboration_count in knowledge graph matches GitHub Issues activity
+   - corroboration_count in knowledge graph matches the number of independent sources actually recorded
 3. Flag discrepancies in validation/coverage-gaps.md
 4. Report summary: total threads audited, discrepancies found, scores recalculated
 ```

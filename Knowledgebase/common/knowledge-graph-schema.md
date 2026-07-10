@@ -145,7 +145,6 @@ An OEM or aftermarket part number. May be a direct replacement or an interchange
 | `fit_notes` | string \| null | `"Direct plug-and-play"` or `"requires adapter harness"` |
 | `corroboration_count` | number | How many independent sources confirm |
 | `verified_by` | string[] | Usernames or orgs that confirmed fit |
-| `community_review_issue` | number \| null | GitHub Issue number where this was vetted |
 | `notes` | string | `"Unleaded, 2.7 V6"` |
 | `url` | string \| null | link to product page |
 | `credibility_score` | number \| null | Composite score 0-10 from `credibility/scoring-algorithm.md`. Only populated for T3/T4 sourced parts. |
@@ -191,9 +190,8 @@ A community forum post from a verified contributor.
 | `summary` | string | brief description of technical content |
 | `authority_tier` | `3` | Forum posts are always Tier 3 |
 | `trust_level` | string | See Trust Ladder below |
-| `community_review_issue` | number \| null | GitHub Issue number |
-| `corroboration_count` | number | `0` until reviewed |
-| `community_verified` | boolean | `false` until reviewed |
+| `corroboration_count` | number | `0` until corroborated |
+| `verified` | boolean | `false` until personally confirmed |
 | `credibility_score` | number \| null | Composite score 0-10 from `credibility/scoring-algorithm.md`. Provides granularity within the tier. |
 | `credibility_breakdown` | object \| null | `{ "source": "newtiburon", "contributor": "chase206", "post_type": "technical_reply", "computed": "2026-03-12" }` |
 
@@ -249,21 +247,20 @@ A physical fastener record from the bolt database with photos and measurements.
 
 ## Trust Ladder
 
-Community and forum-derived information uses a `trust_level` field that escalates as evidence accumulates.
+Forum and web-derived information uses a `trust_level` field that escalates as evidence accumulates.
 
 | `trust_level` | Meaning | How to advance |
 |---------------|---------|---------------|
-| `"community_report"` | One person says so — no corroboration | Open GitHub Issue `community-review` |
-| `"multiple_reports"` | ≥3 independent sources confirm | Maintainer updates after Issue discussion |
-| `"verified_fit"` | Someone installed it and it works (photos/thread) | Add to Issue with photo evidence |
-| `"measured"` | Dimensional or electrical measurement provided | Add measurement + tool used to Issue |
-| `"factory_spec"` | Confirmed in factory manual → upgrades to `authority_tier: 1` | Cite manual page_ref in Issue |
+| `"community_report"` | One forum post says so — no corroboration | Find independent corroborating sources |
+| `"multiple_reports"` | ≥3 independent sources confirm | Update once ≥3 independent sources are recorded |
+| `"verified_fit"` | Installed it and it works (photos/notes) | Add photo/notes evidence to the node |
+| `"measured"` | Dimensional or electrical measurement provided | Add measurement + tool used to the node |
+| `"factory_spec"` | Confirmed in factory manual → upgrades to `authority_tier: 1` | Cite manual page_ref on the node |
 
-Community nodes also carry:
+Forum-derived nodes also carry:
 - `authority_tier`: `2` (OpenGK), `3` (forum), `4` (web/parts data)
-- `community_review_issue`: GitHub Issue number where this was vetted
 - `corroboration_count`: integer count of independent confirmations
-- `community_verified`: boolean — `true` once a maintainer has reviewed
+- `verified`: boolean — `true` once personally confirmed
 
 ---
 
@@ -346,5 +343,4 @@ Additional node types for builds:
 
 - Use `graph-editor.py` (planned) to add nodes/edges without editing JSON directly
 - Node IDs are stable — never rename after creation (other files reference them)
-- Add `"community_review": "pending"` to any forum-derived node for GitHub Issues review flow
 - Source `"OpenGK"` nodes should include `url` pointing to the specific opengk.org page

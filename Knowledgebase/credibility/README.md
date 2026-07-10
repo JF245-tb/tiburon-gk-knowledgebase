@@ -8,7 +8,7 @@ This directory contains the scoring internals for evaluating external sources, c
 
 Every claim in the knowledgebase has an `authority_tier` (1-4) from ARCHITECTURE.md. The credibility system adds a **composite score** (0-10) that provides finer resolution. Two T3 claims can now be compared: a stickied guide from Charlie-III (5.6) vs. a question post from a new user (2.6).
 
-**The tier system is not replaced.** Tier promotion still follows the GitHub Issues workflow in ARCHITECTURE.md Section 7. Credibility scores help maintainers prioritize which claims to review first and help LLMs weight conflicting same-tier sources.
+**The tier system is not replaced.** Tier promotion is a manual editorial decision following the Trust Ladder in `ARCHITECTURE.md` Section 2. Credibility scores help prioritize which claims to look at first and help LLMs weight conflicting same-tier sources.
 
 ---
 
@@ -80,7 +80,6 @@ Every claim in the knowledgebase has an `authority_tier` (1-4) from ARCHITECTURE
 |------|----------|
 | Authority tiers | `ARCHITECTURE.md` Sections 1-3 |
 | Trust ladder | `ARCHITECTURE.md` Section 2 |
-| GitHub Issues workflow | `ARCHITECTURE.md` Section 7 |
 | Knowledge graph schema | `common/knowledge-graph-schema.md` |
 | Forum thread index | `forum/thread-index.json` |
 | Validation test cases | `validation/test-cases.json` |

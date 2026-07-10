@@ -2,6 +2,8 @@
 
 Planned additions to the Tiburon GK Knowledgebase, in rough priority order.
 
+**Top priority:** high-quality extraction from the factory manuals and online sources (forum, OpenGK, parts sites) — accurate text, correct pinouts/specs, and properly ranked source credibility. Everything else builds on that foundation.
+
 ---
 
 ## Stage 1 — MVP (Current)
@@ -29,42 +31,28 @@ See `common/vector-store/README.md` for schema and implementation options.
 
 ---
 
-## Stage 3 — Community Input
+## Stage 3 — Trust Ladder & Source Ranking
 
-Community contributions are tracked through GitHub Issues before being merged into the knowledge graph.
+Forum and web claims are ranked by source credibility (`credibility/`) and climb a trust ladder as they're personally corroborated or verified — see `ARCHITECTURE.md` Sections 2 and 10.
 
 ### Trust ladder (bottom to top)
 
 | Level | Meaning |
 |-------|---------|
-| `community_report` | One person reports it |
-| `multiple_reports` | ≥3 independent confirmations |
+| `community_report` | One forum post reports it |
+| `multiple_reports` | ≥3 independent sources confirm |
 | `verified_fit` | Installed and working, with evidence |
 | `measured` | Dimensional or electrical measurement provided |
 | `factory_spec` | Confirmed in factory manual → becomes Tier 1 |
 
-### GitHub Issues labels
-
-| Label | Use |
-|-------|-----|
-| `community-review` | New forum claim needing vetting |
-| `spec-error` | Incorrect spec reported |
-| `part-number` | New or corrected part number |
-| `procedure-verify` | Procedure step needs confirmation |
-| `measurement` | Measurement needed or contributed |
-| `forum-ingest` | Request to ingest a forum thread |
-| `interchangeable-part` | Cross-vehicle compatibility claim |
-| `help-wanted` | Open request for contribution |
-| `verified` | Confirmed, ready to merge |
-
-### Priority contributions needed
+### Research backlog
 
 - Compatible replacement part numbers (CMP sensor, O2 sensors, wheel bearings)
 - Race-prep procedure verification (alignment specs, brake bias)
 - Forum thread ingestion (NewTiburon.com)
 - Hands-on measurements (CMP sensor air gap, stock injector flow rate)
 
-See `Knowledgebase/ARCHITECTURE.md` for full community input design.
+Tracked in `validation/coverage-gaps.md` as concrete gaps found by the validation test framework, and in `extraction/README.md`'s status tables for what's still unextracted.
 
 ---
 
@@ -85,6 +73,6 @@ Planned:
 ## Stage 5 — Forum Data
 
 - [ ] `forum/scraper.py` — Python scraper for NewTiburon.com (requests + BeautifulSoup4, 3–5s delay)
-- [ ] Priority: posts by chase206 and other verified contributors
-- [ ] Each post ingested as a chunk with `trust_level: "community_report"` and a GitHub Issue opened for review
+- [ ] Priority: posts by chase206 and other high-credibility contributors
+- [ ] Each post ingested as a chunk with `trust_level: "community_report"`, scored per `credibility/scoring-algorithm.md`
 - [ ] See `forum/README.md` for methodology and ethics policy

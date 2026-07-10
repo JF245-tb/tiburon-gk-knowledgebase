@@ -66,7 +66,7 @@ flowchart TD
     EC_SYS["Emission Control — EC<br/>System overview diagram"]
     ETM_LOC["ETM Component Locations<br/>CL section<br/><i>engine harness routing</i>"]
     OPENGK["OpenGK<br/>Replacement Part Numbers<br/>Compatible sensors"]
-    FORUM["Forum — NewTiburon.com<br/><i>community-reviewed<br/>installation tips</i>"]
+    FORUM["Forum — NewTiburon.com<br/><i>credibility-ranked<br/>installation tips</i>"]
 
     CMP_NODE --> SPEC
     CMP_NODE --> MFI

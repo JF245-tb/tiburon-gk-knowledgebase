@@ -85,4 +85,4 @@ Knowledgebase/
 
 ---
 
-See `ROADMAP.md` for planned additions including community input, forum data, and interchangeable parts.
+See `ROADMAP.md` for planned additions including semantic search, forum data, and interchangeable parts.
