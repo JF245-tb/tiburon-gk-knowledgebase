@@ -22,19 +22,37 @@
 
 ---
 
-## Current State (March 2026)
+## Current State (July 2026)
 
 | System | Status |
 |--------|--------|
-| Haltech bench | Cam ✅ Crank ✅ COP fire ✅ — Knock: **next** |
-| PDM Race Studio config | ✅ Updated — physical switch panel (no keypad) |
-| PDM car connection | Spade connectors → fuse box pin 87 (non-destructive) |
-| Physical switch panel | 6 toggles + 1 momentary starter — **not yet wired to PDM** |
-| Stock ECU | Connected and running |
+| Haltech Elite 2500 | **Not yet physically installed in car.** Bench-tested only: Cam ✅ Crank ✅ COP fire ✅ — Knock: next |
+| PDM car connection | Running the fuse box (spade connectors → pin 87, non-destructive) |
+| PDM sensor inputs | Reading a subset of the aftermarket (Lowdoller) sensors — **not all AVI channels wired yet** |
+| Stock ECU | Still connected and running the engine (Haltech has not taken over) |
+| Physical switch panel | 6 toggles + 1 momentary starter |
 | Kill switch | Mounted left of steering wheel, 2 AWG cable run |
-| Seat panel | Needs welding (~3 hrs) — **must do before electronics install** |
 
-**Removed from this weekend:** Coilovers → fab shop Wednesday, front bearings → fab shop.
+> **Bigger picture:** this is a partial install — the PDM has taken over the fuse box and some sensor reads, but the Haltech itself isn't in the car yet, so the stock ECU is still what's actually running the engine. Full Haltech install (injector/coil harnesses, remaining AVI channels, CAN handoff from PDM) is the next major milestone here — see `guides/pdm-build-guide.md` and `guides/harness-design.md` for the Phase 2/3 wiring that gets it there.
+>
+> **Engine swap note:** a fresh race motor for the September race is being built up separately — see `guides/engine-build.md`. Once it goes in, re-verify all Haltech AVI/CAN wiring against the new engine's actual sensor locations before first start.
+
+---
+
+## Suspension — Open Items (Not Yet Scheduled)
+
+> **Reference files:**
+> - Front suspension: `common/shop-manual/suspension-system/front-suspension.md`
+> - Rear suspension: `common/shop-manual/suspension-system/rear-suspension.md`
+> - Suspension specs/torques: `common/shop-manual/suspension-system/specifications.md`
+
+These are separate from the P.1–P.7 tasks below (which were a specific past weekend's plan). Not yet sequenced into a weekend.
+
+- [ ] **Reinstall coilovers with camber plates.** Coilovers went to the fab shop for work (see below) — reinstall with camber plates this time. Confirm camber plate part/bearing spec and strut-top torque before install; re-check alignment afterward.
+- [ ] **Adjust bump stops.** Set bump stop position/length for the coilover travel — do this at the same time as coilover reinstall since it's much easier with the strut out of the car.
+- [ ] **Redesign sway bar end links — recurring failures.** Current links keep breaking. Before just replacing them again, figure out the actual failure mode (fatigue from being non-vertical / preloaded at ride height, wrong length, undersized rod ends, binding) — P.1 and P.3 below cover *setting* link length/preload correctly, but if links keep breaking even when properly set, the link design itself (rod end spec, material, mounting geometry) likely needs to change, not just re-tensioning.
+- [ ] **Swap front sway bar — engine-out window only.** Do this while the race motor is out for the rebuild (see `guides/engine-build.md`) — front sway bar access is dramatically easier with the engine out, so don't miss this window.
+- [ ] **CV axles, tie rod ends, wheel hubs and bearings** — planned for when the engine/trans is out (mating the new engine to the trans with the Quaife LSD). Bundle this with the front sway bar swap since both need the engine-out window.
 
 ---
 

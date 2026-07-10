@@ -6,7 +6,7 @@
 
 ---
 
-## Build Phase Status (March 2026)
+## Build Phase Status (July 2026)
 
 | Phase | System | Status |
 |---|---|---|
@@ -16,9 +16,13 @@
 | P0 | Haltech → PDM CAN data verified | ⬜ |
 | P1 | PDM connected to car (non-destructive) | ✅ Spade connectors on fuse box |
 | P1 | Race Studio config loaded | ✅ Physical switch panel (no keypad) |
+| P1 | PDM reading aftermarket (Lowdoller) sensors | 🟡 Partial — some AVI channels not wired yet |
 | P1 | CAN Keypad 12 | ❌ Excluded — all controls via physical switches |
+| P2 | Haltech physically installed in car | ⬜ **Not started** — stock ECU still running the engine |
 | P2 | Mechanical installation | ⬜ |
 | P3 | Full Haltech integration (stock ECU out) | ⬜ |
+
+> **Note:** a separate race engine build for the September race is in progress (short block assembled, pistons in) — see `guides/engine-build.md`. Once that engine goes in, re-verify all Haltech wiring against it before first start.
 
 ---
 
@@ -32,11 +36,12 @@
 | 4 | `weekend-tasks.md` | Phased build procedure with test gates — current active work |
 | 5 | `guides/pdm-build-guide.md` | Complete PDM config: Race Studio setup, ECU Stream channels, output logic, all 3 phases |
 | 6 | `guides/bench-test.md` | Bench test procedure: fuel pump, fuse box tap, alt exciter, starter |
-| 8 | `cluster-integration.md` | OEM cluster wiring into Haltech (tach, speedo, fuel, coolant) |
-| 9 | `build-profile.md` | Narrative build profile: parts list, mods, history |
-| 10 | `build-knowledge-graph.json` | Component/signal relationship graph for programmatic lookup |
-| 11 | `diagrams/fuel-pump.md` | Mermaid fuel pump power + control path diagram |
-| 12 | `guides/harness-design.md` | Deutsch connector architecture for engine-swap serviceability — D1–D4 pin maps, routing, LM2 wiring |
+| 7 | `cluster-integration.md` | OEM cluster wiring into Haltech (tach, speedo, fuel, coolant) |
+| 8 | `build-profile.md` | Narrative build profile: parts list, mods, history |
+| 9 | `build-knowledge-graph.json` | Component/signal relationship graph for programmatic lookup |
+| 10 | `diagrams/fuel-pump.md` | Mermaid fuel pump power + control path diagram |
+| 11 | `guides/harness-design.md` | Deutsch connector architecture for engine-swap serviceability — D1–D4 pin maps, routing, LM2 wiring |
+| 12 | `guides/engine-build.md` | September race engine build: assembly sequence, gasket/torque reference, mate-to-trans |
 
 ---
 

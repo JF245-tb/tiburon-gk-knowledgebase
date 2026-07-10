@@ -12,7 +12,7 @@
 - 2.7L V6 Delta (G6BA)
 - Unknown-brand headers (better quality than blue car's ECCPP, same unequal-length layout)
   - **Known issue:** gnarly bend on rear bank — want to correct eventually
-- *(Eventually receiving the best built engine — see `/Knowledgebase/cars/engine-builds.md`)*
+- **Replacement engine in progress for September race** — short block assembled (pistons in), remaining assembly + install tracked in `guides/engine-build.md`
 
 ### Exhaust
 - Unknown-brand headers (non-equal-length)
@@ -20,7 +20,7 @@
 
 ### Transmission & Clutch
 - **6-speed Aisin** manual transmission (stock, current)
-- *(Eventually receiving best built 6-speed Aisin with Quaife LSD — see engine builds doc)*
+- **Replacement 6-speed Aisin with Quaife ATB LSD already installed** — will be mated to the new engine when it's ready; see `guides/engine-build.md`. CV axles, tie rod ends, wheel hubs and bearings are being replaced during that same engine-out window.
 - Aluminum short shifter
 - Torque Solutions shifter bushings (shared mod with blue car)
 
