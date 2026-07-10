@@ -87,9 +87,10 @@ Interchangeable part claims carry the same fields plus a `fit_notes` string (e.g
 | `common/shop-manual/fuel-system.md` | FLA (V6), FL (I4) | Injectors, ECM, sensors, DTCs |
 | `common/shop-manual/engine-electrical.md` | EE | Alternator, starter, battery |
 | `common/shop-manual/emission-control-system.md` | EC | O2 sensors, EGR, EVAP |
-| `common/electrical-manual/connector-configurations.md` | CC | Connector codes and pin counts |
+| `common/electrical-manual/cc-connector-configurations.md` | CC | Connector codes and pin counts |
 | `common/electrical-manual/component-locations.md` | CL | Physical locations on car |
-| `common/electrical-manual/schematics.md` | Various | Circuit schematics by system |
+| `common/electrical-manual/schematics/` | SD | Circuit schematics by system (47 files, indexed in `schematics/_index.md`) |
+| `common/electrical-manual/connector-master-reference.md` | Cross-ref | Connector code ↔ component ↔ CC/CL/HL/SD/FLA/graph node |
 
 **MCP access:** All Tier 1 content is served via `@modelcontextprotocol/server-filesystem` from `common/`. This is the only tier guaranteed available to community model users (see Section 10).
 

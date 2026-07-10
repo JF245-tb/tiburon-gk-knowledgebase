@@ -1,7 +1,7 @@
 # Component Locations
-**Source:** `Electrical Troubleshooting Manual/CL.pdf` · Pages: 34 · Vehicle: 2003 Hyundai Tiburon (GK)
+**Source:** ETM CL section (CL.pdf, 34 pages) · Vehicle: 2003 Hyundai Tiburon (GK)
 
-> Component location diagrams are visual — not extractable as text. Use the PDF directly for physical locations. This file contains the section index.
+> Partial extraction. CL pages are spatial diagrams (component silhouettes with connector-code callouts), so most content isn't machine-extractable as text — this file captures the section index plus the key locations pulled by hand for V6 engine-management work. See `connector-master-reference.md` for the CL-page cross-reference by connector code.
 
 ---
 
@@ -43,4 +43,4 @@
 | G14 | Right front chassis rail |
 | G15 | Firewall / dash area |
 
-> For physical diagrams open `Electrical Troubleshooting Manual/CL.pdf`.
+> For a full connector-by-connector CL page cross-reference, see `connector-master-reference.md`.

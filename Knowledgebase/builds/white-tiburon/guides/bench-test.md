@@ -123,7 +123,7 @@ PDM HP3 outputs:
 **Step 1: Locate relay positions**
 - Fuel pump relay: typically labeled FP or FUEL PUMP in the underhood fuse box
 - Alternator relay: labeled ALT, IG1, or MAIN depending on trim
-- Refer to `common/electrical-manual/schematic-diagrams.md` → SD-78 (MFI Control System) for fuse box layout
+- Refer to `common/electrical-manual/schematics/mfi-control-v6.md` → SD-78 (MFI Control System) for fuse box layout
 
 **Step 2: Fuel pump tap**
 1. Pull the OEM fuel pump relay

@@ -47,7 +47,7 @@ flowchart LR
 
     ECU_PIN -->|"if fault"| DTC_P0340
 
-    click CMP_CONN "../../common/electrical-manual/connector-configurations.md" "ETM connector configurations"
+    click CMP_CONN "../../common/electrical-manual/cc-connector-configurations.md" "ETM connector configurations"
     click ECU_PIN "../../common/opengk/ecm-pinouts.md" "OEM ECM connector C133-1"
     click DTC_P0340 "../../common/shop-manual/fuel-system.md" "FLA-73: DTC P0340 procedure"
 ```
@@ -105,7 +105,7 @@ flowchart TD
 |------|----------|
 | [`common/shop-manual/fuel-system.md`](../shop-manual/fuel-system.md) | FLA-2 (specs), FLA-20 (MFI), FLA-73 (DTC P0340/P0341) |
 | [`common/shop-manual/emission-control-system.md`](../shop-manual/emission-control-system.md) | EC chapter — system overview |
-| [`common/electrical-manual/connector-configurations.md`](../electrical-manual/connector-configurations.md) | Engine harness connector codes |
+| [`common/electrical-manual/cc-connector-configurations.md`](../electrical-manual/cc-connector-configurations.md) | Engine harness connector codes |
 | [`common/electrical-manual/component-locations.md`](../electrical-manual/component-locations.md) | Physical location on engine |
 | [`common/opengk/ecm-pinouts.md`](../opengk/ecm-pinouts.md) | Siemens SIMK43 C133-1 connector |
 | [`common/opengk/sensor-information.md`](../opengk/sensor-information.md) | Replacement part numbers |
