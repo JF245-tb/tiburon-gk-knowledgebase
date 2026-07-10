@@ -39,6 +39,45 @@
 
 ---
 
+## Master Sequence — Ordering for Time Savings
+
+Everything currently open, reasoned into an order. The organizing idea: **the engine-out window (pulling the current engine, installing the new one) is the single biggest batching opportunity in the whole list** — several tasks are either physically easier with the engine out, or are engine-mounted work that will be wasted effort if done on the engine that's about to be replaced. Group 3 below is that window.
+
+### 1. Runs now, in parallel, no dependencies
+
+Nothing here blocks or is blocked by anything else — do these whenever shop time allows, ideally *before* Group 3 so the parts/hardware are on hand when the engine-out window opens.
+
+- Engine build assembly (`guides/engine-build.md`, steps 1–7: oil pump/crank sprocket → harmonic balancer → oil pans → heads → camshafts → valve covers → timing belt/water pump) — this happens on a stand, independent of the car.
+- Order/fabricate correctly-sized front sway bar links (short enough to bury the threaded rod, not just re-tension the current ones) and rear strut-tab hardware if the coilover reinstall shows the new tab position doesn't fully resolve it.
+- Collect PTFE line fittings (SU.3 already calls this out as step 1 — do the collecting now even though the actual routing waits, see Group 3).
+
+### 2. Car-side suspension work, independent of the engine
+
+Can happen anytime, and ideally happens *before* Group 4 (corner weighting) since it changes ride height:
+
+- Reinstall coilovers with camber plates — **check the new rear strut tab position here**, this is the moment to find out if it resolves the rear sway bar failure before designing a fix for a problem that might already be solved.
+- Adjust bump stops (same session as coilovers).
+- Rear sway bar link fix, informed by what the tab check above finds.
+
+### 3. Engine-out window — batch everything that needs the bay open or is engine-mounted
+
+When the current engine comes out and the new one (from Group 1) goes in, do all of this in the same window rather than spreading it across separate teardowns:
+
+- Front sway bar swap + install the new front links from Group 1 (don't put the old bar back in with new links now and pull it again later).
+- CV axles, tie rod ends, wheel hubs and bearings — drivetrain access is best with the engine/trans out, and this is literally when the Quaife-equipped transmission goes in.
+- **Build/finish the Phase 2 Deutsch-connector harness** (`guides/harness-design.md`) on the new engine, not the old one. The harness was explicitly designed for this — "pull 4 connectors + 2 grounds + starter = engine is free" — so this is the intended moment to finish it, and any sensor wiring done on the current engine now would need to be redone on the new one anyway since sensors thread into engine-specific bosses.
+- **Install the Lowdoller sensors, MAP sensor, and Radium FPR/PTFE lines on the new engine** (currently SU.1–SU.4, plus the fuel line item above) — same logic: these are all engine-mounted, don't do them twice.
+- First fire on the new engine, Haltech running it (this absorbs the old "NEXT WEEKEND — Phase 2" plan further down, which assumed Phase 2 would happen on the *current* engine — that plan's wiring steps are still the right procedure, just re-timed to the new engine).
+
+> **Open question for you:** the alternative to all of Group 3's electronics work is to validate Haltech + sensors on the *current*, known-good engine first (finish SU.1–SU.4 now, confirm the whole system works), then transplant a proven harness onto the new engine later. That de-risks the electronics by not combining two unknowns (new engine + first real Haltech run) at once, but means redoing the physical sensor mounting labor. Group 3 above assumes you'd rather not do that labor twice — say if you'd rather de-risk instead and I'll re-sequence.
+
+### 4. After the engine is back in and running
+
+- Final alignment check against `common/chassis/gk-chassis-specs.md` § Suspension Alignment Reference — weight distribution just changed with the new engine, so don't trust an alignment done before the swap.
+- **Hub stands + corner weighting — last step.** Depends on final ride height (coilovers/bump stops from Group 2), final alignment, and final weight distribution (new engine from Group 3). Doing it any earlier means redoing it.
+
+---
+
 ## Suspension — Open Items (Not Yet Scheduled)
 
 > **Reference files:**
@@ -56,6 +95,17 @@ These are separate from the P.1–P.7 tasks below (which were a specific past we
   - **Rear:** the whole strut tab sheared off, not just the link — that's a mounting-point failure, not a link failure. Could be an install issue (tab welded/positioned wrong, alignment loading it at an angle) or could be resolved by the new tab position on the replacement coilovers (see the coilover reinstall item above — check tab geometry then, before assuming a link redesign is even needed back there).
 - [ ] **Swap front sway bar — engine-out window only.** Do this while the race motor is out for the rebuild (see `guides/engine-build.md`) — front sway bar access is dramatically easier with the engine out, so don't miss this window.
 - [ ] **CV axles, tie rod ends, wheel hubs and bearings** — planned for when the engine/trans is out (mating the new engine to the trans with the Quaife LSD). Bundle this with the front sway bar swap since both need the engine-out window.
+
+---
+
+## Fuel System — Open Items (Not Yet Scheduled)
+
+Parts are on hand ("ready to install" per `build-profile.md`). Full task detail already lives in **SU.3** below (`SUNDAY` → "Fuel System + Fuel Sensor") — this entry just surfaces it as still-open work since it wasn't showing up in the top-level status.
+
+- [ ] **Replace soft fuel lines with 6AN PTFE.** Collect all fittings first, then route.
+- [ ] **Mount the Radium FPR/damper on the fuel rail** and tie in the return-line fuel pressure sensor tap.
+
+> **Sequencing flag:** the FPR mounts to the fuel rail and the PTFE lines route through the engine bay — both are effectively engine-mounted work. See the Master Sequence below for why this probably shouldn't happen on the current engine.
 
 ---
 
@@ -634,6 +684,7 @@ Power: PDM MP1 (A2) → injector rail + Haltech 34-pin pin 26 (R/L)
 ## NEXT WEEKEND — Phase 2: Haltech Takes Over Engine
 
 > **Full Phase 2 procedure:** `guides/pdm-build-guide.md` → "Phase 2 — PDM + Haltech ECU"
+> **Re-timed by the Master Sequence above (Group 3):** this procedure is still correct, but the current plan is to do it on the *new* engine during the engine-out window rather than on the current engine now — avoids rewiring sensors twice. If you'd rather de-risk by validating Haltech on the current engine first, this section is ready to run as originally written.
 
 After track day with stock ECU + PDM, switch to Haltech running the engine. **No Race Studio config change needed.** Physical wiring only.
 
