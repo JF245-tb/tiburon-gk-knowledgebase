@@ -24,7 +24,7 @@ Structured technical reference for the GK-chassis Hyundai Tiburon. Combines fact
 1. Browse `Knowledgebase/common/shop-manual/` for factory procedures and specs
 2. Browse `Knowledgebase/builds/{car}/build-profile.md` for a specific car's equipment and wiring
 3. Use the Mermaid diagrams in `Knowledgebase/common/diagrams/` for visual component traces
-4. Search for specific values (e.g., "valve spring free height" → finds EMA-3 in `engine-mechanical/specifications.md`)
+4. Search for specific values (e.g., "valve spring free height" → finds EMA-3 in `Knowledgebase/common/shop-manual/engine-mechanical/specifications.md`)
 
 ### For AI Models
 

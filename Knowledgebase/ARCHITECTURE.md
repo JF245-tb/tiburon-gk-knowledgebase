@@ -176,8 +176,8 @@ When an AI queries for "Tiburon ignition coil", the graph traversal should:
 |-----------|-------------------|----------------|-------|
 | Ignition coil (COP) | Toyota 90919-A2005 | Camry 1MZ-FE / Lexus 1UZ | verified_fit |
 | Spark plug | NGK BKR5ES-11 | Many applications | factory_spec |
-| Oxygen sensor | Check `opengk/sensor-information.md` | Various | community_report |
-| Camshaft position sensor | Check `opengk/sensor-information.md` | Various | community_report |
+| Oxygen sensor | Check `common/opengk/sensor-information.md` | Various | community_report |
+| Camshaft position sensor | Check `common/opengk/sensor-information.md` | Various | community_report |
 
 ---
 

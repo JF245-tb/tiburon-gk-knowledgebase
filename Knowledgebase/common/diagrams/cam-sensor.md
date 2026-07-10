@@ -49,7 +49,7 @@ flowchart LR
 
     click CMP_CONN "../../common/electrical-manual/cc-connector-configurations.md" "ETM connector configurations"
     click ECU_PIN "../../common/opengk/ecm-pinouts.md" "OEM ECM connector C133-1"
-    click DTC_P0340 "../../common/shop-manual/fuel-system.md" "FLA-73: DTC P0340 procedure"
+    click DTC_P0340 "../../common/shop-manual/fuel-system/dtc-troubleshooting.md" "FLA-73: DTC P0340 procedure"
 ```
 
 ---
@@ -73,13 +73,13 @@ flowchart TD
     CMP_NODE --> DTC
     CMP_NODE --> EC_SYS
     CMP_NODE --> ETM_LOC
-    CMP_NODE -.->|"community data"| OPENGK
-    CMP_NODE -.->|"community-verified"| FORUM
+    CMP_NODE -.->|"Tier 2 — OpenGK"| OPENGK
+    CMP_NODE -.->|"Tier 3 — credibility-ranked"| FORUM
 
-    click SPEC "../../common/shop-manual/fuel-system.md" "FLA-2 sensor specifications"
-    click MFI "../../common/shop-manual/fuel-system.md" "FLA-20 MFI control system"
-    click DTC "../../common/shop-manual/fuel-system.md" "FLA-73 DTC P0340"
-    click EC_SYS "../../common/shop-manual/emission-control-system.md" "EC chapter"
+    click SPEC "../../common/shop-manual/fuel-system/specifications.md" "FLA-2 sensor specifications"
+    click MFI "../../common/shop-manual/fuel-system/mfi-control-system-part1.md" "FLA-20 MFI control system"
+    click DTC "../../common/shop-manual/fuel-system/dtc-troubleshooting.md" "FLA-73 DTC P0340"
+    click EC_SYS "../../common/shop-manual/emission-control-system/_index.md" "EC chapter"
     click ETM_LOC "../../common/electrical-manual/component-locations.md" "ETM CL section"
     click OPENGK "../../common/opengk/sensor-information.md" "OpenGK sensor info"
 ```
@@ -103,8 +103,10 @@ flowchart TD
 
 | File | Contents |
 |------|----------|
-| [`common/shop-manual/fuel-system.md`](../shop-manual/fuel-system.md) | FLA-2 (specs), FLA-20 (MFI), FLA-73 (DTC P0340/P0341) |
-| [`common/shop-manual/emission-control-system.md`](../shop-manual/emission-control-system.md) | EC chapter — system overview |
+| [`common/shop-manual/fuel-system/specifications.md`](../shop-manual/fuel-system/specifications.md) | FLA-2 sensor specifications |
+| [`common/shop-manual/fuel-system/mfi-control-system-part1.md`](../shop-manual/fuel-system/mfi-control-system-part1.md) | FLA-20 MFI control system |
+| [`common/shop-manual/fuel-system/dtc-troubleshooting.md`](../shop-manual/fuel-system/dtc-troubleshooting.md) | FLA-73 DTC P0340/P0341 |
+| [`common/shop-manual/emission-control-system/_index.md`](../shop-manual/emission-control-system/_index.md) | EC chapter — system overview |
 | [`common/electrical-manual/cc-connector-configurations.md`](../electrical-manual/cc-connector-configurations.md) | Engine harness connector codes |
 | [`common/electrical-manual/component-locations.md`](../electrical-manual/component-locations.md) | Physical location on engine |
 | [`common/opengk/ecm-pinouts.md`](../opengk/ecm-pinouts.md) | Siemens SIMK43 C133-1 connector |

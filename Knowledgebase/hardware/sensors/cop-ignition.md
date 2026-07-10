@@ -93,7 +93,7 @@ Toyota/Denso 4-pin smart coil connector. Source pigtails from:
 | Dwell time | ~3.5ms (stock coil) | **~2.1ms** (Toyota smart coil) |
 | Coil type | External igniter | Smart coil (internal igniter) |
 
-**Firing order (G6BA V6):** Verify in shop-manual/engine-mechanical.md — confirm correct IGN1–6 assignment per cylinder.
+**Firing order (G6BA V6):** Verify in `common/shop-manual/engine-mechanical/specifications.md` — confirm correct IGN1–6 assignment per cylinder.
 
 ⚠️ Setting incorrect dwell on a smart coil (too long) will **overheat and damage the coil**. Smart coils have built-in igniter — they control their own dwell internally. Set ECU dwell to ~2.1ms as directed. Verify with oscilloscope on first startup.
 
@@ -123,5 +123,5 @@ Mid-power outputs on AIM PDM32 are rated ~10–15A continuous — should be adeq
 ## Key References
 - Wiring diagram: JonGTR (NewTiburon.com, 2014) — "Toyota Corolla Coil Wiring" schematic
 - Thread: https://www.newtiburon.com/threads/toyota-cop-ignition-setup.384866/
-- Haltech IGN output pins: `signal-routing.md` (Ignition section)
-- PDM MP2 assignment: `aim-pdm/pdm-pinout.md`
+- Haltech IGN output pins: `builds/white-tiburon/signal-routing.md` (Ignition section)
+- PDM MP2 assignment: `hardware/aim/aim-pdm/pdm-pinout.md`
