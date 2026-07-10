@@ -59,17 +59,21 @@ Can happen anytime, and ideally happens *before* Group 4 (corner weighting) sinc
 - Adjust bump stops (same session as coilovers).
 - Rear sway bar link fix, informed by what the tab check above finds.
 
+### 2.5. Minimal coil + Haltech ignition test — de-risk on the current engine
+
+**Decision made:** rather than the "don't touch the current engine" default from Group 3, validate Haltech-controlled COP ignition on the current, known-good engine first — kept deliberately minimal (ignition only, not fuel/AVI/harness), so it doesn't create much rework later. Full steps in **"Coil + Haltech Ignition — Minimal On-Engine Test"** above. This can happen in parallel with Group 1/2, anytime before the engine-out window.
+
+Why this doesn't conflict with the "don't do engine-mounted work twice" logic in Group 3: the coils, their trigger wiring, and the CKP/CMP taps are cheap/fast to redo on the new engine (a few hours, not a full sensor-and-harness rebuild), and proving ignition control works before combining it with a brand-new, unrun engine build is worth that cost. The full AVI sensor suite, FPR/PTFE lines, and Deutsch harness are a much bigger redo cost — those stay deferred to Group 3.
+
 ### 3. Engine-out window — batch everything that needs the bay open or is engine-mounted
 
 When the current engine comes out and the new one (from Group 1) goes in, do all of this in the same window rather than spreading it across separate teardowns:
 
 - Front sway bar swap + install the new front links from Group 1 (don't put the old bar back in with new links now and pull it again later).
 - CV axles, tie rod ends, wheel hubs and bearings — drivetrain access is best with the engine/trans out, and this is literally when the Quaife-equipped transmission goes in.
-- **Build/finish the Phase 2 Deutsch-connector harness** (`guides/harness-design.md`) on the new engine, not the old one. The harness was explicitly designed for this — "pull 4 connectors + 2 grounds + starter = engine is free" — so this is the intended moment to finish it, and any sensor wiring done on the current engine now would need to be redone on the new one anyway since sensors thread into engine-specific bosses.
+- **Build/finish the Phase 2 Deutsch-connector harness** (`guides/harness-design.md`) on the new engine, not the old one. The harness was explicitly designed for this — "pull 4 connectors + 2 grounds + starter = engine is free" — so this is the intended moment to finish it, and any sensor wiring done on the current engine now would need to be redone on the new one anyway since sensors thread into engine-specific bosses. The ignition wiring from Group 2.5 moves over too, but it's already proven — this is a transplant, not a first-time bring-up.
 - **Install the Lowdoller sensors, MAP sensor, and Radium FPR/PTFE lines on the new engine** (currently SU.1–SU.4, plus the fuel line item above) — same logic: these are all engine-mounted, don't do them twice.
-- First fire on the new engine, Haltech running it (this absorbs the old "NEXT WEEKEND — Phase 2" plan further down, which assumed Phase 2 would happen on the *current* engine — that plan's wiring steps are still the right procedure, just re-timed to the new engine).
-
-> **Open question for you:** the alternative to all of Group 3's electronics work is to validate Haltech + sensors on the *current*, known-good engine first (finish SU.1–SU.4 now, confirm the whole system works), then transplant a proven harness onto the new engine later. That de-risks the electronics by not combining two unknowns (new engine + first real Haltech run) at once, but means redoing the physical sensor mounting labor. Group 3 above assumes you'd rather not do that labor twice — say if you'd rather de-risk instead and I'll re-sequence.
+- First fire on the new engine, now with ignition already de-risked from Group 2.5 (this absorbs the old "NEXT WEEKEND — Phase 2" plan further down, which assumed Phase 2 would happen on the *current* engine — that plan's wiring steps are still the right procedure, just re-timed to the new engine).
 
 ### 4. After the engine is back in and running
 
@@ -106,6 +110,29 @@ Parts are on hand ("ready to install" per `build-profile.md`). Full task detail 
 - [ ] **Mount the Radium FPR/damper on the fuel rail** and tie in the return-line fuel pressure sensor tap.
 
 > **Sequencing flag:** the FPR mounts to the fuel rail and the PTFE lines route through the engine bay — both are effectively engine-mounted work. See the Master Sequence below for why this probably shouldn't happen on the current engine.
+
+---
+
+## Coil + Haltech Ignition — Minimal On-Engine Test (De-Risk Before Swap)
+
+**Decision:** validate COP coils + Haltech ignition control on the *current* engine first, kept as minimal as possible — not the full Phase 2 switchover (see Master Sequence, Group 2.5). Stock ECU keeps controlling fuel injection and everything else; only ignition moves to Haltech for this test. No AVI sensor wiring, no PDM output map changes beyond what's already there (MP2), no production Deutsch harness — hand-wire/temporary connections are fine since this gets redone properly during the engine swap anyway.
+
+> Per `hardware/sensors/cop-ignition.md`, COP coil firing has been bench-tested (coils sparking off the engine) but **not yet physically mounted on any engine** — this is that next step. Cam and crank signals to Haltech show ✅ in `signal-routing.md`, but confirm that's an actual in-car splice off the CKP/CMP sensors (not just the bench validation) before assuming it's done — it needs to feed Haltech *simultaneously* with the stock ECU, which still needs its own cam/crank signal to keep running fuel injection.
+
+- [ ] **Confirm/complete CKP + CMP taps to Haltech.** Splice into the existing sensor signal wires so Haltech gets its own read without disturbing the stock ECU's connection — 26-pin pins 1/5 (crank +/−) and 2/6 (cam +/−), per `signal-routing.md`.
+- [ ] **Remove OEM ignition module bracket + the 3 stock wasted-spark coils** (per `hardware/sensors/cop-ignition.md` → "Coil Mounting").
+- [ ] **Mount the 6 Toyota 90919-A2005 coils** into the plug wells — verify fit/seal per the same checklist, torque or retention clip.
+- [ ] **Wire the coils (temporary/hand-wired is fine for this test):**
+  - Pin A (ground, all 6, shared bus) → engine block/head
+  - Pin D (12V, all 6, shared bus) → PDM MP2
+  - Pin B (trigger, individual) → Haltech 34-pin pins 3–8 (IGN1–6)
+  - Pin C (feedback) → leave open
+- [ ] **Set NSP config before first trigger:** Ignition mode = Sequential COP, Coil type = Smart coil, Dwell = ~2.1 ms. Do not leave at default wasted-spark dwell — smart coils have an internal igniter and wrong dwell will overheat/damage them.
+- [ ] **Verify the firing order before wiring cylinder → IGN output.** The KB has 1-2-3-4-5-6 from `common/shop-manual/engine-mechanical/specifications.md`, but that value is flagged **unverified (⬜)** in the KB's own spot-check tracking — cross-check it against something physical before trusting it for coil sequencing.
+- [ ] **Stage A — spark check before attempting a start.** Crank the engine with fuel disabled (or plugs out) and verify with a timing light or spark tester that each coil fires in the correct sequence relative to TDC. This catches a wiring or firing-order mistake before risking a real start attempt.
+- [ ] **Stage B — first start attempt.** Haltech-controlled ignition + stock ECU fuel. Verify coil dwell/trigger with an oscilloscope on first startup per `cop-ignition.md`'s own warning. Confirm idle.
+
+> **Open risk, not yet resolved in the KB:** removing the stock ignition module/coils means the stock ECU no longer sees whatever ignition feedback it normally expects — whether the Siemens SIMK43 tolerates that gracefully (vs. throwing codes or entering limp mode while fuel injection is still needed from it) isn't documented here. Worth a quick check before Stage B, not just assumed fine.
 
 ---
 
@@ -684,7 +711,7 @@ Power: PDM MP1 (A2) → injector rail + Haltech 34-pin pin 26 (R/L)
 ## NEXT WEEKEND — Phase 2: Haltech Takes Over Engine
 
 > **Full Phase 2 procedure:** `guides/pdm-build-guide.md` → "Phase 2 — PDM + Haltech ECU"
-> **Re-timed by the Master Sequence above (Group 3):** this procedure is still correct, but the current plan is to do it on the *new* engine during the engine-out window rather than on the current engine now — avoids rewiring sensors twice. If you'd rather de-risk by validating Haltech on the current engine first, this section is ready to run as originally written.
+> **Re-timed by the Master Sequence above:** the *ignition* piece of this is being de-risked early on the current engine (Group 2.5 — "Coil + Haltech Ignition — Minimal On-Engine Test"), since it's cheap to redo later and worth proving before combining with an all-new engine build. The rest of this procedure — full injector/fuel takeover, AVI sensors, Deutsch harness, stock ECU removal — stays deferred to the new engine during the engine-out window (Group 3), since that labor is expensive to redo.
 
 After track day with stock ECU + PDM, switch to Haltech running the engine. **No Race Studio config change needed.** Physical wiring only.
 

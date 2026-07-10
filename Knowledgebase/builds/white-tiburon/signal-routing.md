@@ -64,7 +64,7 @@ All sensors: Red=+5V, Black=pressure GND, Yellow=pressure signal, White=temp GND
 **Ground:** Engine block → GND bus → Pin A on all 6 coils.
 **Dwell:** ~2.1 ms in Haltech NSP. Smart coil — internal igniter. Do NOT exceed dwell.
 **NSP setting:** Ignition mode = Sequential COP, Coil type = Smart coil.
-See `cars/cop-ignition.md` for full coil pinout (A/B/C/D), wiring diagram, and part numbers.
+See `hardware/sensors/cop-ignition.md` for full coil pinout (A/B/C/D), wiring diagram, and part numbers.
 
 | Signal | Haltech Pin | Wire Color | Coil Pin | Notes |
 |--------|-------------|------------|----------|-------|
