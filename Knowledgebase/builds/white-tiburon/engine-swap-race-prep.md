@@ -34,6 +34,7 @@
 3. **Fuel system reconnected and leak-checked** — doesn't have to be the new AN system yet. If the 6AN PTFE + Radium FPR + quick-disconnect work isn't going to be done and pressure-tested in time, reconnect stock lines for Thursday and do the AN conversion this weekend instead. A rushed, untested fuel fitting is not a Thursday-morning risk worth taking.
 4. **Front sway bar swap** — do it if the engine work goes smoothly; if not, it can wait for the weekend without touching Thursday.
 5. **PDM harness finalization / starting the Haltech D1–D3 harness in hard-to-reach spots** — genuinely lowest priority this week. It's disconnected either way (Phase 1), so nothing breaks if it's incomplete for Thursday. Do it if there's slack, otherwise it's the first thing pushed to the weekend.
+   - **Exception carved out while the engine is physically out:** D4 (Lowdoller sensor Deutsch) and the fuel pump PDM tap are cheap, engine-independent, and much easier with the bay this open — see "PDM harness / Haltech harness" below for the specific scope. D1/D2/D3 (engine-mounted: cam/crank/knock/IAT/MAP/TPS, coil/injector banks) stay dead last — those depend on the engine's final position anyway and aren't any easier to build before it's back in.
 
 ---
 
@@ -113,9 +114,19 @@ Two distinct Hyundai PNs exist in the parts catalog: `54811-2C000` and `54811-2C
 - [ ] Flag for alignment check — shouldn't move camber/toe, but confirm before or after Thursday
 
 ### PDM harness / Haltech harness (when there's time)
-- [ ] PDM: Lowdoller sensors (oil/coolant/fuel) installed and reading, MAP sensor in, sensor common buses wired, Haltech CAN1 ↔ PDM (B30/B31) verified in Race Studio Live Data
-- [ ] Haltech: start D1 (12-pin: cam/crank/knock/IAT/MAP/TPS) and D2/D3 (coil/injector bank harnesses) per `harness-design.md` — build and route, **do not plug in**. Coil/injector power runs stay coiled & capped per `firewall-passthrough.md` Phase 1 spec.
-- [ ] Whatever doesn't get finished rolls to the weekend without affecting Thursday — Haltech stays disconnected from engine control either way
+
+**Moved up, engine-out only — do these regardless of Mon–Wed slack, they're cheap and don't touch engine control:**
+- [ ] **D4 Lowdoller sensor Deutsch (8-pin)** — replace the temporary Wago splices at the firewall with the finalized D4 connector per `harness-design.md`. Crimp Deutsch DT pins onto all 3 sensors' bare leads (reds → pin 7, black+white → pin 8), terminate chassis-side 8-wire cable to the Haltech AVI pins. Sensor-only, feeds Haltech shadow-logging — no interaction with the stock ECU/BCM.
+- [ ] **Fuel pump → PDM HP3** — pull the OEM fuel pump relay, insert PDM HP3 (B24+B25) into the pin-87 socket in parallel per `pdm-build-guide.md` S.6. Non-destructive/reversible; stock relay is still physically present as fallback. Gets fuel prime + RPM-run logic into Haltech shadow-logging for Thursday.
+- [ ] **Rough-in only (do not connect to the load) — headlights (MP6/B7), fan (HB1/G1+G2), horn (MP3/B4):** pull PDM-side wire through the firewall to a convenient point near each load, coil & cap per `firewall-passthrough.md` Phase 1 spec. BCM keeps driving all three through the HPDE — this is just staging for the eventual Phase 2 switchover.
+- [ ] **Leave the current MP1/MP2 → stock ECU relay wiring untouched.** Whatever's already feeding the stock ECU circuit for Thursday stays as-is — nothing about how the engine gets power should change this week.
+
+**Lowest priority — only with real slack left, first to slip to the weekend:**
+- [ ] Haltech: D1 (12-pin: cam/crank/knock/IAT/MAP/TPS) and D2/D3 (coil/injector bank harnesses) per `harness-design.md` — build and route, **do not plug in**. These depend on the engine's final position, so there's no access advantage to doing them before it's back in.
+- [ ] Wiper switches/relay-less park wiring — not installed yet either way (Ch05/Ch06 spare); skip unless everything else is done.
+- [ ] Confirm Haltech CAN1 ↔ PDM (B30/B31) still verified in Race Studio Live Data after the D4/fuel-pump changes.
+
+Whatever doesn't get finished rolls to the weekend without affecting Thursday — Haltech stays disconnected from engine control either way.
 
 ---
 
