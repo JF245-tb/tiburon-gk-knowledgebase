@@ -65,6 +65,8 @@ Build this as a complete unit before it goes back in — matches how the old one
 - [ ] Mate trans case to clutch/bellhousing — **manual transaxle case to clutch housing bolt: 63–67 Nm**
 - [ ] **Confirm engine-block-to-bellhousing case bolt torque** directly from the physical shop manual's engine-block install section — not fully captured in this KB yet, don't guess a number
 - [ ] Confirm Quaife trans fluid spec/level before it goes back in (or plan to fill after install)
+- [ ] **Pull the lower oil pan** (paper gasket + RTV at the corner seams, bolts to the upper pan — no subframe drop needed) and inspect the pickup tube/screen for assembly debris (machining swarf from the +0.5mm bore work, gasket snippets, shop rags) before first fire. Reinstall with a **new** paper gasket + RTV, torque lower oil pan bolts **10–12 Nm** in the numbered bolt sequence from the manual. Grab 2 spare gaskets now — plan to pull it again after the break-in oil change to check the screen for anything shed during ring/bearing seating. Add a magnetic drain plug now if the pan doesn't already have one.
+- [ ] **Break-in oil:** use a conventional/mineral oil with no friction modifiers, not the usual synthetic — friction modifiers can prevent fresh rings from seating against the bore. **Valvoline VR1 20W-50** is the best of what's on hand (purpose-built break-in/racing oil, high ZDDP, no friction modifiers); Rotella **T4** 15W-40 (conventional line, not T6 synthetic — check the bottle) is a solid second choice. Skip the ZDDP additive — both already carry adequate zinc. Switch to the usual Kirkland synthetic 5W-30 at the post-break-in oil change. If the machine shop or ring manufacturer specified a break-in oil on the build sheet, follow that over this instead.
 
 **Goal by end of Monday:** engine+trans+clutch assembled as a unit, ready to go in Tuesday morning. If the pull + mate goes fast, start the install Monday evening.
 
@@ -136,7 +138,8 @@ Everything deferred from Mon–Wed, plus addressing whatever Thursday surfaced. 
 - [ ] Finish PDM harness (all Lowdoller sensors reading, CAN1 Haltech↔PDM confirmed, D4 8-pin Deutsch built)
 - [ ] Continue/finish D1/D2/D3 Haltech harness build — still leave D2/D3 unplugged
 - [ ] Address any Thursday findings (leaks, clutch adjustment, sway bar balance, noises)
-- [ ] Oil change after initial break-in miles; send a sample for analysis (see `oil-analysis/` for prior Blackstone baseline)
+- [ ] Oil change after initial break-in miles (switch from VR1/Rotella break-in oil to the usual Kirkland synthetic 5W-30); send a sample for analysis (see `oil-analysis/` for prior Blackstone baseline)
+- [ ] Pull the lower oil pan again to inspect the pickup screen for any debris shed during ring/bearing seating (second of the 2 spare gaskets from Monday)
 
 ---
 
