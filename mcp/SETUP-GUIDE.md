@@ -92,7 +92,7 @@ Once the session is loaded, try these to confirm it's working:
 
 **"Which PDM output powers the fuel pump, and what's the trigger logic?"**
 
-Expected answer (from `build-profile.json` + `hardware/aim-pdm/pdm-configuration-guide.md`):
+Expected answer (from `build-profile.json` + `hardware/aim/aim-pdm/pdm-configuration-guide.md`):
 > HP3 (pins A24+A25), 15A overcurrent protection. Trigger: FUEL_PRIME OR ENGINE_RUNNING — 3-second prime on IGN on, then tracks RPM > 50 via CAN from Haltech. No manual override switch; cycle IGN off/on to re-trigger the 3s fuel prime.
 
 ---

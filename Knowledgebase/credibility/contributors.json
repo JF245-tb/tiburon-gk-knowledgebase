@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "description": "Known contributor registry — forum and community members with credibility weights",
+    "description": "Known forum-poster registry — external NewTiburon/OpenGK contributors ranked by credibility weight (not repo contributors)",
     "version": "1.0",
     "last_updated": "2026-03-12",
     "schema_doc": "credibility/README.md",

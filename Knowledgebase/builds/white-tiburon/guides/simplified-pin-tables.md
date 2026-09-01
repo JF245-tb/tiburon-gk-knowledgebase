@@ -4,7 +4,7 @@
 **Car:** White 2003 Tiburon GK | Haltech Elite 2500 + AIM PDM 32
 **Purpose:** Strip the harnesses down to just what's wired. If a pin isn't listed, leave it empty.
 
-> **Naming convention:** PDM docs call the connectors A (Black) and B (Grey). The signal-routing doc uses B=Black and G=Grey. This file uses the **A/B standard** with color labels.
+> **Naming convention:** PDM connectors are A (Black) and B (Grey), per AIM's own naming (`hardware/aim/aim-pdm/pdm-pinout.md`). All build docs now use this A/B standard — an earlier local "B=Black, G=Grey" mnemonic (used in this file's Haltech connector labels and, previously, elsewhere) has been reconciled to match.
 
 ---
 

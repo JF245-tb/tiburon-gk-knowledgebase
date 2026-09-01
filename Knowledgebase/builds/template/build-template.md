@@ -25,7 +25,7 @@
 | Field | Value |
 |-------|-------|
 | **Displacement** | 2.7L V6 |
-| **State** | (stock / built — see `common/engine-builds.md`) |
+| **State** | (stock / built — if built, document the assembly sequence and gasket/torque reference in a `guides/engine-build.md` for this car, following `builds/white-tiburon/guides/engine-build.md` as an example) |
 | **Headers** | |
 | **Exhaust** | |
 | **Intake** | |

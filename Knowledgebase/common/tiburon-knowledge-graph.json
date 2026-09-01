@@ -1,6 +1,6 @@
 {
   "_meta": {
-    "description": "Tiburon GK common knowledge graph â€” manual hierarchy, standard values, OEM components",
+    "description": "Tiburon GK common knowledge graph — manual hierarchy, standard values, OEM components",
     "schema": "common/knowledge-graph-schema.md",
     "version": "1.0",
     "last_updated": "2026-03-13",
@@ -78,17 +78,17 @@
     {
       "id": "manual-etm-cc",
       "type": "manual",
-      "label": "Electrical Manual â€” Connector Configurations",
+      "label": "Electrical Manual — Connector Configurations",
       "chapter_code": "CC",
       "engine": "both",
       "source_pdf": "LARGEFILE Searchable_Manuals/Tiburon-Electrical-Manual/02. Connector Configurations-OCR.pdf",
-      "md_file": "common/electrical-manual/connector-configurations.md",
+      "md_file": "common/electrical-manual/cc-connector-configurations.md",
       "pages": 24
     },
     {
       "id": "manual-etm-cl",
       "type": "manual",
-      "label": "Electrical Manual â€” Component Locations",
+      "label": "Electrical Manual — Component Locations",
       "chapter_code": "CL",
       "engine": "both",
       "source_pdf": "LARGEFILE Searchable_Manuals/Tiburon-Electrical-Manual/03. Component Locations-OCR.pdf",
@@ -98,10 +98,10 @@
     {
       "id": "manual-etm-sd",
       "type": "manual",
-      "label": "Electrical Manual â€” Schematic Diagrams",
+      "label": "Electrical Manual — Schematic Diagrams",
       "chapter_code": "SD",
       "engine": "both",
-      "md_file": "common/electrical-manual/schematic-diagrams.md"
+      "md_file": "common/electrical-manual/schematics/_index.md"
     },
     {
       "id": "EMA-index",
@@ -131,7 +131,7 @@
     {
       "id": "EMA-3",
       "type": "section",
-      "label": "Specifications Table â€” Valve Train, Pistons, Crankshaft",
+      "label": "Specifications Table — Valve Train, Pistons, Crankshaft",
       "page_ref": "EMA-3",
       "section_type": "spec",
       "notes": "Master standard values table. Cross-reference to specific section procedures."
@@ -139,7 +139,7 @@
     {
       "id": "EMA-4",
       "type": "section",
-      "label": "Specifications Table â€” Oil Pump, Cooling",
+      "label": "Specifications Table — Oil Pump, Cooling",
       "page_ref": "EMA-4",
       "section_type": "spec"
     },
@@ -184,7 +184,7 @@
     {
       "id": "EMA-72",
       "type": "section",
-      "label": "Valve Spring â€” Diagram",
+      "label": "Valve Spring — Diagram",
       "page_ref": "EMA-72",
       "section_type": "diagram",
       "parent_id": "EMA-69"
@@ -192,7 +192,7 @@
     {
       "id": "EMA-73",
       "type": "section",
-      "label": "Valve Spring â€” Installation",
+      "label": "Valve Spring — Installation",
       "page_ref": "EMA-73",
       "section_type": "procedure",
       "parent_id": "EMA-69"
@@ -215,7 +215,7 @@
     {
       "id": "EE-2",
       "type": "section",
-      "label": "General Specifications â€” Ignition, Starter, Alternator, Battery",
+      "label": "General Specifications — Ignition, Starter, Alternator, Battery",
       "page_ref": "EE-2",
       "section_code": "EBOO5O10",
       "section_type": "spec"
@@ -243,7 +243,7 @@
     {
       "id": "FLA-2",
       "type": "section",
-      "label": "General Specifications â€” Sensors, Actuators, Fuel Pressure",
+      "label": "General Specifications — Sensors, Actuators, Fuel Pressure",
       "page_ref": "FLA-2",
       "section_code": "EFOC3010",
       "section_type": "spec",
@@ -308,7 +308,7 @@
     {
       "id": "sv-cam-height-intake",
       "type": "standard_value",
-      "label": "Cam Height â€” Intake",
+      "label": "Cam Height — Intake",
       "value": "43.95â€“44.15 mm (1.7303â€“1.7382 in.)",
       "limit": "43.45 mm (1.7106 in.)",
       "unit": "mm",
@@ -318,7 +318,7 @@
     {
       "id": "sv-cam-height-exhaust",
       "type": "standard_value",
-      "label": "Cam Height â€” Exhaust",
+      "label": "Cam Height — Exhaust",
       "value": "43.95â€“44.15 mm (1.7303â€“1.7382 in.)",
       "limit": "43.45 mm (1.7106 in.)",
       "unit": "mm",
@@ -652,7 +652,7 @@
       "subsystem": "engine-management",
       "engine": "V6",
       "sensor_type": "Hall effect",
-      "oem_location": "Camshaft journal area â€” top of engine",
+      "oem_location": "Camshaft journal area — top of engine",
       "opengk_url": "https://opengk.org/",
       "community_review": "pending",
       "connector_code": "C114",
@@ -1070,7 +1070,7 @@
       "system": "engine",
       "subsystem": "engine-management",
       "engine": "V6",
-      "notes": "Two sensors â€” front bank and rear bank (G6BA)",
+      "notes": "Two sensors — front bank and rear bank (G6BA)",
       "oem_part_numbers": [
         {
           "pn": "39250-37150",
@@ -1121,7 +1121,7 @@
       "system": "engine",
       "subsystem": "ignition",
       "engine": "V6",
-      "notes": "OEM: wasted spark (3 coils). White car converted to COP â€” Toyota 90919-A2005 Ã—6. See hardware/sensors/cop-ignition.md.",
+      "notes": "OEM: wasted spark (3 coils). White car converted to COP — Toyota 90919-A2005 Ã—6. See hardware/sensors/cop-ignition.md.",
       "oem_part_numbers": [
         {
           "pn": "27310-37120",
@@ -1904,7 +1904,7 @@
     {
       "id": "diag-EMA-72",
       "type": "diagram",
-      "label": "Valve Spring â€” Installation Diagram",
+      "label": "Valve Spring — Installation Diagram",
       "page_ref": "EMA-72",
       "engine": "V6"
     },
@@ -2005,133 +2005,133 @@
     {
       "id": "section-SD-78",
       "type": "section",
-      "label": "MFI Control System (2.7L) â€” ECM Area",
+      "label": "MFI Control System (2.7L) — ECM Area",
       "page_ref": "SD-78",
       "section_type": "diagram"
     },
     {
       "id": "section-SD-79",
       "type": "section",
-      "label": "MFI Control System (2.7L) â€” O2 Sensors Bank 1",
+      "label": "MFI Control System (2.7L) — O2 Sensors Bank 1",
       "page_ref": "SD-79",
       "section_type": "diagram"
     },
     {
       "id": "section-SD-80",
       "type": "section",
-      "label": "MFI Control System (2.7L) â€” O2 Sensors Bank 2",
+      "label": "MFI Control System (2.7L) — O2 Sensors Bank 2",
       "page_ref": "SD-80",
       "section_type": "diagram"
     },
     {
       "id": "section-SD-81",
       "type": "section",
-      "label": "MFI Control System (2.7L) â€” Fuel/Actuators",
+      "label": "MFI Control System (2.7L) — Fuel/Actuators",
       "page_ref": "SD-81",
       "section_type": "diagram"
     },
     {
       "id": "section-SD-82",
       "type": "section",
-      "label": "MFI Control System (2.7L) â€” Air/Misc Sensors",
+      "label": "MFI Control System (2.7L) — Air/Misc Sensors",
       "page_ref": "SD-82",
       "section_type": "diagram"
     },
     {
       "id": "section-CL-22",
       "type": "section",
-      "label": "Component Locations â€” Engine Sensors",
+      "label": "Component Locations — Engine Sensors",
       "page_ref": "CL-22",
       "section_type": "diagram"
     },
     {
       "id": "section-CL-23",
       "type": "section",
-      "label": "Component Locations â€” Engine Actuators/Coils",
+      "label": "Component Locations — Engine Actuators/Coils",
       "page_ref": "CL-23",
       "section_type": "diagram"
     },
     {
       "id": "section-CL-24",
       "type": "section",
-      "label": "Component Locations â€” ISC/IAT Area",
+      "label": "Component Locations — ISC/IAT Area",
       "page_ref": "CL-24",
       "section_type": "diagram"
     },
     {
       "id": "section-CL-25",
       "type": "section",
-      "label": "Component Locations â€” ECM Area",
+      "label": "Component Locations — ECM Area",
       "page_ref": "CL-25",
       "section_type": "diagram"
     },
     {
       "id": "section-HL-15",
       "type": "section",
-      "label": "Harness Layout â€” Control Harness (4) 2.7L",
+      "label": "Harness Layout — Control Harness (4) 2.7L",
       "page_ref": "HL-15",
       "section_type": "diagram"
     },
     {
       "id": "section-FLA-35",
       "type": "section",
-      "label": "ECT Sensor â€” Circuit Diagram & Procedure",
+      "label": "ECT Sensor — Circuit Diagram & Procedure",
       "page_ref": "FLA-35",
       "section_type": "diagram"
     },
     {
       "id": "section-FLA-40",
       "type": "section",
-      "label": "MAF Sensor â€” Circuit Diagram & Procedure",
+      "label": "MAF Sensor — Circuit Diagram & Procedure",
       "page_ref": "FLA-40",
       "section_type": "diagram"
     },
     {
       "id": "section-FLA-43",
       "type": "section",
-      "label": "IAT Sensor â€” Circuit Diagram & Procedure",
+      "label": "IAT Sensor — Circuit Diagram & Procedure",
       "page_ref": "FLA-43",
       "section_type": "diagram"
     },
     {
       "id": "section-FLA-46",
       "type": "section",
-      "label": "TPS â€” Circuit Diagram & Procedure",
+      "label": "TPS — Circuit Diagram & Procedure",
       "page_ref": "FLA-46",
       "section_type": "diagram"
     },
     {
       "id": "section-FLA-52",
       "type": "section",
-      "label": "Heated Oxygen Sensor â€” Circuit Diagram & Procedure",
+      "label": "Heated Oxygen Sensor — Circuit Diagram & Procedure",
       "page_ref": "FLA-52",
       "section_type": "diagram"
     },
     {
       "id": "section-FLA-55",
       "type": "section",
-      "label": "CMP Sensor â€” Circuit Diagram & Procedure",
+      "label": "CMP Sensor — Circuit Diagram & Procedure",
       "page_ref": "FLA-55",
       "section_type": "diagram"
     },
     {
       "id": "section-FLA-57",
       "type": "section",
-      "label": "CKP Sensor â€” Circuit Diagram & Procedure",
+      "label": "CKP Sensor — Circuit Diagram & Procedure",
       "page_ref": "FLA-57",
       "section_type": "diagram"
     },
     {
       "id": "section-FLA-59",
       "type": "section",
-      "label": "Fuel Injector â€” Circuit Diagram & Procedure",
+      "label": "Fuel Injector — Circuit Diagram & Procedure",
       "page_ref": "FLA-59",
       "section_type": "diagram"
     },
     {
       "id": "section-FLA-65",
       "type": "section",
-      "label": "Knock Sensor â€” Circuit Diagram & Procedure",
+      "label": "Knock Sensor — Circuit Diagram & Procedure",
       "page_ref": "FLA-65",
       "section_type": "diagram"
     }
@@ -2474,7 +2474,7 @@
       "source": "comp-cmp-sensor",
       "target": "FLA-20",
       "rel": "procedure_for",
-      "context": "MFI control system â€” sensor role"
+      "context": "MFI control system — sensor role"
     },
     {
       "source": "comp-ckp-sensor",
@@ -2682,7 +2682,7 @@
       "source": "comp-ignition-coil",
       "target": "pn-cop-toyota-90919-A2005",
       "rel": "has_part",
-      "note": "COP conversion â€” white car only. OEM = wasted spark."
+      "note": "COP conversion — white car only. OEM = wasted spark."
     },
     {
       "source": "comp-ignition-coil",
@@ -2842,79 +2842,79 @@
       "source": "comp-knock-sensor",
       "target": "conn-C123-1",
       "rel": "connector_code",
-      "context": "ETM connector C123-1, 1-pin, CC-17, Control Harness (4) â€” front bank"
+      "context": "ETM connector C123-1, 1-pin, CC-17, Control Harness (4) — front bank"
     },
     {
       "source": "comp-knock-sensor",
       "target": "conn-C123-2",
       "rel": "connector_code",
-      "context": "ETM connector C123-2, 1-pin, CC-17, Control Harness (4) â€” rear bank"
+      "context": "ETM connector C123-2, 1-pin, CC-17, Control Harness (4) — rear bank"
     },
     {
       "source": "comp-ckp-sensor",
       "target": "section-SD-78",
       "rel": "schematic_page",
-      "context": "SD-78: MFI Control System (2.7L) â€” ECM pinout, CKP circuit"
+      "context": "SD-78: MFI Control System (2.7L) — ECM pinout, CKP circuit"
     },
     {
       "source": "comp-cmp-sensor",
       "target": "section-SD-78",
       "rel": "schematic_page",
-      "context": "SD-78: MFI Control System (2.7L) â€” CMP circuit, signal (B, 0.5) to C133-4 pin 7, power via C142"
+      "context": "SD-78: MFI Control System (2.7L) — CMP circuit, signal (B, 0.5) to C133-4 pin 7, power via C142"
     },
     {
       "source": "comp-tps",
       "target": "section-SD-78",
       "rel": "schematic_page",
-      "context": "SD-78: TPS circuit â€” signal (L, 0.5) to C133-3 pin 19"
+      "context": "SD-78: TPS circuit — signal (L, 0.5) to C133-3 pin 19"
     },
     {
       "source": "comp-ect-sensor",
       "target": "section-SD-81",
       "rel": "schematic_page",
-      "context": "SD-81: ECT circuit â€” signal to C133-4"
+      "context": "SD-81: ECT circuit — signal to C133-4"
     },
     {
       "source": "comp-injector",
       "target": "section-SD-81",
       "rel": "schematic_page",
-      "context": "SD-81: Injector circuits â€” C124-1 through C124-6"
+      "context": "SD-81: Injector circuits — C124-1 through C124-6"
     },
     {
       "source": "comp-maf-sensor",
       "target": "section-SD-82",
       "rel": "schematic_page",
-      "context": "SD-82: MAF circuit â€” signal to C133-3 pin 5"
+      "context": "SD-82: MAF circuit — signal to C133-3 pin 5"
     },
     {
       "source": "comp-iat-sensor",
       "target": "section-SD-82",
       "rel": "schematic_page",
-      "context": "SD-82: IAT circuit â€” signal to C133-4"
+      "context": "SD-82: IAT circuit — signal to C133-4"
     },
     {
       "source": "comp-knock-sensor",
       "target": "section-SD-82",
       "rel": "schematic_page",
-      "context": "SD-82: Knock sensor circuits â€” both banks"
+      "context": "SD-82: Knock sensor circuits — both banks"
     },
     {
       "source": "comp-vss",
       "target": "section-SD-82",
       "rel": "schematic_page",
-      "context": "SD-82: VSS circuit â€” C109 to cluster/BCM/ECM"
+      "context": "SD-82: VSS circuit — C109 to cluster/BCM/ECM"
     },
     {
       "source": "comp-o2-sensor",
       "target": "section-SD-79",
       "rel": "schematic_page",
-      "context": "SD-79: O2 sensors Bank 1 â€” C116, C145, C147"
+      "context": "SD-79: O2 sensors Bank 1 — C116, C145, C147"
     },
     {
       "source": "comp-o2-sensor",
       "target": "section-SD-80",
       "rel": "schematic_page",
-      "context": "SD-80: O2 sensors Bank 2 â€” C122, C146, C148"
+      "context": "SD-80: O2 sensors Bank 2 — C122, C146, C148"
     },
     {
       "source": "comp-ect-sensor",
@@ -2968,7 +2968,7 @@
       "source": "comp-injector",
       "target": "section-CL-23",
       "rel": "location_page",
-      "context": "CL-23: Injector locations â€” all 6 cylinders"
+      "context": "CL-23: Injector locations — all 6 cylinders"
     },
     {
       "source": "comp-iat-sensor",
@@ -2980,67 +2980,67 @@
       "source": "comp-ckp-sensor",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control Harness (4) 2.7L â€” C113"
+      "context": "HL-15: Control Harness (4) 2.7L — C113"
     },
     {
       "source": "comp-cmp-sensor",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control Harness (4) 2.7L â€” C114"
+      "context": "HL-15: Control Harness (4) 2.7L — C114"
     },
     {
       "source": "comp-ect-sensor",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control Harness (4) 2.7L â€” C111"
+      "context": "HL-15: Control Harness (4) 2.7L — C111"
     },
     {
       "source": "comp-tps",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control Harness (4) 2.7L â€” C112"
+      "context": "HL-15: Control Harness (4) 2.7L — C112"
     },
     {
       "source": "comp-maf-sensor",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control Harness (4) 2.7L â€” C125"
+      "context": "HL-15: Control Harness (4) 2.7L — C125"
     },
     {
       "source": "comp-iat-sensor",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control Harness (4) 2.7L â€” C127"
+      "context": "HL-15: Control Harness (4) 2.7L — C127"
     },
     {
       "source": "comp-knock-sensor",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control Harness (4) 2.7L â€” C123-1/C123-2"
+      "context": "HL-15: Control Harness (4) 2.7L — C123-1/C123-2"
     },
     {
       "source": "comp-vss",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control Harness (4) 2.7L â€” C109"
+      "context": "HL-15: Control Harness (4) 2.7L — C109"
     },
     {
       "source": "comp-o2-sensor",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control Harness (4) 2.7L â€” C116/C122/C145-C148"
+      "context": "HL-15: Control Harness (4) 2.7L — C116/C122/C145-C148"
     },
     {
       "source": "comp-injector",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control Harness (4) + Injector Harness â€” C124-1..6"
+      "context": "HL-15: Control Harness (4) + Injector Harness — C124-1..6"
     },
     {
       "source": "comp-ignition-coil",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control Harness (4) 2.7L â€” C118"
+      "context": "HL-15: Control Harness (4) 2.7L — C118"
     },
     {
       "source": "section-FLA-35",
@@ -3076,13 +3076,13 @@
       "source": "section-FLA-55",
       "target": "comp-cmp-sensor",
       "rel": "circuit_diagram",
-      "context": "FLA-55: CMP sensor circuit â€” Pin 1=Power, Pin 2=Signal, Pin 3=GND"
+      "context": "FLA-55: CMP sensor circuit — Pin 1=Power, Pin 2=Signal, Pin 3=GND"
     },
     {
       "source": "section-FLA-57",
       "target": "comp-ckp-sensor",
       "rel": "circuit_diagram",
-      "context": "FLA-57: CKP sensor circuit â€” Pin 1=Power, Pin 2=Signal, Pin 3=GND"
+      "context": "FLA-57: CKP sensor circuit — Pin 1=Power, Pin 2=Signal, Pin 3=GND"
     },
     {
       "source": "section-FLA-59",
@@ -3172,18 +3172,18 @@
       "source": "comp-control-harness",
       "target": "section-HL-15",
       "rel": "harness_assignment",
-      "context": "HL-15: Control wiring harness â€” ECM connectors"
+      "context": "HL-15: Control wiring harness — ECM connectors"
     }
   ],
   "quick_lookup": {
     "chapter_codes": {
       "GI": "General Information",
-      "EMA": "Engine Mechanical (V6 Delta 2.7L) â€” shop manual",
-      "EM": "Engine Mechanical (I4 Beta 2.0L) â€” shop manual",
-      "EE": "Engine Electrical â€” shop manual (both engines)",
-      "EC": "Emission Control â€” shop manual",
-      "FLA": "Fuel System (V6) â€” shop manual",
-      "FL": "Fuel System (I4) â€” shop manual",
+      "EMA": "Engine Mechanical (V6 Delta 2.7L) — shop manual",
+      "EM": "Engine Mechanical (I4 Beta 2.0L) — shop manual",
+      "EE": "Engine Electrical — shop manual (both engines)",
+      "EC": "Emission Control — shop manual",
+      "FLA": "Fuel System (V6) — shop manual",
+      "FL": "Fuel System (I4) — shop manual",
       "CH": "Clutch System",
       "TR": "Transaxle",
       "DS": "Driveshaft and Axle",

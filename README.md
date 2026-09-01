@@ -9,15 +9,11 @@ Structured technical reference for the GK-chassis Hyundai Tiburon. Combines fact
 
 | Directory | Contents |
 |-----------|----------|
-| `Knowledgebase/` | Core KB: Markdown docs, knowledge graphs, diagrams, fastener database |
-| `Tiburon-Shop-Manual/` | Factory shop manual PDFs (chapter PDFs) |
-| `Electrical Troubleshooting Manual/` | ETM PDFs (schematics, component locations, connector configurations) |
-| `Electrical Excerpts/` | Selected ETM pages for quick reference |
-| `AIM PDM/` | AIM PDM 32 original documentation |
-| `Haltech/` | Haltech Elite 2500 wiring documentation |
+| `Knowledgebase/` | Core KB: Markdown docs, knowledge graphs, diagrams, fastener database, hardware docs |
 | `mcp/` | MCP server setup for AI model integration |
+| `scripts/` | Extraction and scraping tools (PDF, forum, parts catalog) |
 
-> **Note:** `LARGEFILE Searchable_Manuals/` (OCR'd PDFs, 1.4GB) is excluded from this repo. Its text content is extracted into `Knowledgebase/common/shop-manual/` and `Knowledgebase/common/electrical-manual/`.
+> **Note:** Source PDFs (factory shop manual, ETM, AIM/Haltech datasheets — 1.4GB+) are excluded from this repo (see `.gitignore`). Their content is extracted into `Knowledgebase/common/shop-manual/`, `Knowledgebase/common/electrical-manual/`, and `Knowledgebase/hardware/`.
 
 ---
 
@@ -28,7 +24,7 @@ Structured technical reference for the GK-chassis Hyundai Tiburon. Combines fact
 1. Browse `Knowledgebase/common/shop-manual/` for factory procedures and specs
 2. Browse `Knowledgebase/builds/{car}/build-profile.md` for a specific car's equipment and wiring
 3. Use the Mermaid diagrams in `Knowledgebase/common/diagrams/` for visual component traces
-4. Search for specific values (e.g., "valve spring free height" → finds EMA-3 in `engine-mechanical.md`)
+4. Search for specific values (e.g., "valve spring free height" → finds EMA-3 in `Knowledgebase/common/shop-manual/engine-mechanical/specifications.md`)
 
 ### For AI Models
 
@@ -62,11 +58,11 @@ Knowledgebase/
 │   ├── white-tiburon/   ← Haltech Elite 2500 + AIM PDM 32 build
 │   └── blue-tiburon/    ← Stock Siemens SIMK43 build
 ├── hardware/
-│   ├── aim-pdm/         ← PDM 32 pinout + Race Studio config guide
+│   ├── aim/             ← AIM devices: PDM 32, Data Hub, GPS-08, SmartyCam, Podium, CAN keypad
 │   ├── haltech/         ← Elite 2500 wiring diagrams + connector pinouts
 │   └── sensors/         ← Aftermarket sensor specs and wiring
 ├── fasteners/           ← Bolt database with photos and measurements
-└── forum/               ← Community knowledge (planned)
+└── forum/               ← Community knowledge — thread index + scraped posts
 ```
 
 ---
@@ -89,4 +85,4 @@ Knowledgebase/
 
 ---
 
-See `ROADMAP.md` for planned additions including community input, forum data, and interchangeable parts.
+See `ROADMAP.md` for planned additions including semantic search, forum data, and interchangeable parts.

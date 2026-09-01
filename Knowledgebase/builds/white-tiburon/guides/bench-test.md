@@ -15,7 +15,7 @@
 | Laptop with Race Studio 3 | USB Binder cable to PDM |
 | 12V bench supply or car battery | PDM draws ~0.5A idle; fuel pump ~8A peak |
 | Switch panel (7 switches) | 6 toggles + 1 momentary starter |
-| Fuel pump (external, bench) | Wago or spade to HP3 (B24+B25) |
+| Fuel pump (external, bench) | Wago or spade to HP3 (A24+A25) |
 | Multimeter | Current clamp preferred for pump draw |
 | Fused jumper wires | For fuse box tap connections |
 
@@ -30,7 +30,7 @@
 1. Open `Webinar complete.zconfig` in Race Studio 3
 2. **File → Save As** → `Tiburon_White_v1.zconfig` immediately
 3. Configure in order:
-   - ECU Stream: Haltech CAN_V2_40 protocol on CAN1 (B30/B31)
+   - ECU Stream: Haltech CAN_V2_40 protocol on CAN1 (A30/A31)
    - Channel inputs: Ch02 (fan low), Ch03 (fan high), Ch10 (coolsuit), Ch11 (defogger), Ch12 (horn), Ch04 (headlights), Ch01 (starter), Ch09 (brake)
    - Math channels: ENGINE_RUNNING, FUEL_PRIME, FAN_TEMP bands, STARTER_SAFE, MULTI_WARNING
    - Power output renames and trigger assignments per output map
@@ -48,7 +48,7 @@
 - Leave all outputs disconnected
 
 ### Power-up
-1. Flip IGN toggle → PDM Grey Connector pin G23 to 12V
+1. Flip IGN toggle → PDM Grey Connector pin B23 to 12V
 2. Race Studio Live Data → confirm `SafeIgnition` = 1
 3. Confirm LP1–LP6 show active in Outputs view (no loads connected yet — OK)
 4. Test each toggle switch:
@@ -69,12 +69,12 @@
 ### Wiring for bench test
 ```
 PDM HP3 outputs:
-  B24 ─────┬────── Pump positive (+)
-  B25 ─────┘
+  A24 ─────┬────── Pump positive (+)
+  A25 ─────┘
 
   Battery GND ─── Pump negative (−)
 ```
-- Both B24 and B25 carry HP3 — connect both to pump positive for full current capacity
+- Both A24 and A25 carry HP3 — connect both to pump positive for full current capacity
 - Use 14 AWG minimum for bench test wires
 
 ### Test sequence
@@ -123,12 +123,12 @@ PDM HP3 outputs:
 **Step 1: Locate relay positions**
 - Fuel pump relay: typically labeled FP or FUEL PUMP in the underhood fuse box
 - Alternator relay: labeled ALT, IG1, or MAIN depending on trim
-- Refer to `common/electrical-manual/schematic-diagrams.md` → SD-78 (MFI Control System) for fuse box layout
+- Refer to `common/electrical-manual/schematics/mfi-control-v6.md` → SD-78 (MFI Control System) for fuse box layout
 
 **Step 2: Fuel pump tap**
 1. Pull the OEM fuel pump relay
 2. Identify pin 87 in the relay socket (power out to pump)
-3. Insert male spade connector from PDM HP3 (B24+B25) into pin 87 socket
+3. Insert male spade connector from PDM HP3 (A24+A25) into pin 87 socket
 4. Leave pins 30, 85, 86 untouched (relay coil control — stock ECU still commands it, PDM output just bypasses it)
 
 **Step 3: Verify before starting engine**
@@ -195,7 +195,7 @@ The OEM starter relay in the fuse box has a pin 87 output that goes to the start
 
 1. Locate the starter relay in the underhood fuse box (labeled START or ST)
 2. The OEM ignition switch feeds pin 86 (relay coil) via the IGN switch circuit
-3. **Option A1 — Parallel:** Insert PDM HP1 wire (B1+B13) into pin 87 alongside the existing OEM wire
+3. **Option A1 — Parallel:** Insert PDM HP1 wire (A1+A13) into pin 87 alongside the existing OEM wire
    - PDM and stock ignition switch can both trigger the solenoid independently
    - Safe since stock ECU still runs
 4. **Option A2 — Replace:** Remove stock starter relay; wire HP1 directly to pin 87 socket
@@ -212,14 +212,14 @@ The OEM starter relay in the fuse box has a pin 87 output that goes to the start
 
 If the fuse box tap has too much resistance or the solenoid doesn't respond:
 
-1. Run a new wire from PDM HP1 (B1+B13) directly to the starter solenoid S-terminal (small stud, not the main battery cable)
+1. Run a new wire from PDM HP1 (A1+A13) directly to the starter solenoid S-terminal (small stud, not the main battery cable)
 2. This wire carries 12V when HP1 is active — solenoid sees direct PDM output
 3. Leave the original OEM starter relay circuit intact as backup
 4. **Important:** HP1 has an internal series diode to prevent back-EMF — no additional protection needed
 
 **Wiring at solenoid:**
 ```
-PDM HP1 (B1+B13) ────────── Solenoid S terminal (small lug)
+PDM HP1 (A1+A13) ────────── Solenoid S terminal (small lug)
                              (OEM start wire also connects here — OK in parallel)
 ```
 

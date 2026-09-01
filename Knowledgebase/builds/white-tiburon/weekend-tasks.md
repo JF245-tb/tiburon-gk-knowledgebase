@@ -22,19 +22,135 @@
 
 ---
 
-## Current State (March 2026)
+## Current State (July 2026)
 
 | System | Status |
 |--------|--------|
-| Haltech bench | Cam ✅ Crank ✅ COP fire ✅ — Knock: **next** |
-| PDM Race Studio config | ✅ Updated — physical switch panel (no keypad) |
-| PDM car connection | Spade connectors → fuse box pin 87 (non-destructive) |
-| Physical switch panel | 6 toggles + 1 momentary starter — **not yet wired to PDM** |
-| Stock ECU | Connected and running |
+| Haltech Elite 2500 | **Not yet physically installed in car.** Bench-tested only: Cam ✅ Crank ✅ COP fire ✅ — Knock: next |
+| PDM car connection | Running the fuse box (spade connectors → pin 87, non-destructive) |
+| PDM sensor inputs | Reading a subset of the aftermarket (Lowdoller) sensors — **not all AVI channels wired yet** |
+| Stock ECU | Still connected and running the engine (Haltech has not taken over) |
+| Physical switch panel | 6 toggles + 1 momentary starter |
 | Kill switch | Mounted left of steering wheel, 2 AWG cable run |
-| Seat panel | Needs welding (~3 hrs) — **must do before electronics install** |
 
-**Removed from this weekend:** Coilovers → fab shop Wednesday, front bearings → fab shop.
+> **Bigger picture:** this is a partial install — the PDM has taken over the fuse box and some sensor reads, but the Haltech itself isn't in the car yet, so the stock ECU is still what's actually running the engine. Full Haltech install (injector/coil harnesses, remaining AVI channels, CAN handoff from PDM) is the next major milestone here — see `guides/pdm-build-guide.md` and `guides/harness-design.md` for the Phase 2/3 wiring that gets it there.
+>
+> **Engine swap note:** a fresh race motor for the September race is being built up separately — see `guides/engine-build.md`. Once it goes in, re-verify all Haltech AVI/CAN wiring against the new engine's actual sensor locations before first start.
+
+---
+
+## Master Sequence — Ordering for Time Savings
+
+Everything currently open, reasoned into an order. The organizing idea: **the engine-out window (pulling the current engine, installing the new one) is the single biggest batching opportunity in the whole list** — several tasks are either physically easier with the engine out, or are engine-mounted work that will be wasted effort if done on the engine that's about to be replaced. Group 3 below is that window.
+
+### 1. Runs now, in parallel, no dependencies
+
+Nothing here blocks or is blocked by anything else — do these whenever shop time allows, ideally *before* Group 3 so the parts/hardware are on hand when the engine-out window opens.
+
+- Engine build assembly (`guides/engine-build.md`, steps 1–7: oil pump/crank sprocket → harmonic balancer → oil pans → heads → camshafts → valve covers → timing belt/water pump) — this happens on a stand, independent of the car.
+- Order/fabricate correctly-sized front sway bar links (short enough to bury the threaded rod, not just re-tension the current ones) and rear strut-tab hardware if the coilover reinstall shows the new tab position doesn't fully resolve it.
+- Collect PTFE line fittings (SU.3 already calls this out as step 1 — do the collecting now even though the actual routing waits, see Group 3).
+
+### 2. Car-side suspension work, independent of the engine
+
+Can happen anytime, and ideally happens *before* Group 4 (corner weighting) since it changes ride height:
+
+- Reinstall coilovers with camber plates — **check the new rear strut tab position here**, this is the moment to find out if it resolves the rear sway bar failure before designing a fix for a problem that might already be solved.
+- Adjust bump stops (same session as coilovers).
+- Rear sway bar link fix, informed by what the tab check above finds.
+
+### 2.5. Minimal coil + fuel injection test — de-risk Haltech on the current engine
+
+**Decision made:** rather than the "don't touch the current engine" default from Group 3, run Haltech in full control of **both ignition and fuel injection** on the current, known-good engine first — stock ECU unplugged entirely for this test. Full steps in **"Coil + Fuel Injection — Minimal Haltech On-Engine Test"** above. This can happen in parallel with Group 1/2, anytime before the engine-out window.
+
+Why this doesn't conflict with the "don't do engine-mounted work twice" logic in Group 3: the coils, injector triggering, and the CKP/CMP taps are cheap/fast to redo on the new engine (a few hours, not a full rebuild) — worth proving Haltech can actually run the car before combining that with a brand-new, unrun engine. What's *still* deferred to Group 3 because it's expensive to redo: the full AVI sensor suite (oil/coolant/MAP/fuel pressure), the PTFE lines + Radium FPR (default is this test runs on the current engine's existing fuel delivery, not the new plumbing), and the production Deutsch harness. Base fuel map tuning done now will need revisiting once the Radium FPR changes the actual fuel pressure — expected, not wasted work.
+
+### 3. Engine-out window — batch everything that needs the bay open or is engine-mounted
+
+When the current engine comes out and the new one (from Group 1) goes in, do all of this in the same window rather than spreading it across separate teardowns:
+
+- Front sway bar swap + install the new front links from Group 1 (don't put the old bar back in with new links now and pull it again later).
+- CV axles, tie rod ends, wheel hubs and bearings — drivetrain access is best with the engine/trans out, and this is literally when the Quaife-equipped transmission goes in.
+- **Build/finish the Phase 2 Deutsch-connector harness** (`guides/harness-design.md`) on the new engine, not the old one. The harness was explicitly designed for this — "pull 4 connectors + 2 grounds + starter = engine is free" — so this is the intended moment to finish it, and any sensor wiring done on the current engine now would need to be redone on the new one anyway since sensors thread into engine-specific bosses. The ignition wiring from Group 2.5 moves over too, but it's already proven — this is a transplant, not a first-time bring-up.
+- **Install the Lowdoller sensors, MAP sensor, and Radium FPR/PTFE lines on the new engine** (currently SU.1–SU.4, plus the fuel line item above) — same logic: these are all engine-mounted, don't do them twice.
+- First fire on the new engine, now with ignition already de-risked from Group 2.5 (this absorbs the old "NEXT WEEKEND — Phase 2" plan further down, which assumed Phase 2 would happen on the *current* engine — that plan's wiring steps are still the right procedure, just re-timed to the new engine).
+
+### 4. After the engine is back in and running
+
+- Final alignment check against `common/chassis/gk-chassis-specs.md` § Suspension Alignment Reference — weight distribution just changed with the new engine, so don't trust an alignment done before the swap.
+- **Hub stands + corner weighting — last step.** Depends on final ride height (coilovers/bump stops from Group 2), final alignment, and final weight distribution (new engine from Group 3). Doing it any earlier means redoing it.
+
+---
+
+## Suspension — Open Items (Not Yet Scheduled)
+
+> **Reference files:**
+> - Front suspension: `common/shop-manual/suspension-system/front-suspension.md`
+> - Rear suspension: `common/shop-manual/suspension-system/rear-suspension.md`
+> - Suspension specs/torques: `common/shop-manual/suspension-system/specifications.md`
+
+These are separate from the P.1–P.7 tasks below (which were a specific past weekend's plan). Not yet sequenced into a weekend.
+
+- [ ] **Reinstall coilovers with camber plates.** Coilovers went to the fab shop for work (see below) — reinstall with camber plates this time. Confirm camber plate part/bearing spec and strut-top torque before install; re-check alignment afterward. **Also check the new rear strut tab position while these are out** — see the rear sway bar link note below, this may be the actual fix for the rear failures.
+- [ ] **Adjust bump stops.** Set bump stop position/length for the coilover travel — do this at the same time as coilover reinstall since it's much easier with the strut out of the car.
+- [ ] **Assemble hub stands and corner-weight the car.** Build/assemble the hub stands, then corner-weight on scales at race-ready fuel level and target ride height. Do this *after* the coilover reinstall and alignment are settled (camber plates + bump stop changes above will shift ride height and cross-weight) — target alignment numbers are in `common/chassis/gk-chassis-specs.md` § Suspension Alignment Reference if a re-check is needed at the same time.
+- [ ] **Sway bar end links — recurring failures, two different failure modes front vs. rear.** Don't treat these as the same problem:
+  - **Front:** suspected root cause is the links being too short, leaving too much threaded rod extended/exposed past the rod end — that's a stress-concentration and bending-leverage point, not just a preload issue. Likely fix is a properly-sized link (or heim/rod-end combo) with the threaded portion mostly buried, not a re-tension of the current ones. P.3 below covers *setting* link length/preload on the current parts — treat that as a stopgap, not the fix.
+  - **Rear:** the whole strut tab sheared off, not just the link — that's a mounting-point failure, not a link failure. Could be an install issue (tab welded/positioned wrong, alignment loading it at an angle) or could be resolved by the new tab position on the replacement coilovers (see the coilover reinstall item above — check tab geometry then, before assuming a link redesign is even needed back there).
+- [ ] **Swap front sway bar — engine-out window only.** Do this while the race motor is out for the rebuild (see `guides/engine-build.md`) — front sway bar access is dramatically easier with the engine out, so don't miss this window.
+- [ ] **CV axles, tie rod ends, wheel hubs and bearings** — planned for when the engine/trans is out (mating the new engine to the trans with the Quaife LSD). Bundle this with the front sway bar swap since both need the engine-out window.
+
+---
+
+## Fuel System — Open Items (Not Yet Scheduled)
+
+Parts are on hand ("ready to install" per `build-profile.md`). Full task detail already lives in **SU.3** below (`SUNDAY` → "Fuel System + Fuel Sensor") — this entry just surfaces it as still-open work since it wasn't showing up in the top-level status.
+
+- [ ] **Replace soft fuel lines with 6AN PTFE.** Collect all fittings first, then route.
+- [ ] **Mount the Radium FPR/damper on the fuel rail** and tie in the return-line fuel pressure sensor tap.
+
+> **Sequencing flag:** the FPR mounts to the fuel rail and the PTFE lines route through the engine bay — both are effectively engine-mounted work. See the Master Sequence below for why this probably shouldn't happen on the current engine.
+
+---
+
+## Coil + Fuel Injection — Minimal Haltech On-Engine Test (De-Risk Before Swap)
+
+**Decision:** validate Haltech running **both ignition and fuel injection** on the *current* engine first — not deferred to the new engine (see Master Sequence, Group 2.5). Stock ECU steps back from engine control entirely for this test; AVI sensors (oil/coolant/MAP/fuel pressure), the Deutsch production harness, and the PTFE lines/Radium FPR still stay deferred to the engine swap (Group 3) — see the default call below.
+
+> Per `hardware/sensors/cop-ignition.md`, COP coil firing has been bench-tested (coils sparking off the engine) but **not yet physically mounted on any engine** — this is that next step. Cam and crank signals to Haltech show ✅ in `signal-routing.md`, but confirm that's an actual in-car splice off the CKP/CMP sensors (not just the bench validation) before assuming it's done — it needs to feed Haltech *simultaneously* with the stock ECU's connections until they're fully unplugged below.
+
+### Ignition
+
+- [ ] **Confirm/complete CKP + CMP taps to Haltech.** Splice into the existing sensor signal wires — 26-pin pins 1/5 (crank +/−) and 2/6 (cam +/−), per `signal-routing.md`.
+- [ ] **Remove OEM ignition module bracket + the 3 stock wasted-spark coils** (per `hardware/sensors/cop-ignition.md` → "Coil Mounting").
+- [ ] **Mount the 6 Toyota 90919-A2005 coils** into the plug wells — verify fit/seal per the same checklist, torque or retention clip.
+- [ ] **Wire the coils (temporary/hand-wired is fine for this test):**
+  - Pin A (ground, all 6, shared bus) → engine block/head
+  - Pin D (12V, all 6, shared bus) → PDM MP2
+  - Pin B (trigger, individual) → Haltech 34-pin pins 3–8 (IGN1–6)
+  - Pin C (feedback) → leave open
+- [ ] **Set NSP ignition config before first trigger:** Ignition mode = Sequential COP, Coil type = Smart coil, Dwell = ~2.1 ms. Do not leave at default wasted-spark dwell — smart coils have an internal igniter and wrong dwell will overheat/damage them.
+- [ ] **Verify the firing order before wiring cylinder → IGN output.** The KB has 1-2-3-4-5-6 from `common/shop-manual/engine-mechanical/specifications.md`, but that value is flagged **unverified (⬜)** in the KB's own spot-check tracking — cross-check it against something physical before trusting it for coil sequencing.
+
+### Fuel
+
+- [ ] **Wire injectors to Haltech (temporary/hand-wired is fine for this test):**
+  - Injector power in (12V from injector relay/PDM) → Haltech 34-pin pin 26 (R/L) — **required**
+  - INJ 1–6 ground-side triggers → 34-pin pins 19, 20, 21, 22, 27, 28
+- [ ] **Reroute injector power from the stock main relay to Haltech-triggered supply** — this is the same MP1 reroute the old "NEXT WEEKEND — Phase 2" section describes (`MP1 (A2) → injector rail + 34-pin pin 26`); doing it now instead of later.
+- [ ] **Enter injector data in NSP:** stock injectors are Kefico 9260930004 (per `common/opengk/fuel-injectors.md`, confirmed 2.0L/2.7L stock fitment) — 194cc/min @ 45 psi, 190cc/min @ 43.5 psi, EV6, 14.2Ω, dead-time table available in the same file for calibration.
+- [ ] **Check what fuel pressure the current engine is actually running before trusting either flow number above.** The Radium FPR (still deferred — see below) targets 300±1.5 kPa / 43.5 psi to match the injector table's 43.5 psi column. If the current engine is still on the stock regulator (OEM spec 330–350 kPa / 47–50 psi per `common/shop-manual/fuel-system/specifications.md` FLA-3), use the 45 psi column instead, and expect to retune the base fuel map once the Radium FPR goes in later — that's an expected, cheap redo, not a sign something's wrong.
+- [ ] **Stock ECU fully out of the loop for this test:** unplug stock ECU connectors (C133-1–4) and BCM connector — leave both mounted, label for reversal. Pull MP1/MP2 spades from the OE main relay pin 87 socket now that Haltech drives both.
+
+> **Default call — flag if wrong:** this test runs on whatever fuel delivery hardware the current engine already has (stock regulator, presumably — the PTFE lines and Radium FPR are listed "ready to install" but not yet installed anywhere). The PTFE lines + Radium FPR mount stay deferred to the new engine in Group 3, since that's engine-mounted plumbing work that's expensive to redo, not cheap like the coil/injector wiring above. Say if you actually want the FPR/PTFE lines installed on the current engine now instead.
+
+### Test sequence
+
+- [ ] **Stage A — spark + injector pulse check before attempting a start.** Crank with fuel disabled (or plugs out) and confirm each coil fires in correct sequence via timing light/spark tester; separately confirm injector pulse (noid light or multimeter) fires in the right order relative to TDC. Catches wiring/firing-order/injector-sequence mistakes before a real start attempt.
+- [ ] **Stage B — first start attempt.** Full Haltech control: ignition + fuel. Verify coil dwell/trigger with an oscilloscope per `cop-ignition.md`'s own warning. Confirm idle, then base fuel map tuning (expect it to need real tuning time, not just a first-start check).
+- [ ] **Reversal test, if wanted:** plug stock ECU + BCM back in, MP1/MP2 back to relay → confirm car still runs on stock. Optional safety net, not required to consider the test successful.
+
+> **Open risk, not yet resolved in the KB:** with the stock ECU fully unplugged for this test there's no ambiguity about it fighting Haltech for control — that risk from the ignition-only version of this plan goes away. What's still unverified: whether the base fuel map converges quickly enough on the 45 psi injector data to get a clean start/idle on the first attempt, or whether this turns into a longer tuning session. Budget shop time accordingly rather than assuming a quick test.
 
 ---
 
@@ -142,7 +258,7 @@ PDM at home with laptop + fuel pump. All software work and bench testing — no 
 - [ ] Configure status variables: ENGINE_RUNNING, FUEL_PRIME, FAN_TEMP bands (77/82/87/92°C), FAN_FAILSAFE, STARTER_SAFE, MULTI_WARNING
 - [ ] Configure channel inputs: Ch02 (fan low), Ch03 (fan high), Ch10 (coolsuit), Ch11 (defogger), Ch12 (horn), Ch04 (headlights), Ch01 (starter), Ch09 (brake)
 - [ ] Verify CAN2 disabled (no keypad — preserved in `guides/keypad-config-future.md`)
-- [ ] Configure ECU Stream: Haltech CAN_V2_40 on CAN1 (B30/B31), 500 kbps
+- [ ] Configure ECU Stream: Haltech CAN_V2_40 on CAN1 (A30/A31), 500 kbps
   - Enable channels: RPM, ECT, Oil P, Oil T, Fuel P, TPS, Vehicle Speed, Battery V
 - [ ] Configure SmartyCam Stream: RPM, Speed (GPS-08), Gear, Coolant Temp, Oil P, TPS, Lat G, Long G
 - [ ] Transmit config to PDM via USB
@@ -155,7 +271,7 @@ PDM at home with laptop + fuel pump. All software work and bench testing — no 
 
 > **Full procedure:** `guides/pdm-build-guide.md` → "Fuel Pump Bench Test" section
 
-- [ ] Wire fuel pump to HP3 (B24+B25), 14 AWG minimum, battery GND to pump (−)
+- [ ] Wire fuel pump to HP3 (A24+A25), 14 AWG minimum, battery GND to pump (−)
 - [ ] IGN on → verify 3-second prime cycle → off
 - [ ] Force HP3 on → measure current (expected 5–10A continuous)
 - [ ] Measure voltage at pump (< 0.5V drop from supply)
@@ -187,7 +303,7 @@ PDM at home with laptop + fuel pump. All software work and bench testing — no 
 
 **Bench smoke test (all devices on Data Hub):**
 - [ ] Connect PDM → expansion cable → Data Hub → GPS-08 (port 1) + SmartyCam EXP (port 2) + Podium (port 3 via Binder-to-M8 adapter)
-- [ ] Wire LP3 (B16) → SmartyCam 7-pin power (Red +12V, Black GND) — or use fused bench tap
+- [ ] Wire LP3 (A16) → SmartyCam 7-pin power (Red +12V, Black GND) — or use fused bench tap
 - [ ] IGN on → verify SmartyCam LED (green/blue = CAN active), GPS-08 LED, Podium CAN LED (⇄)
 - [ ] RS3 Live Data → CAN AiM bus shows traffic
 - [ ] SmartyCam: press record → 10s → stop → check `.mp4` on SD (overlay labels visible, values = 0 expected)
@@ -249,9 +365,9 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 - [ ] Wire large terminal B → 150A breaker → starter B+ / alternator B+ (2 AWG)
 - [ ] Wire large terminal B → 120A breaker → PDM Surlok (+) (4 AWG)
 - [ ] Wire small terminal B → IGN toggle switch (new)
-- [ ] IGN toggle → PDM G23 AND Haltech 34-pin pin 13 (P wire)
+- [ ] IGN toggle → PDM B23 AND Haltech 34-pin pin 13 (P wire)
 - [ ] Connect PDM Surlok power cable
-- [ ] Connect PDM grounds (G13, G14, G18 to chassis)
+- [ ] Connect PDM grounds (B13, B14, B18 to chassis)
 
 > Kill switch diagram: `guides/pdm-build-guide.md` → "S.2 Kill Switch Wiring"
 
@@ -262,15 +378,15 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 [START]                                  (LED)
 ```
 
-- [ ] Start button → Ch01 (G26), momentary, active = GND
-- [ ] Fan low toggle → Ch02 (G27), active = 12V
-- [ ] Fan high toggle → Ch03 (G28), active = 12V
-- [ ] Coolsuit toggle → Ch10 (G22), active = 12V
-- [ ] Defogger toggle → Ch11 (B26), active = 12V
-- [ ] Brake light switch → Ch09 (G21), closed on press
-- [ ] Warning LED → LP7 (B20)
+- [ ] Start button → Ch01 (B26), momentary, active = GND
+- [ ] Fan low toggle → Ch02 (B27), active = 12V
+- [ ] Fan high toggle → Ch03 (B28), active = 12V
+- [ ] Coolsuit toggle → Ch10 (B22), active = 12V
+- [ ] Defogger toggle → Ch11 (A26), active = 12V
+- [ ] Brake light switch → Ch09 (B21), closed on press
+- [ ] Warning LED → LP7 (A20)
 
-> **2 spare panel positions** reserved for horn (Ch12/B27) and headlights (Ch04/G29) in Phase 2.
+> **2 spare panel positions** reserved for horn (Ch12/A27) and headlights (Ch04/B29) in Phase 2.
 > **Wiper switches** not installed — wiper logic being developed separately.
 
 ### S.4 First Power-Up in Car
@@ -296,8 +412,8 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 **OE Main Relay (MP1/MP2):**
 - [ ] Locate OE main relay in underhood fuse box
 - [ ] Pull the OE main relay
-- [ ] Insert PDM MP1 (B2) wire into relay socket pin 87 (power out)
-- [ ] Insert PDM MP2 (B3) wire into same pin 87 socket (parallel)
+- [ ] Insert PDM MP1 (A2) wire into relay socket pin 87 (power out)
+- [ ] Insert PDM MP2 (A3) wire into same pin 87 socket (parallel)
 - [ ] IGN on → verify stock ECU powers up via PDM; IGN off → stock ECU loses power
 - [ ] **Test:** Stock dash lights, check engine light, fuel gauge all work
 
@@ -305,12 +421,12 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 
 **Fuel Pump Relay (HP3):**
 - [ ] Pull OEM fuel pump relay
-- [ ] Insert PDM HP3 (B24+B25) wire into pin 87 socket
+- [ ] Insert PDM HP3 (A24+A25) wire into pin 87 socket
 - [ ] IGN on → verify 3-second fuel prime (listen for pump), then off
 - [ ] Verify in Race Studio: `FUEL_PRIME` timer fires
 
 **Starter (HP1 → direct to solenoid):**
-- [ ] Run HP1 (B1+B13) wire directly to starter solenoid S-terminal (10 AWG, ring terminal)
+- [ ] Run HP1 (A1+A13) wire directly to starter solenoid S-terminal (10 AWG, ring terminal)
 - [ ] Leave OEM starter relay in place as backup
 - [ ] Press START (Ch01) → engine cranks; release → stops
 - [ ] While engine running: press START → should NOT engage (RPM interlock)
@@ -322,29 +438,29 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 - [ ] Locate OEM alternator D+ exciter wire (thin ~18 AWG at alternator Yazaki connector)
 - [ ] Confirm with multimeter: 12V with IGN on, 0V with IGN off
 - [ ] Cut exciter wire at convenient point (leave length on both ends)
-- [ ] Fuse box side → wire to PDM LP8 (B21, Black Connector)
+- [ ] Fuse box side → wire to PDM LP8 (A21, Black Connector)
 - [ ] Alternator D+ side → remains connected to alternator (load side)
 
 ### S.8 CAN0 Expansion Bus — AIM Devices + Podium
 
 > Data Hub is a passive star splitter — each device plugs into its own port.
-> GPS-08 and Podium get power through hub +Vb rail (B33, always on). SmartyCam needs **separate LP3 power** via 7-pin connector.
+> GPS-08 and Podium get power through hub +Vb rail (A33, always on). SmartyCam needs **separate LP3 power** via 7-pin connector.
 > All software config should be done Friday (F.3). Saturday is physical install + verification.
 
 **Install:**
-- [ ] Verify CAN0 expansion cable: B22 (H) / B11 (L) / B33 (+Vb out) / B10 (GND)
+- [ ] Verify CAN0 expansion cable: A22 (H) / A11 (L) / A33 (+Vb out) / A10 (GND)
 - [ ] Connect Data Hub male port to expansion cable
 - [ ] Hub port 1 → GPS-08 (5-pin Binder)
 - [ ] Hub port 2 → SmartyCam EXP port (5-pin Binder — CAN data only)
 - [ ] Hub port 3 → Podium Micro (Binder-to-M8 adapter)
-- [ ] Wire LP3 (B16) → SmartyCam 7-pin main power (Red = +12V, Black = GND)
+- [ ] Wire LP3 (A16) → SmartyCam 7-pin main power (Red = +12V, Black = GND)
 - [ ] Mount GPS-08 (roof or cowl — clear sky view, antenna face up)
 - [ ] Mount SmartyCam (windshield or roll bar bracket)
 - [ ] Podium already on electronics plate (S.1)
 
 **Verify:**
 - [ ] IGN on → SmartyCam powers up (CAN LED: green/blue solid)
-- [ ] GPS-08 LED active (powered via hub B33)
+- [ ] GPS-08 LED active (powered via hub A33)
 - [ ] Podium power LED on, CAN ⇄ LED active
 - [ ] RS3 Live Data → CAN AiM bus shows traffic
 - [ ] GPS channels appear in RS3 Channels tab after satellite lock (~30s with sky view)
@@ -414,8 +530,8 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 
 ### SU.6 Haltech CAN1 → PDM
 
-- [ ] Connect Haltech 26-pin pins 23/24 (CAN H/L) → PDM B30/B31 (CAN1)
-- [ ] Power Haltech from PDM LP1 (B14)
+- [ ] Connect Haltech 26-pin pins 23/24 (CAN H/L) → PDM A30/A31 (CAN1)
+- [ ] Power Haltech from PDM LP1 (A14)
 - [ ] Verify Haltech CAN_V2_40 protocol active — all enabled channels visible in Race Studio Live Data
 - [ ] Confirm fan temp bands react to live coolant temp on CAN
 - [ ] Confirm warning LED (LP7) triggers when sensor thresholds crossed (force values in NSP)
@@ -431,7 +547,7 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 
 **Try Option A first (reversible):**
 - [ ] Pull OEM fan relay
-- [ ] Insert HB1 (G1+G2) wire into fan relay pin 87 socket (12 AWG)
+- [ ] Insert HB1 (B1+B2) wire into fan relay pin 87 socket (12 AWG)
 - [ ] Warm up engine → verify fan bands activate at correct temps (25%@77°C, 50%@82°C, 75%@87°C, 98%@92°C)
 
 **If relay socket has too much resistance → Option B (direct):**
@@ -443,7 +559,7 @@ Kill switch already mounted. 2 AWG cable already run from battery (+) to large t
 
 ### SU.7 Wideband AFR (Innovate LM2)
 
-- [ ] Wire LM2 power → PDM LP5 (B18) — already mounted on plate Saturday
+- [ ] Wire LM2 power → PDM LP5 (A18) — already mounted on plate Saturday
 - [ ] Wire LM2 Analog Out 1: Lime Green (+) → Haltech AVI 8 (26-pin pin 4); Yellow (−) → signal GND (26-pin pin 14/15/16)
 - [ ] Install wideband O2 sensor bung in exhaust post-collector (weld if not already in place)
 - [ ] Install O2 sensor, route proprietary cable through firewall → RIGHT trunk → footwell → LM2
@@ -491,62 +607,62 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 
 | Load | PDM Output | Pin(s) | Notes |
 |------|-----------|--------|-------|
-| Starter | HP1 | B1 + B13 | Via solenoid; inductive; series diode |
-| Fan | HB1 | G1 + G2 | PWM 100Hz; Half Bridge 35A; freewheeling diode |
-| Fuel Pump | HP3 | B24 + B25 | Via fuse box pin 87; freewheeling diode |
-| Injector Power / OE Relay | MP1 | B2 | **Phase 1:** OE relay box pin 87 (pull relay). **Phase 2:** → D3 pin 7 (injector rail + Haltech 34-pin pin 26) |
-| Coil Power / OE Relay | MP2 | B3 | **Phase 1:** OE relay box pin 87 (same socket). **Phase 2:** → D2 pin 7 (Pin D all 6 COPs) |
-| Horn | MP3 | B4 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → horn direct or relay socket; Ch12 button |
-| Headlights | MP6 | B7 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → headlight direct or relay socket; Ch04 toggle |
-| Alternator exciter | LP8 | B21 | D+ field wire cut and routed through LP8; SafeIgnition trigger; < 1A draw |
+| Starter | HP1 | A1 + A13 | Via solenoid; inductive; series diode |
+| Fan | HB1 | B1 + B2 | PWM 100Hz; Half Bridge 35A; freewheeling diode |
+| Fuel Pump | HP3 | A24 + A25 | Via fuse box pin 87; freewheeling diode |
+| Injector Power / OE Relay | MP1 | A2 | **Phase 1:** OE relay box pin 87 (pull relay). **Phase 2:** → D3 pin 7 (injector rail + Haltech 34-pin pin 26) |
+| Coil Power / OE Relay | MP2 | A3 | **Phase 1:** OE relay box pin 87 (same socket). **Phase 2:** → D2 pin 7 (Pin D all 6 COPs) |
+| Horn | MP3 | A4 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → horn direct or relay socket; Ch12 button |
+| Headlights | MP6 | A7 | **Phase 1:** Not connected (BCM controls). **Phase 2:** → headlight direct or relay socket; Ch04 toggle |
+| Alternator exciter | LP8 | A21 | D+ field wire cut and routed through LP8; SafeIgnition trigger; < 1A draw |
 
 ### Cockpit
 
 | Load | PDM Output | Pin(s) | Notes |
 |------|-----------|--------|-------|
-| Brake Lights | MP4 | B5 | Always active (Ch09 trigger) |
-| Tail Lights | MP5 | B6 | SafeIgnition (always on) |
-| Coolsuit | MP7 | B8 | Ch10 AND SafeIgnition |
-| Defogger | MP8 | B9 | Ch11 AND SafeIgnition |
+| Brake Lights | MP4 | A5 | Always active (Ch09 trigger) |
+| Tail Lights | MP5 | A6 | SafeIgnition (always on) |
+| Coolsuit | MP7 | A8 | Ch10 AND SafeIgnition |
+| Defogger | MP8 | A9 | Ch11 AND SafeIgnition |
 | Fuel sender | — | — | OEM direct circuit, no PDM involvement |
 
 ### Accessories (SafeIgnition trigger)
 
 | Load | PDM Output | Pin |
 |------|-----------|-----|
-| ECU Power | LP1 | B14 |
-| Dash | LP2 | B15 |
-| SmartyCam | LP3 | B16 |
-| Spare (was GPS) | LP4 | B17 |
-| Wideband | LP5 | B18 |
-| Cluster | LP6 | B19 |
-| Warning LED | LP7 | B20 |
-| AltExciter | LP8 | B21 |
+| ECU Power | LP1 | A14 |
+| Dash | LP2 | A15 |
+| SmartyCam | LP3 | A16 |
+| Spare (was GPS) | LP4 | A17 |
+| Wideband | LP5 | A18 |
+| Cluster | LP6 | A19 |
+| Warning LED | LP7 | A20 |
+| AltExciter | LP8 | A21 |
 
 ### CAN Buses
 
 | Bus | PDM Pins | Device | Speed |
 |-----|----------|--------|-------|
-| CAN0 (AIM expansion) | B22 (H) / B11 (L) | Data Hub → GPS, SmartyCam, Podium | 1 Mbps |
-| CAN1 (ECU) | B30 (H) / B31 (L) | Haltech Elite 2500 | 500 kbps |
-| CAN2 | B28 (H) / B29 (L) | **Unused** — available for future CAN device | 125 kbps |
+| CAN0 (AIM expansion) | A22 (H) / A11 (L) | Data Hub → GPS, SmartyCam, Podium | 1 Mbps |
+| CAN1 (ECU) | A30 (H) / A31 (L) | Haltech Elite 2500 | 500 kbps |
+| CAN2 | A28 (H) / A29 (L) | **Unused** — available for future CAN device | 125 kbps |
 
 ### Switch Panel Inputs
 
 | Switch | PDM Input | Pin | Type |
 |--------|----------|-----|------|
-| Ignition | IGN input | G23 | Latching toggle, 12V |
-| Start | Ch01 | G26 | Momentary, active = GND |
-| Fan low | Ch02 | G27 | Latching toggle, 12V |
-| Fan high | Ch03 | G28 | Latching toggle, 12V |
-| Headlights | Ch04 | G29 | Latching toggle, 12V (Phase 2+) |
-| Brake switch | Ch09 | G21 | Closed on press |
-| Coolsuit | Ch10 | G22 | Latching toggle, 12V |
-| Defogger | Ch11 | B26 | Latching toggle, 12V |
-| Horn | Ch12 | B27 | Momentary, active = GND (Phase 2+) |
+| Ignition | IGN input | B23 | Latching toggle, 12V |
+| Start | Ch01 | B26 | Momentary, active = GND |
+| Fan low | Ch02 | B27 | Latching toggle, 12V |
+| Fan high | Ch03 | B28 | Latching toggle, 12V |
+| Headlights | Ch04 | B29 | Latching toggle, 12V (Phase 2+) |
+| Brake switch | Ch09 | B21 | Closed on press |
+| Coolsuit | Ch10 | B22 | Latching toggle, 12V |
+| Defogger | Ch11 | A26 | Latching toggle, 12V |
+| Horn | Ch12 | A27 | Momentary, active = GND (Phase 2+) |
 
-> **Wipers:** Ch05 (G30) / Ch06 (G31) reserved — wiper logic being developed separately.
-> **Spare:** Ch07 (G32), Ch08 (G33)
+> **Wipers:** Ch05 (B30) / Ch06 (B31) reserved — wiper logic being developed separately.
+> **Spare:** Ch07 (B32), Ch08 (B33)
 
 ---
 
@@ -581,7 +697,7 @@ Build all harnesses with Deutsch connectors now. Switching from stock ECU → Ha
 | Cyl 5 | IGN 5 | 34-pin pin 7 | Y/BR |
 | Cyl 6 | IGN 6 | 34-pin pin 8 | Y/L |
 
-Power: PDM MP2 (B3) → Pin D common bus
+Power: PDM MP2 (A3) → Pin D common bus
 Ground: Pin A → engine block
 
 ### Injector Harness
@@ -595,7 +711,7 @@ Ground: Pin A → engine block
 | Cyl 5 | INJ 5 | 34-pin pin 27 | L/O |
 | Cyl 6 | INJ 6 | 34-pin pin 28 | L/Y |
 
-Power: PDM MP1 (B2) → injector rail + Haltech 34-pin pin 26 (R/L)
+Power: PDM MP1 (A2) → injector rail + Haltech 34-pin pin 26 (R/L)
 
 ### ECU Sensitive Bundle (Shielded)
 
@@ -613,18 +729,19 @@ Power: PDM MP1 (B2) → injector rail + Haltech 34-pin pin 26 (R/L)
 ## NEXT WEEKEND — Phase 2: Haltech Takes Over Engine
 
 > **Full Phase 2 procedure:** `guides/pdm-build-guide.md` → "Phase 2 — PDM + Haltech ECU"
+> **Superseded by the Master Sequence above (Group 2.5):** this section's substance — stock ECU/BCM unplugged, Haltech takes over ignition and injectors — is now happening early on the *current* engine as "Coil + Fuel Injection — Minimal Haltech On-Engine Test," not deferred to a later weekend. What that section deliberately still leaves out (AVI sensors, PTFE/FPR, production Deutsch harness) stays deferred to the new engine during the engine-out window (Group 3). Kept this section as-is below for its wiring reference detail.
 
 After track day with stock ECU + PDM, switch to Haltech running the engine. **No Race Studio config change needed.** Physical wiring only.
 
 - [ ] Unplug stock ECU connectors (C133-1 through C133-4) — leave mounted, label for reversal
 - [ ] Unplug BCM connector — leave mounted
 - [ ] Pull MP1/MP2 spades from OE main relay pin 87 socket
-- [ ] Reroute MP1 (B2) → D3 pin 7 (injector rail + Haltech 34-pin pin 26)
-- [ ] Reroute MP2 (B3) → D2 pin 7 (COP coil Pin D common bus)
+- [ ] Reroute MP1 (A2) → D3 pin 7 (injector rail + Haltech 34-pin pin 26)
+- [ ] Reroute MP2 (A3) → D2 pin 7 (COP coil Pin D common bus)
 - [ ] Plug in D2 (coil Deutsch) — engine side already on coils
 - [ ] Plug in D3 (injector Deutsch) — engine side already on injectors
-- [ ] Add horn button → Ch12 (B27), wire MP3 (B4) → horn
-- [ ] Add headlight toggle → Ch04 (G29), wire MP6 (B7) → headlights
+- [ ] Add horn button → Ch12 (A27), wire MP3 (A4) → horn
+- [ ] Add headlight toggle → Ch04 (B29), wire MP6 (A7) → headlights
 - [ ] First fire on Haltech — base tune, confirm idle
 - [ ] Verify all PDM tests still pass with Haltech running
 - [ ] **Reversal test:** plug stock ECU + BCM back in, MP1/MP2 back to relay → car runs on stock
@@ -642,6 +759,6 @@ After track day with stock ECU + PDM, switch to Haltech running the engine. **No
 - [ ] Mount Lowdoller 1500 PSI brake sensor bracket (leave wires terminated, AVI 7+8 reserved)
 - [ ] Crankcase pressure sensor (valve cover or PCV port → available PDM/Haltech input)
 - [ ] IR tire temp sensor bracket + PDM channel input wiring
-- [ ] Wiper integration — relay-less park design: MP9 (G4) low, MP10 (G5) high, LP9 (G3) park sweep. Ch05/Ch06 switches. Math channels pre-configured in RS3.
+- [ ] Wiper integration — relay-less park design: MP9 (B4) low, MP10 (B5) high, LP9 (B3) park sweep. Ch05/Ch06 switches. Math channels pre-configured in RS3.
 - [ ] CAN Keypad 12 installation (Phase 3 — see `guides/keypad-config-future.md`)
 - [ ] Remove OE ECU, BCM, and relay box (Phase 3 — after proven reliability)

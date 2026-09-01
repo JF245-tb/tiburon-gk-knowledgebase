@@ -46,7 +46,7 @@ Every chunk stored in the vector DB carries this metadata alongside its embeddin
     {"name": "Out of squareness", "value": "Max 1.5°",       "limit": "Max 3°"}
   ],
   "cross_refs": ["EMA-72", "EMA-73"],
-  "community_verified": false,
+  "verified": false,
   "text": "Valve spring\nFree height  42.5 mm (1.6732 in.)  Limit: 41.5 mm (1.6339 in.)\nLoad  21.9 kg/35 mm (48.4 lb/1.3780 in.)  Limit: 21.9 kg/34 mm\nOut of squareness  Max 1.5°  Limit: Max 3°"
 }
 ```
@@ -70,7 +70,7 @@ Every chunk stored in the vector DB carries this metadata alongside its embeddin
 | `graph_node_ids` | string[] | | IDs from `tiburon-knowledge-graph.json` that this chunk feeds |
 | `standard_values` | object[] | | Structured extracted values (name, value, limit) |
 | `cross_refs` | string[] | | Page references mentioned in this chunk |
-| `community_verified` | boolean | | True if content confirmed by forum/community (for OpenGK/forum chunks) |
+| `verified` | boolean | | True if content has been personally confirmed (for OpenGK/forum chunks) |
 | `text` | string | ✓ | Raw text to embed |
 
 ---
@@ -91,7 +91,7 @@ Match the manual's own hierarchy — don't split arbitrarily by token count:
 - **Front-of-chapter spec tables (EMA-2 to EMA-5):** Create one chunk per logical group (general specs, valve specs, piston specs, torques). Each chunk gets a `standard_values` array.
 - **DTC tables (FLA-73+):** One chunk per DTC code row or small group. Tag with the DTC code in `component_tags`.
 - **Schematic diagrams:** Chunk by circuit/system. Text is wire labels and connector codes — useful for "what connector code is the cam sensor" queries.
-- **Forum posts:** One chunk per post. Set `source: "forum"` and `community_verified: false` until reviewed.
+- **Forum posts:** One chunk per post. Set `source: "forum"` and `verified: false` until personally confirmed.
 
 ### Chunk Size Guidelines
 
@@ -199,4 +199,4 @@ Example: Query "valve spring" → retrieves EMA-3 spec chunk → graph lookup �
 2. **Next:** Write `chunker.py` to parse the shop manual and electrical manual `.md` files into `chunks.jsonl`
 3. **Then:** Embed chunks locally with ChromaDB + `bge-small-en-v1.5`
 4. **Later:** Add OpenGK content (part numbers, sensor specs) as additional chunks with `source: "opengk"`
-5. **Community:** Add forum scrapes as chunks with `community_verified: false`, create GitHub Issues review workflow
+5. **Forum:** Add forum scrapes as chunks with `verified: false`, scored per `credibility/scoring-algorithm.md`

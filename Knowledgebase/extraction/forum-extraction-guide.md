@@ -7,7 +7,7 @@ Step-by-step procedure for ingesting forum threads, wiki pages, and web sources 
 ## Quick Reference: Ingestion Pipeline
 
 ```
-1. Select thread/page → 2. Extract content → 3. Classify → 4. Score → 5. Write to KB → 6. Open GitHub Issue
+1. Select thread/page → 2. Extract content → 3. Classify → 4. Score → 5. Write to KB
 ```
 
 ---
@@ -165,13 +165,11 @@ If the thread contains verifiable technical claims (part numbers, specs, fitment
 2. Include `credibility_score` and `credibility_breakdown` fields
 3. Set `authority_tier: 3`, `trust_level: "community_report"`, `corroboration_count: 0`
 
-### Step 6: Open GitHub Issue for Vetting
+### Step 6: Corroborate Over Time
 
-Per `ARCHITECTURE.md` Section 7:
-1. Open Issue with label `community-review` (or `forum-ingest`)
-2. Include: thread URL, post author, claim quoted, credibility score
-3. Community confirms or challenges the claim
-4. Maintainer updates trust_level as corroboration accumulates
+Per `ARCHITECTURE.md` Section 2 (Trust Ladder):
+1. When later ingestion turns up independent corroborating sources, bump `corroboration_count` and advance `trust_level` to `"multiple_reports"` at ≥3
+2. When you personally verify a claim (install it, take a measurement, find it in the factory manual), update `trust_level` to `"verified_fit"`, `"measured"`, or promote to Tier 1 accordingly
 
 ---
 
@@ -183,7 +181,7 @@ OpenGK content is T2 (base credibility 9/10). Simpler pipeline:
 2. **Extract technical content** into `common/opengk/{topic}.md`
 3. **Spot-check against T1** — if the wiki claim can be verified against factory manual, note it
 4. **Add to knowledge graph** with `authority_tier: 2`, `source: "opengk"`
-5. **No GitHub Issue needed** unless the claim contradicts T1 data
+5. **Flag for manual review** only if the claim contradicts T1 data
 
 ### OpenGK Content Structure
 

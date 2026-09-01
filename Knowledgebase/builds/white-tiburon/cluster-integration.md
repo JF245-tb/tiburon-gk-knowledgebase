@@ -232,9 +232,9 @@ The cluster uses three connectors: **M10-1**, **M10-2**, **M10-3**. The pin numb
 | Gauge specs (speedo/tach/fuel/temp) | `shop-manual/body-electrical.md` | Lines 79–213 (all gauge types and tolerances) |
 | Gauge troubleshooting | `shop-manual/body-electrical.md` | Lines 285–310 |
 | Gauge inspection procedures | `shop-manual/body-electrical.md` | Lines 3257–3362 |
-| Indicators & gauges schematic | `electrical-manual/schematic-diagrams.md` | Lines 7383–7466 (circuit descriptions) |
-| Vehicle speed sensor schematic | `electrical-manual/schematic-diagrams.md` | Lines 2780–2844 |
-| MFI control system (tach source) | `electrical-manual/schematic-diagrams.md` | Lines 4900–4943 |
+| Indicators & gauges schematic | `electrical-manual/schematics/indicators-gauges.md` | SD-114 to SD-121 |
+| Vehicle speed sensor schematic | `electrical-manual/schematics/vss.md` | SD-48 to SD-49 |
+| MFI control system (tach source) | `electrical-manual/schematics/mfi-control-v6.md` | SD-78 to SD-85 |
 | Stock ECM pinout (C133-4 pin 17 = tach) | `opengk/ecm-pinouts.md` | Lines 107–119 |
 | Haltech 34-pin pinout | `haltech/main-connector-34-pin-elite2500.md` | Full pinout with DPO assignments |
 | Haltech 26-pin pinout | `haltech/main-connector-26-pin-elite2500.md` | SPI inputs for VSS |

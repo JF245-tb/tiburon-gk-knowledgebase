@@ -14,14 +14,14 @@ Stock ECU still runs the engine. Haltech is powered but only reads the 6 Lowdoll
 
 | Wire | PDM Output | Pin | Gauge | Destination | Phase 1 State |
 |------|-----------|-----|-------|-------------|---------------|
-| Starter | HP1 | B1+B13 | 10 AWG | Starter solenoid S-terminal | **Active** |
-| Fan | HB1 | G1+G2 | 12 AWG | Radiator fan | **Active** |
-| Fuel Pump | HP3 | B24+B25 | 14 AWG | OEM fuse box pin 87 (piggyback) | **Active** |
-| Alt Exciter | LP8 | B21 | 18 AWG | Alternator D+ wire splice | **Active** |
-| Injector Power | MP1 | B2 | 14 AWG | 3-way splice → D2-8 + D3-8 + Haltech 34-pin-26 sense | Coiled & capped |
-| Coil Power | MP2 | B3 | 14 AWG | 2-way splice → D2-7 + D3-7 | Coiled & capped |
-| Headlights | MP6 | B7 | 14 AWG | Headlight connector | Coiled & capped |
-| Horn | MP3 | B4 | 16 AWG | Horn | Coiled & capped |
+| Starter | HP1 | A1+A13 | 10 AWG | Starter solenoid S-terminal | **Active** |
+| Fan | HB1 | B1+B2 | 12 AWG | Radiator fan | **Active** |
+| Fuel Pump | HP3 | A24+A25 | 14 AWG | OEM fuse box pin 87 (piggyback) | **Active** |
+| Alt Exciter | LP8 | A21 | 18 AWG | Alternator D+ wire splice | **Active** |
+| Injector Power | MP1 | A2 | 14 AWG | 3-way splice → D2-8 + D3-8 + Haltech 34-pin-26 sense | Coiled & capped |
+| Coil Power | MP2 | A3 | 14 AWG | 2-way splice → D2-7 + D3-7 | Coiled & capped |
+| Headlights | MP6 | A7 | 14 AWG | Headlight connector | Coiled & capped |
+| Horn | MP3 | A4 | 16 AWG | Horn | Coiled & capped |
 
 ### Haltech Sensor Wiring → Engine Bay (D4 Deutsch 8-pin)
 
@@ -39,8 +39,8 @@ Stock ECU still runs the engine. Haltech is powered but only reads the 6 Lowdoll
 ### Stays Cabin-Side (No Firewall)
 
 - **CAN bus:** Haltech 26-pin-23/24 → PDM A30/A31 (both devices in cabin)
-- **Haltech power:** PDM LP1 (B14) → Haltech 26-pin-11
-- **IGN sense:** PDM G23 splice → Haltech 34-pin-13
+- **Haltech power:** PDM LP1 (A14) → Haltech 26-pin-11
+- **IGN sense:** PDM B23 splice → Haltech 34-pin-13
 - **Battery GND:** Chassis → Haltech 34-pin-10, 34-pin-11
 
 ### Phase 1 Firewall Wire Count
@@ -86,8 +86,8 @@ All PDM power wires are already through the firewall from Phase 1. This phase ad
 | INJ 1 signal | 34-pin-19 | Injector 1 |
 | INJ 3 signal | 34-pin-21 | Injector 3 |
 | INJ 5 signal | 34-pin-27 | Injector 5 |
-| +12V coil power | PDM MP2 (B3) branch | Coil Pin D bus |
-| +12V injector power | PDM MP1 (B2) branch | Injector rail |
+| +12V coil power | PDM MP2 (A3) branch | Coil Pin D bus |
+| +12V injector power | PDM MP1 (A2) branch | Injector rail |
 | **GND ring** (outside connector) | 16 AWG | Front head bolt |
 
 ### Bank 2 Rear — Cyl 2, 4, 6 (D3 Deutsch 8-pin + ground ring)
@@ -100,8 +100,8 @@ All PDM power wires are already through the firewall from Phase 1. This phase ad
 | INJ 2 signal | 34-pin-20 | Injector 2 |
 | INJ 4 signal | 34-pin-22 | Injector 4 |
 | INJ 6 signal | 34-pin-28 | Injector 6 |
-| +12V coil power | PDM MP2 (B3) branch | Coil Pin D bus |
-| +12V injector power | PDM MP1 (B2) branch | Injector rail |
+| +12V coil power | PDM MP2 (A3) branch | Coil Pin D bus |
+| +12V injector power | PDM MP1 (A2) branch | Injector rail |
 | **GND ring** (outside connector) | 16 AWG | Rear head bolt |
 
 ### Uncap Phase 1 PDM Runs — Splice into D2/D3

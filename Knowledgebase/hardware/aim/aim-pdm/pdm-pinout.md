@@ -409,5 +409,4 @@ CAN2 pins (A28 H / A29 L) are available for a future CAN device such as the AIM 
 | File | Contents |
 |------|----------|
 | `AIM PDM/PDM Pinout.pdf` | Source PDF (User Guide page 4) — connector diagram + full pinout tables |
-| `Knowledgebase/cars/white-tiburon.md` | White car wiring integration — which PDM channels are assigned to what |
-| `Knowledgebase/aim-pdm/pdm-pinout.md` | This file |
+| `Knowledgebase/builds/white-tiburon/build-profile.md` | White car wiring integration — which PDM channels are assigned to what |

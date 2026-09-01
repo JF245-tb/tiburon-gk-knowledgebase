@@ -47,8 +47,9 @@ This directory is the **single entry point** for any Claude session that needs t
 
 | Section | Status | Files |
 |---------|--------|-------|
-| Schematic Diagrams (SD) | **Complete** — 37 circuits extracted | `common/electrical-manual/schematics/` |
-| Connector Configurations (CC) | Partial | `common/electrical-manual/connector-configurations.md` |
+| Schematic Diagrams (SD) | **Complete** — 47 circuits extracted | `common/electrical-manual/schematics/` |
+| Connector Configurations (CC) | **Complete** — full CC extraction | `common/electrical-manual/cc-connector-configurations.md` |
+| Harness Layouts (HL) | **Complete** — full HL extraction | `common/electrical-manual/hl-harness-layouts.md` |
 | Component Locations (CL) | Partial | `common/electrical-manual/component-locations.md` |
 
 ### Hardware Datasheets

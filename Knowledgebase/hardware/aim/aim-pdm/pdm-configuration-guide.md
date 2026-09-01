@@ -320,7 +320,7 @@ AIM's official pin labels (from PDM32 tech sheet Ver. 1.17):
 ## Related Files
 | File | Contents |
 |------|----------|
-| `aim-pdm/pdm-pinout.md` | Full connector pinout (both 35-pin connectors) |
+| `hardware/aim/aim-pdm/pdm-pinout.md` | Full connector pinout (both 35-pin connectors) |
 | `builds/white-tiburon/guides/pdm-build-guide.md` | Full Race Studio 3 config: status vars, triggers, ECU Stream channels, step-by-step setup |
-| `cars/white-tiburon-weekend-tasks.md` | Wiring bundle assignments and build task list |
-| `haltech/main-connector-26-pin-elite2500.md` | Haltech CAN bus pins (23=H, 24=L) |
+| `builds/white-tiburon/weekend-tasks.md` | Wiring bundle assignments and build task list |
+| `hardware/haltech/main-connector-26-pin-elite2500.md` | Haltech CAN bus pins (23=H, 24=L) |

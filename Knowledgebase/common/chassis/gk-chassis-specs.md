@@ -180,10 +180,10 @@ OEM front strut spring rate approximately 18–22 N/mm.
 
 | File | Contents |
 |------|----------|
-| `cars/blue-tiburon.md` | Blue car build profile |
-| `cars/white-tiburon.md` | White car build profile |
-| `cars/oem-cluster-integration.md` | OEM cluster wiring plan for Haltech |
-| `opengk/ecm-pinouts.md` | Siemens SIMK43 ECU connector pinouts |
-| `opengk/sensor-information.md` | Recommended sensor part numbers |
-| `shop-manual/engine-mechanical.md` | G6BA engine specs (extracted factory text) |
-| `signal-routing.md` | End-to-end signal routing for white car |
+| `builds/blue-tiburon/build-profile.md` | Blue car build profile |
+| `builds/white-tiburon/build-profile.md` | White car build profile |
+| `builds/white-tiburon/cluster-integration.md` | OEM cluster wiring plan for Haltech |
+| `common/opengk/ecm-pinouts.md` | Siemens SIMK43 ECU connector pinouts |
+| `common/opengk/sensor-information.md` | Recommended sensor part numbers |
+| `common/shop-manual/engine-mechanical/specifications.md` | G6BA engine specs (extracted factory text) |
+| `builds/white-tiburon/signal-routing.md` | End-to-end signal routing for white car |
