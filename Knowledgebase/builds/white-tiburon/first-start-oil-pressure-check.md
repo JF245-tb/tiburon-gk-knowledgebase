@@ -1,68 +1,106 @@
 # White Tiburon — Pre-Start Oil Pressure Check (Crank-Only)
 ## New engine, intake manifold off, spark plugs out
 
-**Car:** White Tiburon | **Config:** Phase 1 — stock ECU for engine control, AIM PDM 32 for power distribution, Haltech Elite 2500 powered in shadow/logging mode
+**Car:** White Tiburon
+**Config for this test:** **Stock OE ECU** running the engine, stock relay box retained, **no Haltech**. AIM PDM 32 replaces the OE ECU (MFI control / main) relay and reads Lowdoller sensors only.
 
-> **This is a crank-only test, not a first start.** With the intake manifold off the engine cannot run, and it must not be allowed to try. The goal is: confirm the new short block builds and holds oil pressure, confirm nothing leaks under pressure, and (bonus) confirm the Haltech sees clean crank/cam sync on the new engine before anything fires.
+> **This is a crank-only test, not a first start.** With the intake manifold off the engine cannot run, and it must not get the chance. The goal is: confirm the new short block builds and holds oil pressure, and confirm nothing leaks under pressure.
 >
-> Plugs out is the right call — no compression means fast cranking, low starter load, and the oil pump gets to speed quickly.
+> Plugs out is the right call — no compression means fast cranking, low starter load, and the oil pump comes up to speed quickly.
 
 ---
 
-## Cross-references
+## Current configuration (supersedes the Haltech-based routing elsewhere in this build folder)
 
-| Topic | File |
+| Item | This test |
 |---|---|
-| Swap sequencing, break-in oil, pan/pickup inspection | `engine-swap-race-prep.md` |
-| PDM Phase 1 fuse box taps, output map | `guides/pdm-build-guide.md` §"Phase 1 — PDM + Stock ECU" |
-| Oil pressure sensor pins, +5V bus, CKP/CMP pins | `signal-routing.md` |
-| Oil pump / pressure switch specs and torques | `common/shop-manual/engine-mechanical/lubrication-system.md` |
-| Engine oil pressure spec, sealants, torques | `common/shop-manual/engine-mechanical/specifications.md` |
-| Starter system, solenoid, starter relay | `common/shop-manual/_archive/engine-electrical.md` §"Starting System" |
+| Engine management | **Stock OE ECU**, everything stock |
+| Haltech Elite 2500 | **Not used** — not in the loop at all |
+| PDM role | Replaces the OE **ECU (MFI control / main) relay**; reads Lowdoller sensors |
+| PDM sensors | Oil temp/pressure, fuel temp/pressure, trans temp/pressure, tire temp |
+| Fuel pump relay | **Stock, in the relay box, ECM-driven** |
+
+> ⚠️ **`signal-routing.md` does not describe this configuration.** It routes every Lowdoller sensor to a Haltech AVI with +5V from Haltech 34-pin pin 9. In this build the sensors go to **PDM channel inputs** with +5V from **PDM B16**. Treat the AVI tables in that file as not applicable until it's updated.
 
 ---
 
-## Relays vs. remote starter — what actually applies to this car
+## Relays: what to pull, and what the PDM now owns
 
-The usual "pull the fuel pump and ignition relays" trick assumes an OEM relay box. **On this car those relays are already out.** Per `guides/pdm-build-guide.md` §S.6, Phase 1 install pulled the OE main relay and the OE fuel pump relay and dropped PDM spade wires into their pin 87 sockets:
+On a stock GK these are two separate relays, and both matter here:
 
-| OEM relay | Replaced by | What it feeds |
-|---|---|---|
-| Main relay (pin 87 socket) | **PDM MP1 (B2) + MP2 (B3)**, trigger `SafeIgnition` | Stock ECU switched power → injectors, coils, O2 heaters |
-| Fuel pump relay (pin 87 socket) | **PDM HP3 (B24+B25)**, trigger 3s prime OR RPM > 50 | In-tank fuel pump |
-| Starter | **PDM HP1 (B1+B13)** direct to solenoid S-terminal, trigger `Ch01 AND IGN AND NOT RPM` | Starter solenoid |
+| Relay | Feeds | Controlled by | Status in this build |
+|---|---|---|---|
+| **Main / MFI control / EGI main relay** ("ECU relay") | ECU switched power, **injectors, coils**, O2 heaters, MAF, purge solenoid, ISA | ECM main relay control (pin 67 / 23 depending on ECU variant) | **Being replaced by the PDM output** |
+| **Fuel pump relay** | In-tank fuel pump | ECM fuel pump relay output (pin 69 / 10) | **Still stock in the relay box** |
 
-So the equivalent of "pull the relays" here is: **pull the MP1/MP2 spades out of the main relay pin 87 socket, and pull the HP3 spade out of the fuel pump relay pin 87 socket.** Same effect, same non-destructive reversibility. Disabling those outputs in Race Studio works too, but a physically removed spade can't be undone by a config you forgot you loaded.
+**The fuel pump one is the one people forget.** Per `fuel-system/general.md`, the ECM "turns the fuel pump relay ON so that current is supplied to the fuel pump **while the engine is cranking** or running." With a stock ECU and a stock fuel pump relay, cranking runs the pump. On a fresh engine with the manifold off, that is exactly what you don't want.
 
-Note the starter interlock: `STARTER_SAFE = Ch01 AND IGN AND NOT RPM`. The PDM start button **requires IGN on**, and IGN on is also what asserts `SafeIgnition` — the same variable that powers MP1/MP2. You cannot use the PDM start button while `SafeIgnition` is de-asserted, which is exactly why the spades (not the toggle) are the lever here.
+### For this test
 
-### Recommended: remote starter, IGN on, MP1/MP2 + HP3 spades pulled
+- [ ] **Pull the OE fuel pump relay** out of the relay box and set it on the bench where you'll see it. No pump, no rail pressure, nothing to squirt.
+- [ ] **Leave the ECU relay position dead** — OE relay out, and the PDM output that replaces it either not yet connected or disabled in Race Studio 3. With no switched power at that socket, the ECU cannot power an injector or charge a coil no matter what it decides to do with its ground-side drivers.
+- [ ] **Verify with a meter, don't trust the plan:** 0 V at the injector rail power feed and at the coil power feed, with everything switched on.
 
-This combination gives full fuel/ignition isolation *and* a live instrument readout:
+That gives you two independent layers (no fuel, no ignition/injector power) on a test where the cost of being wrong is a washed-down fresh bore or a fire near open intake ports.
 
-- **Remote starter at the solenoid** — cranks independent of the PDM logic chain, and lets you stand at the engine watching the gauge and the open ports instead of reaching for a dash button.
-- **IGN toggle ON** — powers the Haltech (LP1), dash (LP2), cluster (LP6) and PDM logging, so oil pressure on AVI 3, RPM, and CAN traffic are all live and recorded.
-- **MP1/MP2 spades out** — stock ECU has no switched power at all. No injector can open, no coil can charge. This is a hard electrical disconnect, not a software inhibit.
-- **HP3 spade out** — fuel pump cannot prime, so the rail never sees pressure even if something else went wrong.
-- Haltech D2/D3 (coil/injector Deutsch) stay unplugged per Phase 1, so the Haltech has no path to fire anything either.
-
-> **Remote starter and HP1:** HP1 has an internal series diode, which should block current from a remote starter back-feeding into the PDM output. Don't rely on it — pull the HP1 ring terminal off the solenoid S post for the duration of the test and reinstall it after. One nut, removes all doubt.
-
-**Why not the PDM start button alone?** It works, but it forces `SafeIgnition` active, which means the only thing standing between a fresh engine and a squirt of fuel into open intake ports is the spade you pulled anyway. If you're pulling the spades either way, the remote starter is simply less to go wrong and puts you where you can see the engine.
-
-**Why not remote starter with IGN off?** Cleanest isolation of all — nothing but the starter is energized — but the Haltech, dash, and cluster are all dead, so you get no electronic oil pressure reading and no log. Only choose this if you're running a mechanical gauge and nothing else.
+> **Note on the ECU itself:** the ECU keeps a permanent B+ feed for memory regardless. That's fine and expected — it's the *switched* feed through the main relay that drives the coils and injectors, and that's the one you're keeping dead.
 
 ---
 
-## Use a mechanical gauge as the primary reading
+## Cranking it: use a remote starter
 
-The Lowdoller 899404 on AVI 3 has never been validated against a known pressure on this engine. Do not let a brand-new, uncalibrated sensor channel be the only thing telling you whether a fresh short block has oil pressure — that's the one measurement you cannot afford to get wrong.
+Use a **remote starter across the starter solenoid B+ and S terminals**. Two reasons:
+
+1. **It's independent of however the start circuit is currently wired.** The OEM ignition cylinder was removed from this car and start moved to a momentary button; depending on where the PDM install currently stands, that button may route through PDM Ch01 → HP1 → solenoid S, or back through the OE starter relay. A remote starter at the solenoid works either way and doesn't depend on an interlock you'd have to go verify first.
+2. **It puts you at the engine.** You want to be standing over the gauge and the open ports while it spins, not in the driver's seat.
+
+If the PDM's HP1 output is already landed on the solenoid S post, **pull that ring terminal off for the duration of the test** and reinstall it after. One nut, and it removes any question of back-feeding the PDM output.
+
+**Do not crank with fuel or ignition live just because the remote starter feels isolated** — it isn't. The remote starter only controls the starter. The fuel pump relay and ECU relay work above are what make the test safe, and they're required regardless of how you spin the engine.
+
+---
+
+## Oil pressure reading — use a mechanical gauge as the primary
+
+The Lowdoller 899404 on a PDM channel has never seen a known pressure on this engine, and the channel calibration is new. Do not let an unvalidated sensor be the only thing telling you whether a fresh short block has oil pressure.
 
 - **Mechanical gauge = truth.** Thread it into the oil pressure switch / sender port.
-- **Haltech AVI 3 = cross-check.** This test is also the free opportunity to validate the sensor calibration (`PSI = (V − 0.5) × 37.5`) against real numbers. Log both, compare.
-- **OEM oil pressure switch → cluster lamp = third cheap indicator.** Lamp extinguishes at **20–40 kPa (2.9–5.8 psi)** per `lubrication-system.md`. Crude, but it's free and it's independent.
-- If the block has only one 1/8" NPT port and the Lowdoller sensor is in it, **tee the port** so the mechanical gauge and the sensor both read. If you'd rather not tee on a fresh build, run the mechanical gauge alone for this test and validate the Lowdoller afterward.
-- Sealant on the pressure switch / sender threads: **3M ATD No. 8660 or ThreeBond 1141E**. Torque **15–22 Nm (11–16 lb·ft)**. Don't let sealant get into the port.
+- **PDM channel = cross-check**, and this test is the free opportunity to validate the calibration against real numbers. Log both and compare.
+- **OEM oil pressure switch → cluster lamp = a third, independent indicator.** Lamp extinguishes at **20–40 kPa (2.9–5.8 psi)** per `lubrication-system.md`. Crude, but free.
+- If the block has one 1/8" NPT port and the Lowdoller is in it, **tee it** so gauge and sensor both read — or run the mechanical gauge alone for this test and validate the sensor afterward.
+- Sender/switch thread sealant: **3M ATD No. 8660 or ThreeBond 1141E**, torque **15–22 Nm (11–16 lb·ft)**. Keep sealant out of the port.
+
+### Wiring the oil sensor to the PDM
+
+| Lowdoller 899404 wire | Goes to | Note |
+|---|---|---|
+| Red (+5V) | **PDM B16** (+5V Analog Vreference) | Not Haltech pin 9 — that's the old plan |
+| Yellow (pressure signal) | A PDM **analog-capable** channel input | 0.5–4.5 V ratiometric — native fit for a 0–5 V input |
+| Black (pressure GND) | **PDM B18 (GND)** | **Not** B13/B14 — those are P GND and carry output current |
+| Green (temp signal) | Analog channel input | See the pull-up caveat below |
+| White (temp GND) | **PDM B18 (GND)** | Same |
+
+Race Studio 3 calibration for the pressure element: **PSI = (V − 0.5) × 37.5**, range 0–150 PSI.
+
+> **Ground the sensors to B18, not to the P GND pins.** Power-ground pins carry output current, and the voltage drop across them offsets every ratiometric reading referenced to them. This is the most common cause of "the gauge reads different when the fan kicks on."
+
+---
+
+## Two constraints worth knowing before you finish the sensor install
+
+Neither blocks this test, but both bite later, and the wiring decisions get made now.
+
+**1. The PTC temp elements may not read without a pull-up.** The Lowdoller pressure elements output 0.5–4.5 V and drop straight onto an analog input. The **temp** elements are PTC *resistive* — they need a pull-up to form a divider and produce a voltage. Haltech AVIs have configurable internal pull-ups, which is what the old plan relied on. The PDM 32 docs in this KB describe its channel inputs as **0–5 V / 0–12 V or digital** and say nothing about a resistive or pull-up mode. Before you count on oil/fuel/trans temp reading: confirm in Race Studio 3 whether those inputs offer a pull-up, and if not, plan on an external pull-up resistor to the B16 5 V rail per temp channel. **Oil pressure is unaffected — it works as-is, so this test is fine.**
+
+**2. You are going to run out of PDM inputs.** Per `pdm-configuration-guide.md`, of the PDM 32's 12 channel inputs only **8 are analog-capable** (the other 4 are digital-only), plus 2 speed inputs.
+
+- Your sensor list is **7 analog signals** — oil P, oil T, fuel P, fuel T, trans P, trans T, tire temp. That fits the 8 analog channels with exactly **one to spare**.
+- That leaves **1 analog + 4 digital = 5 inputs** for the switch panel, which `build-profile.md` lists as **10 switches** (start, fan low, fan high, headlights, wiper low, wiper high, brake, coolsuit, defogger, horn).
+- Five inputs, ten switches. Something has to give: a CAN keypad (config already preserved in `guides/keypad-config-future.md`) frees channel inputs, or some loads go back to conventional relays, or some sensors get dropped.
+
+Also: **the KB doesn't record which specific channel numbers are the analog-capable 8.** Confirm that from the PDM32 user guide before assigning pins — discovering it after the harness is built and loomed is an expensive way to learn it.
+
+> Two smaller doc discrepancies noticed while checking this, worth correcting when the routing docs get updated: `signal-routing.md` lists Ch11/Ch12 at B26/B27, but the pinout has Ch11 = **A26** and Ch12 = **A27** (B26/B27 are Ch01/Ch02). And the pinout's "12 channel inputs" vs. the configuration guide's "8 analog + 4 digital" are the same 12 — the 8/4 split is the one that constrains the build.
 
 ---
 
@@ -70,76 +108,73 @@ The Lowdoller 899404 on AVI 3 has never been validated against a known pressure 
 
 ### A. Mechanical — oiling system
 - [ ] Oil filter installed and **pre-filled** with break-in oil
-- [ ] Crankcase filled to full with break-in oil (Valvoline VR1 20W-50, or Rotella T4 15W-40 conventional — per `engine-swap-race-prep.md`)
+- [ ] Crankcase filled to full with break-in oil (Valvoline VR1 20W-50, or conventional Rotella T4 15W-40 — per `engine-swap-race-prep.md`)
 - [ ] Oil drain plug torqued **35–45 Nm**; magnetic plug if fitted
 - [ ] Lower oil pan bolts torqued **10–12 Nm** in the manual's numbered sequence; pickup screen already inspected for assembly debris
-- [ ] Oil pressure switch / sender installed with sealant, **15–22 Nm** — and confirm the port you used is a live gallery port
-- [ ] Mechanical gauge fitted and its fitting tight
-- [ ] Oil filter bracket, cooler lines (if any) torqued and leak-free
+- [ ] Oil pressure switch / sender installed with sealant, **15–22 Nm** — and confirm the port is a live gallery port
+- [ ] Mechanical gauge fitted, fitting tight
+- [ ] Oil filter bracket and any cooler lines torqued and leak-free
 
 ### B. Mechanical — openings and rotation
 - [ ] Intake ports covered — clean foam plugs or lint-free rags, **counted and written down** so the same number comes back out
-- [ ] Throttle body coolant hoses capped (they're disconnected with the manifold off) — or leave the cooling system empty, since this is crank-only
+- [ ] Throttle body coolant hoses capped (they're off with the manifold) — or leave the cooling system empty, since this is crank-only
 - [ ] Brake booster vacuum port, PCV, and any other open fittings capped so nothing falls in
-- [ ] Spark plug holes left open (intentional) with a rag draped over to catch oil mist
-- [ ] Engine can turn freely by hand, at least two full revolutions on the crank bolt, before the starter ever touches it
+- [ ] Spark plug holes left open (intentional), rag draped over to catch oil mist
+- [ ] Engine turns freely by hand — at least two full revolutions on the crank bolt before the starter ever touches it
 - [ ] Nothing loose on or near the belt, pulleys, or flywheel
 
 ### C. Drivetrain safety
 - [ ] Transaxle in **neutral**, confirmed by hand at the shifter
 - [ ] Wheels chocked, parking brake set
-- [ ] Car on the ground or properly supported on stands — not on a jack
-- [ ] Fire extinguisher within reach (no fuel or spark in this test, but the rule doesn't change)
+- [ ] Car on the ground or on proper stands — not on a jack
+- [ ] Fire extinguisher within reach
 
 ### D. Electrical — required to crank
-- [ ] Battery fully charged; charger or jump pack on it (repeated cranking drains fast)
-- [ ] **Engine-to-chassis ground strap connected** — the single most common post-swap no-crank/slow-crank cause. Starter current returns through this
+- [ ] Battery fully charged, with a charger or jump pack on it (repeated cranking drains fast)
+- [ ] **Engine-to-chassis ground strap connected** — the single most common post-swap no-crank / slow-crank cause; starter current returns through it
 - [ ] Battery negative to chassis, clean and tight
-- [ ] Kill switch ON, all 4 poles
-- [ ] 150A breaker closed; 2 AWG kill switch → starter B+ / alternator B+ intact
+- [ ] Kill switch ON, all 4 poles; 150A breaker closed; 2 AWG to starter B+ intact
 - [ ] Starter motor bolted to the bellhousing, bolts torqued
 - [ ] Starter B+ terminal nut **10–12 Nm**; S-terminal connection clean
-- [ ] HP1 ring terminal **removed** from the solenoid S post if using a remote starter (reinstall after)
-- [ ] 120A breaker → PDM Surlok (+) closed; PDM grounds G13/G14/G18 to chassis
+- [ ] PDM HP1 ring terminal **removed** from the solenoid S post if it's already landed there (reinstall after)
+- [ ] Remote starter leads in hand, insulated, and long enough to stand clear of the belt
 
 ### E. Electrical — must be dead before cranking
-- [ ] **MP1 (B2) + MP2 (B3) spades pulled** from the OE main relay pin 87 socket → stock ECU, injectors, coils unpowered
-- [ ] **HP3 (B24+B25) spade pulled** from the OE fuel pump relay pin 87 socket → fuel pump cannot run
-- [ ] Haltech **D2/D3 unplugged** (Phase 1 default — verify, don't assume)
-- [ ] Confirm with a meter at the injector rail and coil power bus: **0V with IGN on**. Verify it, don't trust the spade
-- [ ] Fuel lines connected and dry-checked, or capped — if the AN conversion isn't finished, cap both ends rather than leaving open lines near an engine you're about to spin
+- [ ] **OE fuel pump relay pulled** from the relay box
+- [ ] **ECU (main / MFI control) relay position dead** — OE relay out, PDM replacement output disconnected or disabled in Race Studio 3
+- [ ] **Meter-verified: 0 V at the injector rail feed and the coil power feed** with everything switched on. Verify it; don't infer it
+- [ ] Fuel lines connected and dry-checked, or capped at both ends — no open fuel lines near an engine you're about to spin
 
 ### F. Electrical — needed for the reading to be worth anything
-- [ ] IGN toggle ON → PDM `SafeIgnition` active, LP1/LP2/LP6 up
-- [ ] Haltech powered: 26-pin pin 11 (LP1), IGN enable 34-pin pin 13, grounds 34-pin pins 10 + 11
-- [ ] Lowdoller oil sensor wired: pressure → **34-pin pin 17** (AVI 3, O/R), temp → **34-pin pin 2** (AVI 4, O/Y), +5V red → **34-pin pin 9**, black/white grounds → **26-pin pins 14/15/16**
-- [ ] CKP wired: **26-pin pin 1** (Trig+, Y shielded) / **26-pin pin 5** (−, G)
-- [ ] CMP wired: **26-pin pin 2** (Home+, Y shielded) / **26-pin pin 6** (−, G)
-- [ ] Haltech CAN1 → PDM B30/B31 connected; AIM dash on LP2 showing live data
-- [ ] Race Studio / Haltech NSP logging armed **before** the first crank — this data is worth having
+- [ ] PDM powered: Surlok (+) via the 120A breaker; grounds landed
+- [ ] PDM **IGN input B23** asserted so the PDM is awake and logging
+- [ ] Lowdoller oil sensor wired per the table above — **+5V from B16, signal grounds to B18**
+- [ ] Oil pressure channel calibrated in Race Studio 3: `PSI = (V − 0.5) × 37.5`
+- [ ] Logging armed **before** the first crank — this trace is your baseline for every later reading
 
 ---
 
 ## Procedure
 
-1. **Pre-prime before cranking, if you have a pre-luber.** Pressurizing the galleries through the oil pressure switch port fills the system and lets you leak-check without any starter wear, and gets oil to fresh bearings before they ever rotate under load. Strongly preferred on a new short block. If you don't have one, cranking is acceptable — the plugs are out and the load is light.
-2. **Crank in 10–15 second bursts, 30–60 seconds rest between.** Starters have a duty cycle; a cooked starter on a car that needs to move is a bad trade.
-3. **Watch the mechanical gauge.** With cold 20W-50 and no compression, expect pressure to come up within roughly 5–15 seconds of cranking, and to read well above idle spec — commonly 20–40+ psi while cranking. The factory figure of **50 kPa (7.3 psi) minimum applies at hot idle, 75–90 °C oil temp** — treat it as a floor for a running engine, not a cranking target.
-4. **If nothing shows after ~30 seconds of total cranking, stop.** Do not keep cranking a dry engine. Check, in order: gauge/sender and the port it's in (easiest and most common), oil pump not primed on assembly, pickup tube gasket or O-ring leaking air, filter or bypass issue, oil level.
-5. **While pressure is up, leak-check** the filter, filter bracket, pan rails, drain plug, sender/gauge fittings, and any cooler lines.
-6. **Bonus — verify Haltech trigger sync on the new engine.** This is the check the swap plan wanted on the old engine. Watch NSP for a clean, stable `RPM` reading and cam home detection while cranking. Zero risk with D2/D3 unplugged, and it's far better to find a trigger problem now than during first start.
+1. **Pre-prime before cranking, if you have a pre-luber.** Pressurizing the galleries through the oil pressure switch port fills the system and lets you leak-check with zero starter wear, and it gets oil to fresh bearings before they rotate under load. Strongly preferred on a new short block. Without one, cranking is acceptable — plugs are out, load is light.
+2. **Crank in 10–15 second bursts, 30–60 seconds rest between.** Starters have a duty cycle, and a cooked starter on a car that needs to move is a bad trade.
+3. **Watch the mechanical gauge.** Cold 20W-50, no compression: expect pressure within roughly 5–15 seconds of cranking, reading well above idle spec — commonly 20–40+ psi while cranking. The factory figure of **50 kPa (7.3 psi) minimum applies at hot idle, 75–90 °C oil temp** — a floor for a running engine, not a cranking target.
+4. **If nothing shows after ~30 seconds of total cranking, stop.** Don't keep cranking a dry engine. Check, in order: gauge/sender and the port it's in (easiest and most common), oil pump not primed at assembly, pickup tube gasket or O-ring drawing air, filter or bypass issue, oil level.
+5. **While pressure is up, leak-check** the filter, filter bracket, pan rails, drain plug, sender and gauge fittings, and any cooler lines.
+6. **Compare the PDM channel against the mechanical gauge** and trim the calibration now, while you have a known reference on the same port.
 7. **Re-check oil level after cranking** — the filter and galleries have taken their share.
-8. **Restore:** reinstall HP1 to the solenoid S post, reinsert MP1/MP2 and HP3 spades, remove and count out every intake port plug, then reinstall the manifold — **intake manifold to cylinder head 19–21 Nm**, surge tank to manifold 15–20 Nm, spark plugs 20–30 Nm.
+8. **Restore:** reinstall the HP1 ring terminal, reinstall the fuel pump relay, restore the ECU relay feed, remove and **count out** every intake port plug, then reinstall the manifold — **intake manifold to cylinder head 19–21 Nm**, surge tank to manifold 15–20 Nm, spark plugs 20–30 Nm.
+9. **Expect stored DTCs.** Cranking with the manifold off means MAF, IAT, TPS and ISA are all disconnected — the ECU will log codes and light the CEL. Normal. Clear them once everything is back together, and don't let them mask a real code later.
 
 ---
 
 ## Notes
 
 - Keep this crank-only. The temptation after a good pressure reading is to "just see if it fires" — it can't, the manifold is off, and putting fuel anywhere near open ports on a fresh engine is how a good day ends badly.
-- Fuel washing cylinder walls on a new build is the other reason the fuel pump stays dead here: unburned fuel on fresh bores is actively bad for ring seating, independent of the fire risk.
+- Fuel washing cylinder walls is the other reason the pump stays dead: unburned fuel on fresh bores is actively bad for ring seating, independent of the fire risk.
 - Log the cranking oil pressure trace. It becomes the baseline every later reading gets compared against.
 
 ---
 
 *Created: 2026-09-11*
-*Sources: `guides/pdm-build-guide.md` Phase 1 §S.6, `signal-routing.md`, `common/shop-manual/engine-mechanical/lubrication-system.md` (EMA-55–58), `.../specifications.md`, `common/shop-manual/_archive/engine-electrical.md`*
+*Sources: `hardware/aim/aim-pdm/pdm-pinout.md`, `hardware/aim/aim-pdm/pdm-configuration-guide.md`, `common/shop-manual/engine-mechanical/lubrication-system.md` (EMA-55–58), `.../specifications.md`, `common/shop-manual/fuel-system/general.md`, `common/opengk/ecm-pinouts.md`*
