@@ -15,6 +15,7 @@
 
 | Topic | File |
 |---|---|
+| Pre-start oil pressure check (crank-only, manifold off) | `first-start-oil-pressure-check.md` |
 | PDM/Haltech phase plan, Deutsch connector architecture | `guides/harness-design.md`, `guides/firewall-passthrough.md`, `guides/pdm-build-guide.md` |
 | PDM bench/car test procedures | `guides/bench-test.md` |
 | Sensor pin/cal tables | `signal-routing.md`, `hardware/sensors/lowdoller-sensors.md` |
@@ -87,7 +88,7 @@ Build this as a complete unit before it goes back in — matches how the old one
 - [ ] **If time is short:** reconnect stock fuel lines, confirm no leaks, defer the AN/FPR/quick-disconnect work to this weekend.
 
 ### First start (if ready by end of day)
-- [ ] Prime oil pressure before first crank (disable ignition/fuel, crank in short bursts until oil pressure shows)
+- [ ] Prime oil pressure before first crank (disable ignition/fuel, crank in short bursts until oil pressure shows) — full procedure and connection checklist in `first-start-oil-pressure-check.md`
 - [ ] First start, immediate leak check (fuel, coolant, oil)
 - [ ] Confirm stock ECU idle/operation normal, no fault codes
 - [ ] Begin banking break-in time — idle and light load only at this stage
