@@ -24,7 +24,9 @@ Using a remote starter, **you need essentially no vehicle electrical system.** T
 | 3 | **Remote starter** across solenoid B+ → S | Cranks it |
 | 4 | Engine full of break-in oil, **pre-filled filter**, pan sealed, drain plug in | The thing being tested |
 | 5 | **Mechanical gauge** in the oil pressure switch port | Primary instrument |
-| 6 | **Lowdoller sensor** in the sandwich plate, powered and read (see below) | Secondary instrument + sensor validation |
+| 6 | **Lowdoller sensor** in the sandwich plate, powered and read (see below) | *Optional.* Secondary instrument + sensor validation |
+
+**The mechanical gauge alone is a complete test.** Items 1–5 are the go/no-go. The Lowdoller is worth the five minutes it takes to read it with a multimeter — it's the sensor that will be reporting oil pressure at 6000 rpm at the track, and this is a free chance to confirm it works before you depend on it — but a missing or unwired sensor is no reason to delay the test.
 
 ### What you do NOT need connected
 
@@ -62,6 +64,36 @@ What you're actually looking for from the pair:
 - **Both read something** → the pump is picking up and the circuit is pressurized. This is the go/no-go.
 - **Gallery gauge reads, sandwich plate doesn't** → suspect the sensor, its port, or its wiring — not the engine.
 - **Sandwich plate reads, gallery gauge doesn't** → that's more interesting, and worth stopping for. It can mean the filter or the cooler circuit isn't passing oil through to the gallery.
+
+---
+
+## What pressure am I looking for?
+
+**There is no factory cranking spec, and you shouldn't go looking for a number.** What you're reading is a *behavior*: pressure rises, then holds steady for as long as you crank, and does the same thing on the next burst.
+
+### While cranking (cold, plugs out, 20W-50, gauge in the gallery port)
+
+| Reading | Verdict |
+|---|---|
+| Comes up and holds steady, repeatable burst to burst | **Pass.** Commonly 20–40+ psi, but the steadiness matters more than the value |
+| Low but rock-steady (say 10–15 psi) | **Not a failure.** Cranking is ~200–300 rpm — the pump is barely turning. Judge it at idle, not here |
+| Needle erratic, fluctuating, won't settle | **Investigate.** Classic sign of the pickup drawing air — tube O-ring or gasket |
+| Builds, then decays while still cranking | **Investigate.** Don't proceed |
+| Nothing after ~30 seconds cumulative | **Stop cranking.** Work the causes in step 4 below |
+
+Cold thick oil can also push the pump against its **relief valve**, so a high cold number isn't a fault. The KB does not record the G6BA relief valve pressure setting, so there's no threshold here to compare against.
+
+### The numbers that actually matter come later
+
+This test is cold, with no combustion, so **it cannot validate the running spec** — it only answers "does the oiling system work." Check these once it runs:
+
+| Figure | Value | What it is |
+|---|---|---|
+| **G6BA factory minimum** | **≥ 50 kPa (7.3 psi)** at 75–90 °C oil temp | A pass/fail **floor**, not a health target. An engine sitting near this hot is in trouble, not in spec |
+| GK **I4** book figure, for scale | 166 kPa (24.5 psi) at hot idle, 90–100 °C | Different engine — not a G6BA spec — but a realistic picture of what a healthy hot idle looks like |
+| Common racer rule of thumb | ~10 psi per 1000 rpm, hot | Useful shape. At 6000+ rpm that's ~60 psi hot |
+
+For a race weekend, **hot pressure at sustained high rpm is the number that matters**, not cranking and not cold idle. Cold idle on a fresh engine with 20W-50 will read high — that tells you very little.
 
 ---
 
@@ -141,7 +173,7 @@ Cheap to check now, expensive to discover with the engine ready to crank:
 
 1. **Pre-prime first if you have a pre-luber.** Pressurizing through the switch port before cranking fills the galleries, the filter, the plate and the cooler with zero starter wear, gets oil to fresh bearings before they rotate under load, and leak-checks the new plate and cooler joints statically. On a new short block with an added cooler circuit, this is worth real effort to arrange.
 2. **Crank in 10–15 second bursts, 30–60 seconds rest.** Starters have a duty cycle.
-3. **Watch the mechanical gauge.** Cold 20W-50, no compression: pressure should appear within roughly 5–15 seconds of cranking, and read well above idle spec — commonly 20–40+ psi. Allow extra time for the cooler circuit to fill. The factory **50 kPa (7.3 psi) minimum is a hot-idle figure at 75–90 °C oil temp** — a floor for a running engine, not a cranking target.
+3. **Watch the mechanical gauge.** Pressure should appear within roughly 5–15 seconds of cranking — allow extra time for the cooler circuit to fill. See "What pressure am I looking for?" above for how to read it; the short version is that steady and repeatable beats any particular number.
 4. **If nothing shows after ~30 seconds of total cranking, stop.** Don't keep cranking a dry engine. Check in order: gauge and the port it's in, oil pump not primed at assembly, pickup tube gasket or O-ring drawing air, sandwich plate or cooler circuit not passing oil, oil level.
 5. **With pressure up, leak-check everything** — and pay particular attention to the sandwich plate faces, the cooler line fittings, and the cooler itself, since those are the joints with no history. Then the filter, pan rails, drain plug, and gauge fitting.
 6. **Note both readings and the spread between them.** Write it down. That spread, at a known oil temperature, is useful reference data later.
