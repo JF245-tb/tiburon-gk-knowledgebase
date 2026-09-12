@@ -52,6 +52,7 @@ Most blue car work involves OEM systems — reference these:
 | OEM ECU identification (5WY label reading) | `common/opengk/ecm-identification.md` |
 | OEM ECU pinouts (5WY 2 / 5WY 5) | `common/opengk/ecm-pinouts.md` |
 | GKFlasher CLI reference | `common/opengk/gkflasher.md` |
+| Verify an ECU is stock vs tuned | `common/opengk/ecu-factory-verification.md` |
 | K-Line protocol (diagnostic comms) | `common/opengk/k-line.md` |
 | SMARTRA / immobiliser | `common/opengk/smartra.md`, `immobiliser.md` |
 | CAN bus messages (DME1–5, ASC1–2) | `common/opengk/can-bus-messages.md` |

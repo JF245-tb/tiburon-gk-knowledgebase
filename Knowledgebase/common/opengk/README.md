@@ -12,6 +12,7 @@ OpenGK's goal is to open source the Hyundai/Kia Siemens ECMs to provide tuning o
 |------|---------|
 | `sensor-information.md` | All recommended sensor part numbers for 2.7L V6 |
 | `gkflasher.md` | GKFlasher installation, usage, and full CLI reference |
+| `ecu-factory-verification.md` | Verify whether an installed ECU is stock or tuned (pre-startup check) |
 | `ecm-pinouts.md` | Siemens 5WY 2 (L4) and 5WY 5 (V6) connector pinouts |
 | `ecm-identification.md` | How to identify ECU variant from label |
 | `fuel-injectors.md` | Injector specs, flow rates, dead times, compatibility |
