@@ -54,6 +54,7 @@ Most blue car work involves OEM systems — reference these:
 | GKFlasher CLI reference | `common/opengk/gkflasher.md` |
 | Verify an ECU is stock vs tuned | `common/opengk/ecu-factory-verification.md` |
 | Factory EEPROM library, tools, datasheets | `common/opengk/file-repository.md` |
+| Race-weekend ECU verification + tune plan | `builds/ecu-verification-and-tune-plan.md` |
 | K-Line protocol (diagnostic comms) | `common/opengk/k-line.md` |
 | SMARTRA / immobiliser | `common/opengk/smartra.md`, `immobiliser.md` |
 | CAN bus messages (DME1–5, ASC1–2) | `common/opengk/can-bus-messages.md` |
