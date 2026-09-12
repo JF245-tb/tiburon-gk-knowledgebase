@@ -49,7 +49,7 @@ Three components, all required:
 
 ### BCM RF Hardware
 - Antenna: Around ignition switch (125 kHz, ASK modulation)
-- IC: **PCF7991AT** (NXP immobilizer base station)
+- IC: **PCF7991AT** (NXP immobilizer base station) — datasheet at <https://opengk.org/files/Users/dante383/PCF7991AT_datasheet.pdf> (`file-repository.md`)
 - BCM transmits RF data in/out via **SMARTRA Protocol over W-Line**
 - BCM is semi-transparent — does not verify data
 

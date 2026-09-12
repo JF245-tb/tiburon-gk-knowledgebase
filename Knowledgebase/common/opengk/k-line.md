@@ -35,7 +35,7 @@ K-line uses the standard **pin 7** on the OBD2 connector.
 
 ## KWP2000 Protocol
 
-**Recommended reference:** OBDII Specifications - KWP2000 DaimlerChrysler 2002.pdf
+**Recommended reference:** OBDII Specifications - KWP2000 DaimlerChrysler 2002.pdf — available at <https://opengk.org/files/Users/dante383/> (see `file-repository.md`)
 
 ### Initialization
 Use **Fast Init**:

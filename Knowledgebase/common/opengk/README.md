@@ -13,6 +13,7 @@ OpenGK's goal is to open source the Hyundai/Kia Siemens ECMs to provide tuning o
 | `sensor-information.md` | All recommended sensor part numbers for 2.7L V6 |
 | `gkflasher.md` | GKFlasher installation, usage, and full CLI reference |
 | `ecu-factory-verification.md` | Verify whether an installed ECU is stock or tuned (pre-startup check) |
+| `file-repository.md` | Index of opengk.org/files — factory EEPROM library, datasheets, tools |
 | `ecm-pinouts.md` | Siemens 5WY 2 (L4) and 5WY 5 (V6) connector pinouts |
 | `ecm-identification.md` | How to identify ECU variant from label |
 | `fuel-injectors.md` | Injector specs, flow rates, dead times, compatibility |
@@ -54,3 +55,5 @@ OpenGK's goal is to open source the Hyundai/Kia Siemens ECMs to provide tuning o
 |----------|-----|
 | NewTiburon.com Forum | https://www.newtiburon.com/ |
 | GKFlasher GitHub | https://github.com/Dante383/GKFlasher |
+| OpenGK file repository (EEPROMs, tools, datasheets) | https://opengk.org/files/ — indexed in `file-repository.md` |
+| GKFlasher Instructions (install guide) | https://opengk.org/index.php?title=GKFlasher_Instructions |
