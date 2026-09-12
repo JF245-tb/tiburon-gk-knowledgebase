@@ -122,9 +122,11 @@ If the "NO-CRANK" condition occurs in one shift lever position but not the other
 
 | No. 1 | No. 2 | No. 3 | No. 4 | No. 5 | No. 6 |
 |-------|-------|-------|-------|-------|-------|
-| 4.39-5.59 | 2.28-3.43 | 3.49-5.24 | 1.9-2.86 | 3.25-4.87 | 1.3-1.95 |
+| 4.39-6.59 | 2.28-3.43 | 3.49-5.24 | 1.9-2.86 | 3.25-4.87 | 1.3-1.95 |
 
 > **NOTE:** Resistance should not be higher than 10,000 Ω per foot of cable. If resistance is higher, replace the cable.
+
+> **CORRECTION (KB):** The No. 1 upper limit was previously transcribed as 5.59 kΩ. The EE.pdf source page (EE-14) reads `4.39 -6.59`, and every other column is a ±20% band about its midpoint (upper = lower × 1.5), which gives 4.39 × 1.5 = 6.59. Corrected to **4.39-6.59 kΩ**.
 
 ---
 
