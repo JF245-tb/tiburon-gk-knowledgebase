@@ -36,6 +36,50 @@ picked back up later.
 
 ---
 
+## Master Pin & Wire Reference
+
+Every wire on both PDM 35-pin connectors for this build. Anything not listed
+here comes out of the harness.
+
+### Connector B (Grey) — 12 wires
+
+| Pin | Function | Wire / Source |
+|---|---|---|
+| B16 | +5V Analog Vref | Shared supply bus → fuel/oil/trans sensor Red wires |
+| B17 | +Vb switched 12V | Tire temp sensor Red wire |
+| B18 | Signal/clean GND | Shared return bus → fuel/oil/trans Black+White wires, tire temp Black wire, LM2 AFR Yellow wire |
+| B23 | Ignition input | Ignition switch (log/session marker only — nothing gated on it) |
+| B26 | Ch01 — `FuelPress` | Fuel sensor Yellow wire |
+| B27 | Ch02 — `FuelTemp` | Fuel sensor Green wire |
+| B28 | Ch03 — `OilPress` | Oil sensor Yellow wire |
+| B29 | Ch04 — `OilTemp` | Oil sensor Green wire |
+| B30 | Ch05 — `TransPress` | Trans sensor Yellow wire |
+| B31 | Ch06 — `TransTemp` | Trans sensor Green wire |
+| B32 | Ch07 — `TireTempFL` | Tire temp sensor White wire |
+| B33 | Ch08 — `AFR` | LM2 Lime Green wire (Analog Out 1 +) |
+
+### Connector A (Black) — 4 wires + 1 reserved
+
+| Pin | Function | Wire / Source |
+|---|---|---|
+| A22 | CAN0 High | CAN expansion cable → Data Hub (GPS-08, SmartyCam, Podium) |
+| A11 | CAN0 Low | CAN expansion cable → Data Hub |
+| A33 | +Vb out CAN | CAN expansion cable → Data Hub — powers GPS-08, SmartyCam, Podium |
+| A10 | GND | CAN expansion cable ground |
+| *(unassigned)* | Reserved power output | Purpose not yet determined — see Open Items |
+
+### Off-Connector — Still Part of This Harness
+
+Not PDM pins, but required connections for the above to work:
+
+| Connection | Detail |
+|---|---|
+| Tire temp shield (Clear wire) | Chassis ground — **not** the B18 clean-GND bus |
+| LM2 power (12V) | Existing switched-ignition fused tap in the stock harness/relay box — **not** a PDM output |
+| LM2 Analog Out 1 (−), Yellow | PDM B18 (listed above under Connector B, repeated here for wiring-order clarity) |
+
+---
+
 ## Sensor List
 
 | Sensor | Model | Signals | Location |
