@@ -19,9 +19,9 @@ picked back up later.
 **What changed from the old plan:**
 - Stock ECU continues to run the engine — no Haltech engine control, no Haltech in
   the sensor path at all.
-- Relay box stays in as-is; only the ECU relay is being replaced. PDM does not
-  distribute power to anything else.
-- **PDM's only job is reading sensors** and broadcasting them over CAN to the AIM
+- Relay box stays in as-is; only the ECU relay is being replaced. PDM distributes
+  power to nothing except one reserved output (see Connector A below).
+- **PDM's main job is reading sensors** and broadcasting them over CAN to the AIM
   dash / SmartyCam / Podium for display and logging. No switch panel, no power
   output logic tied to these channels.
 - MAP sensor removed (was AVI9 on the old Haltech plan — not carried over).
@@ -29,7 +29,10 @@ picked back up later.
   core loop) are being capped — heater core is removed and the TB is already
   blocked internally, so neither loop serves a function anymore. OE coolant sender
   + stock ECU remains the coolant temp reference.
-- Tire temp (front left only) and transmission fluid pressure/temp added.
+- Tire temp (front left only), transmission fluid pressure/temp, and Innovate LM2
+  wideband AFR added.
+- CAN0 (GPS-08, SmartyCam, Podium) and the Ignition input are being kept — not a
+  pure sensor-only build, PDM retains those plus one power output for SmartyCam.
 
 ---
 
@@ -41,6 +44,7 @@ picked back up later.
 | Transmission pressure/temp | Lowdoller 899404 (150 PSI combo) | 2 (P + T) | Right side, grouped with fuel/tire |
 | Tire temp | 6–24VDC supply / 0–5V output sensor (non-Lowdoller) | 1 (T only) | Front left tire only |
 | Oil pressure/temp | Lowdoller 899404 (150 PSI combo) | 2 (P + T) | Left side of engine |
+| Wideband AFR | Innovate LM2, Analog Out 1 | 1 (AFR only) | LM2 on electronics plate, passenger footwell — cockpit-side run, not part of either engine-bay Deutsch connector |
 
 Coolant: **excluded.** MAP: **removed.**
 
@@ -62,7 +66,11 @@ channels are free for sensors.
 | Ch05 | Trans pressure | 899404, 0.5–4.5V ratiometric |
 | Ch06 | Trans temp | 899404, PTC — custom sensor cal in Race Studio |
 | Ch07 | Tire temp (FL) | 0–5V output |
-| Ch08 | **Spare** | Headroom for later (2nd tire zone, brake sensor, etc.) |
+| Ch08 | AFR (LM2 Analog Out 1) | 0–5V, 0V = 7.35 AFR / 5V = 22.39 AFR linear |
+
+> **All 8 analog channels are now committed — zero headroom left.** Adding AFR
+> used the last spare (Ch08). Any future sensor (2nd tire zone, brake combo, a
+> coolant tap) needs something else moved off first.
 
 > PTC calibration table (same for all Lowdoller temp elements) is in
 > `hardware/sensors/lowdoller-sensors.md` — reuse those resistance-vs-temperature
@@ -79,8 +87,9 @@ Connector B (Grey):
 | Function | PDM Pin | Used By |
 |---|---|---|
 | +5V Analog Vref | B16 | Shared bus — all 3 Lowdoller combo sensors' red wires |
-| Signal/clean GND | B18 | Shared bus — Lowdoller black+white returns, tire temp black wire |
+| Signal/clean GND | B18 | Shared bus — Lowdoller black+white returns, tire temp black wire, LM2 AFR signal ground (Yellow) |
 | +Vb switched 12V | B17 | Tire temp red wire only (needs 6–24V, can't share the 5V bus) |
+| Ignition input | B23 | Ignition switch — feeds the built-in `SafeIgnition` software channel for session start/stop marking in the log. Nothing is gated on it (no outputs), it's purely a log reference now. |
 
 **Tire temp sensor pinout** (per sensor datasheet):
 
@@ -90,6 +99,44 @@ Connector B (Grey):
 | Black | Clean sensor ground | PDM B18 (shared clean GND bus) |
 | White | Output signal, 0–5VDC | Ch07 |
 | Clear (shield) | Chassis ground | Chassis, **not** the clean-GND bus — kept separate to avoid coupling shield-return noise into the shared analog sensor signals |
+
+**LM2 AFR wiring** (cockpit-side, short run — does not go through either engine-bay
+Deutsch connector):
+
+| LM2 Wire | Function | Destination |
+|---|---|---|
+| Lime Green | Analog Out 1 (+) | Ch08 (B33) |
+| Yellow | Analog Out 1 (−) | PDM B18 (shared clean GND bus) |
+
+**LM2 power (12V) does NOT come from the PDM.** Tap it from an existing
+switched-ignition fused point in the stock harness/relay box — it's a small draw
+(~1–2A) and this keeps the PDM's one reserved power output free for SmartyCam
+(see Connector A below). Full LM2 cable 3811 pinout reference:
+`guides/harness-design.md` → "Innovate LM2 Wiring" (wiring/pinout still accurate
+even though that doc's AVI destination is superseded).
+
+---
+
+## Connector A (Black) — CAN0 Bus + Reserved Power Output
+
+Kept specifically for GPS-08, SmartyCam, and Podium (all off the CAN0 AIM
+expansion bus), plus one power output held in reserve.
+
+| Pin | Function |
+|---|---|
+| A22 | CAN0 High |
+| A11 | CAN0 Low |
+| A33 | +Vb out CAN — powers GPS-08 + Podium through the Data Hub automatically |
+| A10 | GND (CAN0 expansion cable ground) |
+| A2 | Mid Power Output 1 — **reserved for SmartyCam's main power** (its 7-pin power connector needs its own switched 12V; the CAN0 EXP port is data-only and won't power it) |
+
+(A32, +Vb ext CAN, skipped — documented as "typically unused.")
+
+> **The A2 assignment is a default, not confirmed** — if the one power output you
+> wanted to keep "just in case" was meant for something other than SmartyCam,
+> update this before wiring. If it *is* for SmartyCam, this is the one functional
+> gap that opened up once GPS/SmartyCam/Podium came back into scope, so it's the
+> most likely candidate.
 
 ---
 
@@ -131,11 +178,12 @@ expansion (a 6-pin leaves room to add something else on this side later).
 
 ## Race Studio Configuration
 
-Since the PDM is doing sensor readout only — no switch panel, no power output
-logic — none of the layered logic in `pdm-configuration-guide.md` (Status
-Variables → Trigger Commands → Power Outputs) applies here. The only thing to
-configure is the 7 Channel Inputs as analog sensors, plus making sure they
-actually reach the dash/logger over CAN.
+The PDM is doing sensor readout as its main job, so most of the layered logic in
+`pdm-configuration-guide.md` (Status Variables → Trigger Commands → Power
+Outputs) still doesn't apply — except the one reserved power output for
+SmartyCam, which needs a simple always-on (or `SafeIgnition`-gated) trigger, not
+the old switch-panel logic. The core work is configuring the 8 Channel Inputs as
+analog sensors and making sure they reach the dash/logger over CAN.
 
 > **Field names below follow the pattern used for the old Digital Status channel
 > configs in `pdm-build-guide.md`, adapted for Analog mode.** Exact field labels
@@ -148,8 +196,9 @@ actually reach the dash/logger over CAN.
 
 - [ ] **Disable/remove the ECU Stream (CAN1) config** — no Haltech, nothing to receive on that bus
 - [ ] **Leave CAN2 disabled** — no keypad
-- [ ] **Delete or disable any Status Variables / Trigger Commands / Power Output configs** left over from the old switch-panel plan — nothing in this build drives an output off PDM logic
-- [ ] Keep **CAN0 (CAN AiM, 1 Mbps)** active — this is how these channels reach the dash, SmartyCam, and Podium
+- [ ] **Delete or disable all old switch-panel Status Variables / Trigger Commands / Power Outputs** except the one new SmartyCam power output (A2) — nothing else in this build drives an output off PDM logic
+- [ ] Keep **CAN0 (CAN AiM, 1 Mbps)** active and configured — GPS-08, SmartyCam, and Podium are staying in this build
+- [ ] Configure the new **SmartyCam power output (A2)**: continuous, trigger = `SafeIgnition` (or always-on if you'd rather it powers up with the kill switch regardless of ignition state — your call)
 
 ### Ch01 — `FuelPress`
 
@@ -212,9 +261,17 @@ Same as Ch02 (`FuelTemp`): PTC custom table, 2 Hz, log ✅.
 > degrees on the dash until the curve is entered. Check the sensor's datasheet/
 > listing for a linear range (e.g. "0–5V = X–Y °F") or a table like the PTC one.
 
-### Ch08 — Spare
+### Ch08 — `AFR`
 
-Leave unconfigured.
+| Field | Value |
+|---|---|
+| Name | `AFR` |
+| Mode | Analog |
+| Input range | 0–5V |
+| Calibration | Linear, 2-point: 0V = 7.35 AFR, 5V = 22.39 AFR |
+| Units | AFR (or λ if you'd rather log lambda directly) |
+| Sampling Frequency | 10 Hz |
+| Log values | ✅ Yes |
 
 ### Getting Channels to the Dash
 
@@ -253,7 +310,12 @@ up the Ch08 headroom.
   unverified** — everything previously documented in this KB was Digital Status
   mode (switches). Confirm against the live UI on first setup and correct the
   per-channel tables above if the actual fields differ.
+- **A2 (SmartyCam power) is a default assignment, not confirmed** — this is where
+  the reserved power output landed once SmartyCam's separate power need became
+  clear. Confirm that's actually what "keep one power output" was for.
 - Trans sensor confirmed as Lowdoller 899404 combo (same as fuel/oil).
+- Zero spare analog channels remain after adding AFR (Ch08). Any future sensor
+  addition needs something else moved off first.
 
 ---
 
