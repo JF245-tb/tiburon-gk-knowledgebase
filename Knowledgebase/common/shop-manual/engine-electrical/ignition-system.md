@@ -156,6 +156,38 @@ Measure the resistance between the high-voltage terminal for the No. 3 and No. 6
 
 <!-- Figure: V6 ignition coil connector terminal identification (terminals 1-4), source: EE.pdf page 15 -->
 
+### Identifying the Coil Connector Terminals (KB addition)
+
+> **The EE-15 terminal-identification figure was never extracted** — only the placeholder above. The KB therefore has no drawing of the physical pin positions, and the connector records conflict (see `validation/coverage-gaps.md`). Terminal numbers below are established **electrically**, which is unambiguous and does not depend on the missing figure.
+
+The three primaries share a common 12V feed at **terminal 2**. That makes terminal 2 the only pin electrically distinguishable from the rest, and it is self-identifying:
+
+1. Coil connector unplugged, meter on the 200 Ω range with leads nulled.
+2. Measure all **six** pin-to-pin combinations on the coil-side (male) pins.
+3. **Terminal 2** is the single pin that reads ~0.74 Ω to each of the other three.
+4. The other three pins read **~1.48 Ω to each other** (two primaries in series through the common). Seeing 1.48 Ω confirms both the identification and that the meter is resolving sub-ohm correctly.
+
+Expected matrix for a healthy pack (lead resistance nulled):
+
+| | Term 1 | Term 2 | Term 3 | Term 4 |
+|---|---|---|---|---|
+| **Term 1** | — | 0.74 | 1.48 | 1.48 |
+| **Term 2** | 0.74 | — | 0.74 | 0.74 |
+| **Term 3** | 1.48 | 0.74 | — | 1.48 |
+| **Term 4** | 1.48 | 0.74 | 1.48 | — |
+
+Per EE-15 the pairings are: **2↔1** = No. 3/No. 6 coil, **2↔4** = No. 1/No. 4 coil, **2↔3** = No. 2/No. 5 coil. Distinguishing terminal 1 from 3 from 4 requires the missing figure — but it is **not needed for a go/no-go test**, since all three primaries share one spec. It matters only when tracing a specific ECM driver.
+
+**Failure patterns in the matrix:**
+
+| Pattern | Meaning |
+|---|---|
+| No pin reads ~0.74 Ω to three others | Not a 4-pin wasted-spark pack, or meter/range problem |
+| One pin reads OL to all others | That primary is open — pack is bad |
+| A pair reads ~0 Ω | Shorted primary — pack is bad |
+| Common-to-pin reads ~1.48 Ω | You are not on the common pin; re-identify |
+
+
 ### Inspection and Cleaning
 <!-- EBAA0215 -->
 
