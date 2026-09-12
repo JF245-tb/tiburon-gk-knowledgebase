@@ -274,15 +274,34 @@ sensors and making sure they reach the dash/logger over CAN.
 |---|---|
 | Name | `FuelTemp` |
 | Mode | Analog |
-| Calibration | Custom resistance table — PTC curve from `hardware/sensors/lowdoller-sensors.md` (84.27Ω @ −40°F → 197.71Ω @ 500°F) |
+| Calibration | **Enter in Ohms**, direct from `hardware/sensors/lowdoller-sensors.md` PTC/RTD table (84.27Ω @ −40°F → 197.71Ω @ 500°F). Pull-up-independent — Race Studio applies its own known 2kΩ bias internally. |
 | Units | °F |
 | Sampling Frequency | 2 Hz |
 | Log values | ✅ Yes |
 
-> Confirm what bias/pull-up Race Studio applies for a channel in this mode —
-> the digital-input 10kΩ pull-up used for switches would be far too high a
-> reference for an ~84–198Ω element and would flatten the signal to a few tens
-> of millivolts across the whole range. See Open Items.
+> **Confirmed: the PDM's analog temp channels use a 2kΩ pull-up**, not the 10kΩ
+> digital-switch pull-up feared earlier — that concern is resolved. If Race
+> Studio's dialog for this channel only accepts mV rather than Ohms, use this
+> table instead (5V supply, 2kΩ pull-up, `V = 5 × R / (R + 2000)`):
+>
+> | °F | Ω | mV table (2kΩ pullup) |
+> |---|---|---|
+> | -40 | 84.27 | 0.202V |
+> | -4 | 89.54 | 0.214V |
+> | 32 | 100 | 0.238V |
+> | 68 | 107.79 | 0.256V |
+> | 104 | 115.54 | 0.273V |
+> | 140 | 123.24 | 0.290V |
+> | 176 | 130.9 | 0.307V |
+> | 212 | 138.51 | 0.324V |
+> | 248 | 146.07 | 0.340V |
+> | 284 | 153.585 | 0.357V |
+> | 320 | 161.05 | 0.373V |
+> | 356 | 168.48 | 0.388V |
+> | 392 | 175.86 | 0.404V |
+> | 428 | 183.19 | 0.420V |
+> | 464 | 190.47 | 0.435V |
+> | 500 | 197.71 | 0.450V |
 
 ### Ch03 — `OilPress`
 
@@ -290,7 +309,7 @@ Same as Ch01 (`FuelPress`): 0.5V = 0 PSI, 4.5V = 150 PSI, 10 Hz, log ✅.
 
 ### Ch04 — `OilTemp`
 
-Same as Ch02 (`FuelTemp`): PTC custom table, 2 Hz, log ✅.
+Same as Ch02 (`FuelTemp`): enter in Ohms (or the 2kΩ mV table above), 2 Hz, log ✅.
 
 ### Ch05 — `TransPress`
 
@@ -298,7 +317,7 @@ Same as Ch01 (`FuelPress`): 0.5V = 0 PSI, 4.5V = 150 PSI, 10 Hz, log ✅.
 
 ### Ch06 — `TransTemp`
 
-Same as Ch02 (`FuelTemp`): PTC custom table, 2 Hz, log ✅.
+Same as Ch02 (`FuelTemp`): enter in Ohms (or the 2kΩ mV table above), 2 Hz, log ✅.
 
 ### Ch07 — `TireTempFL`
 
@@ -356,9 +375,11 @@ up the Ch08 headroom.
 
 ## Open Items
 
-- **PTC resistive sensor reading on PDM channel inputs** — confirmed to be handled
-  via custom sensor calibration in Race Studio (per build decision). Worth a bench
-  check with one sensor before committing all four temp channels to this scheme.
+- ~~PTC resistive sensor reading on PDM channel inputs — bias/pull-up unconfirmed~~
+  **RESOLVED:** PDM's analog temp channels use a 2kΩ pull-up (confirmed). Enter
+  calibration in Ohms (pull-up-independent) using the existing PTC/RTD table;
+  mV equivalent for 2kΩ is in the Ch02 section above if Race Studio needs volts
+  instead.
 - **Tire temp voltage-to-temperature curve unknown** — need the sensor's datasheet
   scaling to calibrate Ch07 in Race Studio. Wire it and log raw volts in the
   meantime rather than waiting on this.
