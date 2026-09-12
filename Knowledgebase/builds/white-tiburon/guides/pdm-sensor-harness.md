@@ -101,12 +101,27 @@ Connector B (Grey):
 | Clear (shield) | Chassis ground | Chassis, **not** the clean-GND bus — kept separate to avoid coupling shield-return noise into the shared analog sensor signals |
 
 **LM2 AFR wiring** (cockpit-side, short run — does not go through either engine-bay
-Deutsch connector):
+Deutsch connector). Confirmed against the official LM-2 User Manual (Innovate
+doc #31-0008, Appendix C & §5.3) — this is the correct cable and it's wired as a
+differential output referenced to ground (their "Diagram 2": device with a
+grounded/single-ended analog input, which is what the PDM channel is):
 
 | LM2 Wire | Function | Destination |
 |---|---|---|
 | Lime Green | Analog Out 1 (+) | Ch08 (B33) |
-| Yellow | Analog Out 1 (−) | PDM B18 (shared clean GND bus) |
+| Yellow | Analog Out 1 (−) | PDM B18 (shared clean GND bus) — **must** land on ground per the manual, this isn't optional on a differential output |
+
+**Cable: P/N 3811** ("Analog Cable," 14 stripped leads) — already correct in this
+doc, confirmed against the manual's Appendix C pinout and Appendix F kit
+contents list.
+
+**Calibration already at factory default — verify, don't assume.** Single-channel
+LM-2 units ship with Analog Out 1 set to 0V = AFR 7.35, 5.0V = AFR 22.39 (exactly
+what Ch08 is configured for above), but this is set via the **LM Programmer PC
+software** (Analog Out 1 tab, over USB), not a front-panel menu on the LM-2
+itself — there's no on-unit way to check it. If anyone has ever touched this
+setting, it won't be what's assumed here. Two-minute check with LM Programmer
+before trusting the AFR numbers.
 
 **LM2 power (12V) does NOT come from the PDM.** Tap it from an existing
 switched-ignition fused point in the stock harness/relay box — it's a small draw
@@ -119,24 +134,21 @@ even though that doc's AVI destination is superseded).
 
 ## Connector A (Black) — CAN0 Bus + Reserved Power Output
 
-Kept specifically for GPS-08, SmartyCam, and Podium (all off the CAN0 AIM
-expansion bus), plus one power output held in reserve.
+Kept for GPS-08, SmartyCam, and Podium — all three plug directly into the CAN
+expansion Data Hub together, so SmartyCam does **not** need a separate PDM power
+output after all (superseding the earlier assumption that it did). The reserved
+power output is therefore unassigned — open for whatever the "just in case" use
+turns out to be.
 
 | Pin | Function |
 |---|---|
 | A22 | CAN0 High |
 | A11 | CAN0 Low |
-| A33 | +Vb out CAN — powers GPS-08 + Podium through the Data Hub automatically |
+| A33 | +Vb out CAN — powers GPS-08, SmartyCam, and Podium through the Data Hub |
 | A10 | GND (CAN0 expansion cable ground) |
-| A2 | Mid Power Output 1 — **reserved for SmartyCam's main power** (its 7-pin power connector needs its own switched 12V; the CAN0 EXP port is data-only and won't power it) |
+| *(reserved)* | One power output pin held in reserve, purpose TBD |
 
 (A32, +Vb ext CAN, skipped — documented as "typically unused.")
-
-> **The A2 assignment is a default, not confirmed** — if the one power output you
-> wanted to keep "just in case" was meant for something other than SmartyCam,
-> update this before wiring. If it *is* for SmartyCam, this is the one functional
-> gap that opened up once GPS/SmartyCam/Podium came back into scope, so it's the
-> most likely candidate.
 
 ---
 
@@ -178,12 +190,13 @@ expansion (a 6-pin leaves room to add something else on this side later).
 
 ## Race Studio Configuration
 
-The PDM is doing sensor readout as its main job, so most of the layered logic in
+The PDM is doing sensor readout as its main job, so the layered logic in
 `pdm-configuration-guide.md` (Status Variables → Trigger Commands → Power
-Outputs) still doesn't apply — except the one reserved power output for
-SmartyCam, which needs a simple always-on (or `SafeIgnition`-gated) trigger, not
-the old switch-panel logic. The core work is configuring the 8 Channel Inputs as
-analog sensors and making sure they reach the dash/logger over CAN.
+Outputs) doesn't apply here — SmartyCam, GPS-08, and Podium all get power
+through the CAN0 Data Hub directly, not a PDM-triggered output. The one reserved
+power output (Connector A) has no assigned purpose yet, so nothing to configure
+for it either. The core work is configuring the 8 Channel Inputs as analog
+sensors and making sure they reach the dash/logger over CAN.
 
 > **Field names below follow the pattern used for the old Digital Status channel
 > configs in `pdm-build-guide.md`, adapted for Analog mode.** Exact field labels
@@ -196,9 +209,8 @@ analog sensors and making sure they reach the dash/logger over CAN.
 
 - [ ] **Disable/remove the ECU Stream (CAN1) config** — no Haltech, nothing to receive on that bus
 - [ ] **Leave CAN2 disabled** — no keypad
-- [ ] **Delete or disable all old switch-panel Status Variables / Trigger Commands / Power Outputs** except the one new SmartyCam power output (A2) — nothing else in this build drives an output off PDM logic
+- [ ] **Delete or disable all old switch-panel Status Variables / Trigger Commands / Power Outputs** — nothing in this build drives an output off PDM logic; GPS-08/SmartyCam/Podium power through the CAN0 Data Hub, not a PDM output
 - [ ] Keep **CAN0 (CAN AiM, 1 Mbps)** active and configured — GPS-08, SmartyCam, and Podium are staying in this build
-- [ ] Configure the new **SmartyCam power output (A2)**: continuous, trigger = `SafeIgnition` (or always-on if you'd rather it powers up with the kill switch regardless of ignition state — your call)
 
 ### Ch01 — `FuelPress`
 
@@ -310,12 +322,16 @@ up the Ch08 headroom.
   unverified** — everything previously documented in this KB was Digital Status
   mode (switches). Confirm against the live UI on first setup and correct the
   per-channel tables above if the actual fields differ.
-- **A2 (SmartyCam power) is a default assignment, not confirmed** — this is where
-  the reserved power output landed once SmartyCam's separate power need became
-  clear. Confirm that's actually what "keep one power output" was for.
+- **Reserved power output on Connector A has no assigned purpose** — SmartyCam
+  turned out not to need it (powers through the CAN0 Data Hub like GPS/Podium).
+  Confirm what "keep one power output just in case" was actually for before
+  wiring anything to it.
 - Trans sensor confirmed as Lowdoller 899404 combo (same as fuel/oil).
 - Zero spare analog channels remain after adding AFR (Ch08). Any future sensor
   addition needs something else moved off first.
+- **LM2 Analog Out 1 calibration should be verified in LM Programmer** before
+  race day — it's assumed to still be at factory default (0V=7.35 AFR,
+  5V=22.39 AFR) but there's no way to confirm that from the LM-2 itself.
 
 ---
 
