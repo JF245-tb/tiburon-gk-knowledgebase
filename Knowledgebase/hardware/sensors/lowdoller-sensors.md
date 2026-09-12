@@ -178,6 +178,8 @@ Compatible with Holley, FuelTech, Haltech, and similar ECUs.
 
 **Haltech setup:** Enter this table as a custom calibration in Haltech NSP. Map resistance → temperature using the values above.
 
+**Pull-up voltage tables:** The resistance curve above is a PT100 platinum RTD (100 Ω at 32 °F, 138.51 Ω at 212 °F). For the voltage the ECU actually sees with a 1 kΩ or 2 kΩ pull-up on the 5 V reference, see `pt100-pullup-voltage-tables.md`.
+
 ---
 
 ## Haltech AVI Channel Assignment Plan (White Tiburon)
