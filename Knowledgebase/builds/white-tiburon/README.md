@@ -132,6 +132,7 @@
 | Chassis specs, gear ratios, alignment | `common/chassis/gk-chassis-specs.md` |
 | OEM ECU pinouts (SIMK43 5WY) | `common/opengk/ecm-pinouts.md` |
 | Race-weekend ECU verification + tune plan | `builds/ecu-verification-and-tune-plan.md` |
+| Tune change request for the tuners | `builds/tune-change-request.md` |
 | K-Line / immobiliser / GKFlasher | `common/opengk/k-line.md`, `gkflasher.md`, `smartra.md` |
 | CAN bus messages (DME1–5, ASC1–2) | `common/opengk/can-bus-messages.md` |
 | BCM pinouts | `common/opengk/body-control-module.md` |
